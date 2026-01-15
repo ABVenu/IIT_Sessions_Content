@@ -4,6 +4,8 @@
 
 In this lesson, you’ll learn to explain how AI systems differ from traditional software systems, how the field of AI has evolved over time, how modern AI (especially Generative and Agentic AI) fits into today’s industry landscape, and why the future of software is increasingly driven by intelligent, autonomous systems rather than static code.
 
+![Image 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/3e64f946-7d03-495e-9d8b-359a89199377/0o2hLuzMKugVYqBv.png)
+
 ---
 
 ## 1. From Traditional Software to AI Systems
