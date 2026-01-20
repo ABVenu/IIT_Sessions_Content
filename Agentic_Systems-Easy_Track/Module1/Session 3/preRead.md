@@ -1,5 +1,6 @@
 # Pre-Read: The Developer Workflow
 
+
 ## What You’ll Learn
 
 In this pre-read, you’ll discover:
@@ -8,6 +9,9 @@ In this pre-read, you’ll discover:
 * What the **Command Line (CLI)** is and why developers rely on it
 * How **Git init, add, and commit** fit into daily work
 * The difference between working in **Notebooks** vs **Scripts**
+
+
+![git](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/d47a002f-2c7e-4c31-b773-38046d3ef6d4/VaqIcuPKo1VlErSK.png)
 
 ---
 
