@@ -1,312 +1,284 @@
-# Pandas: The Data Table
+# Pandas: Selection & Filtering
 
 ## What You’ll Learn
 
-In this lesson, you’ll learn how to work with structured, table-like data using **Pandas**, the standard data analysis library in Python. You’ll understand the difference between a Series and a DataFrame, how to load CSV files into Python, and how to inspect datasets quickly and effectively. These skills are essential for AI workflows, where real-world data almost always begins in tabular form.
+In this lesson, you’ll learn how to query structured data using Pandas. You’ll understand how to select specific columns, access rows using indexing methods, filter data using Boolean logic, and sort DataFrames to reveal patterns. These techniques allow you to answer precise questions from raw datasets—an essential skill in AI and data-driven systems.
+
+![Selection](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/e366bcf9-cda6-4741-aa3d-f085d3a6fbb7/XcvvbOdXxdlmsnPf.png)
 
 ---
 
-## 1. Why Pandas Matters in AI
+## 1. Why Selection and Filtering Matter
 
-Most real-world data looks like an Excel sheet:
-- Rows represent records (users, transactions, samples)
-- Columns represent attributes (age, score, label, timestamp)
+Loading a dataset is only the beginning. The real power of Pandas lies in its ability to answer questions such as:
 
-Before training models, data must be:
-- Loaded
-- Cleaned
-- Inspected
-- Transformed
+- Which users have scores above 90?
+- What are the top-performing models?
+- Which rows contain missing data?
+- How does a subset of the dataset behave?
 
-Pandas provides a high-level, expressive way to perform these tasks efficiently. It builds on NumPy but adds labels, indexing, and powerful data manipulation tools.
+AI workflows depend on slicing and querying data correctly before training models. If you filter incorrectly, your model trains on the wrong data. If you sort incorrectly, you misinterpret results.
 
-In modern AI pipelines, Pandas is often the first step before NumPy arrays and model training.
+Precision in selection is precision in analysis.
 
 ---
 
-## 2. Pandas Series vs DataFrame
+## 2. Selecting Columns
 
-### What Is a Series?
+### Selecting a Single Column
 
-A **Series** is a one-dimensional labeled array. It is similar to a NumPy array, but with an associated index.
-
-```python
-import pandas as pd
-
-s = pd.Series([10, 20, 30])
-print(s)
-````
-
-Output:
-
-```
-0    10
-1    20
-2    30
-dtype: int64
-```
-
-Each value has:
-
-* A position
-* An index label
-
-You can also define custom indices:
-
-```python
-s = pd.Series([90, 85, 88], index=["Alice", "Bob", "Charlie"])
-```
-
-A Series is conceptually similar to:
-
-* A single column in a spreadsheet
-* A labeled NumPy array
-
----
-
-### What Is a DataFrame?
-
-A **DataFrame** is a two-dimensional labeled table. It consists of multiple Series aligned by a shared index.
-
-```python
-data = {
-    "Name": ["Alice", "Bob", "Charlie"],
-    "Score": [90, 85, 88],
-    "Passed": [True, True, True]
-}
-
-df = pd.DataFrame(data)
-print(df)
-```
-
-Output:
-
-```
-      Name  Score  Passed
-0    Alice     90    True
-1      Bob     85    True
-2  Charlie     88    True
-```
-
-A DataFrame:
-
-* Has rows and columns
-* Has column names
-* Supports powerful filtering and transformation operations
-
-This structure mirrors Excel tables and SQL query results.
-
----
-
-### Key Conceptual Difference
-
-* A **Series** is one column.
-* A **DataFrame** is a full table.
-
-Most AI workflows operate primarily on DataFrames.
-
----
-
-## 3. Loading CSV Files
-
-### Why CSV?
-
-CSV (Comma-Separated Values) is one of the most common data formats in the world. Many datasets are stored as `.csv` files.
-
-Pandas provides a simple method to load them.
-
----
-
-### Reading a CSV File
+Columns in a DataFrame are selected using bracket notation:
 
 ```python
 import pandas as pd
 
 df = pd.read_csv("data.csv")
-```
 
-That single line:
+scores = df["Score"]
+````
 
-* Opens the file
-* Parses rows and columns
-* Infers data types
-* Constructs a DataFrame
+This returns a **Series**, not a DataFrame.
 
-This simplicity is why Pandas is widely adopted.
-
----
-
-### Inspecting the Loaded Data
-
-Immediately after loading data, you should inspect it before using it for modeling.
-
-This prevents:
-
-* Hidden formatting issues
-* Incorrect data types
-* Missing values
-* Misaligned columns
-
-Professional AI workflows always begin with inspection.
-
----
-
-## 4. Basic Inspection Methods
-
-### `head()`: View the First Rows
-
-```python
-df.head()
-```
-
-By default, this shows the first 5 rows.
-
-You can specify a number:
-
-```python
-df.head(10)
-```
-
-This helps verify:
-
-* Column names
-* Data format
-* Basic structure
-
----
-
-### `tail()`: View the Last Rows
-
-```python
-df.tail()
-```
-
-Useful for:
-
-* Checking dataset completeness
-* Verifying appended records
-* Confirming file parsing
-
----
-
-### `info()`: Understand Structure and Types
-
-```python
-df.info()
-```
-
-This provides:
-
-* Number of rows
-* Column names
-* Data types
-* Count of non-null values
-
-This is one of the most important inspection tools because incorrect data types can break AI models silently.
-
----
-
-### `describe()`: Summary Statistics
-
-```python
-df.describe()
-```
-
-For numerical columns, this shows:
-
-* Count
-* Mean
-* Standard deviation
-* Minimum
-* Maximum
-* Quartiles
-
-This helps identify:
-
-* Outliers
-* Scale differences
-* Distribution patterns
-
-In AI workflows, `describe()` is often the first diagnostic step before preprocessing.
-
----
-
-## 5. Accessing Data in DataFrames
-
-### Selecting a Column
-
-```python
-df["Score"]
-```
-
-This returns a Series.
+Selecting a column is one of the most common operations in data analysis and feature engineering.
 
 ---
 
 ### Selecting Multiple Columns
 
+To select multiple columns, use a list inside brackets:
+
 ```python
-df[["Name", "Score"]]
+subset = df[["Name", "Score"]]
 ```
 
-This returns a new DataFrame.
+This returns a new **DataFrame** containing only those columns.
+
+This pattern is used frequently when:
+
+* Choosing features for a model
+* Creating smaller working subsets
+* Dropping irrelevant columns
 
 ---
 
-### Filtering Rows
+## 3. Row Indexing
 
-```python
-df[df["Score"] > 85]
-```
-
-This filters rows based on a condition—an essential skill in feature engineering and data cleaning.
+Rows can be accessed using either position-based indexing (`iloc`) or label-based indexing (`loc`). Understanding the difference is important.
 
 ---
 
-## 6. How Pandas Fits into AI Pipelines
+### Position-Based Indexing: `iloc`
 
-A typical AI data pipeline looks like this:
+`iloc` selects rows by numerical position.
 
-1. Load dataset using Pandas
-2. Inspect structure with `head()`, `info()`, `describe()`
-3. Clean and transform data
-4. Convert to NumPy arrays
-5. Feed into a model
+```python
+first_row = df.iloc[0]
+```
 
-Pandas acts as the structured “data preparation layer” before numerical computation.
+This selects the first row.
+
+Selecting multiple rows:
+
+```python
+df.iloc[0:3]
+```
+
+This returns the first three rows.
+
+Use `iloc` when:
+
+* You care about position
+* You are slicing by index number
+* You are working with ordered data
+
+---
+
+### Label-Based Indexing: `loc`
+
+`loc` selects rows using labels.
+
+```python
+df.loc[0]
+```
+
+If your DataFrame has custom indices:
+
+```python
+df = df.set_index("Name")
+df.loc["Alice"]
+```
+
+Use `loc` when:
+
+* Your index carries meaning
+* You are filtering by labels
+
+In professional AI systems, meaningful indices (such as IDs or timestamps) are common.
+
+---
+
+## 4. Boolean Filtering
+
+Boolean filtering is one of the most powerful features of Pandas. It allows you to select rows based on conditions.
+
+---
+
+### Basic Filtering
+
+```python
+high_scores = df[df["Score"] > 85]
+```
+
+This returns all rows where the Score column is greater than 85.
+
+Behind the scenes:
+
+* `df["Score"] > 85` produces a Boolean Series
+* Pandas keeps rows where the value is `True`
+
+---
+
+### Multiple Conditions
+
+To combine conditions, use logical operators:
+
+```python
+filtered = df[(df["Score"] > 85) & (df["Passed"] == True)]
+```
+
+Important:
+
+* Use `&` instead of `and`
+* Use `|` instead of `or`
+* Wrap each condition in parentheses
+
+This difference exists because Pandas operates element-wise across Series.
+
+---
+
+### Negation
+
+To filter rows that do not meet a condition:
+
+```python
+not_passed = df[~(df["Passed"] == True)]
+```
+
+The `~` operator negates a Boolean Series.
+
+---
+
+### Why Boolean Filtering Is Essential in AI
+
+Filtering allows you to:
+
+* Remove invalid samples
+* Separate training and validation sets
+* Identify anomalies
+* Segment users or predictions
+
+Most real-world AI data preparation relies heavily on Boolean filtering.
+
+---
+
+## 5. Sorting DataFrames
+
+Sorting reveals structure and patterns.
+
+---
+
+### Sorting by One Column
+
+```python
+sorted_df = df.sort_values("Score")
+```
+
+To sort in descending order:
+
+```python
+sorted_df = df.sort_values("Score", ascending=False)
+```
+
+Sorting is often used to:
+
+* Rank predictions
+* Identify top-performing records
+* Analyze extremes
+
+---
+
+### Sorting by Multiple Columns
+
+```python
+df.sort_values(["Passed", "Score"], ascending=[False, False])
+```
+
+This sorts first by Passed status, then by Score.
+
+---
+
+### Sorting by Index
+
+```python
+df.sort_index()
+```
+
+Useful when index order matters.
+
+---
+
+## 6. Combining Selection and Filtering
+
+A typical AI-style query might look like this:
+
+```python
+top_students = (
+    df[df["Score"] > 85]
+      [["Name", "Score"]]
+      .sort_values("Score", ascending=False)
+)
+```
+
+This chain:
+
+1. Filters rows
+2. Selects columns
+3. Sorts results
+
+This pattern mirrors how analysts and engineers query structured data efficiently.
 
 ---
 
 ## 7. Common Beginner Mistakes
 
-* Skipping inspection steps
-* Ignoring missing values
-* Assuming data types are correct
-* Modifying data without understanding indexing
+* Forgetting parentheses around Boolean conditions
+* Using `and` instead of `&`
+* Confusing `loc` and `iloc`
+* Overwriting the original DataFrame unintentionally
 
-Pandas is powerful, but incorrect assumptions can propagate errors into models.
+These are normal early mistakes and improve with practice.
 
 ---
 
 ## Key Takeaways
 
-Pandas provides structured data handling for AI workflows. A Series represents a single labeled column, while a DataFrame represents a full table. CSV files can be loaded easily with `read_csv()`. Inspection methods like `head()`, `tail()`, `info()`, and `describe()` are essential for understanding datasets before modeling. Mastery of Pandas is the bridge between raw data and machine learning.
+Selection and filtering allow you to query data precisely. Columns are selected using brackets, rows can be accessed by position or label, Boolean conditions filter subsets, and sorting reveals structure. These operations are fundamental to AI data preparation and analysis.
 
 **Mental model:**
-Series = column.
-DataFrame = table.
-`read_csv()` loads.
-Inspection prevents mistakes.
+Select columns.
+Index rows.
+Filter with logic.
+Sort to understand.
 
 ---
 
 ## Additional Reading
 
-* Pandas Official Documentation:
-  [https://pandas.pydata.org/docs/](https://pandas.pydata.org/docs/)
+* Pandas Indexing and Selecting Data:
+  [https://pandas.pydata.org/docs/user_guide/indexing.html](https://pandas.pydata.org/docs/user_guide/indexing.html)
 
-* Pandas 10-Minute Introduction:
-  [https://pandas.pydata.org/docs/user_guide/10min.html](https://pandas.pydata.org/docs/user_guide/10min.html)
+* Boolean Indexing in Pandas:
+  [https://realpython.com/pandas-boolean-indexing/](https://realpython.com/pandas-boolean-indexing/)
 
-* Data Inspection Best Practices:
-  [https://realpython.com/pandas-python-explore-dataset/](https://realpython.com/pandas-python-explore-dataset/)
+* Sorting DataFrames:
+  [https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sort_values.html](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.sort_values.html)
