@@ -256,3 +256,74 @@ z_score_trimmed_df = df[(df['Z_Score'] > -3) & (df['Z_Score'] < 3)]
 
 
 ---
+
+
+# Use corr() and cov() for Correlation & Covariance Matrices
+
+## Core Concept: Multivariate Relationships
+When building predictive models, identifying "features" (variables) that have strong mathematical relationships with your "target" (the thing you are trying to predict) is crucial. `df.corr()` automates this discovery process across millions of data points instantly.
+
+---
+
+## 1. Generating a Correlation Matrix
+
+The `.corr()` method evaluates every numeric column against every other numeric column in the DataFrame. Non-numeric columns (like Strings/Objects) are automatically ignored.
+
+```python
+import pandas as pd
+
+housing = pd.DataFrame({
+    'Price':        [450000, 320000, 580000, 275000, 710000, 390000],
+    'Square_Feet':  [1800, 1350, 2200, 1100, 2800, 1600],
+    'Num_Bedrooms': [3, 2, 4, 2, 5, 3],
+    'Age_of_Home':  [15, 32, 8, 45, 5, 22],
+    'Address':      ['101 Maple St', '202 Oak Ave', '303 Pine Rd', '404 Elm Dr', '505 Cedar Ln', '606 Birch Blvd']
+})
+
+# Assume a real estate DataFrame 'housing'
+# Columns: ['Price', 'Square_Feet', 'Num_Bedrooms', 'Age_of_Home', 'Address']
+
+# Calculate the Pearson correlation matrix
+matrix = housing.corr(numeric_only=True)
+
+# Look at how everything relates specifically to 'Price'
+price_factors = matrix['Price']
+
+# Output Example:
+# Price           1.000   (Perfect correlation with itself)
+# Square_Feet     0.895   (Strong positive relationship)
+# Num_Bedrooms    0.650   (Moderate positive relationship)
+# Age_of_Home    -0.420   (Moderate negative relationship - older is cheaper)
+```
+
+### Pearson vs Spearman vs Kendall
+- `method='pearson'` (Default): Measures linear relationships. Assumes data is normally distributed.
+- `method='spearman'`: Measures monotonic relationships using rank-order. Better for data with extreme outliers or non-linear curves.
+- `method='kendall'`: Another rank-based calculation, highly resilient to small sample sizes.
+
+```python
+# Use Spearman if you have massive, unclipped outliers
+robust_matrix = housing.corr(method='spearman', numeric_only=True)
+```
+
+---
+
+
+![Interpreting Correlation with .corr()](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-70-corr-interpret.png)
+
+## 2. Generating a Covariance Matrix
+
+Covariance measures the joint variability of two variables. 
+
+```python
+# Calculate the Covariance matrix
+cov_matrix = housing.cov(numeric_only=True)
+```
+
+**Why don't we use Covariance visually?**
+Because it is heavily influenced by scale. If you measure house prices in US Dollars and `Square_Feet` in inches, the covariance will be a massive, uninterpretable multi-million integer. If you measure house prices in Millions of Dollars and `Square_Feet` in Acres, the covariance will be a tiny fraction. 
+
+Correlation (`.corr()`) solves this by dividing the covariance by the standard deviations of both variables, mathematically trapping the result between `-1` and `1` regardless of the scale. 
+
+*Rule of thumb: Read `.corr()` with your eyes. Feed `.cov()` to your algorithms.*
+
