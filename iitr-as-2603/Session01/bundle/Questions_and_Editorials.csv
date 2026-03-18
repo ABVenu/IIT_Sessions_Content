@@ -1,0 +1,1197 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Which statement is true regarding the concept of **defining and initializing variables in python**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+subjective,markdown,"Create three variables:
+- `student_name` with your name
+- `student_age` with your age
+- `student_grade` with a grade (A, B, C, etc.)
+
+Print all three variables.
+
+**Expected Output**:
+Alice
+20
+A",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"Create a variable `temperature` with value 72. Change it to 68. Then change it to 75. Print after each change.
+
+**Expected Output**:
+72
+68
+75",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"Create a variable `game_score` starting at 0. Add 100 points (level 1 complete), then add 150 points (level 2 complete), then subtract 50 points (penalty). Print the score after each change.
+
+**Expected Output**:
+0
+100
+250
+200",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"Create variables for:
+- `item_price = 25`
+- `quantity = 3`
+- `total` (calculated as price × quantity)
+
+Print the total. Then change quantity to 5 and recalculate total.
+
+**Expected Output**:
+75
+125",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"You have two variables:
+```python
+a = 10
+b = 20
+```
+
+Swap their values so `a` becomes 20 and `b` becomes 10. You'll need a third temporary variable!
+
+**Expected Output**:
+a = 20
+b = 10",,,,,,,,,,,,,,0.5,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **applying pep 8 variable naming conventions**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+mcsc,markdown,a) `student_name`,,,,,,,,`2nd_place`,`first-name`,`_private`,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"- `studentName` →
+- `TotalScore` →
+- `userEmail` →",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"```python
+1st_place = ""Gold""
+user-email = ""test@test.com""
+for = 10
+total$price = 99.99
+```",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"- First name
+- Last name
+- Age
+- GPA
+- Is enrolled (boolean)",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"```python
+user@domain = ""test""
+className = ""Math""
+MAX_value = 100
+first name = ""Alice""
+my-var = 50
+```",,,,,,,,,,,,,,0.5,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **implementing integer data types for numeric values**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+mcsc,markdown,"- Your age
+- Current year
+- Number of siblings
+
+Print each with its type.",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"```python
+a = 15
+b = 4
+```
+Find: sum, difference, product",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"```python
+print(17 / 5)   # ?
+print(17 // 5)  # ?
+print(17 % 5)   # ?
+```
+Explain why each is different.",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"- How many complete groups?
+- How many students left over?
+
+Write code to calculate this.",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"Example: 185 minutes = 3 hours and 5 minutes
+
+Use integer division and modulo!",,,,,,,,,,,,,,1,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **implementing float data types for decimal numbers**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+mcsc,markdown,"- Product price: $19.99
+- Your height in feet
+- Temperature: 72.5°F",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"```python
+a = 10.5
+b = 3.2
+```
+Find sum, difference, product, quotient",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"- Price: $50.00
+- Tax rate: 8.5%
+- Formula: total = price × (1 + tax_rate/100)",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"- Formula: F = C × 9/5 + 32
+- Test with C = 25",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"- Formula: BMI = weight(kg) / height(m)²
+- Weight: 70 kg
+- Height: 1.75 m
+- Round to 2 decimal places",,,,,,,,,,,,,,1,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **implementing string data types for text**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+mcsc,markdown,"- Your name
+- Your city
+- Your email
+Combine them into a sentence.",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"```python
+word = ""Python""
+```
+Print it:
+- In uppercase
+- In lowercase
+- 3 times in a row",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"```python
+first = ""Alice""
+middle = ""Marie""
+last = ""Johnson""
+```",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"- Contains ""@""
+- Ends with "".com""
+```python
+email = ""user@example.com""
+```",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"```python
+text = ""Hello""
+```
+Use string operations!",,,,,,,,,,,,,,1,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **implementing boolean data types for logical values**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+subjective,markdown,"- is_weekend
+- has_homework
+- is_hungry",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"```python
+active = true      # Wrong capitalization
+finished = ""True""  # String, not boolean
+```",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"```python
+username = ""alice""
+is_active = True
+is_premium = False
+is_verified = True
+```
+Print a status message.",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"- active (bad - not a question)
+- is_active (good)
+- status (bad)
+- has_access (good)",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"```python
+is_game_over = False
+player_alive = True
+has_won = False
+```
+Print game status.",,,,,,,,,,,,,,0.5,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,"When **inspecting data types using type() function**, what is the main benefit for the developer?",,,,,,1,,It creates a reusable block of code that improves modularity.,It executes faster than standard conditional statements.,It automatically imports necessary external modules.,It avoids the need for variable assignments.,,,,markdown,
+subjective,markdown,"- Debugging
+- Validation
+- Understanding code
+- Type checking",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"- `type(variable)` returns the type
+- Returns class object
+- Helps identify type errors
+- Essential for debugging",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+mcsc,markdown,Which statement is true regarding the concept of **performing arithmetic operations on numbers**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+subjective,markdown,"```python
+a = 25
+b = 7
+```
+Find: sum, difference, product, quotient, integer division, remainder, a squared",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"```python
+price = 50
+price += 20
+price *= 2
+price -= 10
+```",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"- Bill amount: $85.00
+- Tip rate: 18%
+- Calculate tip amount
+- Calculate total
+- Split among 4 people",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"- Input: 2 hours, 30 minutes, 45 seconds
+- Output: total seconds
+
+Formula: `(hours × 3600) + (minutes × 60) + seconds`",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"- Takes a 3-digit number (e.g., 456)
+- Extracts each digit using % and //
+- Prints: ""Hundreds: 4, Tens: 5, Ones: 6""
+
+Hint:
+- Ones: `number % 10`
+- Tens: `(number // 10) % 10`
+- Hundreds: `number // 100`",,,,,,,,,,,,,,0.5,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **applying operator precedence in expressions**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+subjective,markdown,"```python
+print(5 + 3 * 2)
+print(10 - 4 / 2)
+print(2 ** 3 + 1)
+```",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"```python
+2 + 3 * 4
+
+2 + 3 * 4
+```",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"```python
+result = 10 + 5 * 2 ** 2 - 3
+```",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"```python
+avg = total + count / 2  # Wrong!
+```",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"```python
+result = (5 + 3) * 2 ** 2 - 10 // 3 + 1
+```
+Evaluate step by step.",,,,,,,,,,,,,,0.5,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
+mcsc,markdown,Which statement is true regarding the concept of **using comparison operators to evaluate conditions**?,,,,,,1,,It is a fundamental feature that enables this specific logic or operation in Python.,It is a visual styling tool for output formatting.,It is a module that must be downloaded via pip before every use.,It is an outdated practice not included in Python 3.,,,,markdown,
+subjective,markdown,"1. Takes a user's age as input
+2. Checks if they are 18 or older
+3. Prints whether they can vote
+
+Example:
+Enter your age: 20
+Can vote: True",,,,,,,,,,,,,,0,markdown,"```python
+age = int(input(""Enter your age: ""))
+can_vote = age >= 18
+print(f""Can vote: {can_vote}"")
+```
+
+- Get age as integer input
+- Use `>=` to check if 18 or older
+- Store boolean result in `can_vote`
+- Print the result"
+subjective,markdown,"Write a program that compares two numbers and prints the results of all six comparison operators.
+
+Example:
+Enter first number: 10
+Enter second number: 20
+
+10 == 20: False
+10 != 20: True
+10 > 20: False
+10 < 20: True
+10 >= 20: False
+10 <= 20: True",,,,,,,,,,,,,,0,markdown,"```python
+num1 = int(input(""Enter first number: ""))
+num2 = int(input(""Enter second number: ""))
+
+print(f""{num1} == {num2}: {num1 == num2}"")
+print(f""{num1} != {num2}: {num1 != num2}"")
+print(f""{num1} > {num2}: {num1 > num2}"")
+print(f""{num1} < {num2}: {num1 < num2}"")
+print(f""{num1} >= {num2}: {num1 >= num2}"")
+print(f""{num1} <= {num2}: {num1 <= num2}"")
+```
+
+- Get two numbers from user
+- Perform all six comparisons
+- Use f-strings to display each comparison and its result
+- Each comparison returns True or False"
+subjective,markdown,"1. Takes a test score as input (0-100)
+2. Determines if the student:
+   - Failed (< 60)
+   - Passed (>= 60)
+   - Got excellent (>= 90)
+3. Prints all three results
+
+Example:
+Enter your score: 85
+Failed: False
+Passed: True
+Excellent: False",,,,,,,,,,,,,,0.5,markdown,"```python
+score = int(input(""Enter your score: ""))
+
+failed = score < 60
+passed = score >= 60
+excellent = score >= 90
+
+print(f""Failed: {failed}"")
+print(f""Passed: {passed}"")
+print(f""Excellent: {excellent}"")
+```
+
+- Store score from user
+- Create three boolean variables:
+  - `failed`: score less than 60
+  - `passed`: score 60 or higher
+  - `excellent`: score 90 or higher
+- Print all three results"
+subjective,markdown,"1. Takes a password as input
+2. Checks if length >= 8 characters
+3. Checks if length >= 12 characters
+4. Prints both results
+
+Example:
+Enter password: mypass123
+Minimum strength (8+ chars): True
+Strong (12+ chars): False",,,,,,,,,,,,,,0.5,markdown,"```python
+password = input(""Enter password: "")
+length = len(password)
+
+minimum_strength = length >= 8
+strong = length >= 12
+
+print(f""Minimum strength (8+ chars): {minimum_strength}"")
+print(f""Strong (12+ chars): {strong}"")
+```
+
+- Get password string from user
+- Calculate length using `len()`
+- Check if length meets minimum (8 chars)
+- Check if length is strong (12 chars)
+- Print both results"
+subjective,markdown,"1. Takes temperature in Celsius
+2. Checks multiple conditions:
+   - Is freezing (<= 0)
+   - Is cold (< 15)
+   - Is comfortable (>= 15 and <= 25)
+   - Is hot (> 25)
+   - Is very hot (>= 35)
+3. Store each result in a variable
+4. Print all results
+
+Example:
+Enter temperature in Celsius: 30
+Freezing: False
+Cold: False
+Comfortable: False
+Hot: True
+Very hot: False
+
+Hint: You can use comparison operators to create each boolean variable!",,,,,,,,,,,,,,0.5,markdown,"```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_comfortable = temp >= 15 and temp <= 25
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```
+
+- Get temperature as float (can have decimals)
+- Create five boolean variables with different conditions:
+  - `is_freezing`: 0 or below
+  - `is_cold`: below 15
+  - `is_comfortable`: between 15 and 25 (uses `and` - will learn more in next LO!)
+  - `is_hot`: above 25
+  - `is_very_hot`: 35 or above
+- Print all results
+
+**Note**: The `and` keyword used in `is_comfortable` combines two conditions. This is a preview of logical operators (next lesson)!
+
+```python
+temp = float(input(""Enter temperature in Celsius: ""))
+
+is_freezing = temp <= 0
+is_cold = temp < 15
+is_warm_enough = temp >= 15
+is_not_too_hot = temp <= 25
+is_comfortable = is_warm_enough and is_not_too_hot  # Combine two booleans
+is_hot = temp > 25
+is_very_hot = temp >= 35
+
+print(f""Freezing: {is_freezing}"")
+print(f""Cold: {is_cold}"")
+print(f""Comfortable: {is_comfortable}"")
+print(f""Hot: {is_hot}"")
+print(f""Very hot: {is_very_hot}"")
+```"
