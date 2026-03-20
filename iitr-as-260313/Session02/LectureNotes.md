@@ -178,6 +178,48 @@ print(not (a and b))
 
 ---
 
+# Expressions, statements & assignment operators
+
+## Expressions vs statements (quick)
+
+An **expression** is code that **evaluates to a value** (e.g. `2 + 3`, `age >= 18`, `name.upper()`, `a and b`). A **statement** is a full instruction Python executes (e.g. `x = 5`, `if x > 0:`, `print("hi")`, `pass`). **`if`** and **`while`** conditions use **expressions**; f-strings use **expressions** inside `{...}`.
+
+```python
+# Expressions (produce values)
+total = 10 + 5
+ok = age >= 18 and has_id
+
+# Statements (do something / define structure)
+score = 100
+if score > 60:
+    print(score)
+```
+
+## Assignment operators
+
+Plain **`=`** assigns once. **Compound assignment** updates a variable using its current value:
+
+| Operator | Example | Meaning |
+|----------|---------|---------|
+| `+=` | `n += 1` | `n = n + 1` |
+| `-=` | `n -= 2` | `n = n - 2` |
+| `*=` | `n *= 3` | `n = n * 3` |
+| `/=` | `n /= 2` | `n = n / 2` (true division → float) |
+| `//=` | `n //= 2` | `n = n // 2` |
+| `%=` | `n %= 5` | `n = n % 5` |
+| `**=` | `n **= 2` | `n = n ** 2` |
+
+```python
+count = 0
+count += 1
+discount = 10
+discount += 5   # same idea as in nested discount examples
+```
+
+Still **assignment**, not comparison—don’t confuse **`+=`** (update) with **`==`** (equal test).
+
+---
+
 # Write If Statements
 
 ## Introduction
@@ -680,11 +722,11 @@ else:
 
 ---
 
-# Accept User Input
+# Input & output: `input()` and `print()`
 
 ## Introduction
 
-**`input()`** lets programs **pause for typed text** — the standard CLI pattern of interactive programs. Programs are **input → processing → output**; `input()` is the primary way to get **keyboard input** in simple scripts.
+**`input()`** and **`print()`** are the usual pair for simple **console I/O**: read from the keyboard, show results in the terminal. Programs follow **input → processing → output**; this section covers both ends.
 
 ---
 
@@ -697,6 +739,18 @@ else:
 </div>
 
 ---
+
+## `print()` — showing output
+
+`print` writes values to **standard output** (the console). You’ll use it for labels, debugging, and user-facing results—often with **f-strings**.
+
+```python
+print("Hello")
+print("a", "b", "c")              # multiple values; default sep is a space
+print("x", "y", sep=" | ")       # custom separator between arguments
+print("No newline", end=" ")      # default end is "\n"; change to control line breaks
+print(f"Score: {95}")
+```
 
 ### How interactive programs fit in history
 
@@ -746,10 +800,11 @@ Interactive programs adapt per run instead of hardcoding `name = "Alice"`.
 
 ## Key takeaways
 
-1. **`variable = input("prompt")`**
-2. **Return type is always `str`** until you convert.
-3. **Convert** with `int()`, `float()` when doing math.
-4. **Clear prompts** help users; validate messy input in real apps.
+1. **`variable = input("prompt")`** — pauses until Enter.
+2. **`print(...)`** — one or more values; optional **`sep=`**, **`end=`**.
+3. **`input` always returns `str`** until you convert.
+4. **Convert** with `int()`, `float()` when doing math.
+5. **Clear prompts** help users; validate messy input in real apps.
 
 ---
 
@@ -896,6 +951,8 @@ This uses **nested ideas only where needed** (here a flat `if/elif` chain is eno
 
 | Term | Meaning |
 |------|---------|
+| Expression | Code that evaluates to a value (e.g. `x + 1`, `a and b`) |
+| Statement | A full instruction (e.g. assignment, `if`, `print(...)`) |
 | Boolean | `True` or `False` (result of comparisons and logic) |
 | Condition | Expression in `if` / `while` that must be truthy/falsy |
 | Block | Indented lines “owned” by `if`, `elif`, `else`, loops, `def`, etc. |
@@ -911,6 +968,7 @@ This uses **nested ideas only where needed** (here a flat `if/elif` chain is eno
 |---------|-------------|
 | `IndentationError` after `if` | Missing indented body or mixed spaces/tabs |
 | `SyntaxError` on `if age = 18` | Used assignment `=` instead of compare `==` |
+| Wrong use of `+=` vs `==` | `+=` updates a variable; `==` only compares |
 | `if` never seems to run | Condition is false; check values with `print` |
 | `elif` never runs | An earlier condition is always true first — **reorder** |
 | `TypeError` on `age + 1` after `input` | Forgot `int()` / `float()` — input is a **string** |
@@ -930,7 +988,9 @@ When something is wrong, **print the variables** just before the `if` and trace 
 | `elif` | vs stacked `if`s, first match, ordering, grades / age / BMI-style bands |
 | `else` | default branch, no condition, position, optional use, login / pricing |
 | Nesting | when to nest, multi-level example, vs `and`, discounts, “too deep” |
-| `input()` | prompt, always `str`, conversion, several fields, mini calculator / profile |
+| Expressions / statements | value vs full instruction; where each appears |
+| Assignment operators | `=`, `+=`, `-=`, `*=`, `/=`, `//=`, `%=`, `**=` |
+| `input()` / `print()` | prompt + always `str`; `print` args, `sep`/`end`, conversion patterns |
 | F-strings | syntax, expressions, numeric formats, alignment, thousands, receipt/report, vs `+` and `.format()`, escapes |
 
 ---
@@ -943,6 +1003,8 @@ When something is wrong, **print the variables** just before the `if` and trace 
 4. **`else`:** Prompt for a username; if it matches `"admin"`, print “welcome admin”; otherwise print “unknown user”.
 5. **Nesting:** Ask for age and a yes/no string for “parent present”; allow entry to a 15+ only event if adult **or** (minor **and** parent present says yes).
 6. **I/O + f-string:** Ask for name and birth year, compute rough age with the current year, and print one f-string summary line.
+7. **`print`:** Print three words on one line with `sep=" • "`. Print two parts on one line with no newline between them using `end`.
+8. **Assignment:** Start `total = 100`; use `*=` to apply a 10% increase in one line and `print` the result.
 
 These reuse the same ideas as the notes without adding new language features.
 
