@@ -1,4 +1,5 @@
-# Apply Logical Operators
+## Operators & Conditional Statements
+### Apply Logical Operators
 
 ## Introduction
 

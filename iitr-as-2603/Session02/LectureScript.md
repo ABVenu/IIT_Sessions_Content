@@ -1,7 +1,7 @@
-# Lecture Script: Logical Operators, Conditionals, Input & F-strings
+# Lecture Script: Operators & Conditional Statements
 
 **Session Duration:** 2 hours  
-**Reference:** Lecture Notes.md
+**Reference:** LectureNotes.md
 
 ---
 

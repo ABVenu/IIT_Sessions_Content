@@ -1,7 +1,7 @@
 # Lecture Script: Introduction to Programming, Python Basics & Development Env Setup
 
 **Session Duration:** 2 hours  
-**Reference:** lectureNotes.md
+**Reference:** LectureNotes.md
 
 ---
 
