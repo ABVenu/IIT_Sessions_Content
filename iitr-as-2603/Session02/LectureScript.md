@@ -1,7 +1,7 @@
 # Lecture Script: Operators & Conditional Statements
 
 **Session Duration:** 2 hours  
-**Reference:** LectureNotes.md
+**Reference:** Lecture Notes.md
 
 ---
 
@@ -13,7 +13,7 @@ Have learners predict the output of a tiny snippet (no IDE yet): `True and False
 
 ---
 
-## 2. Introduce Logical Operators (22 minutes)
+## 2. Introduce Logical Operators (20 minutes)
 
 Bridge: *“Comparisons give True/False. Real programs combine them—`and`, `or`, and `not` are how we glue conditions together.”*
 
@@ -37,7 +37,19 @@ Close with the **practice exercise** in the notes (`a and b or c` vs precedence)
 
 ---
 
-## 3. Introduce `if` Statements (20 minutes)
+## 3. Expressions, statements & assignment operators (3 minutes)
+
+Bridge: *“We combine values and store results—knowing what an expression is makes `if` and f-strings easier.”*
+
+Point to **`# Expressions, statements & assignment operators`** in the notes.
+
+**Expressions vs statements:** An **expression** evaluates to a value (`age >= 18 and ok`, `price * qty`). A **statement** is a full step (`n = 0`, `if ...`, `print(...)`). Conditions and `{...}` in f-strings use expressions.
+
+**Compound assignment:** One-liner table from notes—**`+=`**, **`-=`**, **`*=`**, etc. Live demo **`count += 1`** and **`discount += 5`**. Contrast **`+=`** (update variable) with **`==`** (comparison).
+
+---
+
+## 4. Introduce `if` Statements (20 minutes)
 
 Bridge: *“We can compute booleans. Now we decide what runs: `if` is the basic branch.”*
 
@@ -59,13 +71,13 @@ Run the **`x = 10`** trace exercise from the notes (`A`, `B`, `D`—not `C`).
 
 ---
 
-## 4. Announce a Short Break (5 minutes)
+## 5. Announce a Short Break (5 minutes)
 
 Let learners try one snippet on their machine: combining two comparisons with `and`, or fixing an `if` missing a colon.
 
 ---
 
-## 5. Introduce `elif` (14 minutes)
+## 6. Introduce `elif` (14 minutes)
 
 Bridge: *“Many outcomes aren’t just yes/no. We need a chain: first match wins.”*
 
@@ -81,7 +93,7 @@ Bridge: *“Many outcomes aren’t just yes/no. We need a chain: first match win
 
 ---
 
-## 6. Introduce `else` (12 minutes)
+## 7. Introduce `else` (12 minutes)
 
 Bridge: *“Sometimes we need a guaranteed answer when nothing else matched—that’s `else`.”*
 
@@ -95,7 +107,7 @@ Bridge: *“Sometimes we need a guaranteed answer when nothing else matched—th
 
 ---
 
-## 7. Introduce Nested Conditionals (14 minutes)
+## 8. Introduce Nested Conditionals (13 minutes)
 
 Bridge: *“Sometimes the *next* question only matters if the first answer was yes—that’s nesting.”*
 
@@ -111,23 +123,27 @@ Define **nested `if`**: inner block runs only if outer is true. Demo **age + lic
 
 ---
 
-## 8. Introduce `input()` (11 minutes)
+## 9. Introduce `input()` and `print()` (13 minutes)
 
-Bridge: *“Static variables aren’t enough—programs should react to the user.”*
+Bridge: *“Static variables aren’t enough—programs should react to the user and show answers.”*
 
-Explain **input → processing → output**; **`variable = input("prompt")`** pauses until Enter.
+Use the **Input & output** section (`input()` and `print()`) in the notes.
+
+**`print`:** Writes to the console; multiple arguments default to **space-separated**; mention **`sep=`** and **`end=`** from the notes—quick demo (`print("a", "b", sep=" | ")`).
+
+**`input`:** **`variable = input("prompt")`** pauses until Enter.
 
 **Critical rule:** **`input` always returns a `str`**—even if the user types digits. Demo `type(...)` after reading age.
 
-**Conversion:** `int(...)`, `float(...)`; pattern **`int(input("Age: "))`**. Mini **calculator** with two `float` inputs from the notes.
+**Conversion:** `int(...)`, `float(...)`; pattern **`int(input("Age: "))`**. Mini **calculator** from the notes (often **`print("Sum:", ...)`**).
 
 **Why strings first:** Safety and flexibility—explicit conversion is intentional (briefly: validation before convert in real apps).
 
-Optional: Mention **batch vs interactive** history from the notes in one sentence—CLI and forms are still the same pipeline.
+Optional: One sentence on **batch vs interactive** from the notes.
 
 ---
 
-## 9. Introduce F-strings (11 minutes)
+## 10. Introduce F-strings (11 minutes)
 
 Bridge: *“We’re building strings for users. F-strings are the readable default in modern Python.”*
 
@@ -147,14 +163,17 @@ Contrast one line of **concatenation** vs **f-string**—point to “Zen” take
 
 ---
 
-## 10. Conclude with Reflection (8 minutes)
+## 11. Conclude with Reflection (7 minutes)
 
 **Integrating demo:** Walk or live-code the **“Putting the session together”** example from the notes: read age, **`if` / `elif` / `else`** for group, logical **`can_vote`**, one **`print` with an f-string**.
 
 Ask students to reflect briefly:
 
+- What is the difference between an **expression** and a **statement**?
+- **`+=` vs `==`** — which updates a variable, which compares?
 - When do you choose **several `if`s** vs **`if` / `elif`**?
-- Why does **`input`** force **`int`** before arithmetic?
+- Why does **`input`** return a **`str`**, and when do you use **`int`** / **`float`**?
+- What do **`sep`** and **`end`** on **`print`** change?
 - Why is **`else`** written without a condition, and why must it be **last**?
 - When is **nesting** better than **`and`**?
 
