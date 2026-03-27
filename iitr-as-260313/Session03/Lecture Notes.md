@@ -1,3 +1,40 @@
+# Introduction to Loops
+
+In everyday programs, the same kind of step often has to run **many times**: process every line in a file, every user in a list, every guess in a game, or every tick until a condition changes. Writing separate instructions for each repetition does not scale and is impossible when you do not know the count ahead of time. **Loops** solve this by letting you describe **once** what should repeat and **when** it should stop (or how many times to go).
+
+## Why loops are needed
+
+1. **Scale and length**: Ten steps or ten million steps can use the **same** few lines of code; you do not duplicate blocks by hand.
+2. **Unknown counts**: You often repeat until something happens (“valid password”, “guess is correct”, “balance is zero”) rather than a fixed number you knew when you wrote the code.
+3. **Consistency**: Every repetition runs the **same** logic, which reduces bugs and makes changes easy—you fix logic in one place.
+4. **Working with collections**: Lists, strings, ranges, and other sequences are meant to be traversed; loops are the standard way to visit each item.
+
+## What problems loops solve (in one line each)
+
+| Situation | Without a loop | With a loop |
+| --- | --- | --- |
+| Same action N times | Copy-paste N times | One loop body, controlled by N or a condition |
+| Process each item in data | Manual index and lots of branches | Clear “for each” or index-based iteration |
+| Retry until input is valid | Awful nested `if` chains | Repeat until a condition becomes true |
+| Search or scan until found | Must check every case explicitly | Stop early when found (with `break` where useful) |
+| Tables and combinations | Cannot express row/column patterns | Nested loops express grids and pairs |
+
+**Iteration** is the name for this pattern: executing a block of code repeatedly, usually with something changing each time (a counter, the next item in a list, or user input).
+
+## What this session covers
+
+Python gives you several loop-related tools. Later sections build on this idea in order:
+
+- **While loops** — repeat **while** a Boolean condition is true (great for “until done” and validation).
+- **For loops** — iterate over **sequences** (lists, strings, etc.) in a readable way.
+- **`range()`** — produce numeric sequences efficiently for counting and indexing.
+- **`break` and `continue`** — leave a loop early or skip one pass without rewriting the whole structure.
+- **Nested loops** — outer and inner repetition for tables, grids, and combinations.
+
+The rest of these notes keep that order; we start with **while** because it makes the **condition and update** very visible—then **for** and **range** feel like natural shortcuts for common cases.
+
+---
+
 # Write While Loops
 
 ## Introduction
