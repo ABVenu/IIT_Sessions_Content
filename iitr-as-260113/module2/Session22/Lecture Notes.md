@@ -520,9 +520,6 @@ Like:
 
 ---
 
-Here is the **final, polished version of the notes** with **clear inline comments explaining each line of code**, while maintaining a clean instructional flow.
-
----
 
 ## **7. Implementing Memory Strategies in Agent Workflows (Python)**
 
@@ -534,7 +531,7 @@ Understand how different memory strategies are implemented in Python and how the
 
 ---
 
-#### **1. From Theory to Practice**
+#### **7.1. From Theory to Practice**
 
 Previously, we discussed:
 
@@ -552,7 +549,7 @@ In this section, we will:
 
 ---
 
-#### **2. Understanding `__init__` in Python Classes**
+#### **7.2. Understanding `__init__` in Python Classes**
 
 ##### **What is `__init__`?**
 
@@ -597,11 +594,11 @@ print(s1.name)                  # Access stored value → Output: Rahul
 
 ---
 
-#### **3. Memory Implementations**
+#### **7.3. Memory Implementations**
 
 ---
 
-##### **3.1 Buffer Memory (Stores Complete History)**
+##### **7.3.1 Buffer Memory (Stores Complete History)**
 
 ```python
 class BufferMemory:
@@ -625,7 +622,7 @@ class BufferMemory:
 
 ---
 
-##### **3.2 Window Memory (Stores Recent Interactions Only)**
+##### **7.3.2 Window Memory (Stores Recent Interactions Only)**
 
 ```python
 class WindowMemory:
@@ -652,7 +649,7 @@ class WindowMemory:
 
 ---
 
-#### **3.3 Summary Memory (Stores Compressed Information)**
+#### **7.3.3 Summary Memory (Stores Compressed Information)**
 
 ```python
 class SummaryMemory:
@@ -686,7 +683,7 @@ class SummaryMemory:
 
 ---
 
-#### **4. Running All Memory Types Together**
+#### **7.4. Running All Memory Types Together**
 
 ```python
 # Create memory objects
@@ -728,7 +725,7 @@ summary.summarize()
 
 ---
 
-#### **5. Checking the Output**
+#### **7.5. Checking the Output**
 
 ```python
 print("BUFFER MEMORY:")
@@ -746,7 +743,7 @@ print(summary.get_context())
 
 ---
 
-#### **6. Observations**
+#### **7.6. Observations**
 
 - **Buffer Memory**
   Stores the complete conversation
@@ -759,7 +756,7 @@ print(summary.get_context())
 
 ---
 
-#### **7. Comparison**
+#### **7.7. Comparison**
 
 | Memory Type | Storage Style       | Advantage        | Limitation        |
 | ----------- | ------------------- | ---------------- | ----------------- |
@@ -769,7 +766,7 @@ print(summary.get_context())
 
 ---
 
-#### **8. Important Note (Real-World Perspective)**
+#### **7.8. Important Note (Real-World Perspective)**
 
 Currently:
 
@@ -791,7 +788,7 @@ This enables:
 
 ---
 
-# **9. Key Takeaway**
+#### **7.9. Key Takeaway**
 
 Memory in AI agents is not just about storing data—it is about:
 
