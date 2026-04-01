@@ -943,11 +943,6 @@ for i in range(1, 6):
 # *****
 ```
 
-
-```
-
-
-
 ## Key Takeaways
 
 1. **Loop in loop**: Inner loop completes for each outer iteration
