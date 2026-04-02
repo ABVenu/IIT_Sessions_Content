@@ -1,0 +1,866 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+subjective,markdown,### **1. Define Version Control System (VCS).**,,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,### **2. Explain why manually copying project folders is not a reliable version-management method.**,,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,### **3. Evaluate why Git has become the industry standard. Provide two strong reasons.**,,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,### **Q1. Define what Git is in the context of version control.**,,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,### **Q2. Describe the main difference between Git and GitHub in terms of purpose.**,,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,### **Q3. Summarise why having the same name and email in Git and GitHub matters.**,,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,### **Q4. Differentiate between centralized and distributed version control systems with one real-world advantage of each.**,,,,,,,,,,,,,,,markdown,"Direct commits to the main branch can introduce unstable code.
+
+
+Demonstrate a safe feature-based workflow using branches and Pull Requests.
+
+
+Changes flow through a feature branch before reaching main.
+
+
+Feature branches isolate work and are merged through Pull Requests.
+
+
+In this workflow, a new branch `feature-update` is created from `main`. Changes are committed locally and pushed to the remote repository. A Pull Request is then raised to merge the feature branch into `main`. After review and successful merge, the feature branch is deleted to keep the repository clean. This process ensures code review, traceability, and controlled integration.
+
+
+- Merge conflicts may need manual resolution
+- Branch deletion should happen only after merge"
+subjective,markdown,### **Q5. GitHub requires internet while Git does not. Evaluate whether it is still necessary to use GitHub in a software team and justify your answer.**,,,,,,,,,,,,,,,markdown,"Multiple developers working on the same repository need a structured collaboration process.
+
+
+Demonstrate collaboration using Pull Requests, either with a real collaborator or a simulated workflow.
+
+
+Think in terms of ownership, review, and controlled merging.
+
+
+Pull Requests enable collaboration, review, and safe merging of changes.
+
+
+In this task, changes are made in a separate branch (`collab-feature`) either by a collaborator or via solo simulation. The branch is pushed to GitHub and a Pull Request is raised against `main`. The Pull Request allows review, discussion, and approval before merging. Once merged, the changes become part of the main branch, demonstrating a real-world collaborative workflow.
+
+
+- Fork-based workflows are used in open-source projects
+- Review delays can slow integration"
+subjective,markdown,### **Q6. You installed Git but commits show “Unknown Author” in GitHub. Apply your knowledge to solve the issue. (What command(s) should be executed?)**,,,,,,,,,,,,,,,markdown,"A file was modified after committing, but changes need to be discarded.
+
+
+Restore a file to its last committed state.
+
+
+Use restore for working directory cleanup.
+
+
+Git can revert files back to the last commit.
+
+
+```bash
+echo ""console.log('Profile loaded');"" > profile.js
+git add profile.js
+git commit -m ""Add profile module""
+
+echo ""console.log('Extra log');"" >> profile.js
+
+git restore profile.js
+```
+
+This returns `profile.js` to the state of the last commit.
+
+
+- Discarded changes cannot be recovered
+- Does not affect commit history"
+subjective,markdown,### **Q1. What is the purpose of the Staging Area in Git?**,,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,### **Q2. Explain the difference between `git diff` and `git diff --staged`.**,,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,"### Q3. You modified two files: `index.html` and `style.css`. You want to commit only the changes in `index.html`.
+
+- Write the exact Git commands to:
+
+1. Check the status
+2. Stage only `index.html`
+3. Review staged changes
+4. Commit with message **“Update homepage layout”**",,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,"### Q4. You want to check the difference between two commits with IDs `a1b2c3d` and `f4e5d6a`.
+
+- Write the Git command.",,,,,,,,,,,,,,,markdown,"Direct commits to the main branch can introduce unstable code.
+
+
+Demonstrate a safe feature-based workflow using branches and Pull Requests.
+
+
+Changes flow through a feature branch before reaching main.
+
+
+Feature branches isolate work and are merged through Pull Requests.
+
+
+In this workflow, a new branch `feature-update` is created from `main`. Changes are committed locally and pushed to the remote repository. A Pull Request is then raised to merge the feature branch into `main`. After review and successful merge, the feature branch is deleted to keep the repository clean. This process ensures code review, traceability, and controlled integration.
+
+
+- Merge conflicts may need manual resolution
+- Branch deletion should happen only after merge"
+subjective,markdown,"### Q5. A teammate asks you to show a compact one-line history of commits.
+
+- Which command do you use? Provide the expected output style.",,,,,,,,,,,,,,,markdown,"Multiple developers working on the same repository need a structured collaboration process.
+
+
+Demonstrate collaboration using Pull Requests, either with a real collaborator or a simulated workflow.
+
+
+Think in terms of ownership, review, and controlled merging.
+
+
+Pull Requests enable collaboration, review, and safe merging of changes.
+
+
+In this task, changes are made in a separate branch (`collab-feature`) either by a collaborator or via solo simulation. The branch is pushed to GitHub and a Pull Request is raised against `main`. The Pull Request allows review, discussion, and approval before merging. Once merged, the changes become part of the main branch, demonstrating a real-world collaborative workflow.
+
+
+- Fork-based workflows are used in open-source projects
+- Review delays can slow integration"
+subjective,markdown,"## Q6. Complete Git Workflow: Creating a Folder, Files, Making Changes, and Committing (Full Scenario)
+
+**Task:** Perform the following steps using Git commands and write the code you would run:
+
+1. Create a folder named **project-demo**
+2. Inside it, create a file **app.js** and write any simple JS code
+3. Initialize Git in the folder
+4. Stage and commit the file with the message **“Add initial app.js file”**
+5. Create another file **utils.js** and write some code
+6. Modify **app.js** by adding one more `console.log` line
+7. Stage and commit **both files** with the message **“Add utils.js and update app.js”**",,,,,,,,,,,,,,,markdown,"A file was modified after committing, but changes need to be discarded.
+
+
+Restore a file to its last committed state.
+
+
+Use restore for working directory cleanup.
+
+
+Git can revert files back to the last commit.
+
+
+```bash
+echo ""console.log('Profile loaded');"" > profile.js
+git add profile.js
+git commit -m ""Add profile module""
+
+echo ""console.log('Extra log');"" >> profile.js
+
+git restore profile.js
+```
+
+This returns `profile.js` to the state of the last commit.
+
+
+- Discarded changes cannot be recovered
+- Does not affect commit history"
+subjective,markdown,"## Q7. Compare Changes Across Workflow (Diff Analysis)
+
+**Task:** After completing the workflow above:
+
+1. Compare changes between the **working directory and staging area**
+2. Compare staged changes with the **last commit**
+3. Compare the **initial commit** with the second commit
+4. View a compact commit history",,,,,,,,,,,,,,,markdown,"A file was staged too early, edited again, and committed with a wrong message.
+
+
+Demonstrate unstage, recommit, and amend workflow.
+
+
+Unstage → edit → stage → commit → amend.
+
+
+Git supports flexible correction before pushing.
+
+
+```bash
+echo ""const settings = {};"" > settings.js
+git add settings.js
+
+git restore --staged settings.js
+
+echo ""settings.theme = 'dark';"" >> settings.js
+
+git add settings.js
+git commit -m ""Wrong message""
+
+echo ""const defaults = {};"" > defaults.js
+git add defaults.js
+
+git commit --amend -m ""Add settings file""
+```
+
+This results in a single corrected commit containing both files.
+
+
+- Unsafe after pushing to shared branches
+- Amend only affects the latest commit"
+subjective,markdown,"### **Q1. When should you use `git restore --staged file.txt`?**
+
+(Write 2–3 lines explaining the correct scenario.)",,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,"### **Q2. Why is it unsafe to use `git commit --amend` after pushing your commit to a shared remote?**
+
+(Explain in one short paragraph.)",,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,"### **Q3. You edited `home.js`, `nav.js`, and `styles.css`.**
+
+- You want to discard changes only in `nav.js` but keep edits in other files.
+  Write the exact Git command(s).",,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,"### **Q4. You accidentally staged 10 files using `git add .`, but you want to unstage all of them without deleting your actual edits.**
+
+- Write the command(s) to fix this.",,,,,,,,,,,,,,,markdown,"Direct commits to the main branch can introduce unstable code.
+
+
+Demonstrate a safe feature-based workflow using branches and Pull Requests.
+
+
+Changes flow through a feature branch before reaching main.
+
+
+Feature branches isolate work and are merged through Pull Requests.
+
+
+In this workflow, a new branch `feature-update` is created from `main`. Changes are committed locally and pushed to the remote repository. A Pull Request is then raised to merge the feature branch into `main`. After review and successful merge, the feature branch is deleted to keep the repository clean. This process ensures code review, traceability, and controlled integration.
+
+
+- Merge conflicts may need manual resolution
+- Branch deletion should happen only after merge"
+subjective,markdown,"### **Q5. Complete the following workflow:**
+
+1. Modify `dashboard.js`
+2. Stage the file
+3. Realize you need to change the commit message of your last commit
+4. Fix the commit message to: **""Update dashboard logic""**
+5. Add a missing file `auth.js` into that same commit
+
+Write all the commands in order.",,,,,,,,,,,,,,,markdown,"Multiple developers working on the same repository need a structured collaboration process.
+
+
+Demonstrate collaboration using Pull Requests, either with a real collaborator or a simulated workflow.
+
+
+Think in terms of ownership, review, and controlled merging.
+
+
+Pull Requests enable collaboration, review, and safe merging of changes.
+
+
+In this task, changes are made in a separate branch (`collab-feature`) either by a collaborator or via solo simulation. The branch is pushed to GitHub and a Pull Request is raised against `main`. The Pull Request allows review, discussion, and approval before merging. Once merged, the changes become part of the main branch, demonstrating a real-world collaborative workflow.
+
+
+- Fork-based workflows are used in open-source projects
+- Review delays can slow integration"
+subjective,markdown,"### **Q6. Full Workflow: Create, Commit, Modify, Restore**
+
+**Task:**
+Perform the following steps with exact Git commands:
+
+1. Create a new file named **profile.js**
+2. Add a simple console log inside it
+3. Stage and commit it with message **""Add profile module""**
+4. Modify the file by adding another console log
+5. Decide you want to discard the new changes and return the file to the last committed version
+6. Write all the Git commands in order",,,,,,,,,,,,,,,markdown,"A file was modified after committing, but changes need to be discarded.
+
+
+Restore a file to its last committed state.
+
+
+Use restore for working directory cleanup.
+
+
+Git can revert files back to the last commit.
+
+
+```bash
+echo ""console.log('Profile loaded');"" > profile.js
+git add profile.js
+git commit -m ""Add profile module""
+
+echo ""console.log('Extra log');"" >> profile.js
+
+git restore profile.js
+```
+
+This returns `profile.js` to the state of the last commit.
+
+
+- Discarded changes cannot be recovered
+- Does not affect commit history"
+subjective,markdown,"### **Q7. Workflow with Unstage + Amend**
+
+**Task:**
+Follow these steps and write all required commands:
+
+1. Create a file **settings.js**
+2. Add some settings-related code
+3. Stage the file
+4. Realize you staged it too early and need to edit it again — unstage the file
+5. Make additional edits
+6. Stage it again and commit
+7. Immediately realize the commit message is wrong — update the commit message to **""Add settings file""**
+8. Add a missing file **defaults.js** into the same commit using amend
+
+Write the full sequence of Git commands from start to finish.",,,,,,,,,,,,,,,markdown,"A file was staged too early, edited again, and committed with a wrong message.
+
+
+Demonstrate unstage, recommit, and amend workflow.
+
+
+Unstage → edit → stage → commit → amend.
+
+
+Git supports flexible correction before pushing.
+
+
+```bash
+echo ""const settings = {};"" > settings.js
+git add settings.js
+
+git restore --staged settings.js
+
+echo ""settings.theme = 'dark';"" >> settings.js
+
+git add settings.js
+git commit -m ""Wrong message""
+
+echo ""const defaults = {};"" > defaults.js
+git add defaults.js
+
+git commit --amend -m ""Add settings file""
+```
+
+This results in a single corrected commit containing both files.
+
+
+- Unsafe after pushing to shared branches
+- Amend only affects the latest commit"
+subjective,markdown,"### **Q1. What is meant by “isolated development” when using Git branches?**
+
+(Answer in 2–3 lines.)",,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,"### **Q2. Why is branch cleanup considered a best practice in Git?**
+
+(Explain briefly.)",,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,"### **Q3. Create a project and work using branches**
+
+**Task:**
+Write the Git commands for the following steps:
+
+1. Create a folder named **branch-demo**
+2. Initialize a Git repository inside it
+3. Create a file **app.txt** and add any text
+4. Stage and commit the file with message **""Initial commit on main""**
+5. Create a new branch named **feature-update**
+6. Switch to the **feature-update** branch
+7. Add more text to **app.txt**
+8. Stage and commit the changes with message **""Update app.txt in feature branch""**
+9. Switch back to **main**",,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,"### **Q4. Merge a feature branch and clean it up**
+
+**Task:**
+Continuing from the previous question, write the Git commands to:
+
+1. Merge **feature-update** into **main**
+2. Delete the **feature-update** branch after successful merge
+3. Verify that the branch has been deleted
+
+_(Assume there are no merge conflicts.)_",,,,,,,,,,,,,,,markdown,"Direct commits to the main branch can introduce unstable code.
+
+
+Demonstrate a safe feature-based workflow using branches and Pull Requests.
+
+
+Changes flow through a feature branch before reaching main.
+
+
+Feature branches isolate work and are merged through Pull Requests.
+
+
+In this workflow, a new branch `feature-update` is created from `main`. Changes are committed locally and pushed to the remote repository. A Pull Request is then raised to merge the feature branch into `main`. After review and successful merge, the feature branch is deleted to keep the repository clean. This process ensures code review, traceability, and controlled integration.
+
+
+- Merge conflicts may need manual resolution
+- Branch deletion should happen only after merge"
+subjective,markdown,"### **Q1. What is a remote repository, and why is it important for team collaboration?**
+
+(Answer in 3–4 lines.)
+
+_Expected focus:_
+Shared source of truth, synchronization, collaboration, backup.",,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,"### **Q2. Explain how local and remote repositories work together in Git.**
+
+(Include the role of commit, push, and pull.)
+
+_Expected focus:_
+Local-first workflow, explicit sharing, controlled synchronization.",,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,"### \*\*Q3. A developer says: “I committed my changes, so my teammates can see them.”
+
+Is this statement correct? Justify your answer.\*\*
+
+_Expected focus:_
+Difference between local commits and pushing to remote.",,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,"### **Q4. Describe a typical end-to-end collaboration flow starting from a remote repository to merging changes back.**
+
+(List the steps in order.)
+
+_Expected focus:_
+Remote repo → clone/fork → local work → push → pull request → review → merge → sync.",,,,,,,,,,,,,,,markdown,"Direct commits to the main branch can introduce unstable code.
+
+
+Demonstrate a safe feature-based workflow using branches and Pull Requests.
+
+
+Changes flow through a feature branch before reaching main.
+
+
+Feature branches isolate work and are merged through Pull Requests.
+
+
+In this workflow, a new branch `feature-update` is created from `main`. Changes are committed locally and pushed to the remote repository. A Pull Request is then raised to merge the feature branch into `main`. After review and successful merge, the feature branch is deleted to keep the repository clean. This process ensures code review, traceability, and controlled integration.
+
+
+- Merge conflicts may need manual resolution
+- Branch deletion should happen only after merge"
+subjective,markdown,"### **Q1. What is the purpose of setting an upstream branch using `git push -u`?**
+
+(Answer in 2–3 lines.)",,,,,,,,,,,,,,,markdown,"When pushing a branch to a remote repository for the first time, Git needs to know which remote branch it should track.
+
+
+Explain why the `-u` (upstream) flag is used during the first push.
+
+
+Think about future `git push` and `git pull` commands.
+
+
+Setting an upstream branch links the local branch to a remote branch.
+
+
+Using `git push -u origin branch-name` sets an **upstream relationship** between the local branch and the remote branch. After this is done, Git knows where to push and pull from by default. This allows developers to use simple commands like `git push` and `git pull` without specifying the remote and branch every time.
+
+
+- Required only for the first push of a branch
+- Upstream can be changed later if needed"
+subjective,markdown,"### **Q2. Explain the difference between `git fetch` and `git pull`. Why is `fetch` considered safer?**
+
+(Answer briefly.)",,,,,,,,,,,,,,,markdown,"Developers often need to update their local repository with changes from the remote repository.
+
+
+Differentiate between `git fetch` and `git pull` and explain why fetch is safer.
+
+
+One updates references only, the other updates code automatically.
+
+
+`git fetch` downloads changes without merging, while `git pull` fetches and merges automatically.
+
+
+`git fetch` retrieves the latest changes from the remote repository and updates remote-tracking branches, but it **does not modify the working directory**. This allows developers to review changes before merging.
+`git pull` performs a fetch followed by an automatic merge, which can introduce conflicts immediately. Fetch is considered safer because it gives developers full control over when and how changes are merged.
+
+
+- Pull can cause unexpected conflicts
+- Fetch requires an extra merge step"
+subjective,markdown,"### **Q3. Local to Remote Workflow (First Push)**
+
+**Task:**
+Perform the following steps and submit the repository link:
+
+1. Create a new local repository named **remote-demo**
+2. Create a file **README.md** and add some content
+3. Commit the file with message **""Initial commit""**
+4. Create a remote repository on GitHub
+5. Connect the local repository to GitHub using `origin`
+6. Push the code to GitHub and set the upstream branch
+
+**Expected Evidence:**
+
+- GitHub repo exists
+- `main` branch contains at least one commit",,,,,,,,,,,,,,,markdown,"A local Git repository must be connected to a remote repository to enable sharing and collaboration.
+
+
+Demonstrate the first-time push workflow from local to remote.
+
+
+Initialize locally, then link and push to remote.
+
+
+The first push connects the local repository to a remote and uploads initial commits.
+
+
+In this task, a local repository is created and a `README.md` file is committed. A remote repository is then created on **GitHub** and linked using `git remote add origin`. The code is pushed using `git push -u origin main`, which uploads the commit and sets the upstream branch. This establishes the foundation for all future collaboration.
+
+
+- Remote repository must exist before pushing
+- Branch name (`main` vs `master`) must match"
+subjective,markdown,"### **Q4. Feature Branch → Push → Pull Request → Merge**
+
+**Task:**
+Using the repository from Q6, perform the following:
+
+1. Clone the repository (if not already cloned)
+2. Create a new branch named **feature-update**
+3. Modify **README.md** by adding more content
+4. Commit the changes with a meaningful message
+5. Push the branch to GitHub
+6. Raise a Pull Request from **feature-update → main**
+7. Merge the Pull Request
+8. Delete the feature branch after merge
+
+**Submission:**
+
+- GitHub repository link
+- Pull Request must be visible and merged",,,,,,,,,,,,,,,markdown,"Direct commits to the main branch can introduce unstable code.
+
+
+Demonstrate a safe feature-based workflow using branches and Pull Requests.
+
+
+Changes flow through a feature branch before reaching main.
+
+
+Feature branches isolate work and are merged through Pull Requests.
+
+
+In this workflow, a new branch `feature-update` is created from `main`. Changes are committed locally and pushed to the remote repository. A Pull Request is then raised to merge the feature branch into `main`. After review and successful merge, the feature branch is deleted to keep the repository clean. This process ensures code review, traceability, and controlled integration.
+
+
+- Merge conflicts may need manual resolution
+- Branch deletion should happen only after merge"
+subjective,markdown,"### **Q5. Collaboration Workflow with Pull Requests**
+
+**Task:**
+Perform **one of the following two approaches** (based on availability):
+
+---
+
+#### **Option A: With Collaborator (Preferred)**
+
+1. Add a collaborator to your GitHub repository (Write access)
+2. Collaborator clones the repository
+3. Collaborator creates a new branch **collab-feature**
+4. Collaborator adds a file **collab.txt**, commits, and pushes
+5. Collaborator raises a Pull Request to `main`
+6. You review and merge the collaborator’s Pull Request
+
+---
+
+#### **Option B: Solo Simulation (If No Collaborator Available)**
+
+1. Create a new branch **collab-feature**
+2. Add a file **collab.txt** and commit changes
+3. Push the branch to GitHub
+4. Raise a Pull Request from **collab-feature → main**
+5. Merge the Pull Request yourself
+
+---
+
+**Submission:**
+
+- GitHub repository link
+- At least one merged Pull Request must be visible",,,,,,,,,,,,,,,markdown,"Multiple developers working on the same repository need a structured collaboration process.
+
+
+Demonstrate collaboration using Pull Requests, either with a real collaborator or a simulated workflow.
+
+
+Think in terms of ownership, review, and controlled merging.
+
+
+Pull Requests enable collaboration, review, and safe merging of changes.
+
+
+In this task, changes are made in a separate branch (`collab-feature`) either by a collaborator or via solo simulation. The branch is pushed to GitHub and a Pull Request is raised against `main`. The Pull Request allows review, discussion, and approval before merging. Once merged, the changes become part of the main branch, demonstrating a real-world collaborative workflow.
+
+
+- Fork-based workflows are used in open-source projects
+- Review delays can slow integration"
