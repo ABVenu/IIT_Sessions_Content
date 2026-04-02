@@ -1,0 +1,1805 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+subjective,markdown,"### **Create strings for:**
+
+- Your name
+- Your city
+- Your email
+Combine them into a sentence.",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### **Question 2**
+
+```python
+word = ""Python""
+```
+Print it:
+- In uppercase
+- In lowercase
+- 3 times in a row",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### **Create full name from parts:**
+
+```python
+first = ""Alice""
+middle = ""Marie""
+last = ""Johnson""
+# Output: ""Alice Marie Johnson""
+```",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### **Check if email is valid:**
+
+- Contains ""@""
+- Ends with "".com""
+```python
+email = ""user@example.com""
+```",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### **Create a box around text:**
+
+```python
+text = ""Hello""
+# Output:
+# *******
+# *Hello*
+# *******
+```
+Use string operations!",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Dictionary Creation (3 minutes, Low Difficulty)
+
+Create dictionaries using three different methods:
+1. Using curly braces: a `book` dict with keys `title`, `author`, `year`, `pages`
+2. Using `dict()`: a `settings` dict with keys `theme`, `language`, `notifications`
+3. Using `dict.fromkeys()`: a `scores` dict with keys `Math`, `Science`, `English` all set to 0
+
+Print each dictionary.
+
+**Expected Output:**
+book: {'title': 'Python Crash Course', 'author': 'Eric Matthes', 'year': 2019, 'pages': 544}
+settings: {'theme': 'dark', 'language': 'en', 'notifications': True}
+scores: {'Math': 0, 'Science': 0, 'English': 0}
+
+**Key Concepts:** Multiple dictionary creation methods",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Dictionary from Two Lists (3 minutes, Low Difficulty)
+
+Given two lists:
+```python
+countries = ['India', 'Japan', 'Brazil', 'Germany', 'Australia']
+capitals = ['New Delhi', 'Tokyo', 'Brasilia', 'Berlin', 'Canberra']
+```
+
+1. Create a dictionary mapping countries to capitals using `zip()`
+2. Print the dictionary
+3. Create the reverse mapping (capitals → countries) using a comprehension
+
+**Expected Output:**
+Countries to capitals: {'India': 'New Delhi', 'Japan': 'Tokyo', ...}
+Capitals to countries: {'New Delhi': 'India', 'Tokyo': 'Japan', ...}
+
+**Key Concepts:** `zip()` with `dict()`, dictionary comprehension",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Student Grade Book (5 minutes, Medium Difficulty)
+
+Create a nested dictionary representing a grade book:
+
+```python
+# Structure: {student_name: {subject: grade}}
+```
+
+1. Create entries for 3 students with 3 subjects each
+2. Print each student's grades
+3. Calculate and print each student's average grade
+4. Find the student with the highest average
+
+**Expected Output:**
+Alice: {'Math': 92, 'Science': 88, 'English': 95}
+Bob: {'Math': 78, 'Science': 85, 'English': 80}
+Charlie: {'Math': 95, 'Science': 92, 'English': 88}
+
+Alice average: 91.67
+Bob average: 81.00
+Charlie average: 91.67
+Top student: Alice (or Charlie, tied at 91.67)
+
+**Key Concepts:** Nested dictionaries, iteration, calculations",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Word Frequency with Comprehension (5 minutes, Medium Difficulty)
+
+Given a paragraph:
+```python
+text = ""python is great and python is fun and learning python is the best way to learn programming and programming is fun""
+```
+
+1. Build a word frequency dictionary using a loop
+2. Build a dictionary of words that appear more than once (using comprehension)
+3. Build a dictionary of word lengths (word → length) for unique words
+4. Find the most frequent word
+
+**Expected Output:**
+Frequencies: {'python': 3, 'is': 4, 'great': 1, 'and': 3, ...}
+Repeated words: {'python': 3, 'is': 4, 'and': 3, 'fun': 2, 'programming': 2}
+Word lengths: {'python': 6, 'is': 2, 'great': 5, ...}
+Most frequent: 'is' (4 times)
+
+**Key Concepts:** Building dicts from data, comprehension filtering, `max()`",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Inventory System (5 minutes, Medium Difficulty)
+
+Create an inventory system using dictionaries:
+
+```python
+# Each product: {name: {'price': float, 'quantity': int, 'category': str}}
+```
+
+1. Create an inventory with at least 5 products across 2+ categories
+2. Write a function `total_value(inventory)` — sum of price × quantity for all products
+3. Write a function `by_category(inventory)` — returns `{category: [product_names]}`
+4. Write a function `low_stock(inventory, threshold)` — returns products below threshold
+5. Print results for all three functions
+
+**Expected Output:**
+Total inventory value: $X,XXX.XX
+By category: {'electronics': ['laptop', 'phone'], 'food': ['rice', 'bread'], ...}
+Low stock (< 5): {'bread': 3, 'phone': 2}
+
+**Key Concepts:** Nested dicts, iteration, building new dicts from existing ones",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Access (3 minutes, Low Difficulty)
+
+Given:
+```python
+movie = {
+    'title': 'Inception',
+    'director': 'Christopher Nolan',
+    'year': 2010,
+    'rating': 8.8,
+    'genres': ['Sci-Fi', 'Thriller']
+}
+```
+
+Print:
+1. The title using `[]`
+2. The director using `.get()`
+3. The first genre from the genres list
+4. The `'budget'` key using `.get()` with a default of `'Unknown'`
+5. Check if `'rating'` exists in the dict
+
+**Expected Output:**
+Title: Inception
+Director: Christopher Nolan
+First genre: Sci-Fi
+Budget: Unknown
+Has rating: True
+
+**Key Concepts:** `[]` vs `.get()`, nested access, `in` operator",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Safe Config Reader (3 minutes, Low Difficulty)
+
+Given a partial configuration:
+```python
+config = {'host': '192.168.1.1', 'port': 8080}
+```
+
+Write code that reads these settings with defaults:
+- `host` (default: `'localhost'`)
+- `port` (default: `3000`)
+- `protocol` (default: `'http'`)
+- `timeout` (default: `30`)
+- `debug` (default: `False`)
+
+Print the complete configuration.
+
+**Expected Output:**
+host: 192.168.1.1
+port: 8080
+protocol: http
+timeout: 30
+debug: False
+
+**Key Concepts:** `.get()` with default values",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Nested Data Extraction (5 minutes, Medium Difficulty)
+
+Given:
+```python
+api_response = {
+    'status': 'success',
+    'data': {
+        'user': {
+            'id': 42,
+            'name': 'Alice',
+            'profile': {
+                'avatar': 'alice.png',
+                'bio': 'Python developer'
+            }
+        },
+        'posts': [
+            {'id': 1, 'title': 'Hello World'},
+            {'id': 2, 'title': 'Learning Python'}
+        ]
+    }
+}
+```
+
+Safely extract and print:
+1. The user's name
+2. The user's bio
+3. The user's phone (doesn't exist — default to `'N/A'`)
+4. The title of the second post
+5. The total number of posts
+
+**Expected Output:**
+Name: Alice
+Bio: Python developer
+Phone: N/A
+Second post: Learning Python
+Total posts: 2
+
+**Key Concepts:** Nested access, safe chaining with `.get()`",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Student Lookup System (5 minutes, Medium Difficulty)
+
+```python
+students = {
+    'S001': {'name': 'Alice', 'grade': 'A', 'courses': ['Math', 'Physics']},
+    'S002': {'name': 'Bob', 'grade': 'B', 'courses': ['Chemistry', 'Biology']},
+    'S003': {'name': 'Charlie', 'grade': 'A', 'courses': ['Math', 'English']}
+}
+```
+
+Write a function `lookup(student_id)` that:
+1. Returns student info if ID exists
+2. Returns `""Student not found""` if ID doesn't exist
+3. Prints name, grade, and number of courses
+
+Test with: `'S001'`, `'S004'`, `'S003'`
+
+Then write `get_students_by_grade(grade)` that returns names of all students with that grade.
+
+**Expected Output:**
+S001: Alice, Grade A, 2 courses
+S004: Student not found
+S003: Charlie, Grade A, 2 courses
+Students with grade A: ['Alice', 'Charlie']
+
+**Key Concepts:** `.get()` for missing keys, iterating dict values",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Data Transformer (5 minutes, Medium Difficulty)
+
+Given raw data with inconsistent keys:
+```python
+records = [
+    {'name': 'Alice', 'age': 25, 'city': 'Mumbai'},
+    {'name': 'Bob', 'city': 'Delhi'},
+    {'name': 'Charlie', 'age': 30},
+    {'name': 'Diana', 'age': 28, 'city': 'Bangalore', 'phone': '9876543210'},
+]
+```
+
+Write a function `normalize(records)` that:
+1. Ensures every record has keys: `name`, `age`, `city`, `phone`
+2. Uses defaults: `age=0`, `city='Unknown'`, `phone='N/A'`
+3. Returns the normalized list
+
+Print all normalized records.
+
+**Expected Output:**
+Alice | Age: 25 | City: Mumbai | Phone: N/A
+Bob | Age: 0 | City: Delhi | Phone: N/A
+Charlie | Age: 30 | City: Unknown | Phone: N/A
+Diana | Age: 28 | City: Bangalore | Phone: 9876543210
+
+**Key Concepts:** `.get()` for filling missing fields, data normalization",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Building a Contact (3 minutes, Low Difficulty)
+
+Start with an empty dictionary. Build a contact entry by:
+1. Adding `name` = `'Alice'`
+2. Adding `phone` = `'555-0101'`
+3. Adding `email` = `'alice@old.com'`
+4. Updating `email` to `'alice@new.com'`
+5. Adding `city` = `'Mumbai'` using `setdefault()`
+6. Try to change `city` to `'Delhi'` using `setdefault()` — observe what happens
+
+Print the contact after each step.
+
+**Expected Output:**
+Step 1: {'name': 'Alice'}
+Step 2: {'name': 'Alice', 'phone': '555-0101'}
+Step 3: {'name': 'Alice', 'phone': '555-0101', 'email': 'alice@old.com'}
+Step 4: {'name': 'Alice', 'phone': '555-0101', 'email': 'alice@new.com'}
+Step 5: {'name': 'Alice', 'phone': '555-0101', 'email': 'alice@new.com', 'city': 'Mumbai'}
+Step 6: {'name': 'Alice', 'phone': '555-0101', 'email': 'alice@new.com', 'city': 'Mumbai'}
+
+**Key Concepts:** Assignment, `setdefault()` behavior",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Config Merger (3 minutes, Low Difficulty)
+
+Given:
+```python
+defaults = {'theme': 'light', 'font_size': 14, 'language': 'en', 'notifications': True}
+user_settings = {'theme': 'dark', 'font_size': 18}
+```
+
+1. Create a final config by merging defaults with user settings (user overrides defaults)
+2. Print which settings were overridden
+
+**Expected Output:**
+Final config: {'theme': 'dark', 'font_size': 18, 'language': 'en', 'notifications': True}
+Overridden: theme (light -> dark), font_size (14 -> 18)
+
+**Key Concepts:** `update()`, detecting changes",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Word Frequency Counter (5 minutes, Medium Difficulty)
+
+```python
+text = ""to be or not to be that is the question to be is to exist""
+```
+
+1. Build a frequency dictionary using `.get()` pattern
+2. Find the most common word
+3. Find words that appear exactly once
+4. Find words that appear more than twice
+
+**Expected Output:**
+Frequencies: {'to': 4, 'be': 3, 'or': 1, 'not': 1, ...}
+Most common: 'to' (4 times)
+Appear once: ['or', 'not', 'that', 'the', 'question', 'exist']
+Appear 3+ times: ['to', 'be']
+
+**Key Concepts:** Counter pattern with `.get()`, dict comprehension",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Shopping Cart Manager (5 minutes, Medium Difficulty)
+
+Build a shopping cart system using a dictionary:
+
+```python
+# cart: {product_name: {'price': float, 'quantity': int}}
+```
+
+Implement:
+1. `add_item(cart, name, price, qty)` — add new item or increase quantity
+2. `update_quantity(cart, name, new_qty)` — set new quantity
+3. `get_total(cart)` — total cost
+4. `apply_discount(cart, product, percent)` — reduce price by percent
+
+Test:
+- Add ""Apple"" ($1.50, qty 3)
+- Add ""Banana"" ($0.75, qty 5)
+- Add ""Apple"" again ($1.50, qty 2) — should increase to qty 5
+- Apply 10% discount on Apple
+- Print cart and total
+
+**Key Concepts:** `setdefault()`, modifying nested values",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Grade Tracker (5 minutes, Medium Difficulty)
+
+Build a grade tracking system:
+
+```python
+# grades: {student: [list of scores]}
+```
+
+1. Initialize with empty dict
+2. Add scores one by one: Alice:85, Bob:90, Alice:92, Charlie:78, Bob:88, Alice:95
+3. Calculate each student's average
+4. Assign letter grades (A: 90+, B: 80+, C: 70+, D: below 70)
+5. Print a summary
+
+**Expected Output:**
+Alice: [85, 92, 95] -> Avg: 90.67 -> Grade: A
+Bob: [90, 88] -> Avg: 89.00 -> Grade: B
+Charlie: [78] -> Avg: 78.00 -> Grade: C
+
+**Key Concepts:** `setdefault()` with lists, accumulating data",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Removal Methods (3 minutes, Low Difficulty)
+
+Given:
+```python
+inventory = {'apple': 50, 'banana': 30, 'cherry': 0, 'date': 15, 'elderberry': 5}
+```
+
+1. Remove `'cherry'` using `del` (it's out of stock)
+2. Remove `'date'` using `pop()` and print the removed value
+3. Remove the last item using `popitem()` and print it
+4. Print the remaining inventory
+
+**Expected Output:**
+Removed date with quantity: 15
+Last item removed: ('elderberry', 5)
+Remaining: {'apple': 50, 'banana': 30}
+
+**Key Concepts:** `del`, `pop()`, `popitem()`",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Safe Key Removal (3 minutes, Low Difficulty)
+
+Given a dictionary and a list of keys to remove:
+```python
+data = {'a': 1, 'b': 2, 'c': 3, 'd': 4, 'e': 5}
+remove_keys = ['b', 'c', 'x', 'y', 'z']
+```
+
+Remove all keys from `remove_keys` that exist, without any errors for missing keys. Print which keys were actually removed and which weren't found.
+
+**Expected Output:**
+Removed: b=2
+Removed: c=3
+Not found: x
+Not found: y
+Not found: z
+Final: {'a': 1, 'd': 4, 'e': 5}
+
+**Key Concepts:** `pop()` with default value",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Data Sanitizer (5 minutes, Medium Difficulty)
+
+Write a function `sanitize(data, keep_keys)` that:
+- Takes a dictionary and a set of keys to keep
+- Returns a new dictionary with ONLY the specified keys
+- Also returns a dictionary of removed key-value pairs
+
+```python
+user = {
+    'name': 'Alice', 'age': 25, 'email': 'alice@mail.com',
+    'password': 'secret', 'ssn': '123-45-6789',
+    'address': 'Mumbai', 'phone': '9876543210'
+}
+keep = {'name', 'age', 'email', 'address', 'phone'}
+```
+
+**Expected Output:**
+Safe data: {'name': 'Alice', 'age': 25, 'email': 'alice@mail.com', 'address': 'Mumbai', 'phone': '9876543210'}
+Removed: {'password': 'secret', 'ssn': '123-45-6789'}
+
+**Key Concepts:** Selective removal, dictionary comprehension",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Task Queue (5 minutes, Medium Difficulty)
+
+Implement a simple task queue using a dictionary:
+
+```python
+tasks = {
+    'T001': {'desc': 'Fix login bug', 'priority': 'high'},
+    'T002': {'desc': 'Update docs', 'priority': 'low'},
+    'T003': {'desc': 'Add tests', 'priority': 'medium'},
+    'T004': {'desc': 'Deploy v2', 'priority': 'high'},
+    'T005': {'desc': 'Clean logs', 'priority': 'low'}
+}
+```
+
+1. Process (remove) all high-priority tasks first, printing each
+2. Process one more task using `popitem()`
+3. Clear remaining tasks and print ""Queue cleared""
+
+**Expected Output:**
+Processing HIGH: T001 - Fix login bug
+Processing HIGH: T004 - Deploy v2
+Processing next: T005 - Clean logs
+Queue cleared. Tasks remaining: 0
+
+**Key Concepts:** Conditional removal, `popitem()`, `clear()`",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Cache Manager (5 minutes, Medium Difficulty)
+
+Build a simple cache with a maximum size:
+
+```python
+cache = {}
+max_size = 3
+```
+
+Write functions:
+1. `cache_set(key, value)` — adds to cache; if full, removes oldest entry first
+2. `cache_get(key)` — returns value or `'MISS'`
+3. `cache_delete(key)` — removes entry if exists
+4. `cache_clear()` — empties cache
+
+Test with this sequence:
+- Set a=1, b=2, c=3 (cache full)
+- Set d=4 (should evict 'a')
+- Get 'a' (should be MISS)
+- Get 'b' (should return 2)
+- Delete 'c'
+- Print cache state
+
+**Key Concepts:** `popitem()` for eviction, `pop()` for deletion, cache pattern",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Key vs Value Check (3 minutes, Low Difficulty)
+
+Given:
+```python
+phonebook = {'Alice': '555-0101', 'Bob': '555-0202', 'Charlie': '555-0303'}
+```
+
+Write code to check:
+1. Is 'Alice' a key? Is 'Alice' a value?
+2. Is '555-0202' a key? Is '555-0202' a value?
+3. Is 'Diana' in the phonebook?
+
+**Expected Output:**
+'Alice' is a key: True
+'Alice' is a value: False
+'555-0202' is a key: False
+'555-0202' is a value: True
+'Diana' in phonebook: False
+
+**Key Concepts:** `in` checks keys, `.values()` for value checks",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Form Validator (3 minutes, Low Difficulty)
+
+Write a function `validate_form(data, required_fields)` that checks if all required fields are present in a form dictionary.
+
+```python
+required = ['name', 'email', 'password', 'age']
+
+form1 = {'name': 'Alice', 'email': 'a@b.com', 'password': '123', 'age': 25}
+form2 = {'name': 'Bob', 'email': 'b@c.com'}
+form3 = {'name': 'Charlie', 'age': 30, 'phone': '555-0000'}
+```
+
+For each form, print whether it's valid and list any missing fields.
+
+**Expected Output:**
+Form 1: VALID
+Form 2: INVALID - Missing: ['password', 'age']
+Form 3: INVALID - Missing: ['email', 'password']
+
+**Key Concepts:** `in` with loops, collecting missing keys",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Safe Data Merger (5 minutes, Medium Difficulty)
+
+Write a function `safe_merge(base, updates, overwrite=False)` that:
+- Adds new keys from `updates` to `base`
+- If `overwrite=False`: skips keys that already exist in `base`
+- If `overwrite=True`: overwrites existing keys
+- Returns which keys were added, skipped, or overwritten
+
+```python
+base = {'name': 'Alice', 'age': 25, 'city': 'Mumbai'}
+updates = {'age': 26, 'email': 'alice@mail.com', 'phone': '9876543210'}
+```
+
+Test with both `overwrite=False` and `overwrite=True`.
+
+**Expected Output:**
+Without overwrite:
+  Added: ['email', 'phone']
+  Skipped: ['age']
+  Result: {'name': 'Alice', 'age': 25, 'city': 'Mumbai', 'email': 'alice@mail.com', 'phone': '9876543210'}
+
+With overwrite:
+  Added: ['email', 'phone']
+  Overwritten: ['age'] (25 -> 26)
+  Result: {'name': 'Alice', 'age': 26, 'city': 'Mumbai', 'email': 'alice@mail.com', 'phone': '9876543210'}
+
+**Key Concepts:** `in` for conditional updates",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Inventory Alert System (5 minutes, Medium Difficulty)
+
+```python
+inventory = {
+    'laptop': {'stock': 5, 'min_stock': 10, 'price': 999},
+    'mouse': {'stock': 50, 'min_stock': 20, 'price': 29},
+    'keyboard': {'stock': 8, 'min_stock': 15, 'price': 79},
+    'monitor': {'stock': 30, 'min_stock': 10, 'price': 399}
+}
+```
+
+Write a program that:
+1. Checks if each product has a 'discount' key — if not, set discount to 0
+2. Finds products where stock is below min_stock
+3. Checks if a searched product exists, prints info or ""Not found""
+4. Adds a new product only if it doesn't already exist
+
+**Key Concepts:** `in` with nested dicts, conditional adding",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Student Records Manager (5 minutes, Medium Difficulty)
+
+```python
+records = {
+    'S001': {'name': 'Alice', 'marks': {'Math': 85, 'Science': 92}},
+    'S002': {'name': 'Bob', 'marks': {'Math': 78}},
+    'S003': {'name': 'Charlie', 'marks': {'Science': 88, 'English': 76}}
+}
+```
+
+Write functions:
+1. `has_subject(student_id, subject)` — check if student has a grade for that subject
+2. `add_mark(student_id, subject, score)` — add only if subject not already graded
+3. `get_mark(student_id, subject)` — return mark or ""Not graded""
+4. `common_subjects(id1, id2)` — subjects both students have grades for
+
+**Key Concepts:** Nested key checking, `in` with dict keys",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Iteration (3 minutes, Low Difficulty)
+
+Given:
+```python
+capitals = {'India': 'New Delhi', 'Japan': 'Tokyo', 'France': 'Paris', 'Brazil': 'Brasilia'}
+```
+
+Using iteration, print:
+1. All country names (keys only)
+2. All capital cities (values only)
+3. Each country with its capital in format ""The capital of X is Y""
+
+**Expected Output:**
+Countries: India, Japan, France, Brazil
+Capitals: New Delhi, Tokyo, Paris, Brasilia
+The capital of India is New Delhi
+The capital of Japan is Tokyo
+The capital of France is Paris
+The capital of Brazil is Brasilia
+
+**Key Concepts:** `.keys()`, `.values()`, `.items()`",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Grade Statistics (3 minutes, Low Difficulty)
+
+```python
+grades = {'Alice': 92, 'Bob': 78, 'Charlie': 85, 'Diana': 95, 'Eve': 70}
+```
+
+Using dictionary iteration, calculate and print:
+1. Average grade
+2. Highest scorer (name and grade)
+3. Lowest scorer (name and grade)
+4. Students above average (names)
+
+**Expected Output:**
+Average: 84.0
+Highest: Diana (95)
+Lowest: Eve (70)
+Above average: ['Alice', 'Diana', 'Charlie']
+
+**Key Concepts:** `.values()`, `.items()`, `max()`, `min()`",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Word Frequency Report (5 minutes, Medium Difficulty)
+
+```python
+text = ""python is great python is powerful python is easy to learn and python is fun""
+```
+
+1. Build a frequency dictionary
+2. Print words sorted alphabetically with their counts
+3. Print words sorted by frequency (highest first)
+4. Print a bar chart using `*` characters
+
+**Expected Output:**
+Alphabetical:
+  and: 1
+  easy: 1
+  fun: 1
+  ...
+  python: 4
+
+By frequency:
+  python: 4
+  is: 4
+  ...
+
+Bar chart:
+  python : ****
+  is     : ****
+  to     : *
+  ...
+
+**Key Concepts:** Sorted iteration, formatting",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Nested Dict Report (5 minutes, Medium Difficulty)
+
+```python
+company = {
+    'Engineering': {
+        'Alice': {'salary': 120000, 'level': 'Senior'},
+        'Bob': {'salary': 85000, 'level': 'Junior'}
+    },
+    'Marketing': {
+        'Charlie': {'salary': 95000, 'level': 'Mid'},
+        'Diana': {'salary': 110000, 'level': 'Senior'}
+    },
+    'Sales': {
+        'Eve': {'salary': 75000, 'level': 'Junior'},
+        'Frank': {'salary': 130000, 'level': 'Senior'}
+    }
+}
+```
+
+By iterating through the nested structure, print:
+1. Each department with its employees
+2. Total salary per department
+3. Department with highest total salary
+4. All Senior-level employees across departments
+
+**Key Concepts:** Nested iteration, accumulating values",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Dict Transformation Pipeline (5 minutes, Medium Difficulty)
+
+```python
+raw_data = {
+    'product_001': {'name': 'Laptop', 'price': 999, 'stock': 5},
+    'product_002': {'name': 'Mouse', 'price': 29, 'stock': 0},
+    'product_003': {'name': 'Keyboard', 'price': 79, 'stock': 12},
+    'product_004': {'name': 'Monitor', 'price': 399, 'stock': 0},
+    'product_005': {'name': 'Headset', 'price': 149, 'stock': 8}
+}
+```
+
+Using dict iteration and comprehensions:
+1. Create `in_stock` — only products with stock > 0
+2. Create `price_map` — {product_name: price} for in-stock items
+3. Create `affordable` — products under $200 that are in stock
+4. Calculate total inventory value (price × stock for in-stock items)
+
+**Key Concepts:** Filtering with comprehensions, chained transformations",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Merge Operations (3 minutes, Low Difficulty)
+
+Given:
+```python
+dict1 = {'a': 1, 'b': 2, 'c': 3}
+dict2 = {'b': 20, 'c': 30, 'd': 40}
+```
+
+1. Merge dict2 into dict1 using `update()` — print result
+2. Start fresh with original values. Create a NEW merged dict using `{**d1, **d2}` — verify originals are unchanged
+3. Merge with dict1 taking priority for shared keys
+
+**Expected Output:**
+After update: {'a': 1, 'b': 20, 'c': 30, 'd': 40}
+Unpacking merge: {'a': 1, 'b': 20, 'c': 30, 'd': 40}
+dict1 unchanged: {'a': 1, 'b': 2, 'c': 3}
+dict1 priority: {'b': 2, 'c': 3, 'd': 40, 'a': 1}
+
+**Key Concepts:** `update()`, `{**d1, **d2}`, merge priority",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Config System (3 minutes, Low Difficulty)
+
+Build a 3-layer configuration system:
+```python
+defaults = {'theme': 'light', 'font_size': 14, 'language': 'en', 'sidebar': True, 'notifications': True}
+user_config = {'theme': 'dark', 'font_size': 18}
+session_config = {'sidebar': False}
+```
+
+1. Merge in priority order: defaults < user_config < session_config
+2. Print the final config
+3. Show which settings came from which layer
+
+**Expected Output:**
+Final config: {'theme': 'dark', 'font_size': 18, 'language': 'en', 'sidebar': False, 'notifications': True}
+From defaults: ['language', 'notifications']
+From user: ['theme', 'font_size']
+From session: ['sidebar']
+
+**Key Concepts:** Layered merging, tracking sources",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Merging Lists of Dicts (5 minutes, Medium Difficulty)
+
+Given multiple data sources:
+```python
+source_a = {'item_1': 10, 'item_2': 20, 'item_3': 30}
+source_b = {'item_2': 25, 'item_4': 40, 'item_5': 50}
+source_c = {'item_1': 15, 'item_3': 35, 'item_5': 55}
+```
+
+Write functions:
+1. `merge_sum(dicts)` — merge all, summing values for shared keys
+2. `merge_max(dicts)` — merge all, keeping max value for shared keys
+3. `merge_all_values(dicts)` — merge all, collecting all values as lists
+
+**Expected Output:**
+Sum: {'item_1': 25, 'item_2': 45, 'item_3': 65, 'item_4': 40, 'item_5': 105}
+Max: {'item_1': 15, 'item_2': 25, 'item_3': 35, 'item_4': 40, 'item_5': 55}
+All values: {'item_1': [10, 15], 'item_2': [20, 25], 'item_3': [30, 35], 'item_4': [40], 'item_5': [50, 55]}
+
+**Key Concepts:** Custom merge strategies",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Profile Builder (5 minutes, Medium Difficulty)
+
+Build a user profile from multiple API responses:
+
+```python
+basic_info = {'id': 42, 'name': 'Alice', 'email': 'alice@mail.com'}
+social_info = {'twitter': '@alice', 'github': 'alicecodes'}
+preferences = {'theme': 'dark', 'language': 'en', 'notifications': {'email': True, 'sms': False}}
+activity = {'last_login': '2024-01-15', 'posts': 42}
+```
+
+1. Merge all into a single profile dict
+2. Add a 'full_profile' key that is True
+3. Print the profile in a formatted way
+
+**Key Concepts:** Multi-source merging, nested data",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Inventory Reconciliation (5 minutes, Medium Difficulty)
+
+Two warehouses report their stock:
+```python
+warehouse_a = {'laptop': 10, 'phone': 25, 'tablet': 8, 'charger': 100}
+warehouse_b = {'phone': 15, 'tablet': 12, 'headset': 30, 'cable': 200}
+```
+
+Write functions:
+1. `total_stock(w1, w2)` — combined stock (sum values for shared items)
+2. `only_in_one(w1, w2)` — items available in only one warehouse
+3. `rebalance(w1, w2)` — for shared items, calculate transfer needed to equalize stock
+
+**Expected Output:**
+Total stock: {'laptop': 10, 'phone': 40, 'tablet': 20, 'charger': 100, 'headset': 30, 'cable': 200}
+Only in A: {'laptop': 10, 'charger': 100}
+Only in B: {'headset': 30, 'cable': 200}
+Rebalance: phone: transfer 5 from A to B, tablet: transfer 2 from B to A
+
+**Key Concepts:** Custom merge with arithmetic, set operations on keys",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Class Definition (3 minutes, Low Difficulty)
+
+Define a `Car` class with attributes `make`, `model`, and `year`. Create two instances and print their details.
+
+**Key Concepts:** class keyword, __init__, instance attributes",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Class with Methods (3 minutes, Low Difficulty)
+
+Create a `Rectangle` class with `width` and `height` attributes. Add a method `area()` that returns the area and a method `perimeter()` that returns the perimeter.
+
+**Key Concepts:** Instance methods, self parameter",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Class with Default Values (5 minutes, Medium Difficulty)
+
+Create a `BankAccount` class with `owner` and `balance` (default 0). Add methods `deposit(amount)`, `withdraw(amount)`, and `get_balance()`. Withdraw should prevent negative balances.
+
+**Key Concepts:** Default parameters, validation in methods",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Class Representing Data (5 minutes, Medium Difficulty)
+
+Create a `Student` class that stores name, grades (list), and provides methods `add_grade(grade)`, `average()`, and `highest()`. Handle the case where no grades exist.
+
+**Key Concepts:** List attributes, computed properties",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Multiple Interacting Objects (7 minutes, Medium-High Difficulty)
+
+Create a `Playlist` class that stores a name and a list of song titles. Implement `add_song(title)`, `remove_song(title)`, `shuffle()`, and `__len__()` to support `len(playlist)`.
+
+**Key Concepts:** Magic methods, object interaction, random module",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Creating Multiple Objects (3 minutes, Low Difficulty)
+
+Create a `Book` class with `title`, `author`, and `pages`. Create 3 book objects and store them in a list. Print each book's title.
+
+**Key Concepts:** Object instantiation, lists of objects",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Object Identity (3 minutes, Low Difficulty)
+
+Create two `Point` objects with the same x and y values. Demonstrate that they are different objects using `is` and `==`. Then add an `__eq__` method to compare by values.
+
+**Key Concepts:** Object identity vs equality, __eq__",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Factory Pattern (5 minutes, Medium Difficulty)
+
+Create a `User` class with `name`, `email`, and `role`. Add a class method `from_string(s)` that creates a User from a comma-separated string like `""Alice,alice@mail.com,admin""`.
+
+**Key Concepts:** Class methods, alternative constructors",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Object Collections (5 minutes, Medium Difficulty)
+
+Create a `TaskList` class that manages `Task` objects (each with `title`, `done` status). Implement `add_task()`, `complete_task(title)`, `pending()` returning incomplete tasks, and `summary()`.
+
+**Key Concepts:** Objects managing other objects",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Dynamic Object Creation (7 minutes, Medium-High Difficulty)
+
+Write a function `create_objects(class_type, data_list)` that takes a class and a list of dictionaries, creating an instance for each dict using keyword unpacking. Test with a `Product` class.
+
+**Key Concepts:** Dynamic instantiation, **kwargs unpacking",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
+subjective,markdown,"### Basic Constructor (3 minutes, Low Difficulty)
+
+Create a `Circle` class whose `__init__` takes `radius` and computes `self.area` and `self.circumference` during initialization. Print both for a circle of radius 5.
+
+**Key Concepts:** __init__, computed attributes",,,,,,,,,,,,,,,markdown,"```python
+import math
+
+class Circle:
+    def __init__(self, radius):
+        self.radius = radius
+        self.area = math.pi * radius ** 2
+        self.circumference = 2 * math.pi * radius
+
+c = Circle(5)
+print(f""Area: {c.area:.2f}"")              # Area: 78.54
+print(f""Circumference: {c.circumference:.2f}"")  # Circumference: 31.42
+```"
+subjective,markdown,"### Constructor with Defaults (3 minutes, Low Difficulty)
+
+Create a `Config` class with parameters `host` (default ""localhost""), `port` (default 8080), and `debug` (default False). Demonstrate creating instances with different combinations of arguments.
+
+**Key Concepts:** Default parameters in __init__",,,,,,,,,,,,,,,markdown,"```python
+class Config:
+    def __init__(self, host=""localhost"", port=8080, debug=False):
+        self.host = host
+        self.port = port
+        self.debug = debug
+
+c1 = Config()
+c2 = Config(""0.0.0.0"", 3000, True)
+c3 = Config(debug=True)
+
+print(f""{c1.host}:{c1.port}"")  # localhost:8080
+print(f""{c2.host}:{c2.port}"")  # 0.0.0.0:3000
+print(f""Debug: {c3.debug}"")    # Debug: True
+```"
+subjective,markdown,"### Constructor Validation (5 minutes, Medium Difficulty)
+
+Create a `Temperature` class whose `__init__` takes `celsius`. Raise `ValueError` if the value is below absolute zero (-273.15). Add a method `to_fahrenheit()`.
+
+**Key Concepts:** Validation in __init__, raising exceptions",,,,,,,,,,,,,,,markdown,"```python
+class Temperature:
+    def __init__(self, celsius):
+        if celsius < -273.15:
+            raise ValueError(""Below absolute zero"")
+        self.celsius = celsius
+
+    def to_fahrenheit(self):
+        return self.celsius * 9/5 + 32
+
+t = Temperature(100)
+print(t.to_fahrenheit())  # 212.0
+
+try:
+    Temperature(-300)
+except ValueError as e:
+    print(e)  # Below absolute zero
+```"
+subjective,markdown,"### Constructor with Variable Arguments (5 minutes, Medium Difficulty)
+
+Create a `Team` class whose `__init__` takes a `name` and any number of member names using `*args`. Store members as a list. Add `add_member()` and `__len__()`.
+
+**Key Concepts:** *args in __init__, flexible initialization",,,,,,,,,,,,,,,markdown,"```python
+class Team:
+    def __init__(self, name, *members):
+        self.name = name
+        self.members = list(members)
+
+    def add_member(self, name):
+        self.members.append(name)
+
+    def __len__(self):
+        return len(self.members)
+
+t = Team(""Dev"", ""Alice"", ""Bob"")
+t.add_member(""Carol"")
+print(len(t))        # 3
+print(t.members)     # ['Alice', 'Bob', 'Carol']
+```"
+subjective,markdown,"### Chained Initialization (7 minutes, Medium-High Difficulty)
+
+Create a `DataFrame` class whose `__init__` accepts either a dict of lists or a list of dicts. Normalize both into a consistent internal format (dict of lists). Provide `rows()` and `columns()` methods.
+
+**Key Concepts:** Flexible constructors, type checking",,,,,,,,,,,,,,,markdown,"```python
+class DataFrame:
+    def __init__(self, data):
+        if isinstance(data, dict):
+            self._data = data
+        elif isinstance(data, list) and data:
+            keys = data[0].keys()
+            self._data = {k: [row[k] for row in data] for k in keys}
+        else:
+            self._data = {}
+
+    def columns(self):
+        return list(self._data.keys())
+
+    def rows(self):
+        if not self._data:
+            return []
+        cols = self.columns()
+        n = len(self._data[cols[0]])
+        return [{c: self._data[c][i] for c in cols} for i in range(n)]
+
+df1 = DataFrame({""name"": [""Alice"", ""Bob""], ""age"": [25, 30]})
+print(df1.rows())
+
+df2 = DataFrame([{""name"": ""Alice"", ""age"": 25}, {""name"": ""Bob"", ""age"": 30}])
+print(df2.columns())  # ['name', 'age']
+```"
