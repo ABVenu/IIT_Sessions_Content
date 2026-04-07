@@ -135,43 +135,6 @@ When leakage is removed, evaluation scores may initially drop. This can feel dis
 
 ---
 
-## Datasets for the code examples
-
-The Python cells in **§4** and **§10** use self-contained data — no `data.csv` on disk — so you can paste them directly into Colab.
-
-### Student-style table (§4: split first, then scale)
-
-Predicting a binary `target` (for example, pass vs. need support) from `attendance_pct` and `assignment_avg`, matching the student-performance thread elsewhere in this session.
-
-| attendance_pct | assignment_avg | target |
-| -------------- | -------------- | ------ |
-| 92 | 82 | 1 |
-| 78 | 58 | 0 |
-| 95 | 90 | 1 |
-| 65 | 45 | 0 |
-| 88 | 75 | 1 |
-| 72 | 62 | 0 |
-| 90 | 88 | 1 |
-| 85 | 70 | 1 |
-| 91 | 85 | 1 |
-| 76 | 55 | 0 |
-| 82 | 78 | 1 |
-| 94 | 92 | 1 |
-| 68 | 48 | 0 |
-| 89 | 80 | 1 |
-| 74 | 60 | 0 |
-| 96 | 91 | 1 |
-| 71 | 52 | 0 |
-| 87 | 77 | 1 |
-| 93 | 89 | 1 |
-| 79 | 63 | 0 |
-
-### Imbalanced classification (§10: cross-validation)
-
-**§10** builds `X` and `y` with `sklearn.datasets.make_classification`: 200 samples, four numeric features, and roughly **92% class 0 / 8% class 1**. That mimics “rare event” settings (fraud, purchase, disease) where accuracy alone is misleading and repeated folds help stabilize the estimate.
-
----
-
 ## 4. Data Leakage Guard — The Correct Workflow
 
 ![Wrong order (leaky): preprocess on all data before split. Correct order: split first, then fit transforms on training data only](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/agentic-systems-easy-track/module2/session27/session27-02-split-first-workflow.png)
@@ -207,30 +170,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-# Load data — same rows as in "Student-style table" above (no CSV required)
-data = pd.DataFrame(
-    {
-        "attendance_pct": [
-            92, 78, 95, 65, 88, 72, 90, 85, 91, 76,
-            82, 94, 68, 89, 74, 96, 71, 87, 93, 79,
-        ],
-        "assignment_avg": [
-            82, 58, 90, 45, 75, 62, 88, 70, 85, 55,
-            78, 92, 48, 80, 60, 91, 52, 77, 89, 63,
-        ],
-        "target": [
-            1, 0, 1, 0, 1, 0, 1, 1, 1, 0,
-            1, 1, 0, 1, 0, 1, 0, 1, 1, 0,
-        ],
-    }
-)
+# Load data
+data = pd.read_csv("data.csv")
 X = data.drop("target", axis=1)
 y = data["target"]
 
 # Step 1: Split FIRST — before any transformation
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Step 2: Learn transformation parameters from training data only
 scaler = StandardScaler()
@@ -545,35 +491,24 @@ Cross-validation reduces the influence of randomness on your evaluation. No sing
 ### Code Implementation
 
 ```python
-from sklearn.datasets import make_classification
 from sklearn.model_selection import cross_val_score
 from sklearn.linear_model import LogisticRegression
 
-# Imbalanced synthetic data (~92% vs ~8%) — see "Imbalanced classification" above
-X, y = make_classification(
-    n_samples=200,
-    n_features=4,
-    n_informative=2,
-    n_redundant=0,
-    weights=[0.92, 0.08],
-    random_state=42,
-)
-
-model = LogisticRegression(max_iter=500)
+model = LogisticRegression()
 
 # Perform 5-fold cross-validation
 scores = cross_val_score(model, X, y, cv=5)
 
 # View individual fold scores
 print("Scores per fold:", scores)
+# Example output: [0.82, 0.79, 0.85, 0.80, 0.83]
 
 # View the average — this is your reliable performance estimate
 print("Average score:", scores.mean())
+# Example output: 0.818
 ```
 
-Fold scores depend on the random seed and version of scikit-learn; they should be in a similar range to each other if the model is stable.
-
-Each value in `scores` represents the accuracy from one fold. When those values lie in a narrow band (not wildly different), the model is relatively stable across splits. The mean of the fold scores is a more trustworthy performance estimate than any single train–test split would give on its own.
+Each value in `scores` represents the accuracy from one fold. The fact that they are similar to each other — ranging from 0.79 to 0.85 — suggests the model is stable. The mean of 0.818 is a far more trustworthy performance estimate than any single fold result would have been on its own.
 
 ---
 
@@ -615,7 +550,6 @@ This is not about making your model look good. It is about making your model act
 
 ```python
 import pandas as pd
-from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.preprocessing import StandardScaler
 from sklearn.linear_model import LogisticRegression
@@ -625,9 +559,7 @@ from sklearn.linear_model import LogisticRegression
 
 | Function | Purpose |
 |---|---|
-| `pd.DataFrame({...})` | Build a table in memory (used in §4; no file needed) |
-| `make_classification()` | Generate synthetic imbalanced data (used in §10) |
-| `pd.read_csv()` | Load dataset from a CSV file (your own projects) |
+| `pd.read_csv()` | Load dataset from a CSV file |
 | `train_test_split()` | Split data into training and test sets |
 | `StandardScaler()` | Create a scaler object |
 | `scaler.fit_transform(X_train)` | Learn scaling from training data and apply it |

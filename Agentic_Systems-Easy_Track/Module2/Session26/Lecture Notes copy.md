@@ -24,44 +24,13 @@ To understand the concepts clearly, we will use three datasets from different do
 
 (Used to predict car price)
 
-| Brand   | Year | Fuel   | KMs_Driven | Price   |
-| ------- | ---- | ------ | ---------- | ------- |
-| Maruti  | 2018 | Petrol | 30000      | 400000  |
-| Hyundai | 2017 | Diesel | 40000      | 500000  |
-| Maruti  | 2018 | Petrol | 30000      | 400000  |
-| Honda   | 2016 | Petrol | *missing*  | 450000  |
-| Toyota  | 2019 | Diesel | 20000      | 800000  |
-| Honda   | 2015 | Petrol | 70000      | -200000 |
-
-Issues highlighted in this session: duplicate row (Maruti), missing mileage, negative price, categorical columns (`Brand`, `Fuel`), and features on different scales (`Year` vs `Price`).
-
 ### **Student Dataset**
 
 (Used to understand student performance)
 
-| Student_ID | Marks | Attendance | Grade |
-| ---------- | ----- | ---------- | ----- |
-| S01        | 85    | 90         | A     |
-| S02        | 72    | 88         | B     |
-| S01        | 85    | 90         | A     |
-| S03        | *missing* | 95    | C     |
-| S04        | 90    | 92         | -10   |
-
-Issues: duplicate student row, missing marks, invalid grade (`-10`), plus categorical `Grade` for encoding examples.
-
 ### **E-commerce Dataset**
 
 (Used to analyze orders and pricing)
-
-| OrderID | Product | Quantity | Price  |
-| ------- | ------- | -------- | ------ |
-| O100    | Phone   | 1        | 20000  |
-| O101    | Laptop  | 2        | 60000  |
-| O100    | Phone   | 1        | 20000  |
-| O102    | Phone   | *missing* | 15000 |
-| O103    | Laptop  | 1        | -5000  |
-
-Issues: duplicate order, missing quantity, negative price, categorical `Product`.
 
 Although these datasets belong to different domains, they share similar issues. This helps us understand that data preparation is a universal process.
 
@@ -73,49 +42,12 @@ Although these datasets belong to different domains, they share similar issues. 
 
 Before making any changes, the first step is to understand what the dataset looks like. This is called inspection.
 
-In Google Colab, the dataset is loaded and viewed. The examples in Sections 3–8 use the **car** table below; student and e-commerce tables match the same kinds of issues and can be loaded the same way.
-
-**Car dataset (main running example):**
+In Google Colab, the dataset is loaded and viewed:
 
 ```python
 import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-
 df = pd.DataFrame(data)
 df
-```
-
-**Student and e-commerce datasets (same session, other domains):**
-
-```python
-data_student = {
-    "Student_ID": ["S01", "S02", "S01", "S03", "S04"],
-    "Marks": [85, 72, 85, None, 90],
-    "Attendance": [90, 88, 90, 95, 92],
-    "Grade": ["A", "B", "A", "C", -10],
-}
-
-data_ecommerce = {
-    "OrderID": ["O100", "O101", "O100", "O102", "O103"],
-    "Product": ["Phone", "Laptop", "Phone", "Phone", "Laptop"],
-    "Quantity": [1, 2, 1, None, 1],
-    "Price": [20000, 60000, 20000, 15000, -5000],
-}
-
-df_student = pd.DataFrame(data_student)
-df_ecommerce = pd.DataFrame(data_ecommerce)
-
-print("Student dataset:")
-print(df_student, "\n")
-print("E-commerce dataset:")
-print(df_ecommerce)
 ```
 
 At this stage, we are not trying to fix anything. Instead, we carefully observe the data.
@@ -141,22 +73,8 @@ Machine learning models cannot process missing values. They require complete num
 One common approach is imputation, where missing values are replaced with a reasonable estimate.
 
 ```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-
 df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df
 ```
-
-For `df_student`, you would impute on `Marks`; for `df_ecommerce`, on `Quantity` — same idea, different column name.
 
 The median is used because it represents the middle value and is not affected by extreme values.
 
@@ -189,20 +107,7 @@ In the car dataset, one car entry appears twice. In the student dataset, the sam
 If duplicates are not removed, the model may treat those entries as more important simply because they appear more frequently.
 
 ```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-
 df = df.drop_duplicates()
-df
 ```
 
 ---
@@ -220,21 +125,7 @@ For example:
 These values are called outliers.
 
 ```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df = df.drop_duplicates()
-
 df = df[df["Price"] > 0]
-df
 ```
 
 ![Remove duplicates and filter invalid values so each row is unique and realistic](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/agentic-systems/module2/session26/session26-05-duplicates-outliers.png)
@@ -331,23 +222,8 @@ This step does not change the meaning of the data — it only changes how it is 
 
 In label encoding, each category is assigned a number.
 
-```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df = df.drop_duplicates()
-df = df[df["Price"] > 0]
-
+```python id="8r9p2c"
 df["Fuel"] = df["Fuel"].map({"Petrol": 0, "Diesel": 1})
-df
 ```
 
 After encoding:
@@ -398,24 +274,8 @@ This ordering might be meaningful, but in some cases (like product categories), 
 
 To avoid unintended ordering, we use one-hot encoding.
 
-```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df = df.drop_duplicates()
-df = df[df["Price"] > 0]
-df["Fuel"] = df["Fuel"].map({"Petrol": 0, "Diesel": 1})
-
+```python id="c9j4pl"
 df = pd.get_dummies(df, columns=["Brand"])
-df
 ```
 
 After encoding:
@@ -558,24 +418,7 @@ Feature scaling is the process of transforming all features so that they are on 
 ## **Method 1: Normalization**
 
 ```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df = df.drop_duplicates()
-df = df[df["Price"] > 0]
-df["Fuel"] = df["Fuel"].map({"Petrol": 0, "Diesel": 1})
-df = pd.get_dummies(df, columns=["Brand"])
-
 df["Price"] = (df["Price"] - df["Price"].min()) / (df["Price"].max() - df["Price"].min())
-df
 ```
 
 ### **What Happens After Normalization**
@@ -598,25 +441,7 @@ Now, price is no longer dominating — it is comparable with other features.
 ## **Method 2: Standardization**
 
 ```python
-import pandas as pd
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df = df.drop_duplicates()
-df = df[df["Price"] > 0]
-df["Fuel"] = df["Fuel"].map({"Petrol": 0, "Diesel": 1})
-df = pd.get_dummies(df, columns=["Brand"])
-df["Price"] = (df["Price"] - df["Price"].min()) / (df["Price"].max() - df["Price"].min())
-
 df["Year"] = (df["Year"] - df["Year"].mean()) / df["Year"].std()
-df
 ```
 
 ### **What Happens After Standardization**
@@ -709,32 +534,13 @@ This means:
 ## **Correct Approach**
 
 ```python
-import pandas as pd
 from sklearn.model_selection import train_test_split
-
-data = {
-    "Brand": ["Maruti", "Hyundai", "Maruti", "Honda", "Toyota", "Honda"],
-    "Year": [2018, 2017, 2018, 2016, 2019, 2015],
-    "Fuel": ["Petrol", "Diesel", "Petrol", "Petrol", "Diesel", "Petrol"],
-    "KMs_Driven": [30000, 40000, 30000, None, 20000, 70000],
-    "Price": [400000, 500000, 400000, 450000, 800000, -200000],
-}
-df = pd.DataFrame(data)
-df["KMs_Driven"].fillna(df["KMs_Driven"].median(), inplace=True)
-df = df.drop_duplicates()
-df = df[df["Price"] > 0]
-df["Fuel"] = df["Fuel"].map({"Petrol": 0, "Diesel": 1})
-df = pd.get_dummies(df, columns=["Brand"])
-df["Price"] = (df["Price"] - df["Price"].min()) / (df["Price"].max() - df["Price"].min())
-df["Year"] = (df["Year"] - df["Year"].mean()) / df["Year"].std()
 
 X = df.drop("Price", axis=1)
 y = df["Price"]
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 ```
-
-The cell above rebuilds a fully preprocessed `df` so the split can be run on its own. In real projects, split into train and test **first**, then fit imputers, encoders, and scalers on **training data only** and apply them to the test set — that is how you avoid leakage.
 
 Then:
 
