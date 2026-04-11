@@ -1,0 +1,3381 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+subjective,markdown,"What is the default index of a Pandas Series created from a list `[10, 20, 30]` without specifying an index?
+
+A. `[1, 2, 3]`
+
+B. `['0', '1', '2']` (strings)
+
+C. `[0, 1, 2]` (integers)
+
+D. It has no index until one is assigned.
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following data structures can be used to directly create a Pandas Series? (Select all that apply)
+
+A. Python Dictionary
+
+B. Python List
+
+C. A single Scalar value (e.g., integer 5)
+
+D. Another Pandas Series
+
+**Answer:** A, B, C, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python script to create a Pandas Series from the following list of temperatures: `temps = [98.6, 99.1, 100.2, 97.9]`.
+Assign a custom index to the Series representing the days: `['Mon', 'Tue', 'Wed', 'Thu']`.
+Print the Series.",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"What is the default index assigned to a Pandas Series when no `index` argument is provided?
+
+A. A sequence starting at 1 (1, 2, 3, ...)
+
+B. A sequence starting at 0 (0, 1, 2, ...)
+
+C. The values of the data themselves
+
+D. An empty index with all `None` values
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Select the correct statements regarding the `pd.Series` constructor. (Select all that apply)
+
+A. The `data` argument is mandatory; you cannot create an empty Series.
+
+B. The `index` length must match the `data` length (unless data is a scalar).
+
+C. Pandas will infer the `dtype` if it is not specified.
+
+D. `name` is a mandatory argument.
+
+**Answer:** B, C",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Write a Python function `analyze_sales(sales_list)` that takes a list of daily sales figures as input.
+Inside the function:
+1. Create a Pandas Series from the list.
+2. Assign the index as `['Day1', 'Day2', 'Day3', ...] depending on the length of the list.
+3. Return the created Series.
+
+**Example Input:**
+`[100, 200, 150]`
+
+**Expected Output:**
+```text
+Day1    100
+Day2    200
+Day3    150
+dtype: int64
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following statements regarding creating a Pandas Series from a dictionary are correct? (Select all that apply)
+
+A. The dictionary keys automatically become the Series index labels.
+
+B. The dictionary values automatically become the Series data.
+
+C. If a dictionary is used, the order of the Series will match the dictionary's insertion order (in Python 3.7+).
+
+D. You can still provide an explicit `index` argument to filter or reorder the dictionary data.
+
+**Answer:** A, B, C, D",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"When creating a Pandas Series from a NumPy array, what is the default index if you don't provide one?
+
+A. An array of random numbers
+
+B. The values of the array itself
+
+C. A RangeIndex starting from 0 (0, 1, 2...)
+
+D. `NaN` for all elements
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following are valid ways to create a Pandas Series? (Select all that apply)
+
+A. `pd.Series(5, index=[0, 1, 2])`
+
+B. `pd.Series([1, 2, 3], index=[0, 1])`
+
+C. `pd.Series({'a': 1, 'b': 2}, index=['a', 'c'])`
+
+D. `pd.Series(np.zeros(5))`
+
+**Answer:** A, C, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"If you create a Series from a dictionary `{'a': 1, 'b': 2}` but explicitly pass `index=['b', 'c']`, what will happen?
+
+A. The Series includes 'b' (value 2) and 'c' (value NaN).
+
+B. It throws an error because 'c' is not in the dictionary.
+
+C. It ignores the explicit index and uses keys 'a', 'b'.
+
+D. The Series includes 'b' (value 2) and 'c' (value 0).
+
+**Answer:** A",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"You are tasked with setting up a default scoring system for a new game. There are three players: ""Alice"", ""Bob"", and ""Charlie"". Everyone starts with a single scalar value of `0` points.
+
+1. Write a Python snippet that uses a scalar value and an explicit `index` list to create a Pandas Series `scores` representing this initial state.
+2. In your own words, explain the concept of **Broadcasting** in this context and why it is more memory efficient than passing a list like `[0, 0, 0]`.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"You are developing a dashboard for a small library. The librarian gives you a Python Dictionary representing the current number of books in three genres: `{'Fiction': 120, 'Non-Fiction': 85, 'Sci-Fi': 40}`. 
+
+However, the dashboard must specifically display data for four genres: `['Fiction', 'Non-Fiction', 'History', 'Sci-Fi']`. If a genre is not in the dictionary, it should appear as missing data (`NaN`).
+
+1. Write a Python script to create a Pandas Series named `genre_counts` that enforces this specific index over the dictionary data.
+2. Explain why the value for 'History' becomes `NaN` instead of throwing a `KeyError`.",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following lines of code will retrieve the value `30` from the Series `s = pd.Series([10, 20, 30], index=['x', 'y', 'z'])`?
+
+A. `s['y']`
+
+B. `s[2]`
+
+C. `s.iloc['z']`
+
+D. `s.loc[2]`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Write a Python script that:
+1. Creates a Series `s` with values `[100, 200, 300, 400]` and index `['a', 'b', 'c', 'd']`.
+2. Prints the slice of the Series from label `'b'` to `'d'` (inclusive) using the explicit label accessor.
+3. Prints the element at integer position 0 using the explicit integer accessor.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Select all valid ways to access the value associated with the label 'Region1' in a Series `sales`. (Select all that apply)
+
+A. `sales['Region1']`
+
+B. `sales.loc['Region1']`
+
+C. `sales.iloc['Region1']`
+
+D. `sales.get('Region1')`
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `get_top_three(series_data)` that:
+1. Accepts a numeric Series.
+2. Sorts it in descending order.
+3. Returns the first 3 elements using position-based slicing.
+
+**Example Input:**
+`s = pd.Series([10, 50, 20, 40], index=['a', 'b', 'c', 'd'])`
+
+**Expected Output:**
+```text
+b    50
+d    40
+c    20
+dtype: int64
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following slicing operations on a Pandas Series `s` are **exclusive** of the stop value? (Select all that apply)
+
+A. `s.loc['A':'C']`
+
+B. `s.iloc[0:3]`
+
+C. `s['A':'C']` (assuming index contains strings)
+
+D. `s[0:3]` (assuming default integer index)
+
+**Answer:** B, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"What is the output of `s[1:3]` if `s` has index `['a', 'b', 'c', 'd']`?
+
+A. Values at index 'a' and 'b'
+
+B. Values at index 'b' and 'c'
+
+C. Values at index 'b', 'c', and 'd'
+
+D. Error
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Select all valid vectorized operations you can perform on a numeric Series `s`. (Select all that apply)
+
+A. `s + 10`
+
+B. `s > 5` (Boolean comparison)
+
+C. `s.mean()`
+
+D. `s / 2`
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `calculate_profit(revenue, cost)` that:
+1. Takes two numeric Pandas Series: `revenue` and `cost`.
+2. Uses a vectorized operation to calculate the difference (`revenue - cost`).
+3. Returns the resulting `profit` Series.
+Assume both Series have identical index labels representing product names.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Write a Python function `adjust_grades(grades_series, bonus_points)`:
+1. `grades_series` contains student scores (e.g., `{'Alice': 85, 'Bob': 90}`).
+2. `bonus_points` is a scalar integer (e.g., 5).
+3. Add the bonus to all grades.
+4. Cap the maximum score at 100 (e.g., if score is 98 + 5 = 103, it should become 100).
+5. Return the adjusted Series.
+
+**Example Input:**
+`grades = pd.Series([98, 80])`, `bonus = 5`
+
+**Expected Output:**
+```text
+0    100
+1     85
+dtype: int64
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"When performing an operation between two Series `s1 + s2`, what determines which elements are added together?
+
+A. Their integer position (1st element with 1st element)
+
+B. Their value (smallest with smallest)
+
+C. Their index labels (label 'a' with label 'a')
+
+D. The order of creation
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following scenarios in Pandas Series math result in `NaN` values? (Select all that apply)
+
+A. Adding two Series where a label exists in one but not the other.
+
+B. Dividing a Series by 0 (standard computing behavior).
+
+C. Adding a string to an integer Series.
+
+D. Performing `s + None`.
+
+**Answer:** A, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"What is the result of `pd.Series([10, 20]) * 2`?
+
+A. `[10, 20, 10, 20]`
+
+B. `[20, 40]`
+
+C. `[12, 22]`
+
+D. `[10, 20, 2]`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Which of the following creates a DataFrame from a dictionary `d = {'col1': [1, 2], 'col2': [3, 4]}`?
+
+A. `pd.DataFrame(d)`
+
+B. `pd.Series(d)`
+
+C. `pd.DataFrame([d])`
+
+D. `pd.DataFrame(d, index=[0])`
+
+**Answer:** A",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"What happens if the lists in your dictionary have different lengths (e.g., `{'a': [1, 2], 'b': [1]}`) when creating a DataFrame?
+
+A. It recycles (broadcasts) the shorter list.
+
+B. It fills the missing values with `NaN`.
+
+C. It throws a `ValueError`.
+
+D. It truncates the longer list.
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following data structures can be effectively passed into `pd.DataFrame()` to create a structured table? (Select all that apply)
+
+A. A single dictionary where values are scalar integers (e.g., `{'a': 1, 'b': 2}`).
+
+B. A dictionary where values are lists of equal length.
+
+C. A list of dictionaries.
+
+D. A single integer.
+
+**Answer:** B, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `create_scorecard(names, scores)` that:
+1. Accepts a list of strings `names` and a list of integers `scores`. Assumes they are the exact same length.
+2. Creates a dictionary mapping the key ""Student"" to the names list, and the key ""Grade"" to the scores list.
+3. Converts this dictionary into a Pandas DataFrame.
+4. Returns the DataFrame.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Select all true statements about creating DataFrames from a **List of Dictionaries**. (Select all that apply)
+
+A. Keys in the dictionaries become Column Headers.
+
+B. If a dictionary misses a key present in others, it is filled with `NaN`.
+
+C. Keys must be identical across all dictionaries.
+
+D. This method is often used when parsing JSON records.
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `sales_report(day1_sales, day2_sales)`:
+1. `day1_sales` and `day2_sales` are two dictionaries mapping Product Names to Sales Amount (e.g., `{'Apple': 100}`).
+2. Create a DataFrame from a **list** containing these two dictionaries.
+3. Explicitly set the index of the DataFrame to `['Day 1', 'Day 2']`.
+4. Return the DataFrame.
+
+**Example Input:**
+`d1 = {'A': 10, 'B': 20}`, `d2 = {'A': 15, 'C': 30}`
+
+**Expected Output:**
+```text
+        A     B     C
+Day 1  10  20.0   NaN
+Day 2  15   NaN  30.0
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"When creating a Pandas DataFrame from a standard Python List of Lists without specifying the `columns` argument, what will the column headers default to? (Select all that apply)
+
+A. The exact values of the first row of data.
+
+B. A RangeIndex starting at 0 (`0`, `1`, `2`, ...).
+
+C. Letters of the alphabet (`'A'`, `'B'`, `'C'`, ...).
+
+D. Integer positions corresponding to the length of the inner lists.
+
+**Answer:** B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following creates a DataFrame with column names 'X' and 'Y' from a list of lists `data = [[1, 2], [3, 4]]`?
+
+A. `pd.DataFrame(data, index=['X', 'Y'])`
+
+B. `pd.DataFrame(data, columns=['X', 'Y'])`
+
+C. `pd.DataFrame(data, headers=['X', 'Y'])`
+
+D. `pd.DataFrame(data, keys=['X', 'Y'])`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Which of the following data types can be used as valid input data for `pd.DataFrame()`? (Select all that apply)
+
+A. A List of Lists (e.g., `[[1, 2], [3, 4]]`)
+
+B. A 2-Dimensional NumPy Array (e.g., `np.array([[1, 2], [3, 4]])`)
+
+C. A 1-Dimensional List of Integers (e.g., `[1, 2, 3]`)
+
+D. A single boolean value (e.g., `True`)
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"You are provided the following raw data scraped from a website as a List of Lists:
+`raw_data = [['Toyota', 20000], ['Honda', 18000]]`
+
+1. Write a Python script to create a Pandas DataFrame directly from this `raw_data`.
+2. Ensure the resulting DataFrame has explicit column names: `""Brand""` and `""Price""`.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Write a Python function `matrix_to_df(n_rows, n_cols)` that:
+1. Generates a NumPy matrix of zeros with shape `(n_rows, n_cols)`.
+2. Converts it to a DataFrame.
+3. Assigns column names as 'Col1', 'Col2', etc. dynamically (e.g., if `n_cols=2`, columns are `['Col1', 'Col2']`).
+4. Returns the DataFrame.
+
+**Example Input:**
+`n_rows=2`, `n_cols=2`
+
+**Expected Output:**
+```text
+   Col1  Col2
+0   0.0   0.0
+1   0.0   0.0
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"What is the shape of the DataFrame created by `pd.DataFrame(np.zeros((5, 3)))`?
+
+A. 3 rows, 5 columns
+
+B. 5 rows, 3 columns
+
+C. 5 rows, 5 columns
+
+D. 3 rows, 3 columns
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following parameters help in handling headerless files correctly? (Select all that apply)
+
+A. `header=None`
+
+B. `prefix='X'` (to generate 'X0', 'X1'...)
+
+C. `names=['Col1', 'Col2']`
+
+D. `skiprows=1`
+
+**Answer:** A, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Which function is used to load data from a Comma Separated Values file into a Pandas DataFrame?
+
+A. `pd.read_excel()`
+
+B. `pd.read_table()`
+
+C. `pd.read_csv()`
+
+D. `pd.load_csv()`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Write a Python function `load_and_clean(filepath)` that:
+1. Reads a CSV file from `filepath`.
+2. Specifies that the file uses `;` as a delimiter.
+3. Specifies that the column named `""User_ID""` should be the index.
+4. Returns the DataFrame.
+
+**Example Input:**
+`filepath = 'users.csv'`
+
+**Expected Output:**
+DataFrame with 'User_ID' as index.",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,Write a Python code snippet that reads a file named `data.txt` which is separated by pipes (`|`) into a DataFrame named `df`.,,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"You have a CSV file `dataset.csv` that does not contain a header row. If you run `pd.read_csv('dataset.csv')` (default arguments), what will happen?
+
+A. It will error out.
+
+B. It will use the first row of data as the column headers.
+
+C. It will automatically generate headers '0', '1', '2'.
+
+D. It will skip the first row.
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Select all valid sources that `pd.read_csv()` can accept as the first argument. (Select all that apply)
+
+A. A string path to a local file (`""C:/data/file.csv""`).
+
+B. A URL string (`""http://website.com/data.csv""`).
+
+C. A PHP script.
+
+D. A file-like object (like an open file handle or `io.StringIO`).
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `get_dimensions(df)` that:
+1. Accepts a DataFrame `df`.
+2. Retrievers its shape.
+3. Returns a dictionary with keys `'rows'` and `'cols'` containing the counts.
+
+**Example Input:**
+`df` with 10 rows and 2 columns.
+
+**Expected Output:**
+`{'rows': 10, 'cols': 2}`",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"What is TRUE about `df.values`? (Select all that apply)
+
+A. It strips away the index and column labels.
+
+B. It returns a NumPy representation of the data.
+
+C. It is the recommended way to extract data for Scikit-Learn. (Historical note: `.to_numpy()` is now preferred but `.values` is still common).
+
+D. It returns a dictionary.
+
+**Answer:** A, B",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following are valid attributes of a DataFrame? (Select all that apply)
+
+A. `.columns`
+
+B. `.index`
+
+C. `.values`
+
+D. `.header`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which attribute would you use to get the labels of the rows in a DataFrame `df`?
+
+A. `df.rows`
+
+B. `df.index`
+
+C. `df.labels`
+
+D. `df.axes[1]`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"1. Create a DataFrame named `sales_data` from the dictionary:
+   `{'Product': ['A', 'B', 'C'], 'Sales': [100, 200, 150]}`
+
+2. Write a Python code snippet to print the data type of each column in this DataFrame.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"If `df.shape` returns `(100, 5)`, what does this mean?
+
+A. 100 columns and 5 rows.
+
+B. 100 rows and 5 columns.
+
+C. 100 elements total.
+
+D. The index starts at 5 and ends at 100.
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"What is the data type of `df[['Age']]` (note the double brackets)?
+
+A. `pandas.Series`
+
+B. `pandas.DataFrame`
+
+C. `numpy.ndarray`
+
+D. `list`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following column names CANNOT be accessed using dot notation? (Select all that apply)
+
+A. `""First Name""`
+
+B. `""class""` (Python keyword)
+
+C. `""year_2020""`
+
+D. `""2020_year""` (Starts with number)
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Select the statements that are TRUE about `df[['A', 'B']]`. (Select all that apply)
+
+A. It returns a new DataFrame.
+
+B. It returns a tuple of Series.
+
+C. The order of columns in the result matches the order in the list `['A', 'B']`.
+
+D. It modifies `df` in place.
+
+**Answer:** A, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"1. Create a DataFrame `df` from the following dictionary:
+   `{'City': ['Paris', 'London'], 'Country': ['France', 'UK'], 'Population': [2.1, 8.9]}`
+
+2. Write a Python code snippet to create a new DataFrame `subset_df` containing only the ""City"" and ""Country"" columns from `df`.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following is the valid syntax to select a column named `""Sales Date""` from a DataFrame `df`?
+
+A. `df.Sales Date`
+
+B. `df[""Sales Date""]`
+
+C. `df.Sales_Date`
+
+D. `df(Sales Date)`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Write a Python function `extract_columns(df, col_list)` that:
+1. Accepts a DataFrame `df` and a list of column names `col_list`.
+2. Checks if all columns in `col_list` exist in `df.columns`.
+   - If yes, return the subset DataFrame containing those columns.
+   - If no, return `None` (or print an error message).
+
+**Example Input:**
+`df` columns: `['A', 'B', 'C']`, `col_list=['A', 'C']`
+
+**Expected Output:**
+DataFrame with 'A' and 'C'.",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following is the correct syntax to select a row with the index label `""Row5""` using `.loc`?
+
+A. `df.loc(""Row5"")`
+
+B. `df.loc[""Row5""]`
+
+C. `df.loc.Row5`
+
+D. `df[""Row5""]`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"If you run `df.loc['A':'C']`, and the index contains `['A', 'B', 'C', 'D']`, what will be returned?
+
+A. rows 'A', 'B'
+
+B. rows 'A', 'B', 'C'
+
+C. rows 'B', 'C'
+
+D. Error
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following are valid inputs inside `.loc[]`? (Select all that apply)
+
+A. A single label `df.loc['a']`
+
+B. A list of labels `df.loc[['a', 'b']]`
+
+C. A slice object `df.loc['a':'b']`
+
+D. A boolean array `df.loc[[True, False, True]]`
+
+**Answer:** A, B, C, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `get_user_info(df, user_id)` that:
+1. Accepts a DataFrame `df` (indexed by User ID) and a `user_id`.
+2. Uses `.loc` to access the row containing that user's info.
+3. Accesses the 'Email' column for that row.
+4. Returns the email address.
+Assume `user_id` exists in the index and 'Email' is a valid column.
+
+**Example Input:**
+`user_id='U101'`, Row U101 has Email='u1@test.com'
+
+**Expected Output:**
+`'u1@test.com'`",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"1. Create a DataFrame `monthly_sales` from the list `[100, 200, 300, 400]` with index `['Jan', 'Feb', 'Mar', 'Apr']` and column name `['Sales']`.
+
+2. Write a Python code snippet using `.loc` to select the rows with index labels `""Jan""` and `""Mar""`.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following scenarios will likely raise a `KeyError` when using `df.loc[]`? (Select all that apply)
+
+A. Passing a string label that does not exist in the index.
+
+B. Passing an integer if the index is strictly composed of strings.
+
+C. Passing a boolean array of the same length as the DataFrame.
+
+D. Passing a list of labels `['A', 'B']` where 'B' is missing from the index.
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Consider a DataFrame `df` with 5 rows and an index `[10, 20, 30, 40, 50]`. Which of the following statements are **TRUE**? (Select all that apply)
+
+A. `df.loc[10]` returns the first row.
+
+B. `df.iloc[10]` returns the first row.
+
+C. `df.iloc[0]` returns the first row.
+
+D. `df.iloc[10]` raises an `IndexError`.
+
+**Answer:** A, C, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following is the correct syntax to select the **first 5 rows** of a DataFrame `df` using `iloc`?
+
+A. `df.iloc[0:5]`
+
+B. `df.iloc[1:5]`
+
+C. `df.iloc[0:4]`
+
+D. `df.iloc[:6]`
+
+**Answer:** A",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"If `df` has 10 rows, what does `df.iloc[-1]` return?
+
+A. An error (IndexError).
+
+B. The first row.
+
+C. The last row.
+
+D. An empty Series.
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Write a Python function `get_odd_rows` that accepts a DataFrame `df` and returns a new DataFrame containing only the rows at **odd integer positions** (e.g., row 1, row 3, row 5...).
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({'A': [10, 20, 30, 40, 50]})
+```
+
+**Output:**
+```
+    A
+1  20
+3  40
+```",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following are valid inputs inside `df.iloc[]`? (Select all that apply)
+
+A. An integer (e.g., `5`).
+
+B. A list of integers (e.g., `[0, 2, 4]`).
+
+C. A string label (e.g., `'ColumnA'`).
+
+D. A slice of integers (e.g., `0:5`).
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `get_sub_matrix` that accepts a DataFrame `df` and integers `r` and `c`. The function should use `iloc` to return a sub-DataFrame containing the **first `r` rows** and **first `c` columns**.
+
+**Input:**
+```python
+import pandas as pd
+data = {'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]}
+df = pd.DataFrame(data)
+# Function arguments: df, r=2, c=2
+```
+
+**Output:**
+```
+   A  B
+0  1  4
+1  2  5
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"What value is stored in the new column if you run `df['Flag'] = True`?
+
+A. `True` only in the first row.
+
+B. `True` in every row.
+
+C. `NaN` (because True is not a number).
+
+D. Error (Length mismatch).
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"What happens if you run `df['New'] = [1, 2]` on a DataFrame with 5 rows? (Select all that apply)
+
+A. It raises a `ValueError`.
+
+B. It fills the remaining 3 rows with `NaN`.
+
+C. It recycles ranges `[1, 2, 1, 2, 1]`.
+
+D. It fails because the length of the list (2) does not match the index (5).
+
+**Answer:** A, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following are valid ways to create a new column? (Select all that apply)
+
+A. `df['C'] = 1`
+
+B. `df['C'] = df['A'] * 2`
+
+C. `df['C'] = [1, 2, 3]` (Assume df has 3 rows)
+
+D. `df.insert(0, 'C', 1)` (Method to insert at specific position)
+
+**Answer:** A, B, C, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `add_total_price` that accepts a DataFrame `df` with columns 'Price' and 'Tax'. The function should create a new column 'Total' which is the sum of 'Price' and 'Tax', and then return the modified DataFrame.
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({'Price': [100, 200], 'Tax': [10, 20]})
+```
+
+**Output:**
+```
+   Price  Tax  Total
+0    100   10    110
+1    200   20    220
+```",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following creates a new column `Total` by adding columns `A` and `B`?
+
+A. `df['Total'] = df['A'] + df['B']`
+
+B. `df.Total = df.A + df.B`
+
+C. `df['Total'] = sum(df['A'], df['B'])`
+
+D. `df.add_column('Total', df['A'] + df['B'])`
+
+**Answer:** A",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Write a Python function `flag_expensive_items` that accepts a DataFrame `df` with a 'Price' column. The function should add a new column 'IsExpensive' which contains `True` if the price is **greater than 100**, and `False` otherwise.
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({'Item': ['A', 'B'], 'Price': [50, 150]})
+```
+
+**Output:**
+```
+  Item  Price  IsExpensive
+0    A     50        False
+1    B    150         True
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following code snippets correctly select rows where 'Category' is either 'A' or 'B'? (Select all that apply)
+
+A. `df[(df['Category'] == 'A') | (df['Category'] == 'B')]`
+
+B. `df[df['Category'] == 'A' | 'B']`
+
+C. `df[df['Category'].isin(['A', 'B'])]`
+
+D. `df[df['Category'] == ('A' or 'B')]`
+
+**Answer:** A, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `filter_complex` that filters a DataFrame `df`. It should return rows where:
+1.  'Grade' is 'A' **OR** 'Grade' is 'B'
+2.  **AND** 'Attendance' is greater than 90.
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({
+    'Grade': ['A', 'C', 'B', 'A'],
+    'Attendance': [95, 92, 88, 85]
+})
+```
+
+**Output:**
+```
+  Grade  Attendance
+0     A          95
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"What is the correct syntax to filter for rows where 'Status' is **NOT** 'Complete'?
+
+A. `df[df['Status'] ! 'Complete']`
+
+B. `df[not df['Status'] == 'Complete']`
+
+C. `df[~(df['Status'] == 'Complete')]`
+
+D. `df[df['Status'].is_not('Complete')]`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Select all statements that are **TRUE** regarding Pandas filtering. (Select all that apply)
+
+A. You can chain conditions using `&` and `|`.
+
+B. The `.isin()` method can accept a textual set of strings or a list of numbers.
+
+C. `df.query()` is an alternative string-based API for filtering.
+
+D. You must use `&&` for AND and `||` for OR (like in Java/C++).
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `get_high_value_recent` that accepts a DataFrame `df` with columns 'Amount' and 'Year'. The function should return a filtered DataFrame containing only rows where 'Amount' is **greater than 1000** AND 'Year' is **equal to 2024**.
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({
+    'Amount': [500, 1500, 2000, 1200],
+    'Year': [2024, 2023, 2024, 2024]
+})
+```
+
+**Output:**
+```
+   Amount  Year
+2    2000  2024
+3    1200  2024
+```",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following will raise a Python Error due to operator precedence issues?
+
+A. `(df['A'] > 5) & (df['B'] < 10)`
+
+B. `df['A'].gt(5) & df['B'].lt(10)`
+
+C. `df['A'] > 5 & df['B'] < 10`
+
+D. `(df['A'] > 5) | (df['B'] < 10)`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Write a Python function `drop_missing_data_col` that accepts a DataFrame `df` and returns a new DataFrame with the column named 'Notes' removed.
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({'Data': [1, 2], 'Notes': ['A', 'B']})
+```
+
+**Output:**
+```
+    Data
+0      1
+1      2
+```",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following statements about `df.drop()` are **TRUE**? (Select all that apply)
+
+A. By default, it returns a new DataFrame copy.
+
+B. It can drop multiple columns at once by passing a list.
+
+C. It is strictly for columns; rows cannot be dropped.
+
+D. `inplace=True` modifies the original object.
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following are valid ways to remove a column named 'Test'? (Select all that apply)
+
+A. `df.drop(columns=['Test'])`
+
+B. `df.drop('Test', axis=1)`
+
+C. `del df['Test']`
+
+D. `df -= 'Test'`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `remove_first_row` that accepts a DataFrame `df`. It should return a new DataFrame with the **row at the 0th index label** removed. Assume the index label `0` exists.
+
+**Input:**
+```python
+import pandas as pd
+df = pd.DataFrame({'Val': [10, 20]}, index=[0, 1])
+```
+
+**Output:**
+```
+   Val
+1   20
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following commands will successfully remove the column 'Price' from `df`?
+
+A. `df.drop('Price', axis=0)`
+
+B. `df.drop('Price', axis=1)`
+
+C. `df.remove('Price')`
+
+D. `df.delete('Price')`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"What happens if you run `df.drop(columns=['A'], inplace=True)`?
+
+A. It returns the modified DataFrame.
+
+B. It returns `None`.
+
+C. It returns a copy of the deleted column.
+
+D. It raises an error.
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"What happens when you run `df.rename(columns={'Price': 'Cost'})` without using `inplace=True` or assigning it back to `df`?
+
+A. The original `df` is modified and the column is renamed.
+
+B. A new DataFrame is created with the new name, but the original `df` remains unchanged.
+
+C. An error is raised because `inplace` must be explicit.
+
+D. The operation is ignored by Pandas.
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Suppose you have a DataFrame with columns `['Product', 'Price']`. If you run `df.rename(columns={'PRODUCT': 'Name'})`, what is the result? (Select all that apply)
+
+A. A `KeyError` is raised because 'PRODUCT' (uppercase) does not exist.
+
+B. The DataFrame columns remain `['Product', 'Price']` because renaming is case-sensitive.
+
+C. No error is raised; Pandas simply doesn't find a match to rename.
+
+D. Both 'Product' and 'Price' are removed.
+
+**Answer:** B, C",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"In the following code:
+1. Create a DataFrame from the dictionary `data = {'rev': [100], 'exp': [80]}`.
+2. Rename `'rev'` to `'Revenue'` and `'exp'` to `'Expenses'`.
+3. Use `inplace=True`.
+4. Return the Final DataFrame.
+
+**Expected Output:**
+```text
+   Revenue  Expenses
+0      100        80
+```",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Write a Python function `clean_headers(df)` that:
+1. Takes a DataFrame as input.
+2. Specifically renames any column named `'id'` to `'User_ID'` and `'ts'` to `'Timestamp'`.
+3. Renames the index mapping `0` to `'Start_Row'`.
+4. Returns the modified DataFrame (ensure the changes are saved).
+
+**Example Input:**
+`df = pd.DataFrame({'id': [1], 'ts': ['10:00']}, index=[0])`
+
+**Expected Output:**
+```text
+            User_ID      Timestamp
+Start_Row         1          10:00
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following are valid ways to change column headers in Pandas? (Select all that apply)
+
+A. `df.columns = ['New1', 'New2']` (Replacing the entire list)
+
+B. `df.rename(columns={'Old': 'New'})`
+
+C. `df.set_axis(['New1', 'New2'], axis=1)`
+
+D. `df.columns[0] = 'Revised'`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following syntaxes is the correct way to rename the column `'A'` to `'Alpha'` in a DataFrame `df`?
+
+A. `df.rename(columns=['A', 'Alpha'])`
+
+B. `df.rename(columns=('A', 'Alpha'))`
+
+C. `df.rename(columns={'A': 'Alpha'})`
+
+D. `df.rename(labels=['A': 'Alpha'])`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"What happens if you apply `.mean()` to a group that contains non-numeric data (like a column of Strings)? (Select all that apply)
+
+A. Pandas will convert the Strings to numbers using ASCII values.
+
+B. In newer Pandas versions, non-numeric columns are quietly dropped from the result of the aggregation.
+
+C. The entire operation fails with a `TypeError` every time.
+
+D. You should use `numeric_only=True` in `.mean()` to ensure consistency in modern Pandas.
+
+**Answer:** B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Select the correct statements regarding column selection during grouping. (Select all that apply)
+
+A. `df.groupby('A')['B'].mean()` calculates the mean of column 'B' grouped by 'A'.
+
+B. If you don't select a column (e.g., `df.groupby('A').mean()`), Pandas attempts to calculate the mean for all numeric columns.
+
+C. Grouping by a non-existent column raises a `KeyError`.
+
+D. You can only group by numeric columns.
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"A sales manager needs a reusable utility to quickly summarize average sales performance by team. You must package the groupby logic into a function.
+
+**Problem Statement**
+Write a Python function `analyze_performance(df)` that accepts a DataFrame with columns `'Employee_ID'`, `'Team'`, and `'Sales_Amount'`, groups by `'Team'`, computes the mean `'Sales_Amount'` per team, and returns the resulting Series.
+
+**Constraints**
+- The function must be named `analyze_performance`
+- Group only by `'Team'`; aggregate only the `'Sales_Amount'` column
+- Return the Series directly — do not print inside the function
+
+**Sample Input**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    'Employee_ID': [101, 102, 103, 104, 105, 106],
+    'Team':        ['Red', 'Blue', 'Red', 'Blue', 'Red', 'Blue'],
+    'Sales_Amount':[100, 200, 300, 400, 200, 600]
+})
+
+result = analyze_performance(df)
+print(result)
+```
+
+**Sample Output**
+```
+Team
+Blue    400.0
+Red     200.0
+Name: Sales_Amount, dtype: float64
+```
+
+**Sample Explanation**
+The Blue team has three employees with sales of 200, 400, and 600, giving a mean of 400.0. The Red team has sales of 100, 300, and 200, giving a mean of 200.0. The team names become the index of the returned Series.",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which aggregation function would you use to find the number of records (rows) in each group?
+
+A. `.sum()`
+
+B. `.mean()`
+
+C. `.count()`
+
+D. `.calculate()`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following describes the behavior of the `df.groupby()` object in Pandas?
+
+A. It immediately calculates the mean of all columns.
+
+B. It returns a new DataFrame with unique values only.
+
+C. It is a ""lazy"" object that stores the mapping of rows to groups but performs no calculation initially.
+
+D. It deletes all non-numeric columns from the original DataFrame.
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"A retail company tracks employee salaries and experience across departments. You need to produce two separate summary statistics from the same grouped data.
+
+**Problem Statement**
+Group the DataFrame by `'Department'` and compute two separate aggregations: the total (sum) of `'Salary'` per department and the mean of `'Experience'` per department. Print both results.
+
+**Constraints**
+- Use `groupby('Department')` as the grouping key
+- Do not use `.agg()` — compute each aggregation as a separate chained call
+- Print both resulting Series
+
+**Sample Input**
+```python
+import pandas as pd
+
+df = pd.DataFrame({
+    'Department': ['HR', 'IT', 'Finance', 'IT', 'HR', 'Finance'],
+    'Salary':     [50000, 80000, 70000, 90000, 55000, 65000],
+    'Experience': [3, 5, 7, 2, 4, 6]
+})
+```
+
+**Sample Output**
+```
+Department
+Finance    135000
+HR         105000
+IT         170000
+Name: Salary, dtype: int64
+
+Department
+Finance    6.5
+HR         3.5
+IT         3.5
+Name: Experience, dtype: float64
+```
+
+**Sample Explanation**
+The Finance department has two employees earning 70000 and 65000, so the salary sum is 135000 and their experience values of 7 and 6 average to 6.5. The IT department has two employees (80000 and 90000) with experience 5 and 2, giving a mean of 3.5.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Write a Python script that uses Pandas to accomplish the following:
+1. Create a DataFrame named `inventory` with two columns: 'Product' and 'Stock'.
+2. Populate it with 3 products: 'Wrench' (50), 'Hammer' (50), and 'Saw' (20).
+3. Sort the DataFrame by 'Stock' in Descending order, and use 'Product' as an Ascending tie-breaker.
+4. Reset the index so it is numerically sequential (0, 1, 2) and drops the old index.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following statements about multi-column sorting in Pandas are TRUE? (Select all that apply)
+
+A. You can sort by multiple columns by passing a list of column names to the `by` argument.
+
+B. If the first column in the list has duplicate values, the second column acts as a tie-breaker.
+
+C. You can only sort multiple columns in the same direction (e.g., all must be Ascending).
+
+D. You can specify different sorting directions for each column by passing a list of Booleans to the `ascending` argument.
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"A data analyst runs the following code:
+```python
+df.sort_values(by='Revenue', ascending=False)
+```
+Later in the script, they notice the DataFrame `df` is still in its original, unsorted order. Why did this happen? (Select all that apply)
+
+A. By default, `sort_values` returns a new DataFrame and does not modify the original one.
+
+B. The analyst forgot to assign the result back to `df` (e.g., `df = df.sort_values(...)`).
+
+C. Sorting is only temporary and resets after every 5 lines of code.
+
+D. The `inplace` parameter defaults to `False`.
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following is the correct syntax to sort a DataFrame `df` by a column named 'Price' in descending order (highest price first)?
+
+A. `df.sort_values('Price')`
+
+B. `df.sort_values(by='Price', ascending=False)`
+
+C. `df.sort_values(ascending='Price')`
+
+D. `df.order_by('Price', descending=True)`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Use the following DataFrame for this question:
+
+```python
+import pandas as pd
+import numpy as np
+
+sales_df = pd.DataFrame({
+    'Region':  ['North', 'South', 'East', 'North', 'South', 'East', 'North'],
+    'Month':   ['Jan', 'Jan', 'Feb', 'Feb', 'Mar', 'Mar', 'Mar'],
+    'Revenue': [5000, 3000, np.nan, 7000, 4000, 6000, np.nan]
+})
+```
+
+You are given a DataFrame `sales_df` with columns: 'Region', 'Month', and 'Revenue'.
+Write the command to sort the data such that:
+- 'Region' is sorted from A to Z.
+- Within each Region, 'Revenue' is sorted from Highest to Lowest.
+- All missing value (NaN) rows in the 'Revenue' column appear at the VERY TOP of the sorted list.",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"What happens to the row Index labels (the numbers on the far left) when you sort a DataFrame by its values?
+
+A. They are automatically reset to 0, 1, 2... in the new order.
+
+B. They stay in their original numeric sequence (0, 1, 2...) regardless of the rows.
+
+C. They move along with their respective rows, resulting in a scrambled index.
+
+D. They are deleted from the DataFrame.
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"You have a sensor DataFrame `logs` where the Index is a set of Hours (0 to 23). Due to an error, the rows are in the order `23, 10, 5, 0`.
+Write a Python script that:
+1. Re-orders the DataFrame so the hours are in chronological order (0 at the top).
+2. Uses the modern Pandas assignment pattern (no `inplace=True`).
+3. Sorts the column headers alphabetically at the same time.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"If you have a DataFrame with columns in the order `['Zip', 'Name', 'Age']`, which command will reorder the columns alphabetically to `['Age', 'Name', 'Zip']`?
+
+A. `df.sort_values(axis=1)`
+
+B. `df.sort_index(axis=0)`
+
+C. `df.sort_index(axis=1)`
+
+D. `df.columns.sort()`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Explain the physical difference between `sort_values(by='Sales')` and `sort_index()`. 
+In your explanation, mention:
+- What Pandas looks at to decide the order.
+- What happens to the Index labels in each case.
+- Which one is typically more efficient for large datasets.",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"A student notices that their index labels are 0, 5, 2, 8. They want to restore them to 0, 2, 5, 8. Which of the following technical details about `sort_index()` explains why they should use this method? (Select all that apply)
+
+A. `sort_index()` compares the labels themselves, not the data in the rows.
+
+B. It updates the internal pointer map to point to labels in the user's requested order.
+
+C. It allows for `ascending=True` or `ascending=False` directions.
+
+D. It will delete all rows except for row 0 if no arguments are passed.
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following statements about `sort_index()` are TRUE? (Select all that apply)
+
+A. It can reorder rows numerically or alphabetically based on the labels in the index.
+
+B. It is generally faster than `sort_values()` because the Index structure is optimized for lookups.
+
+C. It permanently modifies the original DataFrame by default (no assignment needed).
+
+D. You can sort column names alphabetically by setting the `axis` parameter to 1.
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Which of the following creates a DataFrame `df` where the rows are ordered by their labels from largest to smallest (3, 2, 1, 0)?
+
+A. `df.sort_index()`
+
+B. `df.sort_index(ascending=False)`
+
+C. `df.sort_values(index, ascending=False)`
+
+D. `df.reverse_index()`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Which of the following are valid ways to count the total number of missing values across the ENTIRE DataFrame (not just per column)? (Select all that apply)
+
+A. `df.isna().sum().sum()`
+
+B. `df.isna().count()`
+
+C. `df.isnull().values.sum()`
+
+D. `df.sum(na=True)`
+
+**Answer:** A, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Why do we use specific functions like `.isna()` instead of a standard equality check (e.g., `x == np.nan`)?
+
+A. `.isna()` is faster.
+
+B. In memory, `NaN` does not equal `NaN`, so standard equality checks will always return `False`.
+
+C. Most computers don't have a `NaN` key on the keyboard.
+
+D. `.isna()` handles both `NaN` and the number `0`.
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which Pandas method should you use to return a Boolean mask where `True` indicates a value is missing?
+
+A. `.isnull()`
+
+B. `.isna()`
+
+C. `.detect_holes()`
+
+D. Both A and B
+
+**Answer:** D",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Write a Python function `get_valid_records(df)` that:
+1. Takes a DataFrame as input.
+2. Specifically looks at the `'Password'` column.
+3. Returns a filtered DataFrame containing only the rows where the `'Password'` is **NOT** missing.
+4. Use the `notna()` method.
+
+**Example Input:**
+`df = pd.DataFrame({'User': ['A', 'B'], 'Password': [np.nan, 'secure123']})`
+
+**Expected Output:**
+```text
+  User   Password
+1    B  secure123
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"What happens if you have a column of Integers and you insert a `NaN` value into one of the rows? (Select all that apply)
+
+A. The column is converted to Strings.
+
+B. The column is ""upcast"" to Floats because `NaN` is a floating-point object.
+
+C. The integer values remain unchanged, and the `NaN` is stored separately.
+
+D. The column's `dtype` changes to `float64`.
+
+**Answer:** B, D",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Use the following DataFrame for this question:
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'Product':     ['Apple', 'Banana', 'Cherry', 'Date', 'Elderberry'],
+    'Stock_Level': [100, np.nan, 50, np.nan, 200]
+})
+```
+
+Given a DataFrame `df` with columns `['Product', 'Stock_Level']`:
+1. Use `isna()` to find rows where `Stock_Level` is missing.
+2. Count the number of such rows.
+3. Print the count.
+
+**Expected Output (Simulation):**
+An integer representing the count of nulls in the Stock_Level column.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Use the following DataFrame for this question:
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'A': ['Alpha', np.nan, 'Gamma', np.nan, 'Epsilon'],
+    'B': [10, 20, np.nan, 40, np.nan]
+})
+```
+
+Given a DataFrame `df` with columns `['A', 'B']`:
+1. Use `fillna()` to replace all missing values in column `'A'` with the word `'Missing'`.
+2. Use `fillna()` to replace all missing values in column `'B'` with the scalar value `0`.
+3. Use `inplace=True` for both operations.
+
+**Expected Output (Simulation):**
+A DataFrame with no NaNs, replaced by 'Missing' in A and 0 in B.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"What is a potential disadvantage of filling missing numerical data with `0` (Zero)? (Select all that apply)
+
+A. It can falsely lower the average (mean) of the dataset.
+
+B. It makes the data files larger in memory.
+
+C. It can introduce misleading outliers if `0` is not a realistic value (e.g., for body temperature).
+
+D. Pandas will crash if you try to add a zero to a float.
+
+**Answer:** A, C",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Which argument is required to ensure that `df.fillna(0)` permanently modifies the original DataFrame object without needing to be re-assigned?
+
+A. `modify=True`
+
+B. `save=True`
+
+C. `inplace=True`
+
+D. `static=True`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
+subjective,markdown,"Which of the following is the modern, recommended way to perform a ""Forward Fill"" on a DataFrame `df` in Pandas?
+
+A. `df.fillna(method='ffill')`
+
+B. `df.ffill()`
+
+C. `df.fill_next()`
+
+D. `df.copy_down()`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"Which of the following are valid ways to fill missing numeric data in a column named `'Prices'`? (Select all that apply)
+
+A. `df['Prices'].fillna(0)`
+
+B. `df['Prices'].fillna(df['Prices'].mean())`
+
+C. `df['Prices'].fillna(method='ffill')`
+
+D. `df['Prices'].fill('Zero')`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `fix_gaps(df)` that:
+1. Takes a DataFrame containing a column named `'Value'`.
+2. Fills any missing values in the `'Value'` column using the **Forward Fill** method.
+3. If there are still missing values (e.g., at the very start of the data), fill those remaining values with `0`.
+4. Returns the modified DataFrame.
+
+**Example Input:**
+`df = pd.DataFrame({'Value': [np.nan, 10, np.nan, 20]})`
+
+**Expected Output:**
+```text
+   Value
+0    0.0
+1   10.0
+2   10.0
+3   20.0
+```",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Use the following DataFrame for this question:
+
+```python
+import pandas as pd
+import numpy as np
+
+df = pd.DataFrame({
+    'ID':    [1, np.nan, 3, np.nan, 5],
+    'Name':  ['Alice', 'Bob', 'Charlie', 'Dave', 'Eve'],
+    'Notes': ['Active', 'Inactive', 'Active', np.nan, 'Active']
+})
+```
+
+Given a DataFrame `df` with columns `['ID', 'Name', 'Notes']`:
+1. Use `dropna()` to drop rows where the `'ID'` is missing.
+2. Ensure the change is permanent using `inplace=True`.
+3. Print the number of rows remaining in the DataFrame using `len(df)`.
+
+**Expected Output (Simulation):**
+An integer representing the count of rows that had a valid ID.",,,,,,,,,,,,,,,markdown,"Implement a targeted cleaning operation that removes records only if their primary identifier (`ID`) is missing.
+
+Successfully combine the `subset` and `inplace=True` parameters in a production-style code snippet.
+
+Don't use the bouncer blindly. Tell him to ONLY check the `'ID'` column. And make sure he doesn't just make a copy—he should fix the original list!
+
+```python
+import pandas as pd
+
+df.dropna(subset=['ID'], inplace=True)
+
+print(len(df))
+```
+
+This Subjective problem represents a common ""First Pass"" in data engineering.
+- Using `subset=['ID']` ensures that we don't accidentally delete rows where something non-critical (like 'Notes') is missing.
+- Using `inplace=True` is more memory-efficient for large datasets as it avoids creating a temporary copy of the DataFrame during the operation.
+- Finally, checking the length (`len(df)`) provides immediate feedback on how many records survived the ""identifiability test"".
+
+The student must submit code that performs a targeted drop on the `'ID'` column using `subset` and `inplace=True`."
+subjective,markdown,"Which of the following is the default behavior of `df.dropna()` in Pandas?
+
+A. It drops only rows that are completely empty.
+
+B. It drops any row that has at least one missing value (`axis=0`, `how='any'`).
+
+C. It drops any column that has at least one missing value.
+
+D. It replaces missing values with the average of the column.
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the default behavior of the `.dropna()` method in Pandas.
+
+Reinforce the ""Zero Tolerance"" policy that Pandas applies to missing data by default.
+
+If you don't give the bouncer any specific instructions, does he look at the whole row or the whole column? And how many holes does he need to see before he throws it out?
+
+By default, `df.dropna()` removes any row (`axis=0`) that contains at least one missing value (`how='any'`).
+
+- **A (Incorrect):** Dropping only completely empty rows requires the explicit argument `how='all'`.
+- **B (Correct):** Pandas is designed to be ""Safe and Strict"". If any part of a record is missing, it assumes the record is compromised and removes it.
+- **C (Incorrect):** To drop columns instead of rows, you must explicitly set `axis=1`.
+- **D (Incorrect):** `dropna()` is a removal tool. To replace or impute values, you would use `fillna()`.
+
+Answer: B"
+subjective,markdown,"What is a common side-effect of dropping multiple rows from a DataFrame? (Select all that apply)
+
+A. The DataFrame's total memory usage might decrease.
+
+B. The `Index` will have gaps (e.g., jumping from 0 to 2 to 5).
+
+C. The DataFrame's shape (`df.shape`) will change.
+
+D. All numeric data in remaining rows is converted to integers.
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify the common side-effects and structural changes that occur when rows are removed from a DataFrame.
+
+Prepare students for the ""Index Fragmentation"" and ""Shape Shifting"" that occurs during data cleaning.
+
+If you have 100 rows and you delete 10, how many rows are left? What happened to the row number `5` if you deleted it?
+
+Dropping rows reduces the DataFrame's size (`shape`), creates gaps in the Index sequence, and potentially frees up memory.
+
+- **A (Correct):** By removing rows, you are literally deleting objects from memory, which reduces the overall footprint of the dataset.
+- **B (Correct):** This is the most common ""Gotcha"". Pandas preserves the original labels. If row 1 is gone, the index skips from 0 to 2.
+- **C (Correct):** `df.shape` is a tuple of (rows, columns). If rows are dropped, the first number in the tuple will change.
+- **D (Incorrect):** Removing a row has no impact on the internal data types (dtypes) of the surviving rows.
+
+Answer: A, B, C"
+subjective,markdown,"Write a Python function `clean_shipments(df)` that:
+1. Takes a DataFrame containing `'Shipment_ID'`, `'Buyer'`, and `'Review'`.
+2. Drops rows only if they are **entirely empty** (all cells are NaN).
+3. Then, drops rows specifically if the `'Shipment_ID'` is missing.
+4. Returns the cleaned DataFrame.
+
+**Example Input:**
+`df = pd.DataFrame({'Shipment_ID': [101, np.nan, np.nan], 'Buyer': ['A', np.nan, 'C']})`
+(Row 2 is entirely NaN, Row 1 is missing only Shipment_ID).
+
+**Expected Output:**
+```text
+   Shipment_ID Buyer
+0        101.0     A
+```
+*(Row 1 was dropped by subset, Row 2 was dropped by how='all')*",,,,,,,,,,,,,,,markdown,"Implement a cleaning function that handles two distinct types of ""Bad Data"": entirely empty rows and rows missing a critical tracker.
+
+Demonstrate the ability to design a sequential cleaning pipeline using multiple calls to the same method with different configurations.
+
+Stage 1: Remove the ""Ghost Rows"" where every single cell is NaN. Stage 2: Remove the ""Anonymous Rows"" where the Shipment_ID is missing.
+
+```python
+import pandas as pd
+
+def clean_shipments(df):
+    df = df.dropna(how='all')
+
+    df = df.dropna(subset=['Shipment_ID'])
+
+    return df
+```
+
+In advanced data cleaning, order matters.
+- By calling `how='all'` first, we remove entries that likely occurred due to technical glitches (empty rows at the end of a file).
+- By following up with `subset=['Shipment_ID']`, we further refine our dataset to ensure every remaining row is ""Actionable"".
+This two-stage bouncer approach ensures that we don't lose rows that might be partially filled (e.g., has a Shipment_ID but no Buyer yet) but we DO lose rows that are scientifically or operationally useless.
+
+The student must submit a function that performs two distinct `dropna` operations: one with `how='all'` and one with `subset=['Shipment_ID']`."
+subjective,markdown,"Which of the following are valid ways to drop data based on missing values AND manage the resulting index gaps? (Select all that apply)
+
+A. `df.dropna().reset_index(drop=True)`
+
+B. `df.dropna(how='all').reset_index()`
+
+C. `df.dropna(thresh=2)` (Without resetting index)
+
+D. `df.drop_missing().reindex()`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify various valid ways to drop missing data and handle the structural integrity of the resulting DataFrame.
+
+Test the understanding of specialized arguments like `how` and `thresh`, as well as post-drop index management.
+
+You can drop by any/all, or use a minimum threshold of valid data point. Once you drop, how do you fix the gaps in the row numbers?
+
+Valid configurations include `how='all'`, `thresh=n`, and combining `dropna()` with `reset_index(drop=True)` to clean the index.
+
+- **A (Correct):** This is the ""Industry Gold Standard"" workflow. You remove the bad rows and immediately re-sequence the index so the row numbers are 0, 1, 2, 3... without gaps.
+- **B (Correct):** `how='all'` is valid for removing ""Ghost Rows"". Calling `.reset_index()` without `drop=True` will move the old index into a new column, which is a valid structural choice.
+- **C (Correct):** `thresh=2` is a valid argument that keeps any row with at least 2 non-null values. Gaps in the index are a natural result of this operation.
+- **D (Incorrect):** `drop_missing()` is not a standard Pandas method name.
+
+Answer: A, B, C"
+subjective,markdown,"What does the `subset` argument in `df.dropna()` allow you to do?
+
+A. Select which rows to keep based on their index.
+
+B. Select a smaller portion of the DataFrame to return.
+
+C. Specify which columns the ""Bouncer"" should check for missing values before deciding to drop a row.
+
+D. Create a sub-group of data for calculation.
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Explain the functionality and purpose of the `subset` argument within the `.dropna()` method.
+
+Demonstrate how to protect ""Nice-to-have"" columns while strictly enforcing data presence in ""Critical"" columns.
+
+Imagine a job application. You might not care if someone missed the ""Hobbies"" section, but you MUST have their ""Email"". How do you tell the bouncer to only look at the ""Email"" column?
+
+The `subset` argument allows you to specify a list of columns that Pandas should check for `NaN` values before deciding to drop a row.
+
+- **A & B (Incorrect):** These are not the functions of `subset`. Selecting rows based on indices is done with `.loc`, and returning a smaller portion of a DataFrame is called ""Slicing"".
+- **C (Correct):** `subset=['Email']` acts as a specialized filter. Even if other columns have missing data, the row will only be dropped if the 'Email' column specifically is null.
+- **D (Incorrect):** Grouping is the domain of the `groupby()` method.
+
+Answer: C"
