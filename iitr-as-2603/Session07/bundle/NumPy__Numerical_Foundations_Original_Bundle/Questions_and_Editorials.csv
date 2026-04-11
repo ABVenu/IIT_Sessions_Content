@@ -1,0 +1,1734 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+subjective,markdown,"What does `np.array([5, 10, 15])` return?
+
+A. A Python list `[5, 10, 15]`
+
+B. A NumPy ndarray of integers
+
+C. A Python tuple `(5, 10, 15)`
+
+D. A NumPy matrix object
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+mcsc,markdown,Which of the following is the universally accepted way to import NumPy in Python?,,,,,,2,,`import numpy`,`import numpy as np`,`from numpy import array`,`import np from numpy`,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"A junior analyst wrote the following code to create a numeric array but got unexpected results:
+
+```python
+import numpy as np
+
+data = np.array([[1, 2, 3], [4, 5]])
+print(data.dtype)
+print(data * 2)
+```
+
+**Tasks:**
+1. Run this code (mentally or in a notebook) and explain what `dtype` is printed and why.
+2. Explain why `data * 2` does not perform element-wise multiplication as expected.
+3. Fix the code so that `data` is a proper 2D float array with shape `(2, 3)` — add a missing element to make the rows equal length, then verify the dtype is `float64`.",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"A data engineer receives sensor readings for three machines across two time periods as a nested Python list:
+
+```python
+readings = [[23.4, 19.1, 30.7],
+            [22.8, 18.5, 31.2]]
+```
+
+**Tasks:**
+1. Convert `readings` into a NumPy array named `arr`.
+2. Print the array and confirm its type using `type()`.
+3. Print its `shape` and `dtype`.
+
+Expected output format:
+```
+[[23.4 19.1 30.7]
+ [22.8 18.5 31.2]]
+<class 'numpy.ndarray'>
+Shape: (2, 3)
+Dtype: float64
+```",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Which of the following statements about NumPy array creation using `np.array()` are true? (Select all that apply)
+
+A. `np.array()` accepts Python lists as input
+
+B. `np.array()` accepts Python tuples as input
+
+C. If you mix integers and floats, NumPy upcasts everything to float
+
+D. If you mix numbers and strings, NumPy converts everything to a Unicode string dtype (e.g., `<U21`)
+
+**Answer:** A, B, C, D",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"Which of the following expressions correctly create a valid NumPy ndarray with numeric dtype? (Select all that apply)
+
+A. `np.array([1, 2, 3])`
+
+B. `np.array((4.0, 5.0, 6.0))`
+
+C. `np.array([[1, 2], [3, 4]])`
+
+D. `np.array([[1, 2], [3]])`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"You receive a NumPy array `mystery` from a colleague's pipeline. Without knowing anything about it in advance, write a ""diagnostic report"" function called `describe_array(arr)` that prints:
+
+```
+Shape:  (rows, cols, ...)
+ndim:   N
+size:   total elements
+dtype:  dtype_name
+nbytes: memory in bytes
+```
+
+Test your function on the following array:
+
+```python
+mystery = np.array([[[1.0, 2.0], [3.0, 4.0]],
+                    [[5.0, 6.0], [7.0, 8.0]]])
+```
+
+Expected output:
+```
+Shape:  (2, 2, 2)
+ndim:   3
+size:   8
+dtype:  float64
+nbytes: 64
+```",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"What is the `dtype` of the array created by `np.array([1, 2, 3])` on most 64-bit systems?
+
+A. float64
+
+B. int32
+
+C. int64
+
+D. object
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"What does `np.array([[1, 2, 3], [4, 5, 6]]).shape` return?
+
+A. `6`
+
+B. `(6,)`
+
+C. `(2, 3)`
+
+D. `(3, 2)`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"Given `arr = np.zeros((4, 3))`, which of the following statements are correct? (Select all that apply)
+
+A. `arr.ndim` is `2`
+
+B. `arr.size` is `12`
+
+C. `arr.shape` is `(3, 4)`
+
+D. `arr.dtype` is `float64`
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"Which of the following attributes tell you something about the memory usage of a NumPy array? (Select all that apply)
+
+A. `.nbytes`
+
+B. `.ndim`
+
+C. `.dtype`
+
+D. `.size`
+
+**Answer:** A, C, D",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"A data scientist runs the following code:
+
+```python
+import numpy as np
+
+arr = np.array([1, 2, 3.0, 4])
+print(arr.dtype)
+
+arr2 = np.array([1, 2, ""three"", 4])
+print(arr2.dtype)
+print(arr2 + 1)
+```
+
+**Tasks:**
+1. Predict the `dtype` of `arr` and explain why.
+2. Predict the `dtype` of `arr2` and explain why.
+3. Explain what happens when you try to compute `arr2 + 1`, and what error (if any) you get.
+4. Fix the code so that `arr2` is a valid float64 array containing `[1.0, 2.0, 3.0, 4.0]` — remove the string.",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"What is the output of `np.arange(1, 10, 2)`?
+
+A. `[1 2 3 4 5 6 7 8 9]`
+
+B. `[1 3 5 7 9 11]`
+
+C. `[1 3 5 7 9]`
+
+D. `[2 4 6 8 10]`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"A junior analyst wrote the following code to generate 10 evenly spaced float values between 0.0 and 0.9:
+
+```python
+import numpy as np
+arr = np.arange(0, 1, 0.1)
+print(len(arr))
+print(arr[-1])
+```
+
+On their machine, the output is:
+```
+11
+1.0000000000000002
+```
+
+**Tasks:**
+1. Explain why `arange` produced 11 elements instead of 10.
+2. Explain what `1.0000000000000002` means and why it appears.
+3. Rewrite the code using `linspace` to reliably generate exactly 10 values between 0.0 and 0.9.
+
+Hint: `linspace(0, 0.9, 10)` — is the endpoint inclusive? Verify.",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"How many elements does `np.linspace(0, 1, 5)` produce, and what is the last element?
+
+A. 4 elements, last element is 0.75
+
+B. 5 elements, last element is 0.8
+
+C. 6 elements, last element is 1.0
+
+D. 5 elements, last element is 1.0
+
+**Answer:** D",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"Which of the following produce a NumPy array of exactly 5 elements? (Select all that apply)
+
+A. `np.arange(0, 5)`
+
+B. `np.linspace(0, 1, 5)`
+
+C. `np.zeros(5)`
+
+D. `np.arange(0, 1, 0.2)`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"A signal processing engineer needs to:
+1. Create a time axis `t` for a 1-second audio signal sampled at 100 Hz (100 samples per second) using `linspace`.
+2. Create a 3×4 zero-initialized weight matrix `W` using `zeros`.
+3. Print the shape and dtype of both arrays.
+
+Expected outputs:
+```
+t shape: (100,)   t dtype: float64
+W shape: (3, 4)   W dtype: float64
+```
+
+Write the complete code.",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Which of the following statements about `np.arange` and `np.linspace` are true? (Select all that apply)
+
+A. `np.linspace(0, 1, 5)` always includes the value `1.0` as its last element
+
+B. `np.arange(0, 1, 0.1)` is guaranteed to produce exactly 10 elements on all platforms
+
+C. `np.linspace` is preferred over `np.arange` when the exact number of points matters
+
+D. Both `np.arange` and `np.linspace` accept float step/range values
+
+**Answer:** A, C, D",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"Which of the following statements about `np.random.rand` and `np.random.randn` are true? (Select all that apply)
+
+A. `np.random.rand(5)` generates values in the range [0, 1)
+
+B. `np.random.randn(5)` generates values from a standard normal distribution with mean=0 and std=1
+
+C. Both `rand` and `randn` take their shape arguments as separate integers, not as a tuple
+
+D. `np.random.rand(3, 4)` and `np.random.rand((3, 4))` produce identical results
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"A machine learning engineer is building a reproducible data pipeline. She needs to:
+
+1. Set seed `99`.
+2. Generate a dataset of 200 samples, each with 4 features drawn from a standard normal distribution (shape: `(200, 4)`).
+3. Generate 200 integer labels uniformly in `{0, 1, 2}` (3-class classification).
+4. Shuffle the dataset and labels together (same permutation applied to both).
+5. Split the shuffled data into 80% training and 20% test sets.
+
+Write the complete code. Print the shapes of all four output arrays (`X_train`, `X_test`, `y_train`, `y_test`).
+
+**Hint:** Use `np.random.permutation()` to get a shuffled index array, then apply it to both X and y.",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"A quantitative analyst needs to simulate 1,000 daily stock returns for a portfolio. Historical analysis shows that daily returns follow a normal distribution with mean = 0.0005 (0.05%) and standard deviation = 0.012 (1.2%).
+
+**Tasks:**
+1. Set a random seed of `123` for reproducibility.
+2. Generate 1,000 simulated daily returns using `np.random.randn`, scaled to the given mean and standard deviation.
+3. Compute and print the sample mean and sample standard deviation of the simulated returns.
+4. Count and print how many days had a negative return.
+
+Expected format:
+```
+Sample mean:  0.0004...
+Sample std:   0.012...
+Negative days: 4XX
+```",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"What does calling `np.random.seed(7)` accomplish?
+
+A. Generates a 7-element random array
+
+B. Restricts all subsequent random values to be less than 7
+
+C. Sets the pseudorandom generator to a reproducible starting state, so all subsequent random calls produce the same sequence
+
+D. Increases the speed of random number generation
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"Which NumPy function generates random float values from a standard normal distribution (mean=0, standard deviation=1)?
+
+A. `np.random.rand()`
+
+B. `np.random.uniform()`
+
+C. `np.random.randint()`
+
+D. `np.random.randn()`
+
+**Answer:** D",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"Which of the following expressions produce arrays containing random integers? (Select all that apply)
+
+A. `np.random.randint(1, 7, size=10)`
+
+B. `np.random.randint(0, 100, size=(3, 4))`
+
+C. `np.random.rand(5).astype(int)`
+
+D. `np.random.randn(5).astype(int)`
+
+**Answer:** A, B, C, D",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"A sensor array records temperature readings every minute for 24 hours (1,440 readings):
+
+```python
+import numpy as np
+np.random.seed(0)
+temps = 20 + 5 * np.random.randn(1440)   # synthetic temperature data
+```
+
+**Tasks (use slicing only — no loops):**
+1. Extract the readings from the first hour (first 60 values) as `first_hour`.
+2. Extract the readings from the last 30 minutes (last 30 values) as `last_half_hour`.
+3. Extract every 10th reading from the full array as a downsampled view `every_10th`.
+4. Print the shape of each result and the mean temperature of `first_hour`.",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Given `arr = np.array([0, 10, 20, 30, 40, 50])`, what does `arr[1:4]` return?
+
+A. `[0 10 20 30]`
+
+B. `[10 20 30 40]`
+
+C. `[10 20 30]`
+
+D. `[0 10 20]`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"Given `arr = np.array([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])`, which of the following slices produce `[0, 2, 4, 6, 8]`? (Select all that apply)
+
+A. `arr[::2]`
+
+B. `arr[0:9:2]`
+
+C. `arr[0:10:2]`
+
+D. `arr[0::2]`
+
+**Answer:** A, C, D",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"Given:
+```python
+arr = np.array([3, 7, 1, 9, 4, 6, 2, 8, 5, 0])
+```
+
+**Tasks:**
+1. Reverse the array using a slice (no `np.flip` or `np.sort`).
+2. Extract elements at even indices (0, 2, 4, ...) using a slice.
+3. Set all elements from index 3 to index 6 (inclusive) to `99` using slice assignment.
+4. After the assignment, verify that the original array was modified in place (not a copy operation).
+5. Print the array after each step.",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Given `arr = np.array([10, 20, 30, 40, 50])`, what does `arr[-2]` return?
+
+A. 20
+
+B. 50
+
+C. 40
+
+D. An IndexError
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"Which of the following statements about NumPy 1D slicing are true? (Select all that apply)
+
+A. The stop index in a slice is exclusive (not included in the result)
+
+B. `arr[::-1]` returns the array in reverse order
+
+C. Negative step values require that start > stop to return non-empty results
+
+D. `arr[2:5]` returns a copy of elements at indices 2, 3, and 4
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"Given:
+```python
+m = np.arange(16).reshape(4, 4)
+```
+
+**Tasks:**
+1. Extract the inner 2×2 submatrix (rows 1–2, columns 1–2).
+2. Set the entire border (first and last row, first and last column) to 0 using slice assignments — without a loop.
+3. Print the matrix after each step.
+4. Verify that the border assignment modified `m` in place (use `.base` on the slice if needed).
+
+Expected final `m`:
+```
+[[ 0  0  0  0]
+ [ 0  5  6  0]
+ [ 0  9 10  0]
+ [ 0  0  0  0]]
+```",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"A clinical dataset has shape `(500, 8)` — 500 patients and 8 biomarkers. The biomarkers are (in column order): age, weight, height, glucose, cholesterol, blood_pressure, heart_rate, bmi.
+
+```python
+import numpy as np
+np.random.seed(42)
+data = np.column_stack([
+    np.random.randint(20, 80, 500),          # age
+    np.random.randint(50, 120, 500),          # weight
+    np.random.randint(150, 200, 500),         # height
+    np.random.randint(70, 200, 500),          # glucose
+    np.random.randint(150, 300, 500),         # cholesterol
+    np.random.randint(60, 140, 500),          # blood_pressure
+    np.random.randint(50, 110, 500),          # heart_rate
+    np.zeros(500)                             # bmi (compute it)
+]).astype(float)
+```
+
+**Tasks (use 2D slicing only — no loops):**
+1. Extract the glucose column (index 3) for all patients as `glucose`.
+2. Extract the first 100 patients, all biomarkers, as `cohort`.
+3. Extract patients 200–299, biomarkers 3–6 (glucose through heart_rate) as `sub`.
+4. Compute BMI = weight / (height/100)^2 for all patients and store in column 7.
+5. Print shapes of `glucose`, `cohort`, `sub`, and verify `data[:, 7].mean()` > 0.",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Given:
+```python
+m = np.array([[10, 20, 30],
+              [40, 50, 60],
+              [70, 80, 90]])
+```
+What does `m[2, 1]` return?
+
+A. 60
+
+B. 70
+
+C. 80
+
+D. 90
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"Given:
+```python
+m = np.array([[1,  2,  3,  4],
+              [5,  6,  7,  8],
+              [9, 10, 11, 12]])
+```
+Which of the following expressions select the entire second row `[5 6 7 8]`? (Select all that apply)
+
+A. `m[1, :]`
+
+B. `m[1]`
+
+C. `m[1, 0:4]`
+
+D. `m[:, 1]`
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"Given `m = np.array([[1,2,3],[4,5,6],[7,8,9]])`, what does `m[:, 0]` return?
+
+A. `[1 2 3]`
+
+B. `[1 4 7]`
+
+C. `[3 6 9]`
+
+D. `[7 8 9]`
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"Which of the following statements about 2D NumPy array slicing are true? (Select all that apply)
+
+A. `m[0, :]` and `m[0]` return the same result (the first row)
+
+B. `m[:, 2]` returns the third column as a 1D array
+
+C. `m[0:2, 1:3]` returns a 2D submatrix (a view)
+
+D. Assigning to `m[1:3, 1:3] = 0` creates a new array and leaves `m` unchanged
+
+**Answer:** A, B, C",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"You are preprocessing data for a machine learning model that predicts housing prices. You have a central feature matrix `X` of shape `(100, 5)` representing 100 houses and 5 features (square footage, bedrooms, etc.). You also have a separate 1D array `y` of shape `(100,)` containing the actual sale prices for these houses.
+
+Before you can save the dataset to a CSV file for another team, they requested that the target variable `y` be attached as the *last column* of the feature matrix `X`. 
+
+```python
+import numpy as np
+
+# A simulated feature matrix (100 houses, 5 features)
+X = np.random.rand(100, 5)
+
+# A simulated target vector (100 houses)
+y = np.random.rand(100) * 500000 
+```
+
+**Tasks:**
+1. You cannot horizontally stack a `(100, 5)` array with a `(100,)` 1D array. They have different dimensionalities. Use `np.newaxis` (or `.reshape()`) to convert `y` into a column vector `y_col` of shape `(100, 1)`.
+2. Use `np.hstack()` or `np.concatenate(..., axis=1)` to glue `X` and `y_col` together. The resulting array should be named `dataset` and have a shape of `(100, 6)`, where the last column is the price.
+3. Validate your work: slice the first row of your new `dataset` and print the 6th element (at index 5). It should exactly match the first element of the original `y` array `y[0]`.",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Which of the following functions will explicitly add a new dimension to the resulting array when combining two 2-dimensional matrices?
+
+A. `np.concatenate`
+
+B. `np.vstack`
+
+C. `np.hstack`
+
+D. `np.stack`
+
+**Answer:** D",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"Suppose you use `np.split` to divide an array `data` into exactly 3 chunks. Which of the following conditions must be met to avoid a `ValueError`? (Select all that apply)
+
+A. The array must be 1-dimensional.
+
+B. The total number of elements in `data` along the split axis must be perfectly divisible by 3.
+
+C. The split elements must all be of the same data type.
+
+D. You must explicitly specify `axis=0` if the array is 2-dimensional.
+
+**Answer:** B, C",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
+subjective,markdown,"Which of the following operations will successfully merge two `(5, 5)` arrays `A` and `B` into a single `(10, 5)` array? (Select all that apply)
+
+A. `np.concatenate([A, B], axis=0)`
+
+B. `np.concatenate([A, B], axis=1)`
+
+C. `np.vstack([A, B])`
+
+D. `np.hstack([A, B])`
+
+**Answer:** A, C",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"You are given an array `data = np.arange(10)`. Which of the following operations will result in a list of exactly 3 arrays?
+
+A. `np.split(data, 3)`
+
+B. `np.split(data, [3])`
+
+C. `np.split(data, [2, 6])`
+
+D. `np.split(data, 4)`
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"You have a massive dataset of 12,000 continuous temperature readings (one per hour for 500 days). You want to reorganize this 1D array into a 2D matrix where each row represents one distinct day (24 hours), and then you want to split this dataset into a ""Training set"" (first 400 days) and a ""Test set"" (last 100 days).
+
+```python
+import numpy as np
+
+# A simulated flat array of 12,000 hourly readings
+np.random.seed(99)
+hourly_temps = np.random.uniform(10.0, 35.0, 12000)
+```
+
+**Tasks:**
+1. Reshape `hourly_temps` into a 2D matrix named `daily_temps` with exactly 24 columns (one for each hour). Let NumPy automatically infer the number of rows.
+2. Split `daily_temps` vertically (row-wise) into two separate matrices: `train_data` containing the first 400 days, and `test_data` containing the remaining days. Use `np.split()` or `np.vsplit()` with an index slice.
+3. Your management wants the `test_data` split *again*. They want a `test_morning` matrix containing the first 12 hours of the day (columns 0-11), and a `test_afternoon` matrix containing the last 12 hours (columns 12-23). Use `np.hsplit()` to split `test_data` horizontally exactly in half.
+4. Print the `.shape` attribute of `train_data`, `test_morning`, and `test_afternoon` to verify they are `(400, 24)`, `(100, 12)`, and `(100, 12)` respectively.",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Which data structure stores its elements as raw contiguous bytes in memory (no per-element Python object overhead)?
+
+A. Python list
+
+B. Python tuple
+
+C. NumPy ndarray
+
+D. Python dictionary
+
+**Answer:** C",,,,,,,,,,,,,,,markdown,"Identify which Python data structure stores elements as raw contiguous bytes without per-element Python object overhead.
+
+Understand the fundamental memory model difference between Python lists, tuples, and NumPy arrays.
+
+Ask: which structure was designed specifically for homogeneous numeric data and stores raw values side by side?
+
+The correct answer is **C**. A NumPy ndarray stores all elements as raw values in a single contiguous memory block. Python lists and tuples store arrays of pointers, each pointing to a separately allocated Python object.
+
+- **A (Python list)** — stores a C array of pointers. Each pointer points to a heap-allocated Python object (e.g., a `PyLong` for an integer). The object carries type info, reference count, and the value — ~28 bytes for a small integer. Total memory for a list of 1M integers: ~35 MB.
+- **B (Python tuple)** — same model as a list structurally (array of pointers), just immutable. Same overhead per element.
+- **C (NumPy ndarray)** — stores raw numeric bytes contiguously. A `float64` array of 1M elements = exactly 8 MB. No Python object per element, no pointer indirection. This is why arithmetic is fast: the CPU can read a block of values, apply an operation via SIMD, and write results without Python VM involvement.
+- **D (Python dictionary)** — a hash table mapping keys to values. Not relevant to sequential numeric storage; has the highest overhead of all.
+
+Answer: C"
+subjective,markdown,"What does ""vectorization"" mean in NumPy?
+
+A. Converting a 1D array into a column vector
+
+B. Applying an operation to all elements of an array using a compiled routine, without a Python-level loop
+
+C. Storing multiple data types in a single array
+
+D. Compressing an array to reduce memory usage
+
+**Answer:** B",,,,,,,,,,,,,,,markdown,"Identify the correct definition of vectorization in the context of NumPy.
+
+Distinguish vectorization from other NumPy features such as reshaping, type conversion, or GPU acceleration.
+
+Vectorization is about *how* an operation is applied — specifically, whether Python iterates element-by-element or hands the work off to a compiled routine.
+
+The correct answer is **C**. Vectorization means expressing an operation on an entire array at once, with the actual iteration happening inside a compiled C routine — not in the Python interpreter. This eliminates Python loop overhead.
+
+- **A** — Incorrect. ""Storing elements as 2D vectors"" is not what vectorization means. It has nothing to do with the geometric concept of a vector.
+- **B** — Partially related but incorrect as a definition. Converting arrays to mathematical vectors describes linear algebra operations, not vectorization as a programming concept.
+- **C** — Correct. When you write `arr * 2`, NumPy does not run a Python loop. It calls a compiled ufunc (universal function) that processes the entire array in one dispatch. The Python interpreter is involved only to call the function, not to iterate.
+- **D** — Incorrect. GPU acceleration is a separate concept (available through CuPy or PyTorch). Standard NumPy runs on CPU only.
+
+Answer: C"
+subjective,markdown,"A data scientist has a Python list of 2 million float values representing daily temperatures over many years. She needs to:
+1. Convert the list to a NumPy array.
+2. Add `273.15` to every value to convert Celsius to Kelvin.
+3. Time the conversion step using `timeit` with 5 repetitions and compare it against an equivalent list comprehension.
+
+Write the complete code for all three tasks. Report and explain the speedup you observe.",,,,,,,,,,,,,,,markdown,"Convert a list of 2 million Celsius temperatures to Kelvin using both a list comprehension and NumPy vectorization, then compare their speeds.
+
+Demonstrate vectorization's real-world speed advantage on a large dataset and practise the `timeit` benchmarking workflow.
+
+Use `timeit.timeit()` with a `lambda` to wrap the operation. Divide the result by the number of repetitions to get per-run time.
+
+
+```python
+import numpy as np
+import timeit
+
+n = 2_000_000
+py_list = [float(i) * 0.01 for i in range(n)]   # synthetic Celsius data
+np_arr  = np.array(py_list)
+
+np_kelvin   = np_arr + 273.15
+list_kelvin = [x + 273.15 for x in py_list]
+
+reps = 5
+
+t_np   = timeit.timeit(lambda: np_arr + 273.15,           number=reps) / reps
+t_list = timeit.timeit(lambda: [x + 273.15 for x in py_list], number=reps) / reps
+
+print(f""NumPy avg:          {t_np*1000:.2f} ms"")
+print(f""List comprehension: {t_list*1000:.2f} ms"")
+print(f""Speedup:            {t_list/t_np:.1f}x"")
+```
+
+**Typical output (varies by hardware):**
+```
+NumPy avg:          8.34 ms
+List comprehension: 198.72 ms
+Speedup:            23.8x
+```
+
+The speedup comes from two sources:
+1. **No Python-level loop** — `np_arr + 273.15` dispatches to a compiled C broadcast addition. The Python interpreter is invoked once, not 2 million times.
+2. **SIMD parallelism** — modern CPUs apply the same instruction to multiple values simultaneously (e.g., 4 float64 values per cycle with AVX).
+
+The list comprehension iterates 2 million Python objects: look up `x`, check its type, create a new float, append to result list — all in interpreted Python. Inherently O(n) at Python speed.
+
+For data science workloads with millions of rows, this 20–50× gap is the reason NumPy (and by extension, pandas, scikit-learn, TensorFlow) exists.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Your teammate wrote the following code to compare memory usage:
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List size:"", sys.getsizeof(py_list), ""bytes"")
+print(""NumPy size:"", np_arr.nbytes, ""bytes"")
+```
+
+She runs it and sees the list size reported as ~4 MB and the NumPy size as ~4 MB, and concludes: ""No memory difference.""
+
+**Tasks:**
+1. Explain why her conclusion is wrong — what is `sys.getsizeof(py_list)` actually measuring?
+2. Estimate the true total memory consumed by the Python list (hint: consider per-element Python object overhead).
+3. Confirm your estimate by running the corrected measurement (you may use `sys.getsizeof` on individual elements plus the pointer array).",,,,,,,,,,,,,,,markdown,"A developer uses `sys.getsizeof()` on a Python list and a NumPy array, sees similar sizes, and incorrectly concludes there is no memory difference.
+
+Understand what `sys.getsizeof()` actually measures for a Python list and compute the true total memory including per-element object overhead.
+
+`sys.getsizeof(a_list)` only measures the size of the list's internal pointer array — it does NOT follow the pointers to measure the objects each element points to.
+
+
+```python
+import sys
+import numpy as np
+
+n = 500_000
+py_list = list(range(n))
+np_arr  = np.array(py_list)
+
+print(""List (pointer array only):"", sys.getsizeof(py_list), ""bytes"")  # ~4 MB
+print(""NumPy array:              "", np_arr.nbytes, ""bytes"")            # ~4 MB
+
+element_size = sys.getsizeof(py_list[0])  # 28 bytes for a small Python int
+true_list_memory = sys.getsizeof(py_list) + n * element_size
+print(f""\nTrue list memory: {true_list_memory / 1e6:.1f} MB"")
+print(f""NumPy memory:     {np_arr.nbytes / 1e6:.1f} MB"")
+print(f""Overhead factor:  {true_list_memory / np_arr.nbytes:.1f}x"")
+```
+
+**Output:**
+```
+List (pointer array only): 4000056 bytes
+NumPy array:               4000000 bytes
+
+True list memory: 18.0 MB
+NumPy memory:     4.0 MB
+Overhead factor:  4.5x
+```
+
+**What `sys.getsizeof(py_list)` measures:** Only the list object's header and its internal C array of pointers — one pointer (8 bytes) per element. It does NOT follow those pointers to count the memory of the pointed-to Python objects.
+
+**What the teammate missed:** Each element in `list(range(n))` is a Python `int` object. A small Python integer takes 28 bytes (type pointer, reference count, ob_digit). For 500,000 elements: 500,000 × 28 = 14,000,000 bytes ≈ 14 MB. Add the pointer array (~4 MB) = **~18 MB total**.
+
+**NumPy's actual usage:** 500,000 × 8 bytes (int64) = exactly **4 MB**. No per-element object overhead.
+
+**Conclusion:** The list uses ~4.5× more memory for the same data. At dataset scale (tens of millions of rows), this can mean the difference between fitting in RAM and crashing.
+
+**Correct measurement approach:** Use `tracemalloc` or `memory_profiler` for complete process-level memory, or calculate manually using `sys.getsizeof(element) × n + sys.getsizeof(list)`.
+
+See the Detailed Explanation above for the complete solution."
+subjective,markdown,"Which of the following operations are typically faster with NumPy arrays than with Python lists of the same size? (Select all that apply)
+
+A. Adding a constant to every element (e.g., `arr + 5`)
+
+B. Computing the sum of all elements
+
+C. Appending a new element to the end of the sequence
+
+D. Computing the element-wise product of two sequences
+
+**Answer:** A, B, D",,,,,,,,,,,,,,,markdown,"Identify which operations are typically faster with NumPy arrays than with Python lists of the same size.
+
+Understand which types of operations benefit from NumPy's vectorization and which do not.
+
+Think about what NumPy is optimised for: bulk numeric operations. Then think about what Python lists are better at: dynamic resizing.
+
+The correct answers are **A, B, D**. Adding a constant, computing a sum, and element-wise products are all bulk numeric operations — NumPy dispatches them to compiled routines and processes multiple elements per CPU cycle. Appending (option C) is the exception: NumPy arrays are fixed-size; `.append()` requires allocating a new array, which is slower than Python's list `.append()`.
+
+- **A (`arr + 5`)** — vectorized scalar broadcast. Compiled C loop over contiguous memory. Significantly faster than a list comprehension. ✓
+- **B (sum of all elements)** — `np.sum(arr)` uses SIMD-optimised summation over contiguous memory. `sum(py_list)` iterates Python objects one by one. ✓
+- **C (appending)** — NumPy does NOT have an efficient append. `np.append()` allocates a brand new array every time (O(n) memory copy). Python lists use dynamic array doubling — amortised O(1). For repeated appends, lists win. ✗
+- **D (element-wise product of two arrays)** — `arr1 * arr2` is vectorized. `[a*b for a,b in zip(l1,l2)]` loops in Python. NumPy is 20x–100x faster for large arrays. ✓
+
+Answer: A, B, D"
+subjective,markdown,"Which of the following are genuine advantages of a NumPy array over a Python list for numerical data? (Select all that apply)
+
+A. Lower memory usage per element
+
+B. Support for mixed data types (strings + numbers in one array)
+
+C. Vectorized arithmetic without explicit loops
+
+D. Fixed dtype that prevents accidental type coercion
+
+**Answer:** A, C, D",,,,,,,,,,,,,,,markdown,"Identify genuine advantages of NumPy arrays over Python lists when working with numerical data.
+
+Distinguish between real NumPy advantages and common misconceptions about what NumPy arrays support.
+
+NumPy's design choices — fixed dtype, contiguous storage, compiled operations — each create specific advantages. One option describes a *disadvantage* disguised as an advantage.
+
+The correct answers are **A, C, D**. NumPy uses less memory per element, supports vectorized operations, and enforces a fixed dtype that catches accidental coercion. Option B is wrong: NumPy arrays do NOT support mixed data types — that's actually a limitation (but an intentional one that enables speed).
+
+- **A (lower memory per element)** — True. int64 in NumPy = 8 bytes. int in Python list = 28+ bytes. For large numeric datasets, NumPy uses 3–5× less memory. ✓
+- **B (support for mixed types)** — False. NumPy arrays are homogeneous — all elements must be the same dtype. Mixing types causes silent upcasting or conversion to object dtype. This is a trade-off for speed, not a feature. ✗
+- **C (vectorized arithmetic without loops)** — True. `arr * 2`, `arr1 + arr2`, `np.sqrt(arr)` all operate without Python-level loops. ✓
+- **D (fixed dtype prevents accidental coercion)** — True. Once a NumPy array is created with `dtype=int64`, all values remain int64. There's no silent type-switching mid-computation. When you need float arithmetic, you explicitly cast. This predictability prevents bugs. ✓
+
+Answer: A, C, D"
