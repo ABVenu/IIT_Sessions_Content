@@ -3,6 +3,8 @@
 ## 1. Why Pandas?
 Pandas bridges the gap between simple lists and manual Excel spreadsheets by providing data context, speed (via NumPy), and usability for tables you load, clean, and analyze in Python.
 
+![Anatomy of a Pandas Series](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-1-series-anatomy.webp)
+
 ## 2. Installation and import
 Install once in your environment (terminal or notebook):
 
@@ -75,6 +77,8 @@ Now that you know what a CSV file is, `pd.read_csv()` is the standard way to **p
 ## 2. Analogy: The Universal Translator
 `pd.read_csv()` is like a translator that can handle different CSV dialects (separators, headers, date formats).
 
+![Reading a CSV File into a DataFrame](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-7-csv-to-dataframe.png)
+
 ## 3. Key Concepts
 -   **Path:** Can be a local file or a URL.
 -   **Separator (`sep`):** Default is comma `,`. Alternatives are Tab (`\t`) or Pipe (`|`).
@@ -120,6 +124,8 @@ A DataFrame's structure, consisting of Index, Columns, and Values, is critical f
 
 ## 2. Analogy: The City Map
 The DataFrame structure is analogous to a city map, with the Index as street names, Columns as avenue names, and Values as the buildings at the intersections.
+
+![DataFrame Structure](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-8-df-structure.png)
 
 ## 3. Key Concepts
 -   **`.index`**: The Row Labels.
@@ -176,6 +182,8 @@ df.tail(10)
 df.sample(5, random_state=42) # random_state ensures reproducibility
 ```
 
+![Quick DataFrame Inspection Methods](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-61-inspection-map.png)
+
 ## 2. Dimensionality with `.shape`
 `.shape` provides the number of rows and columns as a tuple.
 
@@ -215,6 +223,8 @@ Selecting columns filters noise, focuses on relevant data, and optimizes memory 
 
 ## 2. Analogy: The Jukebox
 Selecting a column is like playing a song from a Jukebox.
+
+![Selecting Columns from a DataFrame](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-9-select-columns.webp)
 
 ## 3. Key Concepts
 -   **Bracket `['Col']`**: Returns a **Series**. Use for analysis (math, stats).
@@ -268,6 +278,8 @@ Dot notation is dangerous due to potential conflicts with method names, inabilit
 
 ## 2. Analogy: The Music Request
 `loc` (Label) is like requesting a song by name, whereas `iloc` (Position) is like requesting a track by number.
+
+![Selecting with .loc[ ]](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-10-loc-flow.png)
 
 ## 3. Key Concepts
 -   **Label-Based:** Must use exact index labels.
@@ -323,6 +335,8 @@ Pandas uses Hash Maps for fast label lookups (`O(1)` complexity).
 
 ## 2. Analogy: Address vs GPS
 `iloc` (GPS) relies on absolute physical position, whereas `loc` (Address) relies on assigned names.
+
+![Selecting with .iloc[ ]](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-11-iloc-flow.svg)
 
 ## 3. Key Concepts
 -   **Integer-Based:** Must use integers (0, 1, 2...).
@@ -398,6 +412,8 @@ salary = df_indexed.loc[49201, 'Salary']
 *   **Destructive by default**: The original index is completely deleted.
 *   **Column Removal**: The promoted column is removed from the list of standard `df.columns`.
 
+![set_index() vs reset_index()](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-67-index-reset-set.png)
+
 ## 2. Demoting the Index: `reset_index()`
 When the current index is no longer optimal, reset it to push those values back into standard columns.
 
@@ -422,6 +438,8 @@ Filtering slices data based on content, allowing comparison of segments.
 
 ## 2. Analogy: The Nightclub Bouncer
 Filtering is like a nightclub bouncer who only lets in people who meet a specific condition.
+
+![Filtering with Boolean Conditions](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-12-boolean-filter.png)
 
 ## 3. Key Concepts
 -   **Boolean Mask:** A Series of `True`/`False` values that has the same length as the DataFrame.
@@ -467,6 +485,8 @@ Complex logic refines cohorts to extreme precision.
 ## 2. Analogy: Venn Diagrams
 AND (`&`): The Intersection. OR (`|`): The Union. NOT (`~`): The Inverse.
 
+![Combining Multiple Filter Conditions](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-13-multi-condition.svg)
+
 ## 3. Key Concepts
 -   **Bitwise Operators:** Pandas uses `&`, `|`, `~`.
 -   **Parentheses:** You MUST wrap conditions in parentheses `(A) & (B)`.
@@ -508,6 +528,8 @@ Pandas evaluates all conditions fully, without short-circuiting.
 
 ## 2. Analogy: The Warehouse Manager
 The column to sort by is the mapper, the sort direction is the flow, and `inplace=False` creates a new list.
+
+![Sorting by Column Values](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-21-sort-values.png)
 
 ## 3. Key Concepts
 -   **.sort_values(by='Col')**: Sorts by a single column.
@@ -556,6 +578,8 @@ Identifying missing data with `isna()` and `notna()` is essential for accurate a
 ## 2. Analogy: The Crime Scene Detective
 `isna()`: Looking for the "holes" (Missing furniture). `notna()`: Looking for the "evidence" (Furniture present).
 
+![Detecting Missing Values with .isna()](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-18-isna-flow.png)
+
 ## 3. Key Concepts
 -   **`NaN`**: Stands for "Not a Number".
 -   **`df.isna()`**: Returns a DataFrame of Booleans (`True` where data is missing). `.isnull()` is an alias.
@@ -595,6 +619,8 @@ Filling (Imputation) maintains the size of the dataset while mitigating the impa
 
 ## 2. Analogy: The Restoration Artist
 Constant Value: Patching with a single color. `ffill` (Forward Fill): Patching based on the "Previous" known state. `bfill` (Backward Fill): Patching based on the "Next" known state.
+
+![Choosing a fillna() Strategy](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-19-fillna-strategy.png)
 
 ## 3. Key Concepts
 -   **.fillna(x)**: Replaces all `NaN` with the value `x`.
@@ -637,6 +663,8 @@ Dropping is the safest way to ensure analysis is based on facts.
 
 ## 2. Analogy: The Quality Control Bouncer
 `how='any'`: Zero tolerance. `how='all'`: Delete only entirely empty rows. `subset`: Protect critical columns.
+
+![Removing Missing Values with .dropna()](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/pandas/14-2-20-dropna-strategy.png)
 
 ## 3. Key Concepts
 -   **`df.dropna()`**: The primary tool for removal.
