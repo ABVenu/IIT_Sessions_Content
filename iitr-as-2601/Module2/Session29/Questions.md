@@ -1,5 +1,6 @@
-# Session 29 — Practice Questions
-*Topics: Regularization (Ridge, Lasso, alpha), regression evaluation metrics (MAE, RMSE, R-squared), baseline comparison, and error analysis.*
+# Practice Questions — Regression: Regularization & Evaluation
+
+*Concepts: regularization (Ridge, Lasso, `alpha`), regression metrics (MAE, RMSE, R²), hold-out evaluation, residual diagnostics.*
 
 ---
 
@@ -69,7 +70,7 @@ R-squared can be negative for very poor models. Use MAE/RMSE for scale of errors
 
 ---
 
-**Q6 (Single Correct).** In the lecture’s scikit-learn examples, what does the **`alpha`** setting control for **Ridge** and **Lasso** models?
+**Q6 (Single Correct).** In **scikit-learn**, what does the **`alpha`** hyperparameter control for **`Ridge`** and **`Lasso`**?
 
 - (A) The fraction of data used for training versus testing
 - (B) The random seed used when shuffling or splitting data
@@ -83,38 +84,38 @@ Higher **alpha** means a stronger penalty (more shrinkage in Ridge; more zeroing
 
 ### Hard
 
-**Q7 (Multiple Correct).** In the lecture’s synthetic student dataset, an extra **random noise** column is **not** part of the true score formula, yet plain linear regression may still give it a nonzero coefficient. Which outcomes are **consistent** with the notes?
+**Q7 (Multiple Correct).** A marketing analyst fits **ordinary least squares** to predict **sales** from advertising spend on **TV**, **radio**, and **newspaper**. Empirically, **newspaper** spend is often a weak or irrelevant predictor, yet OLS may still estimate a **nonzero** coefficient on a finite training sample. Which statements are **generally plausible**?
 
-- (A) Ordinary linear regression may assign a nonzero weight to that noise column by chance on finite training data
-- (B) Ridge typically shrinks the noise column’s coefficient compared to ordinary linear regression
-- (C) Lasso may drive that noise column’s coefficient exactly to zero
-- (D) Using regularization **always** improves test-set R-squared versus ordinary linear regression, in every run
+- (A) OLS may assign a nonzero weight to **newspaper** because of sampling noise and spurious correlation in the training data
+- (B) **Ridge** typically **shrinks** the newspaper coefficient relative to OLS
+- (C) **Lasso** may **set the newspaper coefficient exactly to zero**, effectively excluding that channel from the model
+- (D) Regularization **guarantees** higher test-set R² than OLS on every random train/test split
 
 **Answer:** **(A), (B), (C)**  
 Regularization helps but does not guarantee better test metrics in every run or split.
 
 ---
 
-**Q8 (Single Correct).** In **error analysis**, test-set residuals are grouped by study-hour bins. If the **average residual** for a group is **strongly positive**, what does that usually imply?
+**Q8 (Single Correct).** You fit a regression model and inspect **test-set residuals** (actual minus predicted), plotted against predictions or a feature. Which situation **most strongly suggests** that the model may be **missing structure** (for example wrong functional form or missing predictors)?
 
-- (A) The model tends to **under-predict** actual values for that group
-- (B) The model tends to **over-predict** actual values for that group
-- (C) MAE must be zero for that group
-- (D) R-squared must be negative
+- (A) Residuals look **randomly scattered** with no clear trend
+- (B) Residuals show a **clear systematic pattern** (such as a curve or funnel shape)
+- (C) Training accuracy is higher than test accuracy
+- (D) The model uses fewer than five features
 
-**Answer:** **(A)**  
-Residual = actual − predicted; positive average residual means predictions are systematically too low.
+**Answer:** **(B)**  
+Random-looking residuals are what we hope for on a good-enough model; a **systematic pattern** in residuals usually means the model has not captured something important.
 
 ---
 
 ## Subjective Question (1)
 
 **Difficulty:** Medium to Hard  
-**Type:** Implementation (coding)
+**Type:** Implementation (coding) + short written (metric choice for stakeholders)
 
 ### Q9 — Question (what students answer)
 
-Start from the **`df`** created below (this is the **only** provided code — do **not** change **`seed`**, **`n_samples`**, or the score formula). Everything else — how you take features and target from **`df`**, how you split data, how you train **`LinearRegression`**, and how you build a table of **actual vs predicted** scores for evaluation — is for you to design, consistent with the session.
+Start from the **`df`** created below (this is the **only** provided code — do **not** change **`seed`**, **`n_samples`**, or the score formula). Everything else — features and target, train/test split, fitting **`LinearRegression`**, and assembling **actual vs predicted** for evaluation — is yours to specify using sound **supervised learning** practice (e.g. evaluate on held-out data, avoid leakage).
 
 **Provided: create the DataFrame**
 
@@ -135,6 +136,9 @@ df = pd.DataFrame({"study_hours": study_hours, "exam_score": exam_score})
 1. Train a **linear regression** model to predict **`exam_score`** from **`study_hours`**, evaluate in a sound way (for example hold-out test data), and ensure you can compare **actual** targets to **predictions** in a DataFrame with aligned rows.
 2. Implement **`regression_metrics_from_df(df, y_col, y_pred_col)`** that reads those two columns **by name** and returns **`{'mae', 'rmse', 'r2'}`** using **`sklearn.metrics`**. Let $y_i$ be actual values and $\hat{y}_i$ be predictions for $i=1,\ldots,n$. Use **`mean_absolute_error`** for MAE, **`mean_squared_error`** for MSE, define $\mathrm{RMSE} = \sqrt{\mathrm{MSE}}$, and **`r2_score`** for $R^2$.
 
+
+
+
 ```python
 def regression_metrics_from_df(df, y_col: str, y_pred_col: str) -> dict:
     """
@@ -143,6 +147,8 @@ def regression_metrics_from_df(df, y_col: str, y_pred_col: str) -> dict:
     """
     ...
 ```
+**Submission Instructions**
+- Code - Run - Test in any coding environment like VSCode or Google Collab Notebook - paste the answer in the answer box 
 
 ---
 
@@ -151,6 +157,7 @@ def regression_metrics_from_df(df, y_col: str, y_pred_col: str) -> dict:
 - Use **`mean_absolute_error`**, **`mean_squared_error`**, and **`r2_score`** from **`sklearn.metrics`**. Pass **actual** first, **predicted** second (consistent with $y_i$ then $\hat{y}_i$).
 - Report **RMSE** as $\mathrm{RMSE}=\sqrt{\mathrm{MSE}}$ with MSE from **`mean_squared_error`**.
 - Metric logic belongs in **`regression_metrics_from_df`**, not inside **`.fit`**.
+- **Deliverable 3:** Answer the stakeholder question in **two or three sentences** (no code).
 
 ---
 
@@ -158,6 +165,7 @@ def regression_metrics_from_df(df, y_col: str, y_pred_col: str) -> dict:
 
 - **`df`** matches the provided snippet; model trained and evaluated without data leakage; predictions aligned with actuals in the DataFrame passed to **`regression_metrics_from_df`**.
 - **RMSE** computed as $\sqrt{\mathrm{MSE}}$ with sklearn’s **`mean_squared_error`**; **$R^2$** from **`r2_score`**; columns selected by name.
+- **Deliverable 3** mentions interpretability / units (e.g. “average error in marks or minutes”) and contrasts with R² as a relative fit measure — accept reasonable paraphrases.
 
 ---
 
@@ -207,3 +215,5 @@ metrics = regression_metrics_from_df(
 )
 print(metrics)
 ```
+
+
