@@ -86,6 +86,8 @@ Every groupby works in 3 clear steps, so remember this pattern well.
 
 You can imagine it as sorting laundry: first you **split** clothes by colour (whites, darks, colours), then you **apply** washing to each pile separately, and finally you **combine** everything back into the cupboard.
 
+![groupby: Split → Apply → Combine](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session09/split_apply_combine.png)
+
 ## groupby with Basic Aggregations
 
 Now let us actually do groupby on our employee data and find answers **per department**.
@@ -338,7 +340,7 @@ The real skill in merge is choosing the **right type of join**. There are mainly
 
 Think of it like two circles in a Venn diagram: inner is the overlap, outer is the full picture, and left/right keep one full circle intact.
 
-![Types of Joins](https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/SQL_Joins.svg/512px-SQL_Joins.svg.png)
+![SQL-style joins: inner, left, right, and outer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session09/sql_joins_types.png)
 
 ### Inner Join Example
 
@@ -432,50 +434,27 @@ print(merged)
 - `right_on` tells pandas which column to use from the **second (right)** DataFrame.
 - Both columns will appear in the output; you can drop one later using `.drop()` if not needed.
 
-## Combining Data with join
+## Introduction to join
 
-Pandas also has another method called **`.join()`**. It is basically a shortcut for `merge()` when we want to combine tables based on the **index** instead of a column.
+Apart from `merge()`, pandas also gives us another handy method called **`.join()`**. We will not go deep into it today — just understand the **basic idea**, because we will explore it more in future sessions that is in the SQL session.
 
-- **Official Definition:** **`DataFrame.join()`** combines columns of another DataFrame by aligning on the **index** (by default).
-- **In Simple Words:** If both tables share the **same row labels** (index), `join()` is the quickest way to glue them side by side.
-- **Real-Life Example:** It is like two notebooks with the **same page numbers**. If I hold them together page-wise, every page of Notebook A gets matched with the same page of Notebook B.
+- **Official Definition:** **`DataFrame.join()`** is a method that combines two DataFrames by aligning them on their **index** (row labels) by default.
+- **In Simple Words:** If two tables already share the **same row labels** (like the same EmployeeIDs as index), `join()` is a quick, short way to glue them **side by side**.
+- **Real-Life Example:** It is like two notebooks with the **same page numbers**. If you hold them together page-wise, every page of Notebook A automatically pairs up with the same page of Notebook B.
+
+A very small peek at how it looks in code:
 
 ```python
-# Import pandas
-import pandas as pd
-
-# Table 1: Employee basic info, indexed by EmployeeID
-info = pd.DataFrame({
-    "Name":       ["Aarav", "Diya", "Kabir"],
-    "Department": ["Sales", "HR", "IT"]
-}, index=[101, 102, 103])           # EmployeeID is set as the index
-
-# Table 2: Employee salary info, also indexed by EmployeeID
-salary = pd.DataFrame({
-    "Salary": [40000, 55000, 60000]
-}, index=[101, 102, 103])           # Same index: EmployeeID
-
-# Use join() to combine them on the index
-combined = info.join(salary)
-
-print(combined)
+# info and salary are two DataFrames, both indexed by EmployeeID
+combined = info.join(salary)   # Glues them side by side on the index
 ```
 
-**How the code works:**
+That is all you need to know about `join()` for now. Just remember:
 
-- Both DataFrames use **EmployeeID (101, 102, 103) as their index**.
-- `info.join(salary)` glues the two tables side by side, matching rows by index automatically.
-- It is like `merge(info, salary, left_index=True, right_index=True)` but much shorter.
-- By default, `.join()` does a **left join** on the index, so the left table's rows are always preserved.
+- **`merge()`** is used when we combine tables using a **column** (most common case, and what we focused on today).
+- **`join()`** is a shortcut mainly used when we combine tables using the **index**.
 
-### merge vs join — When to Use What
-
-Both methods look similar, so let us make the difference very clear.
-
-- Use **`merge()`** when you want to combine tables on a **column** (most real-world cases).
-- Use **`join()`** when both tables are already **indexed nicely** on the same key.
-- `merge` is more flexible and powerful; `join` is shorter and cleaner for index-based combines.
-- Inside pandas, `join()` actually calls `merge()` behind the scenes, so both give the same final result.
+We will see detailed examples and differences between `merge` and `join` in the upcoming sessions.
 
 ## Putting It All Together — A Mini Mini Project
 
@@ -501,7 +480,7 @@ departments = pd.DataFrame({
 })
 
 # Step 3: Clean up the employees table
-employees = employees.rename(columns={
+employees = employees.rename(columns={nowd
     "emp_id":   "EmployeeID",
     "emp_name": "EmployeeName",
     "sal_$":    "Salary"
@@ -566,7 +545,7 @@ Use this table as a one-page cheat sheet before your assignments and exams.
 | `how="right"` | Keeps all rows of right table | Used for reference data |
 | `how="outer"` | Keeps all rows of both tables | Used to find missing data |
 | `pd.merge(..., left_on=, right_on=)` | Merge when key names differ | `left_on="DeptID", right_on="DepartmentID"` |
-| `df1.join(df2)` | Glues tables on index | `info.join(salary)` |
+| `df1.join(df2)` | Shortcut to combine tables on the **index** (introduction only) | `info.join(salary)` |
 | `.reset_index()` | Turns index back into a column | After groupby |
 | `import pandas as pd` | Loads pandas (always the first line) | Standard import |
 
