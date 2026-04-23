@@ -1,0 +1,168 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Simran is demoing ChatGPT to her manager. She asks, *""What is Java?""* and gets a near-perfect answer. Excited, she then asks, *""What is the leave encashment policy at my company, Infynitec, that was updated last week?""* The model confidently gives a wrong answer.
+
+What is the most accurate reason the second answer failed?",,,,,,2,,LLMs stop working for questions longer than 10 words.,"A plain LLM was not trained on Infynitec's internal documents, and by default it cannot read live company files.","LLMs always invent numbers, regardless of the question.",LLMs only understand English; Simran should have asked in Hindi.,,,69e9b8dafbbfc431d74cb75d,0,markdown,"**Correct: option 2.**
+
+This hits two core limitations from the session: (i) **lack of domain-specific context** — the LLM never saw Infynitec's HR policy in training, and (ii) **no built-in access to external/real-time data** — it cannot open the company's HR portal on its own. Without RAG, the model answers from generic memory and produces a confident but wrong response.
+
+- **Option 1** is wrong: LLMs handle long queries routinely; query length is not the cause.
+- **Option 3** is wrong: LLMs do not *always* invent numbers — they answer well on widely known public facts (like ""What is Java?""). The failure mode here is specific to *private / recently changed* information.
+- **Option 4** is wrong: The question was already in English; language is not the issue."
+mcsc,markdown,"A bank deploys a plain LLM chatbot with no retrieval system. A customer asks, *""What is today's fixed deposit interest rate at your bank?""* The chatbot confidently invents a rate like ""6.75% p.a."" — which turns out to be wrong.
+
+This behaviour of the LLM generating fabricated information while sounding fluent and confident is called:",,,,,,2,,Grounding,Hallucination,Retrieval,Fine-tuning,,,69e9b8dafbbfc431d74cb75d,0,markdown,"**Correct: option 2 (Hallucination).**
+
+As defined in the session, **hallucination** is when an LLM generates information that is incorrect, fabricated, or unsupported while presenting it as a confident factual answer. A ""fake interest rate"" is a textbook hallucination.
+
+- **Grounding** is the *opposite* — anchoring the answer to real retrieved evidence.
+- **Retrieval** is the step of *fetching* relevant chunks from a knowledge base, not generating fake content.
+- **Fine-tuning** is a training technique to adapt a model to specific data; it is unrelated to the act of fabrication."
+mcsc,markdown,"Rahul is building an ""Ask HR"" assistant for his 200-person startup. He wants the assistant to answer questions like *""How many casual leaves do I get?""* using the company's actual HR policy PDF — not from generic internet knowledge.
+
+Which approach fits his requirement best?",,,,,,3,,Use a plain LLM with no external data.,Use only a keyword search on the PDF and return raw paragraphs to the user.,Use a Retrieval-Augmented Generation (RAG) pipeline that first retrieves from the HR policy and then asks the LLM to answer using that content.,Train a new LLM from scratch on his laptop.,,,69e9b8dafbbfc431d74cb75d,0,markdown,"**Correct: option 3.**
+
+The scenario is the exact fit for RAG: the answer *must* come from a specific trusted document (HR policy). RAG retrieves the right chunk first, then the LLM generates a grounded, natural-language answer.
+
+- A **plain LLM** will answer from generic memory and may get *this* company's rules wrong (hallucination risk).
+- **Keyword search alone** returns raw paragraphs and does not handle phrasing differences (e.g., ""WFH"" vs ""remote work""). It also gives no natural-language answer.
+- **Training from scratch** is astronomically expensive and unnecessary for this use case — and still would not solve the ""policy updated last week"" problem."
+mcsc,markdown,"A team lead describes the required behaviour of a support chatbot: *""When a customer asks something, the bot should first look up the correct policy document, and only then compose the final answer.""*
+
+Which of the following best represents the four-step high-level flow of RAG that matches this description?",,,,,,3,,Generate → Retrieve → Query → Context,Context → Query → Generate → Retrieve,Query → Retrieve → Context → Generate,Retrieve → Generate → Query → Context,,,69e9b8dafbbfc431d74cb75d,0,markdown,"**Correct: option 3.**
+
+The session defines the RAG flow as **Query → Retrieve → Context → Generate**: the user asks, the system retrieves relevant chunks, those chunks are added to the prompt as context, and the LLM generates the final grounded answer.
+
+The other orderings break the logic — for example, you cannot ""generate"" before there is even a ""query,"" and retrieval must happen *before* context is passed to the LLM."
+mcsc,markdown,"A healthcare startup says: *""We fine-tuned a general LLM on our medical guidelines six months ago. Last week, the Ministry of Health updated the dosage guidelines. Our chatbot is now giving outdated dosages to doctors.""*
+
+Which option is the **most practical and safe** fix, given the session's discussion of why RAG is preferred over fine-tuning for changing data?",,,,,,3,,Fine-tune the model from scratch every time the guidelines change.,"Just switch to a larger, more expensive LLM.","Build a RAG pipeline that retrieves from the latest guideline documents at query time, and keep the knowledge base updated whenever the Ministry publishes new guidelines.",Ask doctors to phrase their questions more carefully.,,,69e9b8dafbbfc431d74cb75d,0.5,markdown,"**Correct: option 3.**
+
+The session: *""Fine-tuning is expensive, slow to update, and does not give you traceability. RAG lets you simply update the knowledge base whenever policy changes — no retraining needed.""* In a safety-critical domain like healthcare, this is the required approach.
+
+- Frequent full re-fine-tuning is expensive, slow, and impractical when guidelines change often.
+- A **bigger LLM** still has a **static knowledge cutoff** and does not know post-training releases.
+- **Rephrasing** does not replace giving the model real retrieved information."
+mcsc,markdown,"An e-commerce team's RAG chatbot uses **keyword search** for retrieval. A customer asks: *""What is the work from home policy?""* The policy document actually says: *""Remote working is allowed two days per week.""* The chatbot replies, ""No information found.""
+
+What is the correct diagnosis, and what should the team change?",,,,,,2,,The LLM is too small — upgrade to a larger LLM.,"Keyword search can only match exact words, not meaning. Replace it with **vector search using embeddings**, so semantically similar phrases like ""work from home"" and ""remote working"" can be matched.",The document is too short — add more text to it.,"The user's wording is wrong — force customers to use the exact phrase ""remote working.""",,,69e9b8dafbbfc431d74cb75d,0.5,markdown,"**Correct: option 2.**
+
+This matches the session: keyword search may find nothing when the document says ""remote working"" but the user says ""work from home."" Embeddings capture *meaning*, so the phrases can match in vector space.
+
+- A **bigger LLM** does not fix retrieval failure.
+- The document already has the answer; length is not the issue.
+- Forcing exact phrases defeats the purpose of a natural-language assistant."
+mcmc,markdown,Which of the following are **genuine limitations of a plain LLM** that RAG is specifically designed to solve? *(Select all that apply.)*,,,,,,,,"Static, fixed knowledge (the training cutoff).",Inability to translate between English and Hindi.,No access to private / domain-specific documents like HR policies or internal wikis.,"No default access to real-time external data (live APIs, today's stock prices, today's score).",Inability to produce grammatically correct sentences.,"1, 3, 4",69e9b8dafbbfc431d74cb75d,0.5,markdown,"**Correct: options 1, 3, 4.**
+
+- **Static knowledge** (limitation 1 in the session): training data is frozen at the cutoff.
+- **Lack of domain-specific context** (limitation 2): the model has never seen your private docs.
+- **No built-in access to external or real-time data** (limitation 3): the model cannot call APIs or open the internet on its own.
+
+**Not correct:** Modern LLMs are strong at translation; RAG is not for fixing translation. LLMs are strong at **language generation** — grammar is not what RAG is designed to fix."
+mcmc,markdown,"An internal IT helpdesk **agent** answers the query *""How do I request VPN access?""* by first retrieving the latest IT SOP from the internal wiki, then reasoning over it, and then replying.
+
+Which of the following are **genuine benefits** the agent gets *because* it used RAG before acting? *(Select all that apply.)*",,,,,,,,The agent can justify its response by pointing to a specific source document.,"The agent's reasoning is based on the most recent IT policy, not a stale training memory.",The agent completely replaces the company's HR and IT departments.,The agent reduces the risk of confidently sending the user to the wrong team or wrong form.,Using RAG automatically turns a small LLM into a much larger LLM.,"1, 2, 4",69e9b8dafbbfc431d74cb75d,0.5,markdown,"**Correct: options 1, 2, 4.**
+
+- **Traceability / citation:** the agent can point to the SOP chunk it used.
+- **Updated information** after the LLM's training cutoff.
+- The session's IT helpdesk example: without retrieval, it might share an outdated process and send the user to the wrong team — RAG reduces this risk.
+
+**Not correct:** RAG does not replace entire departments. RAG does not change the size or weights of the LLM — only what information is passed at prompt time."
+mcmc,markdown,"A legal-tech company notices that even after adding a RAG pipeline over their contracts database, their chatbot occasionally gives wrong or incomplete answers about specific contract clauses. The LLM itself has been verified as high-quality.
+
+Based on the session's discussion of retrieval quality, which of the following are **realistic retrieval-side causes** of the wrong answers? *(Select all that apply.)*",,,,,,,,"Chunks are either too large (noisy, lots of irrelevant text) or too small (missing important context).","Embeddings are generated by a weak embedding model, so semantically relevant clauses are not ranked near the top.",The vector database was never updated after the latest contract revisions — it still contains old clauses.,"Top-k is set so low (e.g., k = 1) that the most relevant clause sometimes falls just outside the retrieved results.","Lawyers are typing their queries in English instead of Latin, which breaks vector search.","1, 2, 3, 4",69e9b8dafbbfc431d74cb75d,1,markdown,"**Correct: options 1–4.**
+
+The session lists factors that affect retrieval quality: chunking, embeddings, similarity search, ranking/top-k, metadata filters, and keeping the knowledge base updated.
+
+- **Chunking:** *""Too big = noisy, too small = missing context.""*
+- **Embedding model quality** affects ranking.
+- **Stale knowledge base** is a retrieval-quality risk.
+- **Low top-k** can exclude the correct clause.
+
+**Option 5** is wrong: vector search works on embeddings of the input language; English is supported."
+mcmc,markdown,"A fintech team is comparing two versions of their customer chatbot:
+
+- **System X:** Plain LLM, no retrieval.
+- **System Y:** RAG system over the latest product + compliance documents.
+
+Both are asked: *""Can a customer pre-close a personal loan after 6 months, and what is the foreclosure charge?""*
+
+Which of the following statements about the **expected differences** between System X and System Y are **correct**? *(Select all that apply.)*",,,,,,,,System X is more likely to hallucinate a plausible-sounding but wrong foreclosure charge.,System Y can cite the exact policy section from which the foreclosure charge was taken.,"System Y is **completely immune** to wrong answers, even if retrieval fetches the wrong document.",System Y can stay correct even when the foreclosure policy changes next month — as long as the knowledge base is updated.,System X automatically pulls today's RBI circulars from the internet before answering.,"1, 2, 4",69e9b8dafbbfc431d74cb75d,1,markdown,"**Correct: options 1, 2, 4.**
+
+- Without retrieval, System X is prone to hallucinating policy numbers.
+- **Traceability:** System Y can cite the source chunk.
+- RAG supports live updates when the knowledge base is updated.
+
+**Not correct:** Hallucination risk is **lower but not zero** if retrieval is bad. Plain LLMs do not have default internet access."
+subjective,markdown,"### Task: Help ShopEase Fix Their AI Support Assistant
+
+### Scenario
+
+**ShopEase** is an online shopping company. Its support team handles questions about *returns, refunds, shipping, and warranty*.
+
+The company recently tried a ChatGPT-style chatbot for its support team — just a plain LLM, with no extra setup. The chatbot often gave **wrong or made-up answers** about ShopEase's own policies, so the pilot was paused.
+
+You have been asked to write a **short note** explaining *what went wrong* and *how a RAG-based assistant would fix it.*
+
+> This is a writing task, not a coding task. Keep your language simple and clear.
+
+---
+
+**Q1. Why did the plain ChatGPT-style chatbot give wrong answers?**
+
+Explain using:
+
+- any **one** LLM limitation (e.g., *static knowledge* or *lack of domain-specific context*),
+- the idea of **hallucination**, and
+- **one short example** of a wrong answer it could have given ShopEase (for example, a fake refund timeline).
+
+---
+
+**Q2. What should the new assistant ""read from"" to give correct answers?**
+
+List **3 to 5 ShopEase documents** the assistant should be grounded on. For each one, write **one line** about the kind of question it helps answer.
+
+*(Example format: ""Returns Policy — answers questions about return windows, damaged products, and exchange rules."")*
+
+---
+
+**Q3. Walk through the 4-step RAG flow for one customer question.**
+
+Pick **one** customer question (example: *""Can I return a damaged product I received 5 days ago?""*). Then explain, in plain English, what happens in each of the four RAG steps:
+
+1. **Query** — what the user asks.
+2. **Retrieve** — which ShopEase document the system looks into (show a 1–2 line *example chunk* it might bring back).
+3. **Context** — how the retrieved chunk is placed along with the question before the LLM answers.
+4. **Generate** — the final grounded answer the assistant gives the user.
+
+---
+
+### Submission
+
+Submit **any one** of the following:
+
+- Public **GitHub repository** link containing `solution.md`
+- Public **Google Doc** link
+- or Directly type the answer in the answer box",,,,,,,,,,,,,,69e9b8dafbbfc431d74cb75d,1,markdown,"### Q1 — Sample answer
+
+A plain LLM has never read ShopEase's internal documents — this is the problem of **lack of domain-specific context**. On top of that, its knowledge is **static**, so any recent policy change is invisible to it. When asked something it does not actually know, the LLM still answers in a confident tone — this is called **hallucination**. For example, it might tell an agent that ShopEase processes refunds in *3 days*, when the real policy is *7 days*. The answer sounds correct, but it is made up.
+
+### Q2 — Sample answer
+
+- **Returns & Replacements Policy** — answers questions about return windows, damaged products, and exchange rules.
+- **Refund Rules** — answers questions about refund timelines for different payment methods (UPI, card, COD, wallet).
+- **Shipping & Delivery Policy** — answers questions about expected delivery times and delay compensation.
+- **Warranty Policy** — answers questions about how warranty claims are raised and processed.
+- **Payment Rules** — answers questions about COD eligibility and prepaid order rules.
+
+### Q3 — Sample answer
+
+**Customer question:** *""Can I return a damaged product I received 5 days ago?""*
+
+1. **Query:** The above question is sent to the assistant.
+2. **Retrieve:** The system looks into the **Returns Policy** document and brings back a relevant chunk, for example:
+   > *""Damaged products reported within 7 days of delivery are eligible for a free replacement. Customer must upload photo proof; pickup is scheduled within 48 hours.""*
+3. **Context:** That retrieved chunk is placed next to the customer's question in the prompt that goes to the LLM — so the LLM can see *both* the question and the correct policy text.
+4. **Generate:** The assistant replies:
+   > *""Yes — as per ShopEase's Returns Policy, damaged products reported within 7 days are eligible for a free replacement. Since you are on day 5, please upload photo proof and a pickup will be scheduled within 48 hours.""*
+
+This answer is **correct**, **specific to ShopEase**, and **based on a real document** — not on LLM guesswork."

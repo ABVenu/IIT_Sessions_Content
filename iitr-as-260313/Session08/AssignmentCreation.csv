@@ -1,0 +1,80 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A startup is pitching their product as ""an AI that reads goals and writes the next step in plain English."" Under the **standard definition** of an LLM used in agentic systems, what is the **simplest accurate description** of its core behaviour?",,,,,,2,,A) Image in → labels out,B) Text in → text out,C) Audio in → transcript out only,D) Structured JSON in → database rows out only,,,69e71d48b6f5e3e8dde50f5b,0,markdown,"**Correct answer: B.** An LLM is fundamentally **text in → text out**; Q&A, code, summaries, etc. are variations of that pattern.
+
+- **A** is wrong: multimodal models exist, but the core LLM pattern emphasized here is **text in → text out**.
+- **C** and **D** describe narrow interfaces, not that general pattern."
+mcsc,markdown,"In a typical **Observe → Think → Act** agent architecture, where does the LLM **primarily** operate?",,,,,,2,,"A) It mainly runs during **Observe**, to collect sensor data","B) It mainly runs during **Think**, to plan, reason, or decide the next step","C) It mainly runs during **Act**, to physically click buttons in the browser",D) It runs equally at every stage with no distinction,,,69e71d48b6f5e3e8dde50f5b,0,markdown,"**Correct answer: B.** The LLM powers **Think**: the agent sends constructed text (context + instructions) to the model and interprets the reply as the ""thinking.""
+
+- **A** is wrong: Observe is about gathering context and tool outputs.
+- **C** is wrong: Act is execution via tools/code; the LLM is not ""running"" the tool call itself.
+- **D** is wrong: the LLM is invoked at decision points (Think), not continuously in every substage in the same way."
+mcsc,markdown,"In standard LLM usage, what is a **prompt**?",,,,,,3,,A) The LLM's internal parameter count,B) The output text returned by the API,"C) The input text you give the LLM to instruct it on the task, tone, and format",D) The list of tools the agent is allowed to call,,,69e71d48b6f5e3e8dde50f5b,0,markdown,"**Correct answer: C.** A prompt is the **input** text that steers what the model should do and how it should respond.
+
+- **A** describes scale (""large""), not prompts.
+- **B** is the **completion/response**, not the prompt.
+- **D** is agent configuration, not the definition of ""prompt."" "
+mcsc,markdown,Which **company** is widely known for releasing **open-source** **LLaMA** weights that developers can download and run locally?,,,,,,4,,A) OpenAI,B) Google DeepMind,C) Anthropic,D) Meta AI,,,69e71d48b6f5e3e8dde50f5b,0,markdown,**Correct answer: D.** **Meta** releases **LLaMA** with open weights for local use; the other listed providers are best known for proprietary APIs or cloud products.
+mcsc,markdown,"A user asks a chat-only assistant: ""Who won yesterday's IPL match?"" The assistant answers with a confident scoreline. **Without** live data or tools, what is the **most important conceptual issue** with trusting that answer?",,,,,,2,,A) LLMs cannot translate languages,B) The model may lack **real-time** knowledge after its **training cutoff** and might still sound confident,C) LLMs cannot summarize text,D) Tokenization prevents any sports questions,,,69e71d48b6f5e3e8dde50f5b,0.5,markdown,"**Correct answer: B.** Models have **no guaranteed real-time knowledge** beyond their **training cutoff**; for current events, a **search tool** (or similar) is usually required—otherwise the model may guess or hallucinate.
+
+- **A** and **C** are false: translation and summarization are typical strengths.
+- **D** is wrong: tokenization affects chunks and limits, not whether sports questions are allowed."
+mcsc,markdown,An agent pastes a 600-page PDF into **one** API call. The combined prompt exceeds the model's **context window**. Which statement is **most accurate**?,,,,,,3,,A) The model silently keeps only the first paragraph,B) The model automatically uploads the file to Google Drive,C) The input may not be fully processed—context limits mean you often must **chunk** or otherwise split work,D) Tokens become free after 1 million characters,,,69e71d48b6f5e3e8dde50f5b,0.5,markdown,"**Correct answer: C.** A **context window** is a **maximum token** limit per call; oversized input cannot be fully handled in one go—strategies such as **chunking** are required.
+
+- **A** is not a reliable general rule.
+- **B** and **D** are incorrect."
+mcmc,markdown,"*Select all correct options.*
+
+Which items are **recognized limitations** of general-purpose LLMs in introductory treatments?",,,,,,,,"A) **Hallucination** — plausible-sounding but incorrect ""facts""",B) **No real-time knowledge** beyond the training cutoff,C) **Poor at precise multi-step arithmetic** without tooling,D) Guaranteed bitwise-identical answers on every run for the same prompt,,"1, 2, 3",69e71d48b6f5e3e8dde50f5b,0.5,markdown,"**Correct answers: A, B, C.** These are standard limitations (hallucination; cutoff; weak precise arithmetic without tools). **Inconsistency** / randomness also means outputs are **not** guaranteed identical.
+
+- **D** is **incorrect**: outputs can vary between runs (e.g., sampling settings), so bitwise-identical answers are **not** guaranteed."
+mcmc,markdown,"*Select all correct options.*
+
+A well-structured **prompt for an agent** may include which of the following **elements**?",,,,,,,,A) **Role** (who the model should act as),"B) **Context** (facts about the user, order, or tool output)",C) **Task** (what decision or output is needed),"D) **Format instruction** (length, tone, bullet vs paragraph)",,"1, 2, 3, 4",69e71d48b6f5e3e8dde50f5b,0.5,markdown,"**Correct answers: A, B, C, D.** Role, context, task, and format instructions are standard building blocks for agent prompts."
+mcmc,markdown,"*Select all correct options.*
+
+An **accounting agent** must compute **total revenue across 50 invoices** and **percentage growth vs last year**. The team notices wrong totals when the LLM does the arithmetic in natural language. Which mitigations align with **sound agent design** for this workload?",,,,,,,,A) Route arithmetic through a **code execution** / calculator-style tool and use computed results,"B) Assume the LLM is always exact at mental math if the prompt says ""be careful""","C) Treat spreadsheet-scale summation as a task where **tooling**, not raw LLM arithmetic, should dominate",D) Increase the model's context window so invoices no longer exist,,"1, 3",69e71d48b6f5e3e8dde50f5b,1,markdown,"**Correct answers: A, C.** LLMs are unreliable for **precise multi-step arithmetic** at scale; **code execution** (or a calculator tool) should produce the numbers the model then explains or formats.
+
+- **B** is wrong: instruction alone does not make the model a reliable calculator.
+- **D** confuses context size with correctness—more tokens do not fix arithmetic reliability."
+mcmc,markdown,"*Select all correct options.*
+
+Which statements about **tokens** and **typical hosted API** cost and limits are **accurate**?",,,,,,,,A) Text is split into **tokens** before the model processes it,B) **Context window** is a cap on how many tokens can be handled in one call,C) Providers charge based in part on **how many tokens** are processed (input and output),"D) Shorter prompts usually mean **faster** responses, all else equal","E) On typical hosted APIs, **token usage has no impact on billing** — only the model name matters","1, 2, 3, 4",69e71d48b6f5e3e8dde50f5b,1,markdown,"**Correct answers: A, B, C, D.** Tokenization; context limits; token-based pricing; and longer prompts tending to slow responses are all standard points.
+
+- **E** is wrong: **billing** on hosted APIs typically depends on **token** usage (input and output), not only the model name."
+subjective,markdown,"# Subjective assignment — LLM-aware agent design
+
+## Brief
+
+You are designing an **Observe → Think → Act** assistant that calls an LLM and can use **web search** and **Python code execution**. You do **not** need to write API code.
+
+## Scenario
+
+A user uploads a **CSV** (employee ID, hours worked, hourly rate) with **80 rows** and asks:
+
+*""Calculate **gross pay per row**, **company total gross pay**, and **flag rows where hours > 48**.""*
+
+## Submit (one short document)
+
+**1. Design note (about ½ page, max ~120 words)**  
+Answer in prose: Why is it a bad idea to do all of this in the LLM's head? Name the **relevant LLM limitations**, say **which tool** should produce the numbers, and what the LLM should do **after** those numbers exist.
+
+**2. One Think-stage prompt**  
+Write **one** prompt the agent sends to the LLM during **Think** so it can produce the next step (e.g. draft code, or interpret tool output). It must clearly include **role**, **context** (use placeholders like `[CSV_SAMPLE]` if needed), **task**, and **format** of the answer you want. Target **about 100–160 words**.
+
+**3. What can still go wrong?**  
+In **2–4 sentences**: name **one** failure mode even when using tools, and **one** mitigation.
+
+## Submission
+
+Markdown, plain text, PDF, or Google Doc — your cohort's usual channel.
+",,,,,,,"**Example structure (graders accept equivalent substance):**
+
+**1. Design note** — Cite unreliable precise arithmetic at scale (and optionally inconsistency). Numbers should come from **code execution** on the real CSV; the LLM writes or refines code and/or formats results from **executed** output—not mental math in chat.
+
+**2. Think prompt** — Should ground the model: placeholders for data, explicit task (e.g. generate Python that reads CSV and computes totals/flags), and format (e.g. return only code, or a short plan then code).
+
+**3. Risks** — Buggy generated code, wrong file assumed, or runs differing slightly; mitigations: validate outputs, fixed randomness where needed, human check on totals for payroll.",,,,,,,69e71d48b6f5e3e8dde50f5b,1,markdown,"**Grading guide**
+
+- **1:** Strong answers cite unreliable precise arithmetic at scale; numbers from code execution; LLM formats or explains tool output.
+- **2:** Think prompt includes role, context, task, and format (~100–160 words).
+- **3:** Valid risk (e.g. buggy code) + mitigation (e.g. validation, review)."

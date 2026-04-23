@@ -480,7 +480,7 @@ departments = pd.DataFrame({
 })
 
 # Step 3: Clean up the employees table
-employees = employees.rename(columns={nowd
+employees = employees.rename(columns={
     "emp_id":   "EmployeeID",
     "emp_name": "EmployeeName",
     "sal_$":    "Salary"

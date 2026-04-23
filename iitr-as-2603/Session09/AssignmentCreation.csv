@@ -1,0 +1,177 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Ananya exports a small **monthly sales** sheet from her billing software as `sales_march.csv` (comma-separated). She wants a pandas table in Python with rows and columns she can filter and summarise. Which line correctly **loads** that file into a DataFrame called `sales`?,,,,,,1,,"A) `sales = pd.read_csv(""sales_march.csv"")`","B) `sales = pd.DataFrame(""sales_march.csv"")`","C) `sales = pd.load_csv(""sales_march.csv"")`","D) `sales = open(""sales_march.csv"")`",,69e711089c99041e69205266,0,markdown,"**Correct answer: A.** `pd.read_csv(...)` reads a CSV path and returns a DataFrame—the standard pandas API for loading comma-separated files.
+
+- **B** is wrong: `pd.DataFrame(...)` expects tabular data (e.g. dict of lists), not a filename string.
+- **C** is wrong: pandas does not use `load_csv` for this.
+- **D** returns a raw file handle, not a DataFrame."
+mcsc,markdown,"Vikram has a DataFrame `df` with columns `Product`, `Units`, and `Price`. He wants to **remove** the column `Price` from his analysis copy and keep working with the result. By default, `drop` returns a new DataFrame. Which pattern is correct?",,,,,,2,,"A) `df.drop(""Price"")` and continue using `df`","B) `df = df.drop(""Price"", axis=1)`","C) `df.drop(""Price"", axis=0)`","D) `df.delete(""Price"")`",,69e711089c99041e69205266,0,markdown,"**Correct answer: B.** Columns are dropped with **`axis=1`**, and you should **assign back** (`df = ...`) unless you use `inplace=True`.
+
+- **A** omits `axis=1` (pandas treats labels as row index by default) and may error or drop the wrong thing; without assignment the original `df` would not update as intended.
+- **C** uses `axis=0` (rows), not columns.
+- **D** is not a standard pandas DataFrame method for dropping columns."
+mcsc,markdown,A `customers` DataFrame has a column `Age`. Riya wants only rows where age is **strictly greater than 25**. Which expression keeps just those rows?,,,,,,3,,"A) `customers[""Age""] > 25`",B) `customers.filter(Age > 25)`,"C) `customers[customers[""Age""] > 25]`","D) `customers.loc[""Age""] > 25`",,69e711089c99041e69205266,0,markdown,"**Correct answer: C.** Build a boolean Series with `customers[""Age""] > 25`, then pass it inside `customers[...]` to filter rows.
+
+- **A** is only the mask (True/False Series), not the filtered DataFrame.
+- **B** is not the usual pattern for filtering rows with column conditions.
+- **D** misuses `loc`—that is for labels, not all rows where Age > 25."
+mcsc,markdown,"Karan runs `df.groupby(""City"")[""Sales""].mean()`. What happens to **`City`** in the **result**?",,,,,,2,,A) `City` disappears completely,B) `City` becomes the **index** of the result Series,C) `City` stays a normal column with no index change,D) `City` is sorted alphabetically and dropped,,69e711089c99041e69205266,0,markdown,"**Correct answer: B.** After `groupby(""City"")`, the grouping key becomes the **index** of the aggregated output (until you `reset_index()`).
+
+- **A** and **D** are wrong: the city values are still there as index labels.
+- **C** is wrong until you call `.reset_index()`."
+mcsc,markdown,"Neha has a DataFrame `emp` with columns `Age` and `Salary`. She wants employees who are **older than 30** **and** earn **more than 50,000**. Which line is **valid pandas** for row filtering?",,,,,,3,,"A) `emp[(emp[""Age""] > 30) and (emp[""Salary""] > 50000)]`","B) `emp[emp[""Age""] > 30 and emp[""Salary""] > 50000]`","C) `emp[(emp[""Age""] > 30) & (emp[""Salary""] > 50000)]`","D) `emp.where(""Age > 30 and Salary > 50000"")`",,69e711089c99041e69205266,0.5,markdown,"**Correct answer: C.** Use **`&`** between boolean Series and **wrap each condition in parentheses** so pandas evaluates the conditions element-wise.
+
+- **A** and **B** use Python **`and`**, which does not combine two Series the way we need here.
+- **D** is not the usual boolean-indexing pattern; `where` does not take a string expression like that."
+mcsc,markdown,"Isha writes:
+
+```python
+report = df.groupby(""Dept"").agg(
+    Total_Pay=(""Salary"", ""sum""),
+    Avg_Tenure=(""Years"", ""mean""),
+)
+```
+
+What is this style of `agg` called, and what is the main benefit?",,,,,,2,,A) Dictionary aggregation; it always creates a MultiIndex on columns,"B) Named aggregation; readable, business-style column names in one step",C) List aggregation; it can only apply one function per column,D) Split-apply-combine; it replaces the need for `groupby`,,69e711089c99041e69205266,0.5,markdown,"**Correct answer: B.** **Named aggregation** uses `NewName=(""column"", ""function"")` so the output columns are clear (e.g. `Total_Pay`) without awkward default names.
+
+- **A** is wrong: a dict inside `.agg({...})` is different from this keyword form; MultiIndex is more typical when passing a **list** of functions on one column.
+- **C** describes list-style `agg`, not this syntax.
+- **D** is wrong: you still use `groupby` before `agg`."
+mcmc,markdown,"*Select all correct options.*
+
+Which statements match typical pandas behaviour for **`groupby`** and related output?",,,,,,,,A) The grouping column(s) typically become the **index** of the aggregated result,"B) `df.groupby(""Region"")[""Sales""].sum()` returns one total **per region**",C) Calling `.reset_index()` can turn the group key back into a normal column,D) `groupby` always drops every row that contains **any** NaN in **any** column of the DataFrame,"1, 2, 3",69e711089c99041e69205266,0.5,markdown,"**Correct: A, B, C.**
+
+- **A:** The group key moves to the index unless you reset it.
+- **B:** That expression groups by `Region` and sums `Sales` within each group.
+- **C:** `.reset_index()` is the standard way to promote the index back to a column.
+- **D is incorrect:** By default, rows where the **grouping column** is NaN are excluded (`dropna=True` by default for the key). A NaN in some other column does not, by itself, cause `groupby` to drop the row."
+mcmc,markdown,"*Select all correct options.*
+
+For a numeric column `s = df[""Score""]`, which claims align with default pandas behaviour?",,,,,,,,A) `s.sum()` **skips** NaN values,B) `s.mean()` **skips** NaN values,C) `s.count()` counts **non-null** entries,D) `s.min()` always returns NaN if there is at least one NaN in the column,"1, 2, 3",69e711089c99041e69205266,0.5,markdown,"**Correct: A, B, C.**
+
+By default, `sum`, `mean`, `median`, `min`, `max`, and `count` on a Series skip NaN where applicable (`count` counts non-null values).
+
+- **D is incorrect:** `min()` ignores NaN by default and returns the minimum of the non-null values (or NaN if the whole column is null)."
+mcmc,markdown,"*Select all correct options.*
+
+Suppose `df` has columns `Team`, `Sales`, `Bonus`, and **`Rep`** (one salesperson id per row; no nulls). Arjun wants **one row per Team** with:
+
+- total `Sales`
+- average `Bonus`
+- number of rows (headcount), using **`Rep`**
+
+Which approaches are **valid** single-call patterns **after** `df.groupby(""Team"")`?",,,,,,,,"A) `df.groupby(""Team"").agg({""Sales"": ""sum"", ""Bonus"": ""mean"", ""Rep"": ""count""})`","B) `df.groupby(""Team"").agg(Total_Sales=(""Sales"", ""sum""), Avg_Bonus=(""Bonus"", ""mean""), N=(""Rep"", ""count""))`","C) `df.groupby(""Team"")[""Sales""].agg([""sum"", ""mean""])` — this alone also returns average Bonus per Team","D) `df.groupby(""Team"")[[""Sales"", ""Bonus""]].mean()` — this alone also returns total Sales per Team","1, 2",69e711089c99041e69205266,1,markdown,"**Correct: A, B.**
+
+- **A** uses a **dictionary** `agg` to apply different functions to different columns in one grouped result.
+- **B** uses **named aggregation** to get all three metrics with clear column names.
+- **C is incorrect:** That aggregates only `Sales` with two functions; it does not compute Bonus mean or Rep count.
+- **D is incorrect:** `mean()` on both columns does not produce **sum** of Sales; totals need `sum` (or a different aggregation)."
+mcmc,markdown,"*Select all correct options.*
+
+Pooja runs:
+
+```python
+df.groupby(""Store"")[""Revenue""].agg([""sum"", ""mean"", ""count""])
+```
+
+Which outcomes are **plausible** for this pattern?",,,,,,,,A) The result has **one row per Store**,"B) The result may show **more than one summary column** (`sum`, `mean`, `count`)","C) Named aggregation with `Total=(""Revenue"",""sum"")` is the **only** way to avoid ever seeing more than one column of summaries","D) If she instead used `df.groupby(""Store"")[[""Revenue"", ""Cost""]].agg([""sum"", ""mean""])`, the column index could become **hierarchical** (two levels)","1, 2, 4",69e711089c99041e69205266,1,markdown,"**Correct: A, B, D.**
+
+- **A:** Groupby produces one group per unique `Store` value.
+- **B:** A list inside `agg` applies multiple functions—multiple summary columns.
+- **C is incorrect:** Named aggregation is one **clean** way to get flat names; it is not the only possible approach in pandas. List-style `agg` on a single column is a common alternative; it may produce a MultiIndex unless you reshape or rename.
+- **D:** Aggregating **multiple input columns** with a **list** of functions often yields a two-level column index (column × function)."
+subjective,markdown,"# Subjective assignment — Pandas: NGO project tracker
+
+## Problem statement
+
+You volunteer with a small **NGO** that runs community projects in three cities. The coordinator exported a messy spreadsheet-style table: it has useful columns plus a few columns nobody needs for the **quarterly summary**.
+
+Your job is to write a **single Python script** (or notebook cell sequence saved as one `.py` file) that:
+
+1. Builds the data in pandas (you may use `pd.DataFrame({...})`; **do not** rely on `merge` or joins).
+2. **Drops** junk columns.
+3. Produces a **management report**: **one row per `City`**, with **headcount** (number of projects), **total** `Budget_Lakh`, and **average** `Volunteers`—using **`groupby`** and **named aggregation** (`Name=(""col"", ""func"")` style).
+
+Build the solution using: a pandas **DataFrame**, **`drop` with `axis=1`** for column removal, optional row **filtering**, **`groupby`**, and **`agg`** with **named output columns**. Stick to these building blocks; do not introduce unrelated pandas APIs beyond what the tasks require.
+
+## Starter data (use exactly this)
+
+```python
+import pandas as pd
+
+projects = pd.DataFrame({
+    ""ProjectID"":   [""P01"", ""P02"", ""P03"", ""P04"", ""P05"", ""P06""],
+    ""City"":        [""Pune"", ""Pune"", ""Mumbai"", ""Mumbai"", ""Mumbai"", ""Nashik""],
+    ""ProjectName"": [""Water"", ""Lights"", ""Clinic"", ""School"", ""Garden"", ""Skills""],
+    ""Budget_Lakh"": [12.5, 8.0, 25.0, 18.5, 6.0, 9.5],
+    ""Volunteers"":  [10, 14, 22, 30, 8, 12],
+    ""internal_only"": [""x"", ""x"", ""x"", ""x"", ""x"", ""x""],   # junk — remove
+    ""legacy_flag"":   [0, 0, 0, 0, 0, 0],                 # junk — remove
+})
+```
+
+## Tasks
+
+1. **Import** pandas as `pd`.
+2. Create `projects` exactly as above.
+3. **Drop** columns `internal_only` and `legacy_flag` using **`axis=1`**, and assign the result back so the working DataFrame has **no** junk columns.
+4. Build **`report`** with named aggregation using these **exact** output names: `Num_Projects`, `Total_Budget_Lakh`, `Avg_Volunteers`.
+5. **Print** a short banner line (e.g. `NGO summary by city`) and **print** `report`.
+6. **(Stretch, optional)** Call **`.reset_index()`** on a copy of the report and print it once, so `City` appears as a normal column.
+
+## Expected output shape
+
+| City   | Num_Projects | Total_Budget_Lakh | Avg_Volunteers |
+|--------|-------------:|------------------:|---------------:|
+| Mumbai | 3            | 49.5              | 20.0           |
+| Nashik | 1            | 9.5               | 12.0           |
+| Pune   | 2            | 20.5              | 12.0           |
+
+## Submission instructions
+
+1. Use **VS Code** or any IDE; ensure `pandas` is installed (`pip install pandas`).
+2. Run the script end-to-end with **no errors**.
+3. Paste the **full** `.py` source into the assessment **answer** box.
+4. At the **top** (as comments), note your Python version, the `pip install` line you used, and how to run the file (e.g. `python ngo_report.py`).",,,,,,,"```python
+# Python 3.10+ recommended
+# pip install pandas
+# Run: python ngo_report.py
+
+import pandas as pd
+
+projects = pd.DataFrame({
+    ""ProjectID"":   [""P01"", ""P02"", ""P03"", ""P04"", ""P05"", ""P06""],
+    ""City"":        [""Pune"", ""Pune"", ""Mumbai"", ""Mumbai"", ""Mumbai"", ""Nashik""],
+    ""ProjectName"": [""Water"", ""Lights"", ""Clinic"", ""School"", ""Garden"", ""Skills""],
+    ""Budget_Lakh"": [12.5, 8.0, 25.0, 18.5, 6.0, 9.5],
+    ""Volunteers"":  [10, 14, 22, 30, 8, 12],
+    ""internal_only"": [""x"", ""x"", ""x"", ""x"", ""x"", ""x""],
+    ""legacy_flag"":   [0, 0, 0, 0, 0, 0],
+})
+
+projects = projects.drop([""internal_only"", ""legacy_flag""], axis=1)
+
+report = projects.groupby(""City"").agg(
+    Num_Projects=(""ProjectID"", ""count""),
+    Total_Budget_Lakh=(""Budget_Lakh"", ""sum""),
+    Avg_Volunteers=(""Volunteers"", ""mean""),
+)
+
+print(""NGO summary by city"")
+print(report)
+
+report_flat = report.reset_index()
+print(""\nWith City as column:"")
+print(report_flat)
+```",,,,,,69e711089c99041e69205266,1,markdown,"### Ideal walkthrough
+
+1. **Load data:** The starter `DataFrame` holds one row per project with `City` as the grouping key.
+2. **Cleanup:** `projects = projects.drop([""internal_only"", ""legacy_flag""], axis=1)` removes useless columns while keeping analysis columns.
+3. **Group and summarise:** `groupby(""City"")` splits rows by city. Named `agg` maps each output column to one input column and one function.
+4. **Print:** Printing the report shows the index (`City`) and three summary columns.
+
+### Common mistakes
+
+- Forgetting **`axis=1`** when dropping columns.
+- Forgetting to **assign** `projects = projects.drop(...)` and then aggregating on the old frame.
+- Using **`merge`** or file joins when disallowed.
+- Typos in **named aggregation** output keys."

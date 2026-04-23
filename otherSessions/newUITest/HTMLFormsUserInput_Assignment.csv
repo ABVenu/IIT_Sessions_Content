@@ -1,0 +1,38 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,text,"Mira is building a login page. She wants the word Email to be clickable so that focus moves to the text field when a keyboard or screen-reader user activates it. Which approach correctly ties the label to the field?
+
+Put “Email” only in a paragraph above the box, with no programmatic link to the input
+Use a label whose “for” value matches the input’s id, and give the input that id (and use an email-type field)
+Use a label and an input, but do not use a matching id on the input or “for” on the label
+Put the word only in the field’s title and do not use a label element",,,,,,2,,"Put “Email” only in a paragraph above the box, with no programmatic link to the input","Use a label whose “for” value matches the input’s id, and give the input that id (and use an email-type field)","Use a label and an input, but do not use a matching id on the input or “for” on the label",Put the word only in the field’s title and do not use a label element,,69e8da3be90a6b669003a9c2,0,text,B — The label’s “for” must match the input’s id so they are associated and focus moves correctly. A is not tied to the field; C is not associated as shown; D is a weak substitute for a proper label.
+mcsc,text,"Rohan’s form has an optional company name field. The field is empty, but he wants a short hint inside the box that goes away when the user types, and that is not sent as the field’s value if the user leaves it blank. What should he use?
+
+Default text in the box that can be submitted as the value if not changed
+Hint text that is not the value and clears as the user types (placeholder)
+A layer of text on top of the input using styling
+Putting the label wording in the name attribute",,,,,,2,,Default text in the box that can be submitted as the value if not changed,Hint text that is not the value and clears as the user types (placeholder),A layer of text on top of the input using styling,Putting the label wording in the name attribute,,69e8da3be90a6b669003a9c2,0,text,B — Placeholder-style hint text is for display only; a default value (A) can be submitted. C is fragile; D misuses the name attribute.
+mcsc,text,"A shipping form must not submit until the user picks one delivery option: Standard, Express, or Overnight. What is the most appropriate control for “exactly one choice” in one group on the form?
+
+Three checkboxes, one per option
+Radio buttons that all share the same name for the group
+A single line where the user types options separated by commas
+Three separate drop-down lists, one for each line",,,,,,2,,"Three checkboxes, one per option",Radio buttons that all share the same name for the group,A single line where the user types options separated by commas,"Three separate drop-down lists, one for each line",,69e8da3be90a6b669003a9c2,0,text,B — One name groups radios so only one can be selected. Checkboxes (A) allow many; (C) is not a standard pattern for this; (D) is the wrong pattern for one logical choice.
+mcsc,text,"A shirt’s sale price is ₹400 after a 20% discount on the original price. What was the original price in rupees? (The discount is 20% of the original price.)
+
+480
+500
+520
+600",,,,,,2,,480,500,520,600,,69e8da3be90a6b669003a9c2,0.5,text,"B — After a 20% cut, the customer pays 80% of the original, so original = 400 ÷ 0.8 = 500 rupees."
+mcmc,text,"Select all the numbers that are prime numbers.
+
+2
+9
+17
+21",,,,,,,,2,9,17,21,"1, 3",69e8da3be90a6b669003a9c2,0.5,text,"A and C — 2 and 17 are prime. 9 and 21 are composite (9 = 3×3, 21 = 3×7)."
+mcmc,text,"Which of the following are equal to one half? (Select all that apply.)
+
+0.5
+2/4
+3/6
+1/3",,,,,,,,0.5,2/4,3/6,1/3,"1, 2, 3",69e8da3be90a6b669003a9c2,1,text,"A, B, and C — Each is the same as one half. 1/3 is not one half."
+subjective,text,"A search form should show the search words in the web address so people can bookmark or share the link (like a question mark and q= in the address bar). In one or two sentences: should the form use the usual GET style or the usual POST style for this, and in plain words what happens to the field values? (You may name GET or POST.)",,,,,,,Use GET: field names and values are added to the URL so the link is shareable,,,,,,69e8da3be90a6b669003a9c2,0,text,"Use GET. The browser adds the field names and values to the end of the URL, so the search appears in the address bar. With POST, those values are normally not shown in the URL in the same way for a typical form."
