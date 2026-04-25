@@ -1,0 +1,215 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Arjun is cleaning up a sales report in pandas. He runs the following line:
+
+```python
+df.rename(columns={""Sales"": ""Revenue""})
+```
+
+He then prints `df` and is surprised to see the column is still called ""Sales"". What went wrong?",,,,,,2,,`rename()` cannot rename columns that contain numeric data,"`rename()` returns a new DataFrame with the change applied; since Arjun didn't store the result or use `inplace=True`, the original `df` was never modified","The dictionary key ""Sales"" must match the exact data type of the column, not just its name",`rename()` only works after calling `reset_index()` first,,,69eaf26c1fccebf0a1792433,0,markdown,"`df.rename(columns={""Sales"": ""Revenue""})` creates and returns a **new DataFrame** with the renamed column. If that return value is not stored (e.g., `df = df.rename(...)`) and `inplace=True` is not used, the original `df` is left completely unchanged. Option A is incorrect — `rename()` works on any column regardless of data type. Option C is a fabricated rule that does not exist in pandas. Option D is also false — `rename()` works independently of `reset_index()`."
+mcsc,markdown,"A student wants to remove the ""Discount"" column from a DataFrame `df`. She writes:
+
+```python
+df.drop(""Discount"")
+```
+
+What actually happens when this line runs?",,,,,,3,,"The ""Discount"" column is successfully removed from `df`",pandas silently skips the operation since no axis was specified,"pandas raises a `KeyError` because, without `columns=` or `axis=1`, it interprets ""Discount"" as a **row label** — and no row is labelled ""Discount""","pandas removes all columns except ""Discount""",,,69eaf26c1fccebf0a1792433,0,markdown,"`df.drop()` defaults to `axis=0`, meaning it operates on **rows**. Without specifying `columns=[""Discount""]` or `axis=1`, pandas looks for a row with the index label ""Discount"". Since no such row exists, it raises a `KeyError`. The correct ways to drop a column are `df.drop(columns=[""Discount""])` (preferred) or `df.drop(""Discount"", axis=1)`."
+mcsc,markdown,"A data analyst writes:
+
+```python
+result = pd.merge(orders, customers, on=""CustomerID"")
+```
+
+No `how` parameter is specified. What type of join does pandas perform by default?",,,,,,4,,Left join — all rows from `orders` are kept,Outer join — all rows from both DataFrames are kept,Right join — all rows from `customers` are kept,Inner join — only rows where `CustomerID` exists in both DataFrames,,,69eaf26c1fccebf0a1792433,0,markdown,"`pd.merge()` uses **inner join** as its default when `how=` is not specified. Only rows where the key column (`CustomerID`) has a matching value in **both** DataFrames appear in the result. Rows that exist in only one DataFrame are excluded. This is different from `df.join()`, which defaults to a **left join**."
+mcsc,markdown,"After running `result = df.groupby(""Region"")[[""Revenue""]].sum()`, a developer notices that ""Region"" appears as the **index** of the result, not as a regular column. Which method should she use to convert ""Region"" back into a regular column with a default integer index (0, 1, 2…)?",,,,,,3,,"`result.set_index(""Region"")`","`result.drop(index=""Region"")`",`result.reset_index()`,"`result.rename(index={""Region"": 0})`",,,69eaf26c1fccebf0a1792433,0,markdown,"`reset_index()` moves the current index of a DataFrame back into a regular column and replaces it with the default integer range (0, 1, 2, …). After a `groupby()`, the grouped column becomes the index. Calling `.reset_index()` converts it back to a regular column, making it easy to rename, merge with, or display in a report. Option A looks for a **column** named `""Region""` to promote to the index, but here `""Region""` is already the index (not a column), so it is not the right fix. Option B tries to drop a row by label. Option D renames an index label, not the index-to-column structure."
+mcsc,markdown,"A logistics company has a `shipments` DataFrame (left) with 6 rows and a `drivers` DataFrame (right) with 8 rows. Two drivers have never made a shipment, and one shipment has an unrecognised driver ID not present in the `drivers` table. A developer runs:
+
+```python
+result = pd.merge(shipments, drivers, on=""DriverID"", how=""right"")
+```
+
+Which of the following correctly describes the result?",,,,,,3,,Only shipments with a matching driver appear; both unmatched drivers and the unmatched shipment are excluded,All 6 shipments are included; the 2 unmatched drivers are excluded,All 8 drivers are included; the 2 with no shipments show NaN in shipment columns; the 1 unmatched shipment is excluded,"All rows from both DataFrames appear, with NaN wherever there is no match",,,69eaf26c1fccebf0a1792433,0.5,markdown,"A **right join** guarantees every row from the **right DataFrame** (drivers) appears in the result. The 2 drivers with no shipments will be included, but their shipment-related columns (from the left DataFrame) will be **NaN**. The unmatched shipment — which exists in the left but not the right — is **excluded** from a right join. Option A describes an inner join. Option B describes a left join. Option D describes an outer join."
+mcsc,markdown,"A developer has two DataFrames: `df_sales` where the linking column is named `""Cust_ID""`, and `df_info` where the same concept is named `""CustomerID""`. She wants to perform an inner join between them. Which code is correct?",,,,,,3,,"`pd.merge(df_sales, df_info, on=""Cust_ID"", how=""inner"")`","`pd.merge(df_sales, df_info, on=""CustomerID"", how=""inner"")`","`pd.merge(df_sales, df_info, left_on=""Cust_ID"", right_on=""CustomerID"", how=""inner"")`","`pd.merge(df_sales, df_info, key=""Cust_ID"", how=""inner"")`",,,69eaf26c1fccebf0a1792433,0.5,markdown,"When the key column has **different names** in each DataFrame, `on=` cannot be used (it requires the same name in both). Instead, `left_on=` specifies the key column name in the left DataFrame, and `right_on=` specifies it in the right DataFrame. Option A fails because ""Cust_ID"" doesn't exist in `df_info`. Option B fails because ""CustomerID"" doesn't exist in `df_sales`. Option D is invalid — there is no `key=` parameter in `pd.merge()`."
+mcmc,markdown,"A team member asks: *""Which of these approaches correctly renames the column `'Units'` to `'Quantity'` in DataFrame `df`?""*
+
+Which of the following options **correctly rename the column** and ensure the change is reflected in `df`? **Select ALL that apply.**",,,,,,,,"`df.rename(columns={""Units"": ""Quantity""})`","`df.rename(columns={""Units"": ""Quantity""}, inplace=True)`","`df = df.rename(columns={""Units"": ""Quantity""})`","`df.columns = [""Quantity"" if col == ""Units"" else col for col in df.columns]`",,"2,3,4",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Incorrect):** `rename()` without `inplace=True` returns a **new DataFrame** and does not change `df`. Since the result is not stored, the change is lost.
+- **B (Correct):** `inplace=True` tells pandas to apply the rename **directly to `df`**, so the change persists.
+- **C (Correct):** Storing the returned DataFrame back into `df` achieves the same result as `inplace=True`.
+- **D (Correct):** Reassigning `df.columns` with a conditional list updates only the exact `""Units""` column name (not partial matches), and the change is applied directly to `df`."
+mcmc,markdown,"Priya wants to remove the `""Discount""` column from a DataFrame `df`. Which of the following lines of code **successfully remove the column**? **Select ALL that apply.**",,,,,,,,"`df.drop(""Discount"")`","`df.drop(columns=[""Discount""], inplace=True)`","`df.drop(""Discount"", axis=1, inplace=True)`","`df = df.drop(columns=[""Discount""])`",,"2,3,4",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Incorrect):** `df.drop(""Discount"")` interprets ""Discount"" as a **row label** (axis=0 by default) and raises a `KeyError` since no row has that label. It does NOT remove the column.
+- **B (Correct):** `inplace=True` applies the column drop directly to `df`.
+- **C (Correct):** This is the `axis=1` form with `inplace=True`, so `df` is modified directly.
+- **D (Correct):** Reassigning `df = df.drop(columns=[""Discount""])` stores the updated DataFrame back into `df`, so the column is actually removed from `df`."
+mcmc,markdown,"A data analyst writes the following pipeline to generate a regional revenue summary:
+
+```python
+result = (
+    pd.merge(orders, customers, on=""CustomerID"", how=""left"")
+      .groupby(""City"")
+      .agg(Total_Revenue=(""Amount"", ""sum""), Order_Count=(""OrderID"", ""count""))
+      .reset_index()
+      .sort_values(by=""Total_Revenue"", ascending=False)
+)
+```
+
+Assume `orders` has 5 rows and `customers` has 7 rows. Two customers have never placed an order. Which of the following statements about this pipeline are **correct**? **Select ALL that apply.**",,,,,,,,"Since a left join is used, all 5 rows from `orders` are guaranteed to appear in the merged result",The 2 customers with no orders will appear in the merged result with NaN in the `Amount` and `OrderID` columns,`.reset_index()` converts the `City` group-by index back into a regular column so the result has a clean integer index,Removing `.reset_index()` would cause `.sort_values()` to raise an error,,"1,3",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Correct):** A **left join** keeps every row from the left DataFrame (`orders`). All 5 orders are guaranteed to appear. Unmatched right-side (customer) columns fill with NaN.
+- **B (Incorrect):** In a **left join**, the **left DataFrame** (`orders`) drives the result. Customers with no orders are in the right DataFrame — they are **not included** since there is no matching order row on the left. NaN would only appear for orders whose `CustomerID` is missing from `customers`.
+- **C (Correct):** After `.groupby(""City"").agg(...)`, `City` becomes the DataFrame's **index**. `.reset_index()` demotes it back to a regular column, giving the result a default 0, 1, 2… integer index.
+- **D (Incorrect):** `.sort_values()` works on DataFrames regardless of whether the index is a named column or the default integer range. Removing `.reset_index()` does not cause `.sort_values()` to fail — it would still sort correctly."
+mcmc,markdown,"Consider the following two DataFrames:
+
+- `df1` (Orders): CustomerIDs are `[""C01"", ""C02"", ""C01"", ""C04""]` — 4 rows total
+- `df2` (Customers): CustomerIDs are `[""C01"", ""C02"", ""C03"", ""C04""]` — 4 rows total
+
+C03 (Charlie) appears only in `df2` and has no orders. C01 (Alice) appears twice in `df1` because she placed 2 orders.
+
+Which of the following statements are **correct**? **Select ALL that apply.**",,,,,,,,"An **inner join** on `CustomerID` produces exactly 4 rows (C01 contributes 2 rows, C02 contributes 1, C04 contributes 1)",A **right join** on `CustomerID` produces 5 rows — 4 matched rows plus Charlie (C03) with NaN in order-related columns,An **outer join** on `CustomerID` produces the same number of rows as an inner join because all CustomerIDs in `df1` exist in `df2`,A **left join** on `CustomerID` produces at least as many rows as an inner join for the same data,,"1,2,4",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Correct):** Inner join includes only rows where the key exists in both DataFrames. All 4 orders (C01, C02, C01, C04) have matches in `df2`. Alice (C01) appears **twice** since she placed 2 orders. Total = 4 rows.
+- **B (Correct):** A right join keeps all 4 rows from `df2`. Charlie (C03) has no matching order in `df1`, so `OrderID` and `Amount` are **NaN** for that row. The result: 4 matched rows + 1 Charlie row = **5 rows**.
+- **C (Incorrect):** The outer join result is **not** the same as the inner join here. Outer join keeps all rows from both sides. Charlie (C03) is in `df2` only — so the outer join includes him with NaN on the order columns, producing **5 rows** — more than the inner join's 4.
+- **D (Correct):** Left join keeps **all rows from the left DataFrame** (`df1`). Since every order already has a matching customer, the left join here produces 4 rows — equal to the inner join. In general, a left join always produces ≥ as many rows as an inner join because it never drops left-side rows."
+subjective,markdown,"# Subjective Assignment — Pandas: Data Cleanup & Combining DataFrames
+
+---
+
+## Practical Task: Build a City-Wise Revenue Report for FoodFly
+
+### The Scenario
+
+You have just joined **FoodFly**, a growing food delivery startup, as a junior data analyst. The operations manager wants a clean **city-wise revenue summary** to decide which cities to invest in next. She hands you two raw data sources — an orders table and a restaurant directory — and asks you to produce a final ranked report using Python and pandas.
+
+Your job is to merge the data correctly, clean it up, and build the report using a single method-chaining pipeline.
+
+---
+
+### Dataset
+
+Use exactly the following DataFrames in your code:
+
+```python
+import pandas as pd
+
+orders = pd.DataFrame({
+    ""OrderID"":        [101, 102, 103, 104, 105, 106],
+    ""RestaurantID"":   [""R01"", ""R02"", ""R01"", ""R03"", ""R02"", ""R04""],
+    ""CustomerName"":   [""Ananya"", ""Rohit"", ""Priya"", ""Dev"", ""Sara"", ""Meera""],
+    ""Amount"":         [450, 320, 560, 180, 290, 720]
+})
+
+restaurants = pd.DataFrame({
+    ""RestaurantID"":   [""R01"", ""R02"", ""R03"", ""R05""],
+    ""RestaurantName"": [""Spice Garden"", ""The Grill House"", ""Curry Corner"", ""Pasta Palace""],
+    ""City"":           [""Delhi"", ""Mumbai"", ""Delhi"", ""Bengaluru""]
+})
+```
+
+> **Notice:** Order 106 is placed at `R04`, which does not exist in the `restaurants` table. `R05` (Pasta Palace) exists in `restaurants` but has received no orders. Keep these edge cases in mind when choosing your join type.
+
+---
+
+### What You Must Build
+
+Complete all steps below in a single `.py` file or `.ipynb` notebook.
+
+---
+
+#### Step 1 — Merge the DataFrames
+
+Merge `orders` and `restaurants` on `RestaurantID` using the join type that keeps **only orders that have a matching restaurant** (orders from unrecognised restaurants should be excluded, and restaurants with no orders should also be excluded).
+
+Print the merged DataFrame and state in a comment which join type you used and why.
+
+---
+
+#### Step 2 — Clean the Merged Result
+
+From the merged DataFrame produced in Step 1:
+
+1. **Drop** the `RestaurantID` column (it is no longer needed after the merge)
+2. **Rename** the following columns:
+   - `""Amount""` → `""Revenue""`
+   - `""RestaurantName""` → `""Restaurant""`
+
+Print the cleaned DataFrame.
+
+---
+
+#### Step 3 — Build the City-Wise Report Using a Single Pipeline
+
+Starting fresh from the original `orders` and `restaurants` DataFrames, write a **single method-chaining pipeline** (no intermediate variables) that:
+
+1. Merges `orders` and `restaurants` on `RestaurantID` (same join type as Step 1)
+2. Groups the merged result by `City`
+3. Aggregates to produce:
+   - `Total_Revenue` — the sum of `Amount` per city
+   - `Order_Count` — the count of `OrderID` per city
+4. Resets the index so `City` becomes a regular column
+5. Sorts by `Total_Revenue` in **descending order** (highest revenue city first)
+
+Store the final result in a variable called `city_report` and print it.
+
+---
+
+#### Step 4 — Interpret the Output
+
+After printing `city_report`, answer the following in code comments (one sentence each):
+
+1. Which city generated the highest total revenue, and what was the amount?
+2. Why does Pasta Palace (R05, Bengaluru) not appear in the report?
+3. Why does Order 106 (R04) not appear in the report?
+
+---
+
+### Submission Format
+
+- Code in a `.py` file in VS Code or `.ipynb` notebook.
+- Paste the code directly in the answer box
+- Your code must be clean, runnable from top to bottom without errors, and produce all the outputs described above.",,,,,,,,,,,,,,69eaf26c1fccebf0a1792433,1,markdown,"```python
+import pandas as pd
+
+# ── Dataset ────────────────────────────────────────────────────────────────────
+orders = pd.DataFrame({
+    ""OrderID"":        [101, 102, 103, 104, 105, 106],
+    ""RestaurantID"":   [""R01"", ""R02"", ""R01"", ""R03"", ""R02"", ""R04""],
+    ""CustomerName"":   [""Ananya"", ""Rohit"", ""Priya"", ""Dev"", ""Sara"", ""Meera""],
+    ""Amount"":         [450, 320, 560, 180, 290, 720]
+})
+
+restaurants = pd.DataFrame({
+    ""RestaurantID"":   [""R01"", ""R02"", ""R03"", ""R05""],
+    ""RestaurantName"": [""Spice Garden"", ""The Grill House"", ""Curry Corner"", ""Pasta Palace""],
+    ""City"":           [""Delhi"", ""Mumbai"", ""Delhi"", ""Bengaluru""]
+})
+
+# ── Step 1: Merge — Inner Join ─────────────────────────────────────────────────
+# Inner join: keeps only rows where RestaurantID exists in BOTH DataFrames.
+# - Order 106 (R04) is excluded: R04 has no entry in restaurants.
+# - Pasta Palace (R05) is excluded: it has no matching order in orders.
+merged = pd.merge(orders, restaurants, on=""RestaurantID"", how=""inner"")
+print(""Step 1 — Merged DataFrame:"")
+print(merged)
+
+# ── Step 2: Drop RestaurantID, Rename columns ──────────────────────────────────
+clean = merged.drop(columns=[""RestaurantID""])
+clean.rename(columns={""Amount"": ""Revenue"", ""RestaurantName"": ""Restaurant""}, inplace=True)
+print(""\nStep 2 — Cleaned DataFrame:"")
+print(clean)
+
+# ── Step 3: City-Wise Report via Method Chaining ───────────────────────────────
+city_report = (
+    pd.merge(orders, restaurants, on=""RestaurantID"", how=""inner"")   # Step 1: merge
+      .groupby(""City"")                                               # Step 2: group by city
+      .agg(                                                          # Step 3: aggregate
+          Total_Revenue=(""Amount"", ""sum""),                           #   total revenue per city
+          Order_Count=(""OrderID"", ""count"")                           #   number of orders per city
+      )
+      .reset_index()                                                 # Step 4: City → regular column
+      .sort_values(by=""Total_Revenue"", ascending=False)              # Step 5: highest revenue first
+)
+
+print(""\nStep 3 — City-Wise Revenue Report:"")
+print(city_report)
+
+# ── Step 4: Interpretation ─────────────────────────────────────────────────────
+# Q1: Delhi generated the highest total revenue (₹1,190 = Order 101: ₹450 + Order 103: ₹560 + Order 104: ₹180).
+# Q2: Pasta Palace (R05, Bengaluru) has no matching orders in the orders table, so the inner join excludes it.
+# Q3: Order 106 uses RestaurantID R04, which does not exist in the restaurants table; the inner join excludes it.
+```"
