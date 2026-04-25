@@ -1,0 +1,125 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Ananya just installed Python on her laptop. She opens VS Code, creates a file called `hello.py`, types `print(""Hello, World!"")`, saves the file, and then runs it from the terminal by typing `python hello.py`. The message `Hello, World!` appears on the screen. What role did the **terminal** play in this workflow?",,,,,,3,,It compiled the `.py` file into machine code before running it,It acted as a text editor where she typed her Python code,It executed a command that told the Python interpreter to run the script,It automatically checked the code for errors before execution,,,69eb48b11fccebf0a17996d9,0,markdown,"**Correct answer: C.** The terminal is a command-line interface used to issue system commands. When Ananya typed `python hello.py`, she instructed the operating system to invoke the Python **interpreter** and pass the script to it. The interpreter then executed the code line by line.
+**A** is wrong: Python is an interpreted language, not compiled. **B** is wrong: VS Code, not the terminal, is the text editor. **D** is wrong: the terminal does not automatically check Python syntax; that is the interpreter's job at runtime."
+mcsc,markdown,"A student writes the following line in Python:
+
+```python
+age = 20
+```
+
+What is the correct technical term for `age` in this statement?",,,,,,2,,A keyword,A variable,A function,A data type,,,69eb48b11fccebf0a17996d9,0,markdown,"**Correct answer: B.** `age` is a **variable** — a named storage location that holds a value. Here it stores the integer `20`.
+**A** is wrong: keywords are reserved words like `if`, `for`, `while` that have special meaning in Python; user-defined names are not keywords. **C** is wrong: a function is a reusable block of code called with parentheses, e.g., `print()`. **D** is wrong: the data type of `age` is `int`, but `age` itself is not a data type — it is the variable name."
+mcsc,markdown,"Rahul runs the following code:
+
+```python
+x = 10
+y = 3
+print(x // y)
+```
+
+What is the output?",,,,,,2,,3.33,3,1,0,,,69eb48b11fccebf0a17996d9,0,markdown,"**Correct answer: B.** The `//` operator performs **floor division** — it divides and rounds the result down to the nearest whole number. `10 / 3 = 3.33...`, and floor division discards the decimal, giving `3`.
+**A** is the result of regular division (`/`), not floor division. **C** would be the remainder (`%`), not the quotient. **D** is incorrect altogether."
+mcsc,markdown,Which of the following is a valid Python variable name?,,,,,,3,,`2score`,`my-score`,`my_score`,`class`,,,69eb48b11fccebf0a17996d9,0,markdown,"**Correct answer: C.** `my_score` is valid — Python variable names can contain letters, digits, and underscores, but must **not** start with a digit or contain hyphens, and must not be reserved keywords.
+**A** is wrong: variable names cannot start with a digit. **B** is wrong: hyphens (`-`) are not allowed; Python treats them as the subtraction operator. **D** is wrong: `class` is a reserved keyword in Python."
+mcsc,markdown,"What will the following code print?
+
+```python
+a = 7
+b = 2
+print(a % b)
+```",,,,,,3,,3,3.5,1,0,,,69eb48b11fccebf0a17996d9,0,markdown,"**Correct answer: C.** The `%` operator returns the **remainder** after division. `7 ÷ 2 = 3` with a remainder of `1`, so `7 % 2 = 1`.
+**A** is the quotient, not the remainder. **B** is the result of `7 / 2`. **D** would mean 7 is evenly divisible by 2, which it is not."
+mcsc,markdown,"A student writes:
+
+```python
+is_raining = True
+temperature = 28.5
+city = ""Delhi""
+visitors = 1200
+```
+
+Which variable holds a **float** value?",,,,,,2,,`is_raining`,`temperature`,`city`,`visitors`,,,69eb48b11fccebf0a17996d9,0,markdown,"**Correct answer: B.** `temperature = 28.5` stores a decimal number, which is a **float** in Python.
+**A** holds a `bool` (`True`/`False`). **C** holds a `str` (a string enclosed in quotes). **D** holds an `int` (a whole number without a decimal point)."
+mcsc,markdown,"Priya writes the following code:
+
+```python
+x = 5
+y = 2
+result = x ** y
+print(result)
+```
+
+What is the output and which operator is responsible?",,,,,,2,,`10` — the multiplication operator,`25` — the exponentiation operator,`7` — the addition operator,`2` — the floor division operator,,,69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answer: B.** The `**` operator is Python's **exponentiation** (power) operator. `5 ** 2` means 5 raised to the power of 2, which equals `25`.
+**A** is wrong: multiplication would use `*` and give `10`. **C** is wrong: addition would give `7`. **D** is wrong: floor division would give `2`, but the operator used is `**`, not `//`."
+mcsc,markdown,"What does the following comparison expression evaluate to?
+
+```python
+10 == ""10""
+```",,,,,,2,,"`True`, because both hold the value 10","`False`, because Python compares both value and data type for `==`","`True`, because Python automatically converts the string to an integer",An error is raised because you cannot compare an `int` and a `str`,,,69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answer: B.** In Python, `==` checks both **value** and **type**. The integer `10` and the string `""10""` are different types, so the result is `False`. Python does **not** automatically convert types for `==`.
+**A** is wrong: they look the same but are different types. **C** is wrong: Python does not implicitly cast types during comparison. **D** is wrong: Python does not raise an error here — it simply returns `False`."
+mcsc,markdown,"A developer writes:
+
+```python
+marks = 85
+passing_marks = 40
+print(marks >= passing_marks)
+```
+
+What is the output?",,,,,,3,,`85`,`False`,`True`,`45`,,,69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answer: C.** The `>=` (greater than or equal to) operator compares `85` and `40`. Since `85` is greater than `40`, the expression evaluates to `True`.
+**A** is wrong: comparison operators never return the numeric value itself; they return a boolean. **B** is wrong: `85 >= 40` is a true statement. **D** is wrong: subtraction was not performed here."
+mcsc,markdown,"Vikram evaluates the expression:
+
+```python
+result = 2 + 3 * 4 - 1
+print(result)
+```
+
+What is printed?",,,,,,2,,`19`,`13`,`20`,`11`,,,69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answer: B.** Python follows standard **operator precedence** (BODMAS/PEMDAS). Multiplication is evaluated before addition and subtraction: `3 * 4 = 12`, then `2 + 12 - 1 = 13`.
+**A** would be the result if evaluated strictly left-to-right without precedence: `(2+3)*4-1 = 19`. **C** and **D** are incorrect arithmetic results."
+mcmc,markdown,"Which of the following are valid Python data types for the values shown?
+
+*Select all correct options.*",,,,,,,,`x = 42` → `int`,`x = 3.14` → `float`,"`x = ""hello""` → `str`",`x = True` → `str`,`x = False` → `bool`,"1, 2, 3, 5",69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answers: A, B, C, E.**
+`42` is an **int**; `3.14` is a **float**; `""hello""` is a **str**; `False` is a **bool**.
+**D** is wrong: `True` is a **bool**, not a `str`. A string would require quotes, e.g., `""True""`."
+mcmc,markdown,"A student is exploring the difference between `/` and `//` in Python. Which statements are **correct**?
+
+*Select all correct options.*",,,,,,,,`7 / 2` returns `3.5` — a float result,`7 // 2` returns `3` — the quotient with the decimal discarded,`7 / 2` returns `3` — Python automatically rounds down for `/`,"`7 // 2` returns `3.0` when at least one operand is a float, e.g., `7.0 // 2`",Both `/` and `//` always return the same result,"1, 2, 4",69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answers: A, B, D.**
+`/` always returns a float in Python 3 (`3.5`). `//` performs floor division returning an `int` when both operands are integers (`3`), but returns a `float` if at least one operand is a float (`7.0 // 2 = 3.0`).
+**C** is wrong: `/` does not round down; use `//` for that. **E** is wrong: they differ whenever division is not exact."
+mcmc,markdown,"Sunita is naming variables in her program. Which of the following names are **valid** Python variable names?
+
+*Select all correct options.*",,,,,,,,`_score`,`total_marks`,`3rd_place`,`class`,`studentAge`,"1, 2, 5",69eb48b11fccebf0a17996d9,0.5,markdown,"**Correct answers: A, B, E.**
+`_score` (starts with underscore — allowed), `total_marks` (letters and underscores — allowed), and `studentAge` (camelCase — allowed) are all valid.
+**C** is wrong: variable names cannot start with a digit. **D** is wrong: `class` is a Python reserved keyword and cannot be used as a variable name."
+mcmc,markdown,"A teacher asks her class to predict the output of the following code:
+
+```python
+a = 10
+b = 4
+print(a / b)
+print(a // b)
+print(a % b)
+print(a ** b)
+print(a != b)
+```
+
+Which of the following output predictions are **correct**?
+
+*Select all correct options.*",,,,,,,,`a / b` → `2.5`,`a // b` → `2`,`a % b` → `4`,`a ** b` → `10000`,`a != b` → `True`,"1, 2, 4, 5",69eb48b11fccebf0a17996d9,1,markdown,"**Correct answers: A, B, D, E.**
+`10 / 4 = 2.5` (float division). `10 // 4 = 2` (floor division). `10 ** 4 = 10,000`. `10 != 4` is `True` because the values are not equal.
+**C** is wrong: `10 % 4 = 2` (remainder of 10 ÷ 4), not `4`."
+mcmc,markdown,"A developer reviews the following code and wants to know which statements about it are **true**:
+
+```python
+price = 199.99
+quantity = 3
+discount = 10
+total = price * quantity
+final_price = total - discount
+print(final_price > 500)
+print(final_price == 589.97)
+```
+
+*Select all correct options.*",,,,,,,,`price` is of type `float`,`quantity` is of type `int`,`total` evaluates to `599.97`,`final_price > 500` prints `True`,`final_price == 589.97` prints `False` due to floating-point precision issues in Python,"1, 2, 3, 4",69eb48b11fccebf0a17996d9,1,markdown,"**Correct answers: A, B, C, D.**
+`price = 199.99` is a `float`; `quantity = 3` is an `int`. `199.99 * 3 = 599.97`, so `total = 599.97`. `final_price = 599.97 - 10 = 589.97`, and `589.97 > 500` is `True`.
+**E** is wrong: in this particular case, Python's floating-point representation of `199.99 * 3 - 10` produces exactly `589.97`, so `final_price == 589.97` actually prints `True`, not `False`. While floating-point precision issues are a real concern in Python, they do not affect every calculation — this expression happens to be represented exactly."

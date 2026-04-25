@@ -1,0 +1,7 @@
+| topic/sub topic | status | remarks |
+| --- | --- | --- |
+| Decision Trees – rule-based model intuition and decision paths | Covered | ML-as-rules framing; decision trees as if/else / flowchart-style rules; loan use case; `fit`, visualization, depth, overfitting discussion; student-data and notebook demos. |
+| Random Forest – ensemble concept combining multiple trees | Covered | Introduced after decision trees; ensemble / voting idea; `n_estimators`; compared to single tree on case study; feature importance mentioned. |
+| Evaluation Metrics – accuracy, precision, recall, and F1 score interpretation | Covered | Confusion matrix recap (TP/TN/FP/FN); limits of accuracy and imbalanced settings; precision, recall, formulas and column/row interpretations; F1 as harmonic mean / class-level balance; classification report; extended demo on medical/cancer-style example. |
+| ROC-AUC – model ranking and separation ability | Covered | ROC–AUC segment with implementation; AUC as area under curve; interpretation stressed as how well the model separates the two classes; comparison of decision tree vs random forest AUC values; 0.5 vs 1.0 scale; explicit “ranking” wording light vs separation. |
+| Threshold Tuning – adjusting decision thresholds to balance precision and recall | Covered | `predict_proba` and default 0.5 threshold; changing threshold in earlier demo; closing recap on tuning threshold to improve F1 / model quality. |

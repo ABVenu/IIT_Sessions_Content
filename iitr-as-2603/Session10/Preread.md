@@ -1,25 +1,32 @@
-# Pre-read: From Excel Brain to Database Brain — Your First SQL Queries
+# Pre-read: SQL: Querying Data with SELECT and WHERE
 
-Imagine lakhs of people trying to book a train seat at the same second. If every booking lived only in one person’s laptop file, seats would clash, data would vanish when the laptop shut down, and nobody could trust the system. Companies do not run on lone spreadsheets — they run on **databases**: permanent, shared, fast stores of truth. This session is your first step into that world.
+## The hook
+You already shuffle rows and columns in **pandas** when you work with a CSV on your laptop — a solid first step. The moment a company needs one shared number for train seats, canteen stock, or payroll, the data cannot live only in your notebook’s temporary memory. Picture IRCTC or a busy Swiggy kitchen screen: many people need the same rows at the same time, and nothing should vanish when someone closes a file. **Databases** hold that kind of data for good, and we step into how you **ask** for answers from one today.
 
-**What if** you had to answer “Who are our top three highest-paid people in Delhi?” from a table with thousands of employees — and you had to do it again tomorrow, and the day after, without opening every row by hand? Doing it manually does not scale. You need a way to **ask the computer in clear language** and get only the rows you care about, in the order you want.
+## The problem
+**What if** you had to list “everyone in Sales in Delhi, joined after 2020, top three by salary” from a sheet with ten thousand names? Scrolling, manual filters, and re-sorting every day is slow. **What if** two people email two different “final” Excel files, and no one knows which one is the truth? You need a single, trusted store and a **repeatable instruction** the machine can run again and again. The pain is not “math is hard” — the pain is scale, sharing, and trust in the source.
 
-That “language” for talking to relational databases is **SQL** (Structured Query Language). We will use it to **read** data with `SELECT`, **narrow** it with `WHERE`, **sort** with `ORDER BY`, and **cap** long lists with `LIMIT` — the same mental steps you already know from pandas, but where the data lives in a proper database table.
+## The solution preview
+**SQL** (Structured Query Language) is the common way to **read** data stored as **tables** (rows and columns) inside a relational **database**; in this session you will use it to **select** the columns you need, **filter** rows, **sort** the result, and **cap** how many lines come back — the same story you know from **DataFrames**, but where the data lives in a proper, shared system. The live class will show you the order of the words, how to run a query in a real tool, and one running **employees** table so every new keyword has a clear before-and-after.
 
-**Think of it like a library.** The database is the librarian with lakhs of books in the back. You do not run through every shelf. You simply say, in effect: “Show me only these columns, only rows that match this rule, sorted this way, and stop after the first few.” SQL is that polite, precise sentence to the librarian.
+## A simple analogy
+Think of a **library** with lakhs of books. You do not search every shelf yourself. You walk to the desk and say, in effect: “From this catalogue, show me only these details, only books that match this rule, in this order, and stop after a few results.” The librarian is the **database**; your clear sentence is the **query** — the same **library** picture we use in the lecture notes.
 
-**SQL** is just the standard way we **request** information from tables (rows and columns, like a serious Excel sheet stored safely on disk). **SELECT** means “show me these fields.” **WHERE** means “only rows that pass this test” — like a guard at a gate who lets in only visitors who match your rule. You will see how these pieces fit in one fixed order: what to show, which table, which rows, how to sort, how many to return.
+## Key terms
+- **Table:** A named grid in the database: each **row** is one record, each **column** is one type of field (name, salary, city).
+- **SQL:** The usual language to ask a relational **database** for data; the basics repeat across many products.
+- **SELECT:** "Show me these **columns**" — the part of a query that lists what you want to see.
+- **WHERE:** "Keep only **rows** that pass this test" — your filter, like a rule at the gate.
+- **DISTINCT:** "Show each different value only once" — useful for unique names or cities without repeats.
+- **ORDER BY** and **LIMIT:** Sort the answer (e.g. salary high to low) and return only the first few rows when you do not need the full list.
 
-**Interesting questions** we will crack in the live session:
+## Questions we will answer in the session
+1. Why does a **database** beat a lone **pandas** session or a private spreadsheet when data must be **permanent**, **shared**, and **reliable** for many people at once?
+2. How do you put "which **columns**, which **table**, which **rows**, which **order**, how many **rows**" into one well-formed **SQL** question the system understands?
+3. How does the **same** filter-and-sort job you would do in **pandas** line up, step by step, with **SQL** so you do not juggle two unrelated mental models?
 
-- How is a database different from pandas or Excel when data must last forever and serve many users at once — and why does that matter for jobs in data and analytics?
-- How do you write one short SQL query to get “top N” answers (for example, highest salaries in a city) instead of scrolling and sorting by hand?
-- How does the **same** question look in SQL versus pandas — so you can switch between them without learning two different ways of thinking?
-
-**After this session, you will be able to:**
-
-- Explain in plain words **why** databases exist and what **SQL** is for.
-- Read from a table using **`SELECT`**, pick columns, use **`DISTINCT`**, and filter with **`WHERE`** (including **AND**, **OR**, **BETWEEN**, **IN**, **LIKE**, and missing values).
-- Sort results with **`ORDER BY`** and take only the first few rows with **`LIMIT`**, and relate these steps to the pandas you already know.
-
-Come curious — we start from “why databases,” end with queries you can run in tools like MySQL Workbench, and use one **`employees`** table all through so cause and effect stay crystal clear.
+## What you will be able to do after the session
+- Explain **why** data often lives in **databases** and what **SQL** is for, in plain words tied to real apps you already use.
+- Read data using **SELECT**, narrow it with **WHERE** (with common tests and combinations), and use **DISTINCT**, **ORDER BY**, and **LIMIT** where they fit.
+- Map **DataFrame** selection and filtering to the **SQL** version of the same job so toolbars and interview questions look familiar.
+- Run ideas against one consistent **employees** table in class so you see exactly how each keyword changes the **output**.
