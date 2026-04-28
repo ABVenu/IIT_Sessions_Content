@@ -1,592 +1,777 @@
-# Pandas: Data Cleanup & Combining DataFrames
+# SQL: Querying Data with SELECT and WHERE
 
-In the previous session, we built a strong foundation with pandas. We created and read DataFrames, filtered rows using boolean conditions, applied basic aggregation functions like `sum()`, `mean()`, `count()`, `min()`, and `max()`, and then used **`groupby()`** to group data by categories. We also mastered the powerful **`agg()`** function, which lets you apply multiple different aggregation operations on multiple columns in one shot — for example, getting the total sales and average sales per product at the same time.
+In our last sessions, we used **pandas** to load, clean, and analyse data sitting inside CSV or Excel files. That works well for small datasets on a laptop, but it falls apart the moment the data becomes large, shared across many users, or needs to be **remembered permanently**. This is exactly where **databases** and **SQL** step in — and that is the world we will enter today.
 
-**In this session, we continue from where we left off. Here is what we will cover:**
+## Why Do We Need Databases?
 
-- How to **rename columns** in a DataFrame (including result DataFrames from `groupby`)
-- How to **drop columns and rows** from a DataFrame (including conditional row deletion)
-- Understanding **`reset_index()`** and when to use it
-- How to **combine two DataFrames** using `pd.merge()` — and the four types of merges: Inner, Left, Right, and Outer
-- How `df.join()` works and how it differs from `pd.merge()`
-- How to **chain multiple operations together** in a clean pipeline
-- A brief peek into **why SQL is needed** and what is coming next
+![Why databases: pandas and CSV live in temporary workspace memory while a database persists on disk and serves many users at once — persistence, concurrency, scale](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session10/session10-why-databases.png)
 
----
+Before we jump into SQL, we must first understand **why databases exist at all**. Pandas, Excel, and CSV files feel enough when we are learning, but real companies need something much stronger.
 
-## Quick Recap: The `agg()` Function
+- **Official Definition:** A **Database (DB)** is an organised collection of data stored electronically in a computer system, designed so that data can be added, read, updated, and deleted **safely and efficiently** by many users at the same time.
+- **In Simple Words:** A database is a **smart digital godown** where data is **permanently stored, properly organised, and quickly searchable**.
+- **Real-Life Example:** Think of **IRCTC (train ticket booking)**. Lakhs of people book tickets at the same second. The moment you pay, your booking is **saved forever**, your seat is **reserved instantly**, and nobody else can book the same seat. Excel or pandas can never do this — only a **database** can.
 
-Before we move to new topics, let us take a very quick look at what we covered at the end of the last session — the **`agg()`** function. This is important because we will use `rename()` on its output in just a few minutes.
+### Problems with Pandas / Excel / CSV Files
 
-- **Official Definition:** **`agg()`** (aggregate) is a pandas method that allows you to apply **multiple aggregation functions** to one or more columns of a grouped DataFrame in a single step.
-- **In Simple Words:** Instead of writing three lines to get sum, mean, and max separately, `agg()` gives you all of them in one clean shot.
-- **Real-Life Example:** In a company's monthly report, the manager wants to see the **total sales**, **average sales**, and **maximum units sold** — all per product category. Writing this three times would be messy. `agg()` does it in one command.
+To truly feel the need for databases, let us see **where pandas and Excel fail** in real-world situations.
 
-Here is our running dataset for the session — a small product sales table called `df`:
+- **Not Permanent:** Pandas stores data in **RAM (temporary memory)**. The moment you close Python, your DataFrame is **gone forever**. A database stores data on **disk**, so it survives restarts and power cuts.
+- **Single User Only:** Only one person can edit an Excel/CSV file at a time. A database lets **thousands of users read and write together** without conflicts.
+- **Size Limits:** Excel crashes after around **10 lakh rows**, and pandas struggles when data goes beyond your laptop's RAM. Databases comfortably handle **billions of rows**.
+- **No Safety Rules:** Nothing stops you from typing `"abcd"` in a salary column in Excel. Databases enforce **data types, unique IDs, and validation rules** automatically.
+- **Slow Searches:** Searching in a giant CSV means scanning every row. Databases use **indexes** (like a book's index page) and return answers in **milliseconds**.
+- **No Security:** Anyone who gets the Excel file can see everything. Databases support **usernames, passwords, and row-level permissions**.
+- **No History / Backups:** If someone overwrites an Excel file, the old data is lost. Databases keep **transaction logs** and can **roll back** wrong changes.
+
+In short, pandas is a **calculator for data**, but a database is the **bank vault that holds it**.
+
+### What a Database Gives You (In One Line Each)
+
+- **Persistence** → Data is stored **forever**, not just while the program runs.
+- **Concurrency** → Many users can read and write **at the same time**.
+- **Integrity** → **Rules and data types** keep bad data out.
+- **Scalability** → Handles **crores of rows** without breaking a sweat.
+- **Speed** → **Indexes** make searches very fast.
+- **Security** → **Logins and permissions** protect sensitive data.
+- **Recovery** → **Backups and transactions** protect against mistakes and crashes.
+
+Now that we know **why** databases are needed, let us quickly look at the **different types** of databases you will hear about.
+
+## Types of Databases
+
+![Relational SQL databases use structured linked tables; NoSQL databases use flexible formats like documents, key-value, graph — choose what fits the data](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session10/session10-types-of-databases.png)
+
+Not every database is the same. Different kinds of data need different kinds of databases, just like we use different vehicles for different journeys.
+
+### 1. Relational Databases (SQL Databases)
+
+- **Official Definition:** A **Relational Database** stores data in **tables** made of **rows and columns**, and uses **SQL** to interact with the data.
+- **In Simple Words:** It is like a set of **connected Excel sheets** where every sheet has a fixed structure, and sheets can be **linked** using common IDs.
+- **Real-Life Example:** A **bank's account system** — one table for customers, one for accounts, one for transactions, all connected by Customer ID.
+- **Popular Examples:** **MySQL, PostgreSQL, Oracle, Microsoft SQL Server, SQLite**.
+- **Best For:** Banking, inventory, bookings, HR, e-commerce — anywhere data has a **clear structure**.
+
+### 2. Non-Relational Databases (NoSQL Databases)
+
+- **Official Definition:** **NoSQL** databases store data in **flexible formats** like documents, key-value pairs, graphs, or wide columns instead of rigid tables.
+- **In Simple Words:** They are used when data does **not fit neatly into rows and columns**, like social media posts or chat messages.
+- **Real-Life Example:** Your **Instagram feed** — every post has different fields (photo, video, reel, story, caption, tags). Fixed columns would not work here.
+- **Popular Examples:** **MongoDB** (document), **Redis** (key-value), **Cassandra** (wide-column), **Neo4j** (graph).
+- **Best For:** Chat apps, social feeds, caching, recommendation engines, real-time analytics.
+
+Our focus in this course is on **Relational Databases** and SQL.
+
+## Real-World Use Cases of Databases
+
+To make things concrete, here are **everyday apps you already use** that run on databases.
+
+- **IRCTC / MakeMyTrip:** Train and flight bookings, seat availability, payment history — relational databases.
+- **Flipkart / Amazon:** Product catalog, orders, reviews, cart — a mix of SQL and NoSQL.
+- **WhatsApp / Instagram:** Chats, stories, likes, follower lists — mostly NoSQL for scale.
+- **Banks (HDFC, SBI, Paytm):** Account balances, transactions, loan records — strictly relational databases with strong safety rules.
+- **Swiggy / Zomato:** Restaurants, menus, live orders, delivery tracking — relational for orders, NoSQL for live locations.
+- **Hospitals (Apollo, AIIMS):** Patient records, prescriptions, reports — relational databases that keep data safe for years.
+- **Schools and Universities:** Student info, attendance, marks, fees — classic relational database use case.
+
+Every one of these apps needs **permanent, safe, shared, fast, and secure data** — and that is exactly what databases provide. Out of all these types, the **relational database** is the most common in the industry, and it uses one special language called **SQL**. That is where we go next.
+
+## Introduction to SQL
+
+Now that we know **what a database is** and **why we need one**, let us understand the language we use to **talk to relational databases**.
+
+- **Official Definition:** **SQL** (Structured Query Language) is a standard language used to **store, read, update, and delete** data stored in relational databases.
+- **In Simple Words:** SQL is the **language we use to talk to a database**, just like English is the language we use to talk to a shopkeeper.
+- **Real-Life Example:** Think of a **library**. The librarian (database) has lakhs of books (data). You cannot go and search every shelf yourself. You simply say, *"Please give me all books by APJ Abdul Kalam published after 2010."* That sentence is your **SQL query**.
+
+### Why Learn SQL?
+
+- **Universal Language:** Almost every company in the world uses SQL. Whether it is MySQL, PostgreSQL, Oracle, or SQL Server — the **basic syntax is the same**.
+- **Most In-Demand Skill:** SQL is consistently one of the **top 3 skills** asked in data, analyst, and backend job interviews.
+- **Powerful with Very Little Code:** A question that takes **20 lines in Python** often takes **3 lines in SQL**.
+- **Works on Huge Data:** SQL queries can handle **crores of rows** without loading everything into memory.
+
+### Types of SQL Commands (Just the Names)
+
+You do not need to memorise this today. Just know that SQL commands come in a few families; today we will focus on the **DQL** family (reading data).
+
+- **DDL (Data Definition Language):** `CREATE`, `ALTER`, `DROP` — build and change table structure.
+- **DML (Data Manipulation Language):** `INSERT`, `UPDATE`, `DELETE` — change the data inside tables.
+- **DQL (Data Query Language):** `SELECT` — **read** data (our main focus today).
+- **DCL (Data Control Language):** `GRANT`, `REVOKE` — manage user permissions.
+
+Now that we know what SQL does and where it fits, a very natural question comes up: **"Sir, where do we actually write and run SQL?"** Let us answer that before we jump into our first query.
+
+## Where to Write and Practice SQL
+
+Unlike Python, SQL does **not** run inside VS Code directly — it runs inside a **database tool** that talks to a database. You have a few options, and you can pick any one based on your comfort. But remember, we **strongly recommend** downloading a proper workbench to match the setup you will see in real companies.
+
+- **MySQL Workbench (Most Recommended):** This is the **official free tool** from MySQL. It gives you a proper query editor, a result viewer, and a visual view of your tables — exactly like the setup used in companies. Download and install it from the **official MySQL website**. This is the tool we will use for class demos.
+- **DBeaver (Great Alternative):** DBeaver is a **free, universal database tool** that works with MySQL, PostgreSQL, SQLite, and many other databases. If MySQL Workbench feels a bit heavy on your laptop, DBeaver is a lighter and equally friendly option.
+- **Online SQL Compilers (Not Recommended — only for quick practice):** Websites like **SQLiteOnline**, **OneCompiler**, **Programiz SQL**, or **DB Fiddle** let you run SQL queries directly in the browser **without installing anything**. They are fine if you just want to try out a small query, **but they usually do NOT let you save your work**, your database **resets when you close the tab**, and they do **not match a real company setup**. Use them only as a last option.
+
+**Our clear recommendation:** Please go ahead and **download MySQL Workbench** (or DBeaver, if you prefer a lighter tool) on your laptop before you start practising. It is the closest to what you will see in real jobs and interviews, and your work is **saved permanently**. Use online compilers only when you are on a different machine and just want to try a quick query.
+
+Once your tool is installed, open it, connect to a database, and you can simply paste every SQL code block from this lecture into it and hit **Run**. That is exactly how a data professional works every day.
+
+## SQL Basics: Tables, Rows, and Columns
+
+Every database is made of **tables**. And every table looks exactly like an Excel sheet — just stored on a computer in a more powerful form.
+
+- **Official Definition:** A **table** is a collection of related data organised in **rows** (records) and **columns** (fields).
+- **In Simple Words:** A table is just an **Excel sheet** sitting inside a database.
+- **Real-Life Example:** An **attendance register** in school is a perfect table. Each **row** is one student, and each **column** is a piece of information (Name, Roll No, Class, Attendance %).
+
+Let us break down the three main parts of any table.
+
+- **Table:** The full Excel-like sheet (e.g., `employees`, `students`, `orders`).
+- **Column (Field):** One **type of information**, like `Name` or `Salary`. Every column has a fixed **data type** (text, number, date).
+- **Row (Record):** One **full entry**, like *one employee* with their Name, Salary, Department, City.
+- **Primary Key:** A special column (like `EmployeeID`) whose value is **unique** for every row. It is like your Aadhaar number — no two people share it.
+
+![Anatomy of a SQL table: columns, rows, primary key, and cell labelled on the employees table](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session10/table_anatomy.png)
+
+Before we start querying, let us set up **one single employees dataset** that we will use for the **entire lecture** — every SELECT, WHERE, ORDER BY, and LIMIT example will use this same table, so you can see the **cause and effect** clearly.
+
+### Our Running Dataset: the `employees` Table
+
+We first create the table structure, and then we insert 10 employee records into it. This is our **single source of truth** for the whole session.
+
+```sql
+-- Create a table called 'employees' with 6 columns
+CREATE TABLE employees (
+    EmployeeID   INT PRIMARY KEY,   -- Unique ID for each employee (like Aadhaar)
+    Name         VARCHAR(50),       -- Employee's full name (text up to 50 letters)
+    Department   VARCHAR(30),       -- Which team they belong to
+    Salary       INT,               -- Monthly salary in rupees
+    City         VARCHAR(30),       -- City where employee lives
+    JoiningYear  INT                -- Year they joined the company
+);
+
+-- Insert 10 sample rows into the employees table
+INSERT INTO employees VALUES (101, 'Aarav',  'Sales',       40000, 'Delhi',    2020);
+INSERT INTO employees VALUES (102, 'Diya',   'HR',          55000, 'Mumbai',   2019);
+INSERT INTO employees VALUES (103, 'Kabir',  'Sales',       60000, 'Delhi',    2021);
+INSERT INTO employees VALUES (104, 'Meera',  'IT',          75000, 'Bengaluru',2018);
+INSERT INTO employees VALUES (105, 'Rohan',  'IT',          90000, 'Bengaluru',2017);
+INSERT INTO employees VALUES (106, 'Sneha',  'HR',          50000, 'Mumbai',   2022);
+INSERT INTO employees VALUES (107, 'Vihaan', 'Finance',     70000, 'Delhi',    2019);
+INSERT INTO employees VALUES (108, 'Ishaan', 'Finance',     85000, 'Mumbai',   2016);
+INSERT INTO employees VALUES (109, 'Anaya',  'Sales',       45000, 'Bengaluru',2023);
+INSERT INTO employees VALUES (110, 'Riya',   'IT',          95000, 'Delhi',    2015);
+```
+
+**How the code works:**
+
+- `CREATE TABLE employees (...)` tells the database to make a **new empty table** with the given column names and **data types**.
+- `PRIMARY KEY` on `EmployeeID` guarantees that **no two rows can have the same EmployeeID**, preventing duplicates.
+- `VARCHAR(50)` means the column can store **up to 50 characters** of text.
+- `INSERT INTO employees VALUES (...)` adds **one row** at a time. The **order of values** must match the **order of columns** in the CREATE TABLE.
+- After running all 10 INSERTs, our `employees` table has **10 employees** spread across 4 departments and 3 cities. This table will be **used for every query** in the rest of the lecture.
+
+Now that our data is loaded, let us learn how to **read** it using the most important keyword in SQL — `SELECT`.
+
+## SELECT Queries: Reading Data
+
+`SELECT` is the first word of **almost every SQL query you will ever write**. It simply tells the database, *"Give me some data from this table."*
+
+- **Official Definition:** **`SELECT`** is the SQL statement used to **retrieve data** from one or more tables.
+- **In Simple Words:** `SELECT` means *"show me"*. You tell the database **which columns** you want and **which table** to get them from.
+- **Real-Life Example:** It is like asking the waiter, *"Please show me only the desserts from the menu."* You are not asking for everything — just what you need.
+
+The basic structure of every SELECT query looks like this:
+
+```sql
+SELECT column1, column2, ...
+FROM table_name;
+```
+
+Let us try this on our `employees` table.
+
+### Select All Columns with `*`
+
+The star `*` is a shortcut that means **"all columns"**. Use it when you want to see the **full table**.
+
+```sql
+-- Show ALL columns and ALL rows from the employees table
+SELECT *
+FROM employees;
+```
+
+**How the code works:**
+
+- `SELECT *` asks the database for **every column** in the table.
+- `FROM employees` tells the database **which table** to read from.
+- The semicolon `;` at the end marks the **end of the SQL statement** (like a full stop in English).
+- The output will be all **10 rows** and all **6 columns** of our employees table.
+
+A small best practice: in **real company projects**, avoid `SELECT *` because it brings back huge amounts of data. Always mention only the columns you really need.
+
+### Select Specific Columns
+
+Most of the time, you only want **2 or 3 columns** out of a big table. Just list them with commas.
+
+```sql
+-- Show only the Name and Salary of every employee
+SELECT Name, Salary
+FROM employees;
+
+-- Show three columns: Name, Department, and City
+SELECT Name, Department, City
+FROM employees;
+```
+
+**How the code works:**
+
+- We list the **exact column names** after `SELECT`, separated by **commas**.
+- The database returns a new table with **only those columns** for all 10 employees.
+- The **order we write** (Name, Salary) is the **order we get back**, which is useful for reports.
+
+### Getting Unique Values with `DISTINCT`
+
+Our `employees` table has 10 rows but only **4 unique departments** (Sales, HR, IT, Finance). If we want to see each **unique value only once**, we use `DISTINCT`.
+
+- **Official Definition:** **`DISTINCT`** removes duplicate values from the result and returns only **unique** entries.
+- **In Simple Words:** It means *"show me one of each kind"*.
+- **Real-Life Example:** In your WhatsApp contact list, if 5 different people are from **Delhi**, `DISTINCT` would just show "Delhi" **once** in a list of cities.
+
+```sql
+-- Show each Department name only ONCE (no duplicates)
+SELECT DISTINCT Department
+FROM employees;
+
+-- Show each unique City
+SELECT DISTINCT City
+FROM employees;
+
+-- Show each unique combination of Department AND City
+SELECT DISTINCT Department, City
+FROM employees;
+```
+
+**How the code works:**
+
+- `SELECT DISTINCT Department` looks at the Department column and keeps **only one copy** of each value.
+- With a single column, we get 4 rows back: **Sales, HR, IT, Finance**.
+- With a single column `City`, we get 3 rows: **Delhi, Mumbai, Bengaluru**.
+- When `DISTINCT` is used with **multiple columns**, the database treats the **whole combination** as one unit. So **`Sales, Delhi`** is different from **`Sales, Bengaluru`**.
+
+A common doubt: *"What if I write `DISTINCT` after the first column only?"* Remember, `DISTINCT` always applies to **all columns after it** in the SELECT, not just one. There is no way to DISTINCT just one column while keeping others duplicated.
+
+## Filtering Data with WHERE
+
+Reading the **whole table** is rarely useful. In real work, we usually want to answer questions like *"Which employees earn more than 60000?"* or *"Which employees live in Delhi?"* For this, we use the **`WHERE`** clause.
+
+- **Official Definition:** **`WHERE`** is the SQL clause used to **filter rows** based on a given condition, returning only the rows that match.
+- **In Simple Words:** `WHERE` means *"only give me rows where this condition is true"*.
+- **Real-Life Example:** It is like a **security guard at the mall gate**. Only visitors who meet the condition (*valid ticket*) are allowed inside. Others are turned away.
+
+The basic structure is:
+
+```sql
+SELECT columns
+FROM table_name
+WHERE condition;
+```
+
+### Filtering with Comparison Operators
+
+SQL gives us the same comparison operators that you use in math class.
+
+- **`=`** → equal to (notice: **single** equal sign in SQL, not `==`)
+- **`<>`** or **`!=`** → not equal to
+- **`>`** → greater than
+- **`<`** → less than
+- **`>=`** → greater than or equal to
+- **`<=`** → less than or equal to
+
+Let us try them on our running `employees` table.
+
+```sql
+-- Employees who work in the Sales department
+SELECT Name, Department, Salary
+FROM employees
+WHERE Department = 'Sales';
+
+-- Employees earning MORE than 60000 per month
+SELECT Name, Salary
+FROM employees
+WHERE Salary > 60000;
+
+-- Employees who DO NOT belong to IT
+SELECT Name, Department
+FROM employees
+WHERE Department <> 'IT';
+
+-- Employees who joined ON OR AFTER 2020
+SELECT Name, JoiningYear
+FROM employees
+WHERE JoiningYear >= 2020;
+```
+
+**How the code works:**
+
+- In `WHERE Department = 'Sales'`, text values are always wrapped in **single quotes**.
+- Numeric comparisons like `Salary > 60000` do **not** use quotes because numbers are not text.
+- `<>` and `!=` both mean **"not equal"**. Most databases accept both, but `<>` is the official SQL standard.
+- The database checks the condition **row by row** and keeps only the rows where the condition is **TRUE**.
+
+A very common beginner mistake: writing `WHERE Department == 'Sales'` with **two** equal signs. That works in Python and JavaScript, but in SQL we use **only one** equal sign.
+
+### Filtering with Logical Operators (AND, OR, NOT)
+
+Real questions usually have **multiple conditions**. For example, *"Sales employees in Delhi earning more than 50000"*. We combine conditions using **`AND`**, **`OR`**, and **`NOT`**.
+
+- **`AND`** → **Both** conditions must be true (like Venn diagram **intersection**).
+- **`OR`** → **At least one** condition must be true (like Venn diagram **union**).
+- **`NOT`** → **Reverses** the condition (true becomes false).
+
+```sql
+-- AND: Sales employees who earn more than 50000
+SELECT Name, Department, Salary
+FROM employees
+WHERE Department = 'Sales'
+  AND Salary > 50000;
+
+-- OR: Employees from Delhi OR Mumbai
+SELECT Name, City
+FROM employees
+WHERE City = 'Delhi'
+   OR City = 'Mumbai';
+
+-- NOT: Employees NOT from Bengaluru
+SELECT Name, City
+FROM employees
+WHERE NOT City = 'Bengaluru';
+
+-- Combining: IT employees in Bengaluru earning at least 80000
+SELECT Name, Department, City, Salary
+FROM employees
+WHERE Department = 'IT'
+  AND City = 'Bengaluru'
+  AND Salary >= 80000;
+```
+
+**How the code works:**
+
+- `AND` narrows the result. Each row must pass **every** condition to be included.
+- `OR` widens the result. A row is kept if it matches **any** one of the conditions.
+- `NOT` flips the truth value. `NOT City = 'Bengaluru'` is the same as `City <> 'Bengaluru'`.
+- When mixing `AND` and `OR`, always use **parentheses** to control the order, just like in math.
+
+### Helpful Shortcuts: BETWEEN, IN, and LIKE
+
+SQL gives us three very handy shortcuts to avoid writing long `OR` or comparison chains.
+
+- **`BETWEEN a AND b`** → Checks if a value is within a range (both ends included).
+- **`IN (a, b, c)`** → Checks if a value matches any item in a list.
+- **`LIKE 'pattern'`** → Checks if a text value matches a pattern (`%` = any characters, `_` = exactly one character).
+
+```sql
+-- BETWEEN: Employees earning between 50000 and 80000 (both inclusive)
+SELECT Name, Salary
+FROM employees
+WHERE Salary BETWEEN 50000 AND 80000;
+
+-- IN: Employees from Delhi, Mumbai, or Bengaluru (same as 3 ORs)
+SELECT Name, City
+FROM employees
+WHERE City IN ('Delhi', 'Mumbai', 'Bengaluru');
+
+-- LIKE: Employees whose Name starts with the letter 'A'
+SELECT Name
+FROM employees
+WHERE Name LIKE 'A%';
+
+-- LIKE: Employees whose Name ends with 'a'
+SELECT Name
+FROM employees
+WHERE Name LIKE '%a';
+```
+
+**How the code works:**
+
+- `BETWEEN 50000 AND 80000` is a cleaner way to write `Salary >= 50000 AND Salary <= 80000`. **Both boundaries are included**.
+- `IN ('Delhi', 'Mumbai')` is a shorter, faster way to write many `OR` conditions.
+- In `LIKE 'A%'`, the percent sign `%` means *"any number of characters (including zero)"*. So it matches Aarav, Anaya, Ananya, etc.
+- `LIKE '%a'` finds names **ending with** the letter 'a', like Diya, Meera, Sneha, Anaya, Riya.
+
+### Filtering for Missing Values: IS NULL
+
+In real databases, some values are **missing** (NULL). For example, a new employee may not yet have a city recorded. We check for such rows using **`IS NULL`** (not `= NULL`).
+
+```sql
+-- (Suppose some employees have no City recorded)
+-- Find all employees whose City is missing
+SELECT Name
+FROM employees
+WHERE City IS NULL;
+
+-- Find all employees whose City is filled in
+SELECT Name, City
+FROM employees
+WHERE City IS NOT NULL;
+```
+
+**How the code works:**
+
+- `NULL` means **"unknown" or "no value entered"** — it is **not** zero and **not** empty string.
+- `City = NULL` does **not** work in SQL, because NULL cannot be compared using `=`.
+- Always use `IS NULL` or `IS NOT NULL` to check missing data.
+
+## Sorting and Limiting Results
+
+After filtering, we often want results in a **specific order** — highest salary first, or names in alphabetical order. And sometimes we just want the **top 5 or top 10** rows. For this we use **`ORDER BY`** and **`LIMIT`**.
+
+### Sorting with ORDER BY
+
+- **Official Definition:** **`ORDER BY`** sorts the output rows based on one or more columns in ascending or descending order.
+- **In Simple Words:** It means *"arrange the result in this order before showing it to me"*.
+- **Real-Life Example:** It is like asking Flipkart *"Show me phones sorted by **price: low to high**"*. The data is the same, but the **order** helps you decide.
+
+```sql
+-- Sort all employees by Salary in ASCENDING order (low to high, default)
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary;
+
+-- Explicit ASC keyword (same result as above)
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary ASC;
+
+-- Sort by Salary in DESCENDING order (high to low)
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary DESC;
+
+-- Sort by Department (A-Z), then by Salary (high to low) within each department
+SELECT Name, Department, Salary
+FROM employees
+ORDER BY Department ASC, Salary DESC;
+```
+
+**How the code works:**
+
+- **`ASC`** = Ascending (smallest first). This is the **default**, so you can omit it.
+- **`DESC`** = Descending (largest first). You must write it if you want reverse order.
+- When you sort by **multiple columns**, SQL sorts first by the **first column**, and uses the **second column as a tie-breaker**.
+- For text columns, sorting is **alphabetical** (A to Z for ASC, Z to A for DESC).
+
+### Limiting Rows with LIMIT
+
+Sometimes we only care about the **top few rows** — like the *top 5 highest paid employees*. We use **`LIMIT`** for this.
+
+- **Official Definition:** **`LIMIT n`** restricts the query output to the first **n** rows.
+- **In Simple Words:** It means *"give me only this many rows, not everything"*.
+- **Real-Life Example:** It is like Google Images showing you only the **first 50 results** instead of all 10,00,000 matches.
+
+```sql
+-- Show only the first 3 employees (in the order they are stored)
+SELECT *
+FROM employees
+LIMIT 3;
+
+-- TOP 3 highest paid employees (combine ORDER BY + LIMIT)
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary DESC
+LIMIT 3;
+
+-- LOWEST paid 5 employees
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary ASC
+LIMIT 5;
+
+-- Top 2 highest paid IT employees (combine WHERE + ORDER BY + LIMIT)
+SELECT Name, Department, Salary
+FROM employees
+WHERE Department = 'IT'
+ORDER BY Salary DESC
+LIMIT 2;
+```
+
+**How the code works:**
+
+- `LIMIT 3` tells the database to return **at most 3 rows**.
+- **Combining `ORDER BY` with `LIMIT`** is the standard way to get a **"Top N"** report.
+- Without `ORDER BY`, `LIMIT` just gives the first N rows in whatever order the database chooses — which may not be meaningful.
+- Note: some databases (like Microsoft SQL Server) use `TOP 3` instead of `LIMIT 3`, but MySQL, PostgreSQL, and SQLite all use `LIMIT`.
+
+### The Full Query Order
+
+Once you learn `SELECT`, `WHERE`, `ORDER BY`, and `LIMIT`, the **order you write them in** is fixed. Remember this pattern — it is the **backbone of every SQL query**.
+
+![SQL query pipeline showing written order SELECT → FROM → WHERE → ORDER BY → LIMIT vs execution order FROM → WHERE → ORDER BY → LIMIT → SELECT](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session10/sql_query_pipeline.png)
+
+```sql
+SELECT    columns          -- What to show
+FROM      table_name       -- Which table to read
+WHERE     condition        -- Which rows to keep
+ORDER BY  column DESC      -- How to arrange them
+LIMIT     n;               -- How many to return
+```
+
+For example, *"Show me the top 3 highest-paid Delhi employees"* becomes:
+
+```sql
+-- Top 3 highest-paid employees based in Delhi
+SELECT Name, City, Salary
+FROM employees
+WHERE City = 'Delhi'
+ORDER BY Salary DESC
+LIMIT 3;
+```
+
+**How the code works:**
+
+- First, `FROM employees` loads the table into memory.
+- Then `WHERE City = 'Delhi'` keeps only Delhi-based rows.
+- `ORDER BY Salary DESC` sorts those rows from **highest to lowest salary**.
+- Finally, `LIMIT 3` returns only the **top 3 rows** of that sorted list.
+
+## Pandas vs SQL — The Big Bridge
+
+Many of you are coming from the last session where we used **pandas**. The good news: almost **every SQL idea has a pandas twin**. Once you see the pattern, switching between them becomes effortless.
+
+- **Official Definition:** Both **pandas** and **SQL** are tools to query structured tabular data; one runs inside Python on DataFrames, the other runs inside databases on tables.
+- **In Simple Words:** **Same question, two languages**. Like ordering *"one cup of tea"* in Hindi vs English — both get you tea.
+- **Real-Life Example:** Google Maps and Apple Maps both show the same roads. Only the **buttons and words** are different; the destination is the same.
+
+![Side-by-side mapping of SQL and pandas for the same top-3 highest-paid Delhi employees query, step by step: filter, sort, limit, pick columns](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session10/pandas_vs_sql_bridge.png)
+
+Below is the side-by-side mapping using **our same `employees` table**. In pandas we assume the same data has been loaded into a DataFrame called `df`.
+
+### Setup the Same Data in Pandas
 
 ```python
-# Import pandas library — always use 'pd' as the alias
+# Import pandas with its standard alias
 import pandas as pd
 
-# Create our running dataset: Product sales data
+# Create the SAME employees table as a pandas DataFrame
 df = pd.DataFrame({
-    "Product":  ["A", "B", "A", "C", "B", "A", "C", "B"],    # Product category
-    "Region":   ["East", "West", "West", "East", "East", "East", "West", "West"],  # Region
-    "Sales":    [300, 200, 380, 100, 130, 250, 400, 420],     # Sales in rupees
-    "Units":    [10,  8,   15,  4,   5,   9,   16,  17],      # Units sold
-    "Discount": [5,   8,   6,   4,   7,   5,   9,   6]        # Discount percentage
+    "EmployeeID":  [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
+    "Name":        ["Aarav","Diya","Kabir","Meera","Rohan",
+                    "Sneha","Vihaan","Ishaan","Anaya","Riya"],
+    "Department":  ["Sales","HR","Sales","IT","IT",
+                    "HR","Finance","Finance","Sales","IT"],
+    "Salary":      [40000, 55000, 60000, 75000, 90000,
+                    50000, 70000, 85000, 45000, 95000],
+    "City":        ["Delhi","Mumbai","Delhi","Bengaluru","Bengaluru",
+                    "Mumbai","Delhi","Mumbai","Bengaluru","Delhi"],
+    "JoiningYear": [2020, 2019, 2021, 2018, 2017,
+                    2022, 2019, 2016, 2023, 2015]
 })
-
-# Group by Product and apply multiple aggregations at once
-result = df.groupby("Product")["Sales"].agg(["sum", "mean"])
-
-# Print the result
-print(result)
 ```
 
 **How the code works:**
 
-- `df.groupby("Product")` splits the data into groups — one group for Product A, one for B, one for C.
-- `["Sales"]` tells pandas to focus only on the Sales column after grouping.
-- `.agg(["sum", "mean"])` calculates **both sum and mean** for each product group in one step.
-- The output is a **new DataFrame** with columns named `sum` and `mean` — these are generic names. Now, we need to rename them to something more meaningful, which is exactly what we learn next.
+- We create a pandas DataFrame with the **exact same 10 rows** we inserted in SQL.
+- Each key in the dictionary becomes a **column**, and each list is that column's values.
+- From now on, `df` in pandas is the **same thing** as the `employees` table in SQL.
 
----
+### Side-by-Side Mapping
 
-## Data Cleanup: Renaming Columns
+Let us take the most common operations and see them in **both languages**, on the same data.
 
-When you apply `groupby()` + `agg()`, the result DataFrame has column names like **`sum`** and **`mean`**. If someone else reads your report, they will ask: *"Sum of what? Mean of what?"* That is where **renaming columns** becomes important.
+#### 1. Select all rows and columns
 
-- **Official Definition:** **`df.rename()`** is a pandas method that lets you change the column names (or index labels) of a DataFrame by passing a dictionary of old-name-to-new-name mappings.
-- **In Simple Words:** You are giving new, more meaningful labels to existing columns — like crossing out a vague heading in a notebook and writing a better one.
-- **Real-Life Example:** Imagine a student marksheet where columns are named `col1`, `col2`, `col3`. That is confusing. Renaming them to `Maths`, `Science`, `English` makes the report readable.
-
-### Syntax
-
-```python
-# Basic syntax — return a NEW renamed DataFrame
-df_new = df.rename(columns={"old_name": "new_name"})
-
-# Use inplace=True to modify the original DataFrame directly
-df.rename(columns={"old_name": "new_name"}, inplace=True)
+```sql
+-- SQL
+SELECT * FROM employees;
 ```
 
-### Example 1: Renaming Columns of an Aggregation Result
-
 ```python
-# Import pandas
-import pandas as pd
-
-# Create our product sales DataFrame
-df = pd.DataFrame({
-    "Product":  ["A", "B", "A", "C", "B", "A", "C", "B"],
-    "Region":   ["East", "West", "West", "East", "East", "East", "West", "West"],
-    "Sales":    [300, 200, 380, 100, 130, 250, 400, 420],
-    "Units":    [10,  8,   15,  4,   5,   9,   16,  17],
-    "Discount": [5,   8,   6,   4,   7,   5,   9,   6]
-})
-
-# Step 1: Group by Product and calculate sum and mean of Sales
-result = df.groupby("Product")["Sales"].agg(["sum", "mean"])
-
-# Step 2: Print the result — columns are currently named 'sum' and 'mean'
-print(result)
-
-# Step 3: Rename 'sum' to 'Total Sales' and 'mean' to 'Average Sales'
-result.rename(columns={"sum": "Total Sales", "mean": "Average Sales"}, inplace=True)
-
-# Step 4: Print the renamed result
-print(result)
+# Pandas
+df
 ```
 
-**How the code works:**
+**How the code works:** `SELECT *` in SQL and just writing `df` in pandas both ask for the **full table**.
 
-- `agg(["sum", "mean"])` generates a result DataFrame with columns named exactly `sum` and `mean` by default.
-- `result.rename(columns={"sum": "Total Sales", "mean": "Average Sales"}, inplace=True)` replaces those generic names with meaningful ones.
-- `inplace=True` means the change happens **inside the same `result` variable** — no new variable is created.
-- Without `inplace=True`, the renamed version is returned as a **new DataFrame** which you must store separately: `result_new = result.rename(...)`.
+#### 2. Select specific columns
 
-### Example 2: Renaming Columns of the Raw DataFrame
-
-You can rename columns in any DataFrame, not just aggregation results. Here we rename columns directly in `df`:
-
-```python
-# Rename 'Sales' to 'Revenue', 'Units' to 'Quantity', 'Discount' to 'Discount Rate'
-df.rename(columns={"Sales": "Revenue", "Units": "Quantity", "Discount": "Discount Rate"}, inplace=True)
-
-# Print to verify changes
-print(df)
+```sql
+-- SQL
+SELECT Name, Salary FROM employees;
 ```
 
-**How the code works:**
-
-- Each `"old_name": "new_name"` pair inside the dictionary tells pandas exactly what to change.
-- `inplace=True` updates `df` itself, so there is no need to write `df = df.rename(...)`.
-- You can rename **one column or multiple columns** in the same call — just add more key-value pairs to the dictionary.
-
-> **Common Mistake:** Forgetting that `rename()` without `inplace=True` returns a copy. If you do `df.rename(...)` without storing the result, nothing changes in your original `df`.
-
----
-
-## Understanding `reset_index()`
-
-When you apply `groupby()`, the **group-by column** (like `Product`) becomes the **index** of the result DataFrame. You might notice that the column is sitting at the left edge, not behaving like a regular column. **`reset_index()`** converts that index back into a regular column.
-
-- **Official Definition:** **`reset_index()`** resets the index of a DataFrame back to the default integer range (0, 1, 2, …) and moves the old index into a regular column.
-- **In Simple Words:** It is like saying *"stop treating Product as a special label and just treat it like any other normal column again."*
-- **Real-Life Example:** Imagine a shelf of files where the file names are the shelf labels. `reset_index()` takes those labels off the shelf and places them as content inside the files — now they are just regular data.
-
-![Before and after reset_index(): group-by key as index vs regular column](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/Session10/lecture-notes-images/session10-reset-index-diagram.png)
-
 ```python
-# Group by Product, get sum of Sales
-result = df.groupby("Product")["Sales"].sum()
-
-# 'Product' is currently the INDEX — reset it to become a normal column
-result = pd.DataFrame(result)       # Convert Series to DataFrame first
-result.reset_index(inplace=True)    # Move index back to a column
-
-# Print the final result
-print(result)
+# Pandas
+df[["Name", "Salary"]]
 ```
 
-**How the code works:**
+**How the code works:** In SQL we list column names after `SELECT`. In pandas, we pass a **list of column names** inside double brackets `[[ ]]` to get a sub-table.
 
-- After `groupby().sum()`, the output is a **pandas Series** (single column), not a DataFrame. We convert it using `pd.DataFrame(result)`.
-- `reset_index()` moves the `Product` index into a proper column so the final table has clean row numbers (0, 1, 2, …) as its index.
-- You may or may not apply `reset_index()` — it depends on how you want to use the result. If you plan to rename columns, working with a proper DataFrame (not a Series) is cleaner.
+#### 3. DISTINCT unique values
 
-> **Pro Tip:** When your group-by result has **more than one column** (from `agg()`), it is already a DataFrame. `reset_index()` still converts the group-by column into a regular column.
-
----
-
-## Data Cleanup: Dropping Columns and Rows
-
-Cleaning data often means removing information you no longer need. `drop()` is the tool for this.
-
-- **Official Definition:** **`df.drop()`** removes specified rows or columns from a DataFrame and returns a new DataFrame (or modifies in place if `inplace=True`).
-- **In Simple Words:** It is like tearing a page out of a notebook or erasing a column from a register — the data is gone.
-- **Real-Life Example:** Think of a payroll sheet that has 15 columns. HR only needs name, department, and salary for a report. The remaining 12 columns are dropped to create a clean, shareable sheet.
-
-### Dropping a Single Column
-
-```python
-# Drop the 'Discount' column from df (returns a new DataFrame)
-clean_df = df.drop(columns=["Discount"])
-
-# Print columns remaining after the drop
-print(clean_df.columns)
+```sql
+-- SQL
+SELECT DISTINCT Department FROM employees;
 ```
 
-### Dropping Multiple Columns
-
 ```python
-# Drop both 'Units' and 'Discount' at once
-clean_df = df.drop(columns=["Units", "Discount"])
-
-# Print columns remaining
-print(clean_df.columns)
+# Pandas
+df["Department"].unique()
 ```
 
-**How the code works:**
+**How the code works:** `DISTINCT` in SQL and `.unique()` in pandas both remove duplicates and give you each unique value once.
 
-- Always pass column names as a **list** inside `columns=[...]`.
-- Without `inplace=True`, `drop()` returns a **new DataFrame**. The original `df` is not changed unless you write `df = df.drop(...)`.
-- The older way was `df.drop("Discount", axis=1)` — `axis=1` means columns. The newer, clearer way is `df.drop(columns=["Discount"])`. **Prefer the newer way** — it is more readable.
+#### 4. WHERE — single condition
 
-### Dropping Specific Rows by Index
-
-```python
-# Drop the rows at index position 0 and 2 (first and third rows)
-clean_df = df.drop([0, 2])
-
-# Print the cleaned DataFrame
-print(clean_df)
+```sql
+-- SQL
+SELECT Name, Salary
+FROM employees
+WHERE Salary > 60000;
 ```
 
-### Conditional Row Deletion
-
-This is very powerful. We drop all rows where `Sales` is less than 150:
-
 ```python
-# Find the INDEX values of all rows where Sales < 150
-rows_to_drop = df[df["Sales"] < 150].index   # Returns a list of index labels
-
-# Drop those rows from df and store the result
-result = df.drop(rows_to_drop)
-
-# Print the cleaned result
-print(result)
+# Pandas
+df[df["Salary"] > 60000][["Name", "Salary"]]
 ```
 
-**How the code works:**
+**How the code works:** In pandas, `df["Salary"] > 60000` creates a **Boolean mask** of True/False, and `df[mask]` keeps only the True rows. Then we pick the needed columns.
 
-- `df[df["Sales"] < 150]` filters the DataFrame to show only rows where the Sales column value is less than 150.
-- `.index` extracts the **index labels** (row numbers) of those matching rows — not the data itself.
-- `df.drop(rows_to_drop)` removes those specific rows by their index labels.
-- This is very useful in real data cleaning: you can remove all rows below a quality threshold, delete test data, or filter out incorrect entries.
+#### 5. WHERE with AND
 
-> **Key Insight — `axis` parameter:** `axis=0` (the default) refers to rows. `axis=1` refers to columns. That is why when dropping rows, you do not need to mention `axis`. But when using the older syntax with just a name (not the `columns=` keyword), you must write `axis=1` to tell pandas you mean a column, not a row.
-
----
-
-## Combining DataFrames: Why We Need Merge
-
-So far we have been working with **one DataFrame at a time**. But in real-world applications, data is spread across **multiple tables**. For example:
-
-- An e-commerce app has an **orders table** (Order ID, Customer ID, Amount)
-- And a **customers table** (Customer ID, Name, City)
-
-To find out *"Which city placed the most orders?"* you need **both tables together**. You need to combine them based on the common column (`Customer ID`). This is called **merging** (or joining).
-
-- **Official Definition:** **Merging** is the process of combining two DataFrames into one by matching rows based on a **common column** (called the key column).
-- **In Simple Words:** It is like matching two registers using the Roll Number. Once matched, you can see the student's name (from one register) and their marks (from another register) side by side.
-- **Real-Life Example:** Think of **Swiggy**. There is one database for orders and another for restaurants. When you track your order, Swiggy **merges** both to show you: Order #4567 is from Domino's (Koramangala branch) and it was placed at 8 PM.
-
-### Our Running Example: Orders and Customers
-
-For all merge examples, we will use these two DataFrames:
-
-```python
-# Import pandas
-import pandas as pd
-
-# DataFrame 1: Orders table — who ordered what and how much they paid
-df1 = pd.DataFrame({
-    "OrderID":    [1, 2, 3, 4],          # Unique ID for each order
-    "CustomerID": ["C01", "C02", "C01", "C04"],  # Who placed the order
-    "Amount":     [250, 300, 150, 500]   # Amount paid in rupees
-})
-
-# DataFrame 2: Customers table — customer details
-df2 = pd.DataFrame({
-    "CustomerID": ["C01", "C02", "C03", "C04"],  # Customer ID (matches df1)
-    "Name":       ["Alice", "Bob", "Charlie", "Dave"],  # Customer name
-    "City":       ["New York", "Mumbai", "Pune", "Chennai"]  # City where they live
-})
-
-print("Orders Table:")
-print(df1)
-print("\nCustomers Table:")
-print(df2)
+```sql
+-- SQL
+SELECT Name, Department, Salary
+FROM employees
+WHERE Department = 'Sales'
+  AND Salary > 50000;
 ```
 
-**How the code works:**
-
-- `df1` (Orders) has 4 orders. Notice that C01 appears twice (Alice placed 2 orders) and C03 never appears (Charlie placed no orders).
-- `df2` (Customers) has 4 customers, including Charlie who has no orders.
-- Both DataFrames share the **`CustomerID`** column — this is the **key** used for merging.
-- All four types of merges we cover next use these same two DataFrames.
-
----
-
-## Types of Merges (Joins)
-
-There are four main types of merges in pandas, and each one answers a different business question.
-
-![Four merge types in pandas: Inner, Left, Right, and Outer — what each keeps](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/Session10/lecture-notes-images/session10-merge-types-four-joins.png)
-
-### 1. Inner Join — Only Matching Rows from Both Tables
-
-- **Official Definition:** **Inner join** returns only the rows where the key column has a **matching value in both DataFrames**.
-- **In Simple Words:** Only keep rows that exist in **both** tables. If a customer has no orders, skip them. If an order has no customer, skip it.
-- **Real-Life Example:** It is like finding students who are **both** present in the attendance register **AND** the marks register. Anyone missing from either list is excluded.
-
 ```python
-# Inner join: only rows where CustomerID exists in BOTH df1 and df2
-result_inner = pd.merge(df1, df2, on="CustomerID", how="inner")
-
-# Print the merged result
-print(result_inner)
+# Pandas (parentheses are REQUIRED around each condition)
+df[(df["Department"] == "Sales") & (df["Salary"] > 50000)]
 ```
 
-**How the code works:**
+**How the code works:** SQL uses `AND`; pandas uses `&`. In pandas, each condition **must be in parentheses**, otherwise Python gets confused about operator order.
 
-- `pd.merge(df1, df2, ...)` — `df1` is the **left** DataFrame, `df2` is the **right** DataFrame.
-- `on="CustomerID"` tells pandas which column is the **key** — it must exist in **both** DataFrames with the **same name**.
-- `how="inner"` specifies the join type. This is also the **default** if you don't mention `how`.
-- **Result:** 4 rows — Orders 1, 2, 3, 4 map to Alice, Bob, Alice, Dave respectively (C01=Alice, C02=Bob, C04=Dave). All 4 orders have matching customers in df2, so all 4 rows appear.
-- Charlie (C03) is **only in df2** (Customers) — since Charlie has no orders in df1, Charlie is **completely excluded** from the inner join result.
+#### 6. WHERE with OR and IN
 
-> **Key Rule for Inner Join:** A row is included **only if** the CustomerID appears in **both tables**. Missing from either side = excluded.
-
-### 2. Left Join — All Rows from Left, Matching Rows from Right
-
-- **Official Definition:** **Left join** returns **all rows from the left DataFrame**, plus matching rows from the right. Where there is no match on the right, the right-side columns are filled with **NaN** (null/missing).
-- **In Simple Words:** Keep everything from the left table. If the right table has matching data, bring it in. If not, put blank/NaN there.
-- **Real-Life Example:** A teacher has a **list of all students** (left). She wants to add their exam scores (right). If a student was absent during the exam, their score column shows **NaN** — but the student is still listed.
-
-```python
-# Left join: ALL rows from df1 (orders), matching rows from df2 (customers)
-result_left = pd.merge(df1, df2, on="CustomerID", how="left")
-
-# Print the result
-print(result_left)
+```sql
+-- SQL
+SELECT Name, City
+FROM employees
+WHERE City IN ('Delhi', 'Mumbai');
 ```
 
-**How the code works:**
-
-- All 4 rows of `df1` (orders) are **guaranteed** to appear in the result.
-- For each order, pandas looks up the matching `CustomerID` in `df2` to get Name and City.
-- In our current dataset, all 4 CustomerIDs (C01, C02, C01, C04) have matches in df2 — so no NaN appears here.
-- **If we had an order from C05** (a deactivated customer not in df2), that row would still appear, but `Name` and `City` would be **NaN**.
-
-> **Key Rule for Left Join:** Every row from the **left DataFrame is always present** in the result. Right-side columns will be NaN for rows with no match.
-
-### 3. Right Join — All Rows from Right, Matching Rows from Left
-
-- **Official Definition:** **Right join** returns **all rows from the right DataFrame**, plus matching rows from the left. Where there is no match on the left, the left-side columns are filled with **NaN**.
-- **In Simple Words:** This is the mirror image of left join. The **right table is the priority** — every row from it is kept.
-- **Real-Life Example:** HR has a **list of all departments** (right). They want to map it to employee names (left). Even departments with no employees are included — with NaN in the name column.
-
 ```python
-# Right join: ALL rows from df2 (customers), matching rows from df1 (orders)
-result_right = pd.merge(df1, df2, on="CustomerID", how="right")
-
-# Print the result
-print(result_right)
+# Pandas
+df[df["City"].isin(["Delhi", "Mumbai"])][["Name", "City"]]
 ```
 
-**How the code works:**
+**How the code works:** SQL's `IN (...)` is the same as pandas' `.isin([...])`. Both give rows where the column value matches **any item** in the list.
 
-- All 4 rows of `df2` (customers) are **guaranteed** to appear in the result.
-- Charlie (C03) has **no orders** in df1. So in the result, Charlie appears but `OrderID` and `Amount` are **NaN**.
-- Alice (C01) placed 2 orders — so she appears **twice** in the result (once for each order).
-- Dave (C04) placed 1 order — appears once with order details filled in.
+#### 7. ORDER BY
 
-> **Key Rule for Right Join:** Every row from the **right DataFrame is always present** in the result. Left-side columns will be NaN for rows with no match.
-
-### 4. Outer Join — All Rows from Both Tables
-
-- **Official Definition:** **Outer join** (also called Full Outer Join) returns **all rows from both DataFrames**. Where there is no match on either side, NaN is used to fill the missing columns.
-- **In Simple Words:** Keep everything from both tables. No one gets excluded. If there is no matching data, fill it with NaN.
-- **Real-Life Example:** You are combining two guest lists from two different parties. **Everyone from both lists** is included in the final combined list — even if they attended only one party (their info from the other party is blank/NaN).
-
-```python
-# Outer join: ALL rows from BOTH df1 and df2
-result_outer = pd.merge(df1, df2, on="CustomerID", how="outer")
-
-# Print the result
-print(result_outer)
+```sql
+-- SQL
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary DESC;
 ```
 
-**How the code works:**
-
-- Every row from `df1` (orders) is included. Every row from `df2` (customers) is included.
-- Charlie (C03) has no orders → `OrderID` and `Amount` are NaN.
-- If there were a C05 order not in df2 → `Name` and `City` would be NaN.
-- This is the **most inclusive** join — it leaves no data behind, using NaN for everything that cannot be matched.
-
-### Quick Comparison of All Four Join Types
-
-| Join Type | What It Keeps | NaN Appears When |
-| :--- | :--- | :--- |
-| **Inner** | Only rows matching in **both** tables | Never (unmatched rows are dropped) |
-| **Left** | All rows from **left** + matched from right | Right-side columns for unmatched left rows |
-| **Right** | All rows from **right** + matched from left | Left-side columns for unmatched right rows |
-| **Outer** | All rows from **both** tables | Both sides — wherever there is no match |
-
----
-
-## Merging When Column Names Are Different
-
-In our example, both DataFrames had the column named `CustomerID`. But in real projects, the **same data might have different column names** in different tables.
-
-For example: `df1` calls it `"CustID"` and `df2` calls it `"CustomerID"`. You cannot use `on=` in this case. Instead, use **`left_on`** and **`right_on`**:
-
 ```python
-# Example: key column has different names in each DataFrame
-df1_renamed = df1.rename(columns={"CustomerID": "CustID"})  # Rename to simulate different names
-
-# Use left_on and right_on when column names differ
-result = pd.merge(df1_renamed, df2, left_on="CustID", right_on="CustomerID", how="inner")
-
-# Print the result
-print(result)
+# Pandas
+df.sort_values(by="Salary", ascending=False)[["Name", "Salary"]]
 ```
 
-**How the code works:**
+**How the code works:** `ORDER BY ... DESC` in SQL matches `sort_values(by=..., ascending=False)` in pandas. Both arrange the data before returning it.
 
-- `left_on="CustID"` says: the key column in the **left DataFrame (df1_renamed)** is called `CustID`.
-- `right_on="CustomerID"` says: the key column in the **right DataFrame (df2)** is called `CustomerID`.
-- Both columns will appear in the result (CustID and CustomerID are both included). You can drop one of them afterwards.
+#### 8. LIMIT
 
----
-
-## The `suffixes` Parameter
-
-When both DataFrames have a **non-key column with the same name** (e.g., both have a column called `Name`), pandas cannot distinguish them in the merged result. It automatically adds suffixes `_x` and `_y`. You can control these:
-
-```python
-# If both DataFrames had a column called 'ID', pandas would add _x and _y
-# To customize the suffixes, use the 'suffixes' parameter
-result = pd.merge(df1, df2, on="CustomerID", how="inner", suffixes=("_order", "_customer"))
-
-# Now overlapping column names would be like 'ID_order' and 'ID_customer' instead of 'ID_x' and 'ID_y'
-print(result)
+```sql
+-- SQL
+SELECT Name, Salary
+FROM employees
+ORDER BY Salary DESC
+LIMIT 3;
 ```
 
-**How the code works:**
-
-- `suffixes=("_order", "_customer")` tells pandas to append `_order` for columns from `df1` and `_customer` for columns from `df2` when there is a name clash.
-- This makes the final merged DataFrame much more readable — you always know which column belongs to which original table.
-
----
-
-## `df.join()` — The Older Join Method
-
-Besides `pd.merge()`, pandas has a method called `df.join()`. It is an **older** way to combine DataFrames and works based on **index columns**.
-
-- **Official Definition:** **`df.join()`** combines two DataFrames based on their **index** (row labels), not on a regular column.
-- **In Simple Words:** `join()` is an older sibling of `merge()`. It works only if the linking data is in the **index** of the DataFrame, not a regular column.
-- **Key difference:** `pd.merge()` is **flexible** — works on any column. `df.join()` works **only on the index** by default. The default join type in `join()` is **left**, while in `merge()` it is **inner**.
-
 ```python
-# Step 1: Set CustomerID as the index for BOTH DataFrames
-orders_indexed = df1.set_index("CustomerID")      # CustomerID becomes index of orders
-customers_indexed = df2.set_index("CustomerID")   # CustomerID becomes index of customers
-
-# Step 2: Join using the .join() method (left join by default)
-result_join = orders_indexed.join(customers_indexed)
-
-# Print the result
-print(result_join)
+# Pandas
+df.sort_values(by="Salary", ascending=False).head(3)[["Name", "Salary"]]
 ```
 
-**How the code works:**
+**How the code works:** `LIMIT 3` is the same as pandas' `.head(3)`. Both return only the **first 3 rows** of the sorted result.
 
-- `set_index("CustomerID")` moves the `CustomerID` column out of regular data and makes it the **row label (index)** of the DataFrame.
-- `orders_indexed.join(customers_indexed)` then matches rows based on these index labels and combines the two tables.
-- **Recommendation:** In practice, **use `pd.merge()`** — it is more flexible, more readable, and works on any column without needing `set_index()`. Use `join()` only if you are specifically working with index-based DataFrames.
+#### 9. The Full Query Example
 
----
+*"Top 3 highest-paid Delhi employees"* — our earlier example — in both languages.
 
-## Method Chaining — Building a Pipeline
-
-One of the most powerful things about pandas is that you can **chain multiple operations together** in one clean, flowing statement. Instead of storing intermediate results in many different variables, you can connect steps with a `.` (dot).
-
-- **Official Definition:** **Method chaining** is the practice of calling multiple methods one after another on the same object, where each method returns the DataFrame for the next method to work on.
-- **In Simple Words:** It is like an assembly line in a factory. The raw material goes in, passes through station 1 (merge), then station 2 (groupby), then station 3 (rename), and the finished product comes out at the end.
-
-![Method chaining: merge → groupby → agg → reset_index → rename → sort_values](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/Session10/lecture-notes-images/session10-method-chaining-pipeline.png)
-
-### Example: A Full Business Analysis Pipeline
-
-*Question: For each city, what is the total revenue and number of orders? Show cities sorted by total revenue (highest first).*
+```sql
+-- SQL
+SELECT Name, City, Salary
+FROM employees
+WHERE City = 'Delhi'
+ORDER BY Salary DESC
+LIMIT 3;
+```
 
 ```python
-# Import pandas
-import pandas as pd
-
-# Orders DataFrame
-df1 = pd.DataFrame({
-    "OrderID":    [1, 2, 3, 4],
-    "CustomerID": ["C01", "C02", "C01", "C04"],
-    "Amount":     [250, 300, 150, 500]
-})
-
-# Customers DataFrame
-df2 = pd.DataFrame({
-    "CustomerID": ["C01", "C02", "C03", "C04"],
-    "Name":       ["Alice", "Bob", "Charlie", "Dave"],
-    "City":       ["Delhi", "Mumbai", "Pune", "Chennai"]
-})
-
-# Full pipeline using method chaining
-result = (
-    pd.merge(df1, df2, on="CustomerID", how="inner")   # Step 1: Merge orders with customers
-      .groupby("City")                                  # Step 2: Group by city
-      .agg(                                             # Step 3: Aggregate
-          Total_Revenue=("Amount", "sum"),              #   Total amount per city
-          Order_Count=("OrderID", "count")              #   Number of orders per city
-      )
-      .reset_index()                                    # Step 4: Make City a regular column
-      .rename(columns={"City": "Capital City"})         # Step 5: Rename 'City' column
-      .sort_values(by="Total_Revenue", ascending=False) # Step 6: Sort by revenue (highest first)
+# Pandas
+(
+    df[df["City"] == "Delhi"]
+      .sort_values(by="Salary", ascending=False)
+      .head(3)[["Name", "City", "Salary"]]
 )
-
-# Print the final result
-print(result)
 ```
 
-**How the code works:**
+**How the code works:** The **thinking order is identical** in both — filter → sort → limit → pick columns. Only the **syntax** changes. Once this click happens, you can easily move between SQL and pandas depending on where your data lives.
 
-- **Step 1 (merge):** Combines orders and customer data on `CustomerID`. Only inner-matched rows are kept.
-- **Step 2 (groupby):** Groups the merged data by `City`.
-- **Step 3 (agg):** For each city, calculates the **total revenue** (sum of Amount) and **order count** (count of OrderID).
-- **Step 4 (reset_index):** Moves `City` from the index back into a regular column.
-- **Step 5 (rename):** Renames `City` to `Capital City` for the output report.
-- **Step 6 (sort_values):** Sorts cities so the **highest revenue city** appears at the top.
-- The parentheses `(...)` around the whole block are just to allow writing it across multiple lines without a `\` backslash. This is a clean Python style for long chains.
+### Quick Mapping Table (Pandas ↔ SQL)
 
-> **Common Mistake with chaining + groupby:** After `groupby()["SomeColumn"].sum()`, the result is a **pandas Series** (single column), not a DataFrame. If you target a single column, use `agg()` instead, which always returns a DataFrame and works better in a chain.
-
----
-
-## Common Mistakes & Fixes
-
-Let us quickly look at the mistakes students often make in these operations, so you do not repeat them.
-
-- **`rename()` without `inplace=True` or reassignment:** `df.rename(columns={"A":"B"})` does **not change** `df`. You must either write `df = df.rename(...)` or add `inplace=True`.
-- **Dropping a column without `columns=` keyword:** `df.drop("Discount")` will try to drop a **row** labelled "Discount", not the column. Always use `df.drop(columns=["Discount"])` or `df.drop("Discount", axis=1)`.
-- **Using `on=` when column names are different:** If `df1` calls it `CustID` and `df2` calls it `CustomerID`, `on="CustomerID"` will fail on `df1`. Use `left_on` and `right_on` instead.
-- **Forgetting that `groupby()` on a single column returns a Series:** After `df.groupby("X")["Y"].sum()`, the result is a Series. Converting to DataFrame with `pd.DataFrame(...)` before chaining further operations avoids confusion.
-- **Using `join()` without setting the index:** `df1.join(df2)` will not work as expected if the linking column is not the index. Either `set_index()` first, or just use `pd.merge()`.
-- **Not knowing the default join types:** `pd.merge()` defaults to **inner join**. `df.join()` defaults to **left join**. Forgetting this leads to unexpected missing rows.
-- **Forgetting `NaN` means missing, not zero:** In a left join, if a row from the left has no match in the right, the right-side columns show **NaN** — not 0. Treating NaN as 0 in calculations gives wrong results.
-
----
-
-## A Brief Look Ahead: Why SQL is Next
-
-In today's session, all our data was **hard-coded** inside the Python program. Those DataFrames live in your **RAM (temporary memory)**. The moment you close your terminal or restart VS Code, the data is **gone forever**.
-
-![Pandas data in RAM (session memory) vs SQL in a database (persistent storage)](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/Session10/lecture-notes-images/session10-pandas-ram-vs-sql-database.png)
-
-In real companies, data is never hard-coded. Millions and billions of rows are stored **permanently** in **databases** — special software designed to store, protect, and quickly retrieve data.
-
-To talk to a database, we use a language called **SQL (Structured Query Language)**. You will see that **almost everything you did in pandas has a direct SQL equivalent** — `groupby` becomes `GROUP BY`, filtering becomes `WHERE`, and selecting columns becomes `SELECT`.
-
-In the next session, we will start with:
-
-- What are databases and why are they needed?
-- Setting up practice on **DB Fiddle** (online SQL playground at dbfiddle.com)
-- Writing your first `SELECT`, `WHERE`, `ORDER BY`, and `LIMIT` queries
-- Mapping what you know in pandas to SQL syntax
-
----
-
-## Key Takeaways
-
-- **`df.rename(columns={...})`** is how you give meaningful names to columns — always use `inplace=True` or reassign to make the change stick.
-- **`df.drop(columns=[...])` and `df.drop([row_indices])`** are your tools for removing unwanted columns and rows, including conditional deletion using `.index`.
-- **`pd.merge()`** is the standard, flexible way to combine two DataFrames using a key column — it supports Inner, Left, Right, and Outer joins using the `how=` parameter.
-- **The four join types** answer different questions: Inner = only matches, Left = all from left, Right = all from right, Outer = everyone from both sides.
-- **Method chaining** lets you write a multi-step data pipeline in one clean, readable block — merge → groupby → agg → reset_index → rename → sort_values.
-- SQL is what comes next — it solves the problem of **permanent, large-scale data storage** and uses nearly the same mental model as pandas.
-
----
-
-## Important Commands & Terminologies (Quick Reference)
-
-| Command / Method | What It Does | Simple Example |
+| Task | SQL | Pandas |
 | :--- | :--- | :--- |
-| `df.rename(columns={...})` | Rename one or more columns | `df.rename(columns={"Sales": "Revenue"})` |
-| `inplace=True` | Modify the original DataFrame directly, no copy | `df.rename(..., inplace=True)` |
-| `df.drop(columns=[...])` | Drop one or more columns | `df.drop(columns=["Discount", "Units"])` |
-| `df.drop([index_list])` | Drop rows by their index labels | `df.drop([0, 2])` |
-| `df[condition].index` | Get index labels of rows that match a condition | `df[df["Sales"] < 150].index` |
-| `df.reset_index()` | Convert the DataFrame index back to a regular column | `result.reset_index(inplace=True)` |
-| `df.set_index("col")` | Set a column as the DataFrame index | `df.set_index("CustomerID")` |
-| `pd.merge(df1, df2, on=..., how=...)` | Merge two DataFrames on a common column | `pd.merge(df1, df2, on="CustomerID", how="inner")` |
-| `how="inner"` | Only rows that match in both DataFrames | Default join type in `pd.merge()` |
-| `how="left"` | All rows from left + matching from right | Right-side is NaN for no match |
-| `how="right"` | All rows from right + matching from left | Left-side is NaN for no match |
-| `how="outer"` | All rows from both DataFrames | NaN wherever no match exists |
-| `left_on=`, `right_on=` | Key columns with different names in each DataFrame | `pd.merge(df1, df2, left_on="CustID", right_on="CustomerID")` |
-| `suffixes=(...)` | Custom suffixes for overlapping non-key columns | `pd.merge(..., suffixes=("_order","_customer"))` |
-| `df.join(other)` | Older index-based join method | `orders_indexed.join(customers_indexed)` |
-| Method Chaining | Chain multiple operations with `.` in one block | `pd.merge(...).groupby(...).agg(...).rename(...)` |
-| `NaN` | Not a Number — represents a missing/null value | Appears in unmatched rows of left/right/outer joins |
-| `pd.merge()` default | Inner join | `pd.merge(df1, df2, on="key")` → inner |
-| `df.join()` default | Left join | `df1.join(df2)` → left |
+| All rows, all columns | `SELECT * FROM employees` | `df` |
+| Specific columns | `SELECT Name, Salary FROM employees` | `df[["Name","Salary"]]` |
+| Unique values | `SELECT DISTINCT Department FROM employees` | `df["Department"].unique()` |
+| Filter — single | `WHERE Salary > 60000` | `df[df["Salary"] > 60000]` |
+| Filter — AND | `WHERE A = x AND B > y` | `df[(df["A"]==x) & (df["B"]>y)]` |
+| Filter — IN | `WHERE City IN ('Delhi','Mumbai')` | `df[df["City"].isin(["Delhi","Mumbai"])]` |
+| Not equal | `WHERE City <> 'Delhi'` | `df[df["City"] != "Delhi"]` |
+| Null check | `WHERE City IS NULL` | `df[df["City"].isna()]` |
+| Sort | `ORDER BY Salary DESC` | `df.sort_values("Salary", ascending=False)` |
+| Top N | `LIMIT 3` | `df.head(3)` |
+
+## Common Doubts and Mistakes
+
+Let us quickly go over the mistakes students make most often when starting SQL.
+
+- **Using `==` instead of `=`:** In SQL, equality is a **single** equal sign, not double.
+- **Forgetting quotes around text:** `WHERE Department = Sales` fails; it must be `WHERE Department = 'Sales'`.
+- **Using `= NULL` instead of `IS NULL`:** NULL cannot be compared with `=`. Always use `IS NULL` or `IS NOT NULL`.
+- **Wrong keyword order:** SQL is strict — `SELECT` first, then `FROM`, `WHERE`, `ORDER BY`, `LIMIT`. Changing the order is an error.
+- **SELECT * in production:** It is fine while learning, but in real projects it slows things down and exposes unnecessary columns.
+- **Uppercase vs lowercase:** SQL keywords are **not case-sensitive** (`SELECT` = `select`), but **string values are case-sensitive** (`'Sales'` is not `'sales'`).
+- **Forgetting the semicolon:** Many tools require `;` at the end. Always finish your statement with one.
+- **Mixing `AND`/`OR` without parentheses:** `A = 1 OR B = 2 AND C = 3` is not always what you think. Use parentheses to be safe.
+
+## Important Commands & Keywords (Quick Revision)
+
+Use this table as your one-page cheat sheet before assignments and interviews.
+
+| Command / Keyword | What It Does | Simple Example |
+| :--- | :--- | :--- |
+| `CREATE TABLE` | Creates a new empty table | `CREATE TABLE employees (...)` |
+| `INSERT INTO` | Adds a new row to a table | `INSERT INTO employees VALUES (101, 'Aarav', ...)` |
+| `SELECT` | Reads columns from a table | `SELECT Name FROM employees` |
+| `SELECT *` | Reads all columns | `SELECT * FROM employees` |
+| `FROM` | Tells which table to read | `FROM employees` |
+| `DISTINCT` | Removes duplicates | `SELECT DISTINCT City FROM employees` |
+| `WHERE` | Filters rows by a condition | `WHERE Salary > 50000` |
+| `=`, `<>`, `>`, `<`, `>=`, `<=` | Comparison operators | `WHERE Salary >= 60000` |
+| `AND`, `OR`, `NOT` | Combine multiple conditions | `WHERE A = 1 AND B > 2` |
+| `BETWEEN ... AND ...` | Range filter (inclusive) | `WHERE Salary BETWEEN 50000 AND 80000` |
+| `IN (...)` | Match any value in a list | `WHERE City IN ('Delhi','Mumbai')` |
+| `LIKE`, `%`, `_` | Pattern match on text | `WHERE Name LIKE 'A%'` |
+| `IS NULL` / `IS NOT NULL` | Check for missing values | `WHERE City IS NULL` |
+| `ORDER BY ... ASC/DESC` | Sort result rows | `ORDER BY Salary DESC` |
+| `LIMIT n` | Return first n rows | `LIMIT 5` |
+| `;` | End of SQL statement | `SELECT * FROM employees;` |
+
+With this, you can now **read, filter, sort, and limit** data from any SQL database confidently — which is the first and most important skill in handling real-world structured data. In the next session, we will use the **same `employees` table** to learn how to **modify and combine data** with UPDATE, DELETE, and JOINs.

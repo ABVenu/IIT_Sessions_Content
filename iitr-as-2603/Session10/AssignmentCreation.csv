@@ -1,215 +1,146 @@
 questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
-mcsc,markdown,"Arjun is cleaning up a sales report in pandas. He runs the following line:
+mcsc,markdown,Priya is a junior data analyst at a logistics company. She has just been given access to the company's `employees` database and wants to see **every column and every row** of the table to understand its structure before starting any analysis. Which SQL query should she run?,,,,,,3,,`SELECT ALL FROM employees;`,`SELECT employees FROM *;`,`SELECT * FROM employees;`,`FROM employees SELECT *;`,,,69f05195f83aa704824d296c,0,markdown,"`SELECT * FROM employees;` is the correct syntax. `SELECT *` means ""give me all columns"", and `FROM employees` tells the database which table to read from. `SELECT ALL` is not valid SQL syntax. `SELECT employees FROM *` has the table and wildcard positions swapped. `FROM employees SELECT *` reverses the required keyword order — SQL always starts with `SELECT`, then `FROM`."
+mcsc,markdown,"Rajan, an HR manager at a manufacturing firm, needs to pull records of all employees who joined his company **on or after the year 2020** to plan a batch appraisal cycle. The table is `employees` and the column is `JoiningYear`. Which SQL clause correctly filters those records?",,,,,,4,,`HAVING JoiningYear >= 2020`,`ORDER BY JoiningYear >= 2020`,`LIMIT JoiningYear >= 2020`,`WHERE JoiningYear >= 2020`,,,69f05195f83aa704824d296c,0,markdown,`WHERE` is the SQL clause used to filter rows based on a condition. `WHERE JoiningYear >= 2020` keeps only rows where the joining year is 2020 or later. `HAVING` is used with `GROUP BY` for aggregate filtering. `ORDER BY` sorts rows — it does not filter. `LIMIT` restricts how many rows are returned — it does not filter by condition.
+mcsc,markdown,"A sales director at ShopBridge asks her analyst to find out **which unique cities** their employees are based in — she only wants each city name listed once, with no repetitions. The analyst runs this query on the `employees` table from the lecture:
 
-```python
-df.rename(columns={""Sales"": ""Revenue""})
+```sql
+SELECT DISTINCT City FROM employees;
 ```
 
-He then prints `df` and is surprised to see the column is still called ""Sales"". What went wrong?",,,,,,2,,`rename()` cannot rename columns that contain numeric data,"`rename()` returns a new DataFrame with the change applied; since Arjun didn't store the result or use `inplace=True`, the original `df` was never modified","The dictionary key ""Sales"" must match the exact data type of the column, not just its name",`rename()` only works after calling `reset_index()` first,,,69eaf26c1fccebf0a1792433,0,markdown,"`df.rename(columns={""Sales"": ""Revenue""})` creates and returns a **new DataFrame** with the renamed column. If that return value is not stored (e.g., `df = df.rename(...)`) and `inplace=True` is not used, the original `df` is left completely unchanged. Option A is incorrect — `rename()` works on any column regardless of data type. Option C is a fabricated rule that does not exist in pandas. Option D is also false — `rename()` works independently of `reset_index()`."
-mcsc,markdown,"A student wants to remove the ""Discount"" column from a DataFrame `df`. She writes:
+How many rows will the result contain, and which cities will appear?",,,,,,4,,10 rows – all city names including repetitions,"4 rows – Sales, HR, IT, Finance",1 row – showing a count of distinct cities,"3 rows – Delhi, Mumbai, Bengaluru",,,69f05195f83aa704824d296c,0,markdown,"`DISTINCT` removes duplicate values and returns each unique entry only once. In the lecture `employees` table, the `City` column contains: Delhi (×4), Mumbai (×3), Bengaluru (×3). `DISTINCT` collapses these into 3 unique values: Delhi, Mumbai, Bengaluru. 10 rows would be the result without `DISTINCT`. The second option lists departments, not cities. A single count row would require `COUNT`, not `DISTINCT` alone."
+mcsc,markdown,"A data engineer at a fintech startup is working with a `transactions` table that has over 10 lakh rows. Before writing a complex query, she wants to quickly **preview just the first 5 rows** to check the column names and data format. Which keyword should she add to her `SELECT` query to do this in MySQL?",,,,,,4,,`TOP 5`,`FETCH 5`,`ROWS 5`,`LIMIT 5`,,,69f05195f83aa704824d296c,0,markdown,"`LIMIT 5` is the correct keyword in MySQL, PostgreSQL, and SQLite to restrict output to the first N rows. `TOP 5` is used in Microsoft SQL Server — not MySQL. `FETCH` and `ROWS` are not valid standalone SQL keywords for this purpose. Adding `LIMIT 5` at the end of a `SELECT` returns only 5 rows, which is useful for quick previews."
+mcsc,markdown,"Arjun, a data analyst at a retail company, runs the following query on the `employees` table from the lecture to find the company's top IT earners:
 
-```python
-df.drop(""Discount"")
+```sql
+SELECT Name, Salary
+FROM employees
+WHERE Department = 'IT'
+ORDER BY Salary DESC
+LIMIT 2;
 ```
 
-What actually happens when this line runs?",,,,,,3,,"The ""Discount"" column is successfully removed from `df`",pandas silently skips the operation since no axis was specified,"pandas raises a `KeyError` because, without `columns=` or `axis=1`, it interprets ""Discount"" as a **row label** — and no row is labelled ""Discount""","pandas removes all columns except ""Discount""",,,69eaf26c1fccebf0a1792433,0,markdown,"`df.drop()` defaults to `axis=0`, meaning it operates on **rows**. Without specifying `columns=[""Discount""]` or `axis=1`, pandas looks for a row with the index label ""Discount"". Since no such row exists, it raises a `KeyError`. The correct ways to drop a column are `df.drop(columns=[""Discount""])` (preferred) or `df.drop(""Discount"", axis=1)`."
-mcsc,markdown,"A data analyst writes:
+Referring to the `employees` dataset in the lecture, which two employees will appear in the result?",,,,,,3,,"Aarav (₹40,000) and Diya (₹55,000)","Meera (₹75,000) and Rohan (₹90,000)","Riya (₹95,000) and Rohan (₹90,000)","Riya (₹95,000) and Meera (₹75,000)",,,69f05195f83aa704824d296c,0.5,markdown,"The IT department has 3 employees: Meera (₹75,000), Rohan (₹90,000), and Riya (₹95,000). `ORDER BY Salary DESC` sorts them highest first: Riya → Rohan → Meera. `LIMIT 2` returns only the top 2: **Riya (₹95,000)** and **Rohan (₹90,000)**. Meera at ₹75,000 ranks third and is cut off by `LIMIT`. The first option lists Sales and HR employees who do not satisfy `WHERE Department = 'IT'`."
+mcsc,markdown,"Sana, a new SQL learner, writes the following query after coming from a Python background. She gets a syntax error when she runs it:
 
-```python
-result = pd.merge(orders, customers, on=""CustomerID"")
+```sql
+SELECT Name, Department
+FROM employees
+WHERE Department == 'Sales';
 ```
 
-No `how` parameter is specified. What type of join does pandas perform by default?",,,,,,4,,Left join — all rows from `orders` are kept,Outer join — all rows from both DataFrames are kept,Right join — all rows from `customers` are kept,Inner join — only rows where `CustomerID` exists in both DataFrames,,,69eaf26c1fccebf0a1792433,0,markdown,"`pd.merge()` uses **inner join** as its default when `how=` is not specified. Only rows where the key column (`CustomerID`) has a matching value in **both** DataFrames appear in the result. Rows that exist in only one DataFrame are excluded. This is different from `df.join()`, which defaults to a **left join**."
-mcsc,markdown,"After running `result = df.groupby(""Region"")[[""Revenue""]].sum()`, a developer notices that ""Region"" appears as the **index** of the result, not as a regular column. Which method should she use to convert ""Region"" back into a regular column with a default integer index (0, 1, 2…)?",,,,,,3,,"`result.set_index(""Region"")`","`result.drop(index=""Region"")`",`result.reset_index()`,"`result.rename(index={""Region"": 0})`",,,69eaf26c1fccebf0a1792433,0,markdown,"`reset_index()` moves the current index of a DataFrame back into a regular column and replaces it with the default integer range (0, 1, 2, …). After a `groupby()`, the grouped column becomes the index. Calling `.reset_index()` converts it back to a regular column, making it easy to rename, merge with, or display in a report. Option A looks for a **column** named `""Region""` to promote to the index, but here `""Region""` is already the index (not a column), so it is not the right fix. Option B tries to drop a row by label. Option D renames an index label, not the index-to-column structure."
-mcsc,markdown,"A logistics company has a `shipments` DataFrame (left) with 6 rows and a `drivers` DataFrame (right) with 8 rows. Two drivers have never made a shipment, and one shipment has an unrecognised driver ID not present in the `drivers` table. A developer runs:
+What is the mistake, and what is the correct fix?",,,,,,3,,`Department` should be wrapped in quotes: `'Department' == 'Sales'`,`WHERE` should be replaced with `HAVING` for text comparisons,`==` should be replaced with `=` — SQL uses a single equal sign for comparison,The query is correct; `==` and `=` are both accepted in SQL,,,69f05195f83aa704824d296c,0.5,markdown,"In Python, `==` is used for equality checks. In SQL, equality comparison uses a **single `=`**. Writing `==` causes a syntax error in major SQL databases. Column names are not wrapped in quotes for this filter (quotes are for string literals). `HAVING` is used with `GROUP BY` aggregations, not simple row filtering. The correct predicate is `WHERE Department = 'Sales'`."
+mcmc,markdown,"*Select all that apply.*
 
-```python
-result = pd.merge(shipments, drivers, on=""DriverID"", how=""right"")
+Kavitha is a data analyst at a healthcare company. She wants to retrieve all employees from the `employees` table who **either work in the IT department OR earn more than ₹80,000** (or both). Which of the following SQL queries will give her the correct result?",,,,,,,,`SELECT * FROM employees WHERE Department = 'IT' OR Salary > 80000;`,`SELECT * FROM employees WHERE Department = 'IT' AND Salary > 80000;`,`SELECT * FROM employees WHERE Salary > 80000 OR Department = 'IT';`,`SELECT * FROM employees WHERE NOT (Department != 'IT' AND Salary <= 80000);`,,"1, 3, 4",69f05195f83aa704824d296c,0.5,markdown,"**A** is correct — it uses `OR` to match IT employees or high earners. **B** is incorrect — `AND` requires both conditions at once, which is a much narrower result. **C** is correct — same logic as A; `OR` is commutative. **D** is correct — by De Morgan's law, `NOT (Department != 'IT' AND Salary <= 80000)` is equivalent to `(Department = 'IT' OR Salary > 80000)`."
+mcmc,markdown,"*Select all that apply.*
+
+A company's database administrator is onboarding a new intern and explains how SQL handles missing data differently from Excel or Python. Based on what was covered in the lecture, which of the following statements about **NULL** in SQL are correct?",,,,,,,,"NULL means ""no value entered"" or ""unknown"" — it is NOT the same as 0 or an empty string",You can find rows with missing values using `WHERE City = NULL`,`IS NULL` is the correct syntax to find rows where a column has no value recorded,`IS NOT NULL` returns only rows where the column has an actual value stored,,"1, 3, 4",69f05195f83aa704824d296c,0.5,markdown,"**A** is correct — NULL is the absence of a value, not the same as `0` or `''`. **B** is incorrect — `= NULL` does not work; comparisons with NULL use `IS NULL` / `IS NOT NULL`. **C** is correct. **D** is correct — `IS NOT NULL` keeps rows with present values."
+mcmc,markdown,"*Select all that apply.*
+
+A senior analyst at a logistics company runs the following query on the `employees` table from the lecture to identify mid-to-high earners in the Finance and IT departments:
+
+```sql
+SELECT Name, Department, Salary
+FROM employees
+WHERE Department IN ('Finance', 'IT')
+  AND Salary BETWEEN 70000 AND 90000;
 ```
 
-Which of the following correctly describes the result?",,,,,,3,,Only shipments with a matching driver appear; both unmatched drivers and the unmatched shipment are excluded,All 6 shipments are included; the 2 unmatched drivers are excluded,All 8 drivers are included; the 2 with no shipments show NaN in shipment columns; the 1 unmatched shipment is excluded,"All rows from both DataFrames appear, with NaN wherever there is no match",,,69eaf26c1fccebf0a1792433,0.5,markdown,"A **right join** guarantees every row from the **right DataFrame** (drivers) appears in the result. The 2 drivers with no shipments will be included, but their shipment-related columns (from the left DataFrame) will be **NaN**. The unmatched shipment — which exists in the left but not the right — is **excluded** from a right join. Option A describes an inner join. Option B describes a left join. Option D describes an outer join."
-mcsc,markdown,"A developer has two DataFrames: `df_sales` where the linking column is named `""Cust_ID""`, and `df_info` where the same concept is named `""CustomerID""`. She wants to perform an inner join between them. Which code is correct?",,,,,,3,,"`pd.merge(df_sales, df_info, on=""Cust_ID"", how=""inner"")`","`pd.merge(df_sales, df_info, on=""CustomerID"", how=""inner"")`","`pd.merge(df_sales, df_info, left_on=""Cust_ID"", right_on=""CustomerID"", how=""inner"")`","`pd.merge(df_sales, df_info, key=""Cust_ID"", how=""inner"")`",,,69eaf26c1fccebf0a1792433,0.5,markdown,"When the key column has **different names** in each DataFrame, `on=` cannot be used (it requires the same name in both). Instead, `left_on=` specifies the key column name in the left DataFrame, and `right_on=` specifies it in the right DataFrame. Option A fails because ""Cust_ID"" doesn't exist in `df_info`. Option B fails because ""CustomerID"" doesn't exist in `df_sales`. Option D is invalid — there is no `key=` parameter in `pd.merge()`."
-mcmc,markdown,"A team member asks: *""Which of these approaches correctly renames the column `'Units'` to `'Quantity'` in DataFrame `df`?""*
+Referring to the dataset in the lecture, which employees will appear in the result?",,,,,,,,"Vihaan (Finance, ₹70,000)","Riya (IT, ₹95,000)","Ishaan (Finance, ₹85,000)","Meera (IT, ₹75,000)","Rohan (IT, ₹90,000)","1, 3, 4, 5",69f05195f83aa704824d296c,1,markdown,"`IN ('Finance', 'IT')` keeps Finance and IT employees. `BETWEEN 70000 AND 90000` is inclusive. Finance: Vihaan ₹70,000 ✓, Ishaan ₹85,000 ✓. IT: Meera ₹75,000 ✓, Rohan ₹90,000 ✓, Riya ₹95,000 ✗ (above 90,000). So Riya is excluded; Vihaan, Ishaan, Meera, and Rohan appear."
+mcmc,markdown,"*Select all that apply.*
 
-Which of the following options **correctly rename the column** and ensure the change is reflected in `df`? **Select ALL that apply.**",,,,,,,,"`df.rename(columns={""Units"": ""Quantity""})`","`df.rename(columns={""Units"": ""Quantity""}, inplace=True)`","`df = df.rename(columns={""Units"": ""Quantity""})`","`df.columns = [""Quantity"" if col == ""Units"" else col for col in df.columns]`",,"2,3,4",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Incorrect):** `rename()` without `inplace=True` returns a **new DataFrame** and does not change `df`. Since the result is not stored, the change is lost.
-- **B (Correct):** `inplace=True` tells pandas to apply the rename **directly to `df`**, so the change persists.
-- **C (Correct):** Storing the returned DataFrame back into `df` achieves the same result as `inplace=True`.
-- **D (Correct):** Reassigning `df.columns` with a conditional list updates only the exact `""Units""` column name (not partial matches), and the change is applied directly to `df`."
-mcmc,markdown,"Priya wants to remove the `""Discount""` column from a DataFrame `df`. Which of the following lines of code **successfully remove the column**? **Select ALL that apply.**",,,,,,,,"`df.drop(""Discount"")`","`df.drop(columns=[""Discount""], inplace=True)`","`df.drop(""Discount"", axis=1, inplace=True)`","`df = df.drop(columns=[""Discount""])`",,"2,3,4",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Incorrect):** `df.drop(""Discount"")` interprets ""Discount"" as a **row label** (axis=0 by default) and raises a `KeyError` since no row has that label. It does NOT remove the column.
-- **B (Correct):** `inplace=True` applies the column drop directly to `df`.
-- **C (Correct):** This is the `axis=1` form with `inplace=True`, so `df` is modified directly.
-- **D (Correct):** Reassigning `df = df.drop(columns=[""Discount""])` stores the updated DataFrame back into `df`, so the column is actually removed from `df`."
-mcmc,markdown,"A data analyst writes the following pipeline to generate a regional revenue summary:
+Neha, a Python developer at a data consulting firm, is migrating her team's pandas analysis scripts into SQL queries so they can be run directly against the company's MySQL database. She has the `employees` DataFrame `df` (same data as in the lecture). Which of the following **pandas → SQL translations** are correct?",,,,,,,,"`df[""Department""].unique()` → `SELECT DISTINCT Department FROM employees;`","`df.sort_values(""Salary"", ascending=True).head(5)` → `SELECT * FROM employees ORDER BY Salary DESC LIMIT 5;`","`df[(df[""City""] == ""Delhi"") & (df[""Salary""] >= 70000)]` → `SELECT * FROM employees WHERE City = 'Delhi' AND Salary >= 70000;`","`df[df[""City""].isna()]` → `SELECT * FROM employees WHERE City IS NULL;`",,"1, 3, 4",69f05195f83aa704824d296c,1,markdown,"**A** is correct — `.unique()` matches `DISTINCT`. **B** is incorrect — `ascending=True` is low-to-high (`ORDER BY Salary ASC`), not `DESC`. **C** is correct — boolean `&` maps to `AND`, and `==` in pandas maps to `=` in SQL. **D** is correct — `.isna()` maps to `IS NULL`."
+subjective,markdown,"**The TalentBridge Employee Intelligence Report**
 
-```python
-result = (
-    pd.merge(orders, customers, on=""CustomerID"", how=""left"")
-      .groupby(""City"")
-      .agg(Total_Revenue=(""Amount"", ""sum""), Order_Count=(""OrderID"", ""count""))
-      .reset_index()
-      .sort_values(by=""Total_Revenue"", ascending=False)
-)
-```
+Arjun has just joined as a junior data analyst at **TalentBridge**, a mid-sized HR consulting firm. On his very first week, his manager drops a task on his desk: *""Set up a small employee database, run a few queries, and send me the results — I need them before the team meeting this afternoon.""*
 
-Assume `orders` has 5 rows and `customers` has 7 rows. Two customers have never placed an order. Which of the following statements about this pipeline are **correct**? **Select ALL that apply.**",,,,,,,,"Since a left join is used, all 5 rows from `orders` are guaranteed to appear in the merged result",The 2 customers with no orders will appear in the merged result with NaN in the `Amount` and `OrderID` columns,`.reset_index()` converts the `City` group-by index back into a regular column so the result has a clean integer index,Removing `.reset_index()` would cause `.sort_values()` to raise an error,,"1,3",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Correct):** A **left join** keeps every row from the left DataFrame (`orders`). All 5 orders are guaranteed to appear. Unmatched right-side (customer) columns fill with NaN.
-- **B (Incorrect):** In a **left join**, the **left DataFrame** (`orders`) drives the result. Customers with no orders are in the right DataFrame — they are **not included** since there is no matching order row on the left. NaN would only appear for orders whose `CustomerID` is missing from `customers`.
-- **C (Correct):** After `.groupby(""City"").agg(...)`, `City` becomes the DataFrame's **index**. `.reset_index()` demotes it back to a regular column, giving the result a default 0, 1, 2… integer index.
-- **D (Incorrect):** `.sort_values()` works on DataFrames regardless of whether the index is a named column or the default integer range. Removing `.reset_index()` does not cause `.sort_values()` to fail — it would still sort correctly."
-mcmc,markdown,"Consider the following two DataFrames:
+Using the `employees` table structure from today's lecture, Arjun must build the database from scratch and write a series of SQL queries to answer real business questions.
 
-- `df1` (Orders): CustomerIDs are `[""C01"", ""C02"", ""C01"", ""C04""]` — 4 rows total
-- `df2` (Customers): CustomerIDs are `[""C01"", ""C02"", ""C03"", ""C04""]` — 4 rows total
+**Your task**
 
-C03 (Charlie) appears only in `df2` and has no orders. C01 (Alice) appears twice in `df1` because she placed 2 orders.
+Complete all the steps below in a single `.sql` file, in order:
 
-Which of the following statements are **correct**? **Select ALL that apply.**",,,,,,,,"An **inner join** on `CustomerID` produces exactly 4 rows (C01 contributes 2 rows, C02 contributes 1, C04 contributes 1)",A **right join** on `CustomerID` produces 5 rows — 4 matched rows plus Charlie (C03) with NaN in order-related columns,An **outer join** on `CustomerID` produces the same number of rows as an inner join because all CustomerIDs in `df1` exist in `df2`,A **left join** on `CustomerID` produces at least as many rows as an inner join for the same data,,"1,2,4",69eaf26c1fccebf0a1792433,0.5,markdown,"- **A (Correct):** Inner join includes only rows where the key exists in both DataFrames. All 4 orders (C01, C02, C01, C04) have matches in `df2`. Alice (C01) appears **twice** since she placed 2 orders. Total = 4 rows.
-- **B (Correct):** A right join keeps all 4 rows from `df2`. Charlie (C03) has no matching order in `df1`, so `OrderID` and `Amount` are **NaN** for that row. The result: 4 matched rows + 1 Charlie row = **5 rows**.
-- **C (Incorrect):** The outer join result is **not** the same as the inner join here. Outer join keeps all rows from both sides. Charlie (C03) is in `df2` only — so the outer join includes him with NaN on the order columns, producing **5 rows** — more than the inner join's 4.
-- **D (Correct):** Left join keeps **all rows from the left DataFrame** (`df1`). Since every order already has a matching customer, the left join here produces 4 rows — equal to the inner join. In general, a left join always produces ≥ as many rows as an inner join because it never drops left-side rows."
-subjective,markdown,"# Subjective Assignment — Pandas: Data Cleanup & Combining DataFrames
+**Step 1 — Build the database**
 
----
+Create the `employees` table with the following columns and insert all 10 records exactly as provided in the lecture:
 
-## Practical Task: Build a City-Wise Revenue Report for FoodFly
+| Column | Data Type |
+| :--- | :--- |
+| EmployeeID | INT (Primary Key) |
+| Name | VARCHAR(50) |
+| Department | VARCHAR(30) |
+| Salary | INT |
+| City | VARCHAR(30) |
+| JoiningYear | INT |
 
-### The Scenario
+*(Use the exact `CREATE TABLE` and `INSERT INTO` statements from the lecture.)*
 
-You have just joined **FoodFly**, a growing food delivery startup, as a junior data analyst. The operations manager wants a clean **city-wise revenue summary** to decide which cities to invest in next. She hands you two raw data sources — an orders table and a restaurant directory — and asks you to produce a final ranked report using Python and pandas.
+**Step 2 — Answer the business questions**
 
-Your job is to merge the data correctly, clean it up, and build the report using a single method-chaining pipeline.
+Write one SQL query for each question below. Add a comment above each query indicating which question number it answers.
 
----
+**Query 1 — High Earners List:** The finance team needs a list of all employees earning **strictly above ₹60,000**. Show their **Name, Department, and Salary**, sorted from the **highest salary to the lowest**.
 
-### Dataset
+**Query 2 — Department Directory:** HR wants to know **which unique departments** exist in the company — each department name listed exactly once, with no duplicates.
 
-Use exactly the following DataFrames in your code:
+**Query 3 — Delhi & Mumbai Pre-2021 Joiners:** The company is running a 5-year loyalty recognition programme. Find all employees who are based in **Delhi or Mumbai** AND who joined **before 2021**. Show their **Name, City, and JoiningYear**.
 
-```python
-import pandas as pd
+**Query 4 — Top 3 Earners:** The CEO wants to see the **top 3 highest-paid employees** across all departments. Show their **Name, Department, and Salary**.
 
-orders = pd.DataFrame({
-    ""OrderID"":        [101, 102, 103, 104, 105, 106],
-    ""RestaurantID"":   [""R01"", ""R02"", ""R01"", ""R03"", ""R02"", ""R04""],
-    ""CustomerName"":   [""Ananya"", ""Rohit"", ""Priya"", ""Dev"", ""Sara"", ""Meera""],
-    ""Amount"":         [450, 320, 560, 180, 290, 720]
-})
+**Query 5 — Name Pattern Search:** The admin team is looking for employees whose name **starts with the letter 'R'**. Show their **Name and Department**.
 
-restaurants = pd.DataFrame({
-    ""RestaurantID"":   [""R01"", ""R02"", ""R03"", ""R05""],
-    ""RestaurantName"": [""Spice Garden"", ""The Grill House"", ""Curry Corner"", ""Pasta Palace""],
-    ""City"":           [""Delhi"", ""Mumbai"", ""Delhi"", ""Bengaluru""]
-})
-```
+**Submission instructions**
 
-> **Notice:** Order 106 is placed at `R04`, which does not exist in the `restaurants` table. `R05` (Pasta Palace) exists in `restaurants` but has received no orders. Keep these edge cases in mind when choosing your join type.
+- Open **MySQL Workbench** (or DBeaver / any SQL tool you have set up).
+- Write all SQL statements — the `CREATE TABLE`, all 10 `INSERT`s, and all 5 queries — in a **single `.sql` file**, one after another.
+- Run the entire file and verify that each query returns the expected result.
+- Copy-paste all your SQL into the **answer/code box** and submit.",,,,,,,,,,,,,,69f05195f83aa704824d296c,0.5,markdown,"Reference solution (one valid `.sql` file):
 
----
+```sql
+CREATE TABLE employees (
+    EmployeeID   INT PRIMARY KEY,
+    Name         VARCHAR(50),
+    Department   VARCHAR(30),
+    Salary       INT,
+    City         VARCHAR(30),
+    JoiningYear  INT
+);
 
-### What You Must Build
+INSERT INTO employees VALUES (101, 'Aarav',  'Sales',       40000, 'Delhi',    2020);
+INSERT INTO employees VALUES (102, 'Diya',   'HR',          55000, 'Mumbai',   2019);
+INSERT INTO employees VALUES (103, 'Kabir',  'Sales',       60000, 'Delhi',    2021);
+INSERT INTO employees VALUES (104, 'Meera',  'IT',          75000, 'Bengaluru',2018);
+INSERT INTO employees VALUES (105, 'Rohan',  'IT',          90000, 'Bengaluru',2017);
+INSERT INTO employees VALUES (106, 'Sneha',  'HR',          50000, 'Mumbai',   2022);
+INSERT INTO employees VALUES (107, 'Vihaan', 'Finance',     70000, 'Delhi',    2019);
+INSERT INTO employees VALUES (108, 'Ishaan', 'Finance',     85000, 'Mumbai',   2016);
+INSERT INTO employees VALUES (109, 'Anaya',  'Sales',       45000, 'Bengaluru',2023);
+INSERT INTO employees VALUES (110, 'Riya',   'IT',          95000, 'Delhi',    2015);
 
-Complete all steps below in a single `.py` file or `.ipynb` notebook.
+-- Query 1 — High earners (strictly above 60000), highest salary first
+SELECT Name, Department, Salary
+FROM employees
+WHERE Salary > 60000
+ORDER BY Salary DESC;
 
----
+-- Query 2 — Unique departments
+SELECT DISTINCT Department
+FROM employees;
 
-#### Step 1 — Merge the DataFrames
+-- Query 3 — Delhi or Mumbai, joined before 2021
+SELECT Name, City, JoiningYear
+FROM employees
+WHERE (City = 'Delhi' OR City = 'Mumbai')
+  AND JoiningYear < 2021;
 
-Merge `orders` and `restaurants` on `RestaurantID` using the join type that keeps **only orders that have a matching restaurant** (orders from unrecognised restaurants should be excluded, and restaurants with no orders should also be excluded).
+-- Query 4 — Top 3 earners
+SELECT Name, Department, Salary
+FROM employees
+ORDER BY Salary DESC
+LIMIT 3;
 
-Print the merged DataFrame and state in a comment which join type you used and why.
-
----
-
-#### Step 2 — Clean the Merged Result
-
-From the merged DataFrame produced in Step 1:
-
-1. **Drop** the `RestaurantID` column (it is no longer needed after the merge)
-2. **Rename** the following columns:
-   - `""Amount""` → `""Revenue""`
-   - `""RestaurantName""` → `""Restaurant""`
-
-Print the cleaned DataFrame.
-
----
-
-#### Step 3 — Build the City-Wise Report Using a Single Pipeline
-
-Starting fresh from the original `orders` and `restaurants` DataFrames, write a **single method-chaining pipeline** (no intermediate variables) that:
-
-1. Merges `orders` and `restaurants` on `RestaurantID` (same join type as Step 1)
-2. Groups the merged result by `City`
-3. Aggregates to produce:
-   - `Total_Revenue` — the sum of `Amount` per city
-   - `Order_Count` — the count of `OrderID` per city
-4. Resets the index so `City` becomes a regular column
-5. Sorts by `Total_Revenue` in **descending order** (highest revenue city first)
-
-Store the final result in a variable called `city_report` and print it.
-
----
-
-#### Step 4 — Interpret the Output
-
-After printing `city_report`, answer the following in code comments (one sentence each):
-
-1. Which city generated the highest total revenue, and what was the amount?
-2. Why does Pasta Palace (R05, Bengaluru) not appear in the report?
-3. Why does Order 106 (R04) not appear in the report?
-
----
-
-### Submission Format
-
-- Code in a `.py` file in VS Code or `.ipynb` notebook.
-- Paste the code directly in the answer box
-- Your code must be clean, runnable from top to bottom without errors, and produce all the outputs described above.",,,,,,,,,,,,,,69eaf26c1fccebf0a1792433,1,markdown,"```python
-import pandas as pd
-
-# ── Dataset ────────────────────────────────────────────────────────────────────
-orders = pd.DataFrame({
-    ""OrderID"":        [101, 102, 103, 104, 105, 106],
-    ""RestaurantID"":   [""R01"", ""R02"", ""R01"", ""R03"", ""R02"", ""R04""],
-    ""CustomerName"":   [""Ananya"", ""Rohit"", ""Priya"", ""Dev"", ""Sara"", ""Meera""],
-    ""Amount"":         [450, 320, 560, 180, 290, 720]
-})
-
-restaurants = pd.DataFrame({
-    ""RestaurantID"":   [""R01"", ""R02"", ""R03"", ""R05""],
-    ""RestaurantName"": [""Spice Garden"", ""The Grill House"", ""Curry Corner"", ""Pasta Palace""],
-    ""City"":           [""Delhi"", ""Mumbai"", ""Delhi"", ""Bengaluru""]
-})
-
-# ── Step 1: Merge — Inner Join ─────────────────────────────────────────────────
-# Inner join: keeps only rows where RestaurantID exists in BOTH DataFrames.
-# - Order 106 (R04) is excluded: R04 has no entry in restaurants.
-# - Pasta Palace (R05) is excluded: it has no matching order in orders.
-merged = pd.merge(orders, restaurants, on=""RestaurantID"", how=""inner"")
-print(""Step 1 — Merged DataFrame:"")
-print(merged)
-
-# ── Step 2: Drop RestaurantID, Rename columns ──────────────────────────────────
-clean = merged.drop(columns=[""RestaurantID""])
-clean.rename(columns={""Amount"": ""Revenue"", ""RestaurantName"": ""Restaurant""}, inplace=True)
-print(""\nStep 2 — Cleaned DataFrame:"")
-print(clean)
-
-# ── Step 3: City-Wise Report via Method Chaining ───────────────────────────────
-city_report = (
-    pd.merge(orders, restaurants, on=""RestaurantID"", how=""inner"")   # Step 1: merge
-      .groupby(""City"")                                               # Step 2: group by city
-      .agg(                                                          # Step 3: aggregate
-          Total_Revenue=(""Amount"", ""sum""),                           #   total revenue per city
-          Order_Count=(""OrderID"", ""count"")                           #   number of orders per city
-      )
-      .reset_index()                                                 # Step 4: City → regular column
-      .sort_values(by=""Total_Revenue"", ascending=False)              # Step 5: highest revenue first
-)
-
-print(""\nStep 3 — City-Wise Revenue Report:"")
-print(city_report)
-
-# ── Step 4: Interpretation ─────────────────────────────────────────────────────
-# Q1: Delhi generated the highest total revenue (₹1,190 = Order 101: ₹450 + Order 103: ₹560 + Order 104: ₹180).
-# Q2: Pasta Palace (R05, Bengaluru) has no matching orders in the orders table, so the inner join excludes it.
-# Q3: Order 106 uses RestaurantID R04, which does not exist in the restaurants table; the inner join excludes it.
+-- Query 5 — Names starting with 'R'
+SELECT Name, Department
+FROM employees
+WHERE Name LIKE 'R%';
 ```"

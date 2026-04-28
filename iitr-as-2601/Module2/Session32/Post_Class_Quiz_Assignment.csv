@@ -1,0 +1,43 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Which of the following best describes unsupervised learning?
+
+- Training a model on labeled data to predict a known output
+- Using reward signals to train an agent through trial and error
+- Finding hidden patterns and groupings in data that has no predefined labels
+- Building a classifier using human-annotated examples",,,,,,3,,Training a model on labeled data to predict a known output,Using reward signals to train an agent through trial and error,Finding hidden patterns and groupings in data that has no predefined labels,Building a classifier using human-annotated examples,,69f09a90c9507b484f543682,0.5,text,"Unsupervised learning uses data without predefined labels to discover hidden patterns and structure. Supervised learning and classifiers with labels describe a different setup; reinforcement learning uses reward signals."
+mcsc,markdown,"In K-Means clustering, what is a centroid?
+
+- The data point with the largest feature value in a cluster
+- The boundary line drawn between two clusters
+- A randomly chosen data point that stays fixed throughout training
+- The calculated mean position of all points currently assigned to a cluster",,,,,,4,,The data point with the largest feature value in a cluster,The boundary line drawn between two clusters,A randomly chosen data point that stays fixed throughout training,The calculated mean position of all points currently assigned to a cluster,,69f09a90c9507b484f543682,0.5,text,"The centroid is the mean (average) position of the points in that cluster. It may not coincide with an actual data point. It is updated each iteration until convergence—not fixed randomly for the whole run."
+mcsc,markdown,"The Elbow Method is used to determine the optimal value of K in K-Means. What does the ""elbow"" point on the WCSS vs K curve indicate?
+
+- The K value at which WCSS is highest
+- The K value beyond which adding more clusters gives diminishing improvement in WCSS
+- The K value where all data points are equidistant from their centroids
+- The K value equal to the number of features in the dataset",,,,,,2,,The K value at which WCSS is highest,The K value beyond which adding more clusters gives diminishing improvement in WCSS,The K value where all data points are equidistant from their centroids,The K value equal to the number of features in the dataset,,69f09a90c9507b484f543682,0.5,text,"The elbow is where the rate of decrease in WCSS (inertia) sharply slows—extra clusters stop helping much. WCSS does not peak at the elbow; K is not tied to feature count; equidistance is not what the elbow represents."
+mcsc,markdown,"If PC1 in a PCA analysis has an explained variance ratio of 0.72, what does this mean?
+
+- 72% of all data points were assigned to the first principal component
+- PC1 was computed using 72% of the original features
+- PC1 alone captures 72% of the total information (variance) present in the original dataset
+- The model achieves 72% accuracy after dimensionality reduction",,,,,,3,,72% of all data points were assigned to the first principal component,PC1 was computed using 72% of the original features,PC1 alone captures 72% of the total information (variance) present in the original dataset,The model achieves 72% accuracy after dimensionality reduction,,69f09a90c9507b484f543682,0.5,text,"Explained variance ratio is the fraction of total dataset variance captured by that component. It does not describe point counts, how many raw features were used, or classifier accuracy."
+mcmc,markdown,"Which of the following are correct steps in the K-Means clustering algorithm? *(Select all that apply)*
+
+- Choose the number of clusters K before the algorithm starts
+- Assign each data point to the nearest centroid using Euclidean distance
+- Recalculate each centroid as the mean of all points currently in that cluster
+- Use labeled class information to guide the cluster assignments",,,,,,,,Choose the number of clusters K before the algorithm starts,Assign each data point to the nearest centroid using Euclidean distance,Recalculate each centroid as the mean of all points currently in that cluster,Use labeled class information to guide the cluster assignments,"1, 2, 3",69f09a90c9507b484f543682,0.5,text,"K must be chosen first; then assignments and centroid updates repeat until convergence. K-Means is unsupervised and does not use labels to assign clusters."
+mcmc,markdown,"Which of the following statements about Principal Component Analysis (PCA) are correct? *(Select all that apply)*
+
+- PCA requires features to be standardized before it is applied
+- The first principal component (PC1) captures the least variance in the data
+- Each principal component is orthogonal (perpendicular) to all other principal components
+- PCA reduces the number of features while preserving as much variance as possible",,,,,,,,PCA requires features to be standardized before it is applied,The first principal component (PC1) captures the least variance in the data,Each principal component is orthogonal (perpendicular) to all other principal components,PCA reduces the number of features while preserving as much variance as possible,"1, 3, 4",69f09a90c9507b484f543682,0.5,text,"Standardizing avoids scale dominance; PCs are orthogonal with PC1 capturing the most variance, then successive components capture the remaining variance in decreasing order. PC1 does not capture the least variance."
+mcmc,markdown,"Why is combining PCA with K-Means considered a powerful approach? *(Select all that apply)*
+
+- PCA removes noisy and redundant features, making K-Means distance calculations more meaningful
+- PCA assigns cluster labels to each data point before K-Means runs
+- After clustering, reducing data further to 2D with PCA allows the clusters to be visualized on a standard scatter plot
+- Running K-Means on PCA-reduced data is faster than on the original high-dimensional data",,,,,,,,"PCA removes noisy and redundant features, making K-Means distance calculations more meaningful",PCA assigns cluster labels to each data point before K-Means runs,"After clustering, reducing data further to 2D with PCA allows the clusters to be visualized on a standard scatter plot",Running K-Means on PCA-reduced data is faster than on the original high-dimensional data,"1, 3, 4",69f09a90c9507b484f543682,0.5,text,"PCA reduces dimensionality and noise so distances are more meaningful and clustering is faster; PCA does not produce cluster labels—K-Means does. A 2D PCA projection is commonly used to visualize cluster structure for human review."

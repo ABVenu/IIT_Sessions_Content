@@ -1,226 +1,226 @@
-# Objective Assignment — Pandas: Data Cleanup & Combining DataFrames
+# Assignment – Objective Questions
+## Session 10: SQL – Querying Data with SELECT and WHERE
 
 ---
 
-## MCQ — Single Correct Answer
+### Q1 (MCQ | Easy)
+
+Priya is a junior data analyst at a logistics company. She has just been given access to the company's `employees` database and wants to see **every column and every row** of the table to understand its structure before starting any analysis. Which SQL query should she run?
+
+**Options:**
+- A) `SELECT ALL FROM employees;`
+- B) `SELECT employees FROM *;`
+- C) `SELECT * FROM employees;`
+- D) `FROM employees SELECT *;`
+
+**Answer:** C
+
+**Explanation:**
+`SELECT * FROM employees;` is the correct syntax. `SELECT *` means "give me all columns", and `FROM employees` tells the database which table to read from. Option A (`SELECT ALL`) is not valid SQL syntax. Option B has the table and wildcard positions swapped. Option D reverses the required keyword order — SQL always starts with `SELECT`, then `FROM`.
 
 ---
 
-**Question 1** *(Easy)*
+### Q2 (MCQ | Easy)
 
-Arjun is cleaning up a sales report in pandas. He runs the following line:
+Rajan, an HR manager at a manufacturing firm, needs to pull records of all employees who joined his company **on or after the year 2020** to plan a batch appraisal cycle. The table is `employees` and the column is `JoiningYear`. Which SQL clause correctly filters those records?
 
-```python
-df.rename(columns={"Sales": "Revenue"})
+**Options:**
+- A) `HAVING JoiningYear >= 2020`
+- B) `ORDER BY JoiningYear >= 2020`
+- C) `LIMIT JoiningYear >= 2020`
+- D) `WHERE JoiningYear >= 2020`
+
+**Answer:** D
+
+**Explanation:**
+`WHERE` is the SQL clause used to filter rows based on a condition. `WHERE JoiningYear >= 2020` checks each row and keeps only those where the joining year is 2020 or later. `HAVING` is used with GROUP BY for aggregate filtering (not covered yet). `ORDER BY` sorts rows — it does not filter. `LIMIT` restricts how many rows are returned — it does not filter by condition.
+
+---
+
+### Q3 (MCQ | Easy)
+
+A sales director at ShopBridge asks her analyst to find out **which unique cities** their employees are based in — she only wants each city name listed once, with no repetitions. The analyst runs this query on the `employees` table from the lecture:
+
+```sql
+SELECT DISTINCT City FROM employees;
 ```
 
-He then prints `df` and is surprised to see the column is still called "Sales". What went wrong?
+How many rows will the result contain, and which cities will appear?
 
-A) `rename()` cannot rename columns that contain numeric data
-B) `rename()` returns a new DataFrame with the change applied; since Arjun didn't store the result or use `inplace=True`, the original `df` was never modified
-C) The dictionary key "Sales" must match the exact data type of the column, not just its name
-D) `rename()` only works after calling `reset_index()` first
+**Options:**
+- A) 10 rows – all city names including repetitions
+- B) 4 rows – Sales, HR, IT, Finance
+- C) 1 row – showing a count of distinct cities
+- D) 3 rows – Delhi, Mumbai, Bengaluru
 
-**Correct Answer:** B
+**Answer:** D
 
-**Answer Explanation:**
-`df.rename(columns={"Sales": "Revenue"})` creates and returns a **new DataFrame** with the renamed column. If that return value is not stored (e.g., `df = df.rename(...)`) and `inplace=True` is not used, the original `df` is left completely unchanged. Option A is incorrect — `rename()` works on any column regardless of data type. Option C is a fabricated rule that does not exist in pandas. Option D is also false — `rename()` works independently of `reset_index()`.
+**Explanation:**
+`DISTINCT` removes duplicate values and returns each unique entry only once. Looking at the `employees` table from the lecture, the City column contains: Delhi (×4), Mumbai (×3), Bengaluru (×3). `DISTINCT` collapses these into 3 unique values: Delhi, Mumbai, Bengaluru. Option A (10 rows) would be the result without DISTINCT. Option B lists departments, not cities. Option C would require a COUNT() function, not DISTINCT alone.
 
 ---
 
-**Question 2** *(Easy)*
+### Q4 (MCQ | Easy)
 
-A student wants to remove the "Discount" column from a DataFrame `df`. She writes:
+A data engineer at a fintech startup is working with a `transactions` table that has over 10 lakh rows. Before writing a complex query, she wants to quickly **preview just the first 5 rows** to check the column names and data format. Which keyword should she add to her `SELECT` query to do this in MySQL?
 
-```python
-df.drop("Discount")
+**Options:**
+- A) `TOP 5`
+- B) `FETCH 5`
+- C) `ROWS 5`
+- D) `LIMIT 5`
+
+**Answer:** D
+
+**Explanation:**
+`LIMIT 5` is the correct keyword in MySQL, PostgreSQL, and SQLite to restrict output to the first N rows. `TOP 5` is used in Microsoft SQL Server — not MySQL. `FETCH` and `ROWS` are not valid standalone SQL keywords for this purpose. Adding `LIMIT 5` at the end of any SELECT query ensures only 5 rows are returned, which is very useful for quick previews.
+
+---
+
+### Q5 (MCQ | Moderate)
+
+Arjun, a data analyst at a retail company, runs the following query on the `employees` table from the lecture to find the company's top IT earners:
+
+```sql
+SELECT Name, Salary
+FROM employees
+WHERE Department = 'IT'
+ORDER BY Salary DESC
+LIMIT 2;
 ```
 
-What actually happens when this line runs?
+Referring to the `employees` dataset in the lecture, which two employees will appear in the result?
 
-A) The "Discount" column is successfully removed from `df`
-B) pandas silently skips the operation since no axis was specified
-C) pandas raises a `KeyError` because, without `columns=` or `axis=1`, it interprets "Discount" as a **row label** — and no row is labelled "Discount"
-D) pandas removes all columns except "Discount"
+**Options:**
+- A) Aarav (₹40,000) and Diya (₹55,000)
+- B) Meera (₹75,000) and Rohan (₹90,000)
+- C) Riya (₹95,000) and Rohan (₹90,000)
+- D) Riya (₹95,000) and Meera (₹75,000)
 
-**Correct Answer:** C
+**Answer:** C
 
-**Answer Explanation:**
-`df.drop()` defaults to `axis=0`, meaning it operates on **rows**. Without specifying `columns=["Discount"]` or `axis=1`, pandas looks for a row with the index label "Discount". Since no such row exists, it raises a `KeyError`. The correct ways to drop a column are `df.drop(columns=["Discount"])` (preferred) or `df.drop("Discount", axis=1)`.
+**Explanation:**
+The IT department has 3 employees: Meera (₹75,000), Rohan (₹90,000), and Riya (₹95,000). `ORDER BY Salary DESC` sorts them highest first: Riya → Rohan → Meera. `LIMIT 2` then returns only the top 2: **Riya (₹95,000)** and **Rohan (₹90,000)**. Option B and D are incorrect because Meera at ₹75,000 ranks third — she is cut off by the LIMIT. Option A lists Sales and HR employees who don't satisfy `WHERE Department = 'IT'`.
 
 ---
 
-**Question 3** *(Easy)*
+### Q6 (MCQ | Moderate)
 
-A data analyst writes:
+Sana, a new SQL learner, writes the following query after coming from a Python background. She gets a syntax error when she runs it:
 
-```python
-result = pd.merge(orders, customers, on="CustomerID")
+```sql
+SELECT Name, Department
+FROM employees
+WHERE Department == 'Sales';
 ```
 
-No `how` parameter is specified. What type of join does pandas perform by default?
+What is the mistake, and what is the correct fix?
 
-A) Left join — all rows from `orders` are kept
-B) Outer join — all rows from both DataFrames are kept
-C) Right join — all rows from `customers` are kept
-D) Inner join — only rows where `CustomerID` exists in both DataFrames
+**Options:**
+- A) `Department` should be wrapped in quotes: `'Department' == 'Sales'`
+- B) `WHERE` should be replaced with `HAVING` for text comparisons
+- C) `==` should be replaced with `=` — SQL uses a single equal sign for comparison
+- D) The query is correct; `==` and `=` are both accepted in SQL
 
-**Correct Answer:** D
+**Answer:** C
 
-**Answer Explanation:**
-`pd.merge()` uses **inner join** as its default when `how=` is not specified. Only rows where the key column (`CustomerID`) has a matching value in **both** DataFrames appear in the result. Rows that exist in only one DataFrame are excluded. This is different from `df.join()`, which defaults to a **left join**.
-
----
-
-**Question 4** *(Easy)*
-
-After running `result = df.groupby("Region")[["Revenue"]].sum()`, a developer notices that "Region" appears as the **index** of the result, not as a regular column. Which method should she use to convert "Region" back into a regular column with a default integer index (0, 1, 2…)?
-
-A) `result.set_index("Region")`
-B) `result.drop(index="Region")`
-C) `result.reset_index()`
-D) `result.rename(index={"Region": 0})`
-
-**Correct Answer:** C
-
-**Answer Explanation:**
-`reset_index()` moves the current index of a DataFrame back into a regular column and replaces it with the default integer range (0, 1, 2, …). After a `groupby()`, the grouped column becomes the index. Calling `.reset_index()` converts it back to a regular column, making it easy to rename, merge with, or display in a report. Option A looks for a **column** named `"Region"` to promote to the index, but here `"Region"` is already the index (not a column), so it is not the right fix. Option B tries to drop a row by label. Option D renames an index label, not the index-to-column structure.
+**Explanation:**
+In Python (and JavaScript), `==` is used for equality checks, which is why Sana made this mistake. However, in SQL, equality comparison always uses a **single `=`** sign. Writing `==` causes a syntax error in all major SQL databases. Column names are never wrapped in quotes (that's for text values). `HAVING` is used with GROUP BY aggregations, not simple row filtering. The correct query is `WHERE Department = 'Sales'`.
 
 ---
 
-**Question 5** *(Moderate)*
+### Q7 (MSQ | Moderate)
 
-A logistics company has a `shipments` DataFrame (left) with 6 rows and a `drivers` DataFrame (right) with 8 rows. Two drivers have never made a shipment, and one shipment has an unrecognised driver ID not present in the `drivers` table. A developer runs:
+Kavitha is a data analyst at a healthcare company. She wants to retrieve all employees from the `employees` table who **either work in the IT department OR earn more than ₹80,000** (or both). Which of the following SQL queries will give her the correct result? *(Select all that apply)*
 
-```python
-result = pd.merge(shipments, drivers, on="DriverID", how="right")
+**Options:**
+- A) `SELECT * FROM employees WHERE Department = 'IT' OR Salary > 80000;`
+- B) `SELECT * FROM employees WHERE Department = 'IT' AND Salary > 80000;`
+- C) `SELECT * FROM employees WHERE Salary > 80000 OR Department = 'IT';`
+- D) `SELECT * FROM employees WHERE NOT (Department != 'IT' AND Salary <= 80000);`
+
+**Answer:** A, C, D
+
+**Explanation:**
+- **A:** Correct — directly uses `OR` to match IT employees or high earners.
+- **B:** Incorrect — `AND` requires **both** conditions to be true simultaneously, which would return only IT employees who also earn more than ₹80,000. This is a much narrower result.
+- **C:** Correct — identical logic to A; `OR` is commutative so swapping the conditions gives the same result.
+- **D:** Correct — applying De Morgan's Law: `NOT (Department != 'IT' AND Salary <= 80000)` simplifies to `(Department = 'IT' OR Salary > 80000)` — exactly what Kavitha wants.
+
+---
+
+### Q8 (MSQ | Moderate)
+
+A company's database administrator is onboarding a new intern and explains how SQL handles missing data differently from Excel or Python. Based on what was covered in the lecture, which of the following statements about **NULL** in SQL are correct? *(Select all that apply)*
+
+**Options:**
+- A) NULL means "no value entered" or "unknown" — it is NOT the same as 0 or an empty string
+- B) You can find rows with missing values using `WHERE City = NULL`
+- C) `IS NULL` is the correct syntax to find rows where a column has no value recorded
+- D) `IS NOT NULL` returns only rows where the column has an actual value stored
+
+**Answer:** A, C, D
+
+**Explanation:**
+- **A:** Correct — NULL represents the **absence of any value**. It is fundamentally different from 0 (a valid number) or `''` (an empty string).
+- **B:** Incorrect — `= NULL` does **not** work in SQL. Because NULL represents the unknown, it cannot be compared using `=`. The result of any `= NULL` comparison is always NULL (neither TRUE nor FALSE). You must use `IS NULL`.
+- **C:** Correct — `IS NULL` is the proper SQL syntax for checking missing values.
+- **D:** Correct — `IS NOT NULL` is the inverse, returning rows where data is present.
+
+---
+
+### Q9 (MSQ | Hard)
+
+A senior analyst at a logistics company runs the following query on the `employees` table from the lecture to identify mid-to-high earners in the Finance and IT departments:
+
+```sql
+SELECT Name, Department, Salary
+FROM employees
+WHERE Department IN ('Finance', 'IT')
+  AND Salary BETWEEN 70000 AND 90000;
 ```
 
-Which of the following correctly describes the result?
+Referring to the dataset in the lecture, which employees will appear in the result? *(Select all that apply)*
 
-A) Only shipments with a matching driver appear; both unmatched drivers and the unmatched shipment are excluded
-B) All 6 shipments are included; the 2 unmatched drivers are excluded
-C) All 8 drivers are included; the 2 with no shipments show NaN in shipment columns; the 1 unmatched shipment is excluded
-D) All rows from both DataFrames appear, with NaN wherever there is no match
+**Options:**
+- A) Vihaan (Finance, ₹70,000)
+- B) Riya (IT, ₹95,000)
+- C) Ishaan (Finance, ₹85,000)
+- D) Meera (IT, ₹75,000)
+- E) Rohan (IT, ₹90,000)
 
-**Correct Answer:** C
+**Answer:** A, C, D, E
 
-**Answer Explanation:**
-A **right join** guarantees every row from the **right DataFrame** (drivers) appears in the result. The 2 drivers with no shipments will be included, but their shipment-related columns (from the left DataFrame) will be **NaN**. The unmatched shipment — which exists in the left but not the right — is **excluded** from a right join. Option A describes an inner join. Option B describes a left join. Option D describes an outer join.
+**Explanation:**
+First, `IN ('Finance', 'IT')` keeps only Finance and IT employees:
+- Finance: Vihaan (₹70,000), Ishaan (₹85,000)
+- IT: Meera (₹75,000), Rohan (₹90,000), Riya (₹95,000)
 
----
+Then `BETWEEN 70000 AND 90000` (both ends **inclusive**) filters further:
+- Vihaan ₹70,000 ✓ (equals lower bound)
+- Ishaan ₹85,000 ✓
+- Meera ₹75,000 ✓
+- Rohan ₹90,000 ✓ (equals upper bound)
+- Riya ₹95,000 ✗ (exceeds 90,000 — excluded)
 
-**Question 6** *(Moderate)*
-
-A developer has two DataFrames: `df_sales` where the linking column is named `"Cust_ID"`, and `df_info` where the same concept is named `"CustomerID"`. She wants to perform an inner join between them. Which code is correct?
-
-A) `pd.merge(df_sales, df_info, on="Cust_ID", how="inner")`
-B) `pd.merge(df_sales, df_info, on="CustomerID", how="inner")`
-C) `pd.merge(df_sales, df_info, left_on="Cust_ID", right_on="CustomerID", how="inner")`
-D) `pd.merge(df_sales, df_info, key="Cust_ID", how="inner")`
-
-**Correct Answer:** C
-
-**Answer Explanation:**
-When the key column has **different names** in each DataFrame, `on=` cannot be used (it requires the same name in both). Instead, `left_on=` specifies the key column name in the left DataFrame, and `right_on=` specifies it in the right DataFrame. Option A fails because "Cust_ID" doesn't exist in `df_info`. Option B fails because "CustomerID" doesn't exist in `df_sales`. Option D is invalid — there is no `key=` parameter in `pd.merge()`.
+So **Riya is the only one excluded**, because ₹95,000 is above the upper limit.
 
 ---
 
-## MSQ — Multiple Correct Answers
+### Q10 (MSQ | Hard)
 
----
+Neha, a Python developer at a data consulting firm, is migrating her team's pandas analysis scripts into SQL queries so they can be run directly against the company's MySQL database. She has the `employees` DataFrame `df` (same data as in the lecture). Which of the following **pandas → SQL translations** are correct? *(Select all that apply)*
 
-**Question 7** *(Moderate)*
+**Options:**
+- A) `df["Department"].unique()` → `SELECT DISTINCT Department FROM employees;`
+- B) `df.sort_values("Salary", ascending=True).head(5)` → `SELECT * FROM employees ORDER BY Salary DESC LIMIT 5;`
+- C) `df[(df["City"] == "Delhi") & (df["Salary"] >= 70000)]` → `SELECT * FROM employees WHERE City = 'Delhi' AND Salary >= 70000;`
+- D) `df[df["City"].isna()]` → `SELECT * FROM employees WHERE City IS NULL;`
 
-A team member asks: *"Which of these approaches correctly renames the column `'Units'` to `'Quantity'` in DataFrame `df`?"*
+**Answer:** A, C, D
 
-Which of the following options **correctly rename the column** and ensure the change is reflected in `df`? **Select ALL that apply.**
-
-A) `df.rename(columns={"Units": "Quantity"})`
-B) `df.rename(columns={"Units": "Quantity"}, inplace=True)`
-C) `df = df.rename(columns={"Units": "Quantity"})`
-D) `df.columns = ["Quantity" if col == "Units" else col for col in df.columns]`
-
-**Correct Answers:** B, C, D
-
-**Answer Explanation:**
-- **A (Incorrect):** `rename()` without `inplace=True` returns a **new DataFrame** and does not change `df`. Since the result is not stored, the change is lost.
-- **B (Correct):** `inplace=True` tells pandas to apply the rename **directly to `df`**, so the change persists.
-- **C (Correct):** Storing the returned DataFrame back into `df` achieves the same result as `inplace=True`.
-- **D (Correct):** Reassigning `df.columns` with a conditional list updates only the exact `"Units"` column name (not partial matches), and the change is applied directly to `df`.
-
----
-
-**Question 8** *(Moderate)*
-
-Priya wants to remove the `"Discount"` column from a DataFrame `df`. Which of the following lines of code **successfully remove the column**? **Select ALL that apply.**
-
-A) `df.drop("Discount")`
-B) `df.drop(columns=["Discount"], inplace=True)`
-C) `df.drop("Discount", axis=1, inplace=True)`
-D) `df = df.drop(columns=["Discount"])`
-
-**Correct Answers:** B, C, D
-
-**Answer Explanation:**
-- **A (Incorrect):** `df.drop("Discount")` interprets "Discount" as a **row label** (axis=0 by default) and raises a `KeyError` since no row has that label. It does NOT remove the column.
-- **B (Correct):** `inplace=True` applies the column drop directly to `df`.
-- **C (Correct):** This is the `axis=1` form with `inplace=True`, so `df` is modified directly.
-- **D (Correct):** Reassigning `df = df.drop(columns=["Discount"])` stores the updated DataFrame back into `df`, so the column is actually removed from `df`.
-
----
-
-**Question 9** *(Hard)*
-
-A data analyst writes the following pipeline to generate a regional revenue summary:
-
-```python
-result = (
-    pd.merge(orders, customers, on="CustomerID", how="left")
-      .groupby("City")
-      .agg(Total_Revenue=("Amount", "sum"), Order_Count=("OrderID", "count"))
-      .reset_index()
-      .sort_values(by="Total_Revenue", ascending=False)
-)
-```
-
-Assume `orders` has 5 rows and `customers` has 7 rows. Two customers have never placed an order. Which of the following statements about this pipeline are **correct**? **Select ALL that apply.**
-
-A) Since a left join is used, all 5 rows from `orders` are guaranteed to appear in the merged result
-B) The 2 customers with no orders will appear in the merged result with NaN in the `Amount` and `OrderID` columns
-C) `.reset_index()` converts the `City` group-by index back into a regular column so the result has a clean integer index
-D) Removing `.reset_index()` would cause `.sort_values()` to raise an error
-
-**Correct Answers:** A, C
-
-**Answer Explanation:**
-- **A (Correct):** A **left join** keeps every row from the left DataFrame (`orders`). All 5 orders are guaranteed to appear. Unmatched right-side (customer) columns fill with NaN.
-- **B (Incorrect):** In a **left join**, the **left DataFrame** (`orders`) drives the result. Customers with no orders are in the right DataFrame — they are **not included** since there is no matching order row on the left. NaN would only appear for orders whose `CustomerID` is missing from `customers`.
-- **C (Correct):** After `.groupby("City").agg(...)`, `City` becomes the DataFrame's **index**. `.reset_index()` demotes it back to a regular column, giving the result a default 0, 1, 2… integer index.
-- **D (Incorrect):** `.sort_values()` works on DataFrames regardless of whether the index is a named column or the default integer range. Removing `.reset_index()` does not cause `.sort_values()` to fail — it would still sort correctly.
-
----
-
-**Question 10** *(Hard)*
-
-Consider the following two DataFrames:
-
-- `df1` (Orders): CustomerIDs are `["C01", "C02", "C01", "C04"]` — 4 rows total
-- `df2` (Customers): CustomerIDs are `["C01", "C02", "C03", "C04"]` — 4 rows total
-
-C03 (Charlie) appears only in `df2` and has no orders. C01 (Alice) appears twice in `df1` because she placed 2 orders.
-
-Which of the following statements are **correct**? **Select ALL that apply.**
-
-A) An **inner join** on `CustomerID` produces exactly 4 rows (C01 contributes 2 rows, C02 contributes 1, C04 contributes 1)
-B) A **right join** on `CustomerID` produces 5 rows — 4 matched rows plus Charlie (C03) with NaN in order-related columns
-C) An **outer join** on `CustomerID` produces the same number of rows as an inner join because all CustomerIDs in `df1` exist in `df2`
-D) A **left join** on `CustomerID` produces at least as many rows as an inner join for the same data
-
-**Correct Answers:** A, B, D
-
-**Answer Explanation:**
-- **A (Correct):** Inner join includes only rows where the key exists in both DataFrames. All 4 orders (C01, C02, C01, C04) have matches in `df2`. Alice (C01) appears **twice** since she placed 2 orders. Total = 4 rows.
-- **B (Correct):** A right join keeps all 4 rows from `df2`. Charlie (C03) has no matching order in `df1`, so `OrderID` and `Amount` are **NaN** for that row. The result: 4 matched rows + 1 Charlie row = **5 rows**.
-- **C (Incorrect):** The outer join result is **not** the same as the inner join here. Outer join keeps all rows from both sides. Charlie (C03) is in `df2` only — so the outer join includes him with NaN on the order columns, producing **5 rows** — more than the inner join's 4.
-- **D (Correct):** Left join keeps **all rows from the left DataFrame** (`df1`). Since every order already has a matching customer, the left join here produces 4 rows — equal to the inner join. In general, a left join always produces ≥ as many rows as an inner join because it never drops left-side rows.
+**Explanation:**
+- **A:** Correct — `.unique()` removes duplicates in pandas, exactly as `DISTINCT` does in SQL.
+- **B:** Incorrect — `ascending=True` means sorting **low to high (ASC)**, but the SQL says `ORDER BY Salary DESC` which sorts **high to low**. The correct SQL equivalent would be `ORDER BY Salary ASC LIMIT 5`.
+- **C:** Correct — `&` in pandas corresponds to `AND` in SQL. The double-equals `==` in pandas matches single `=` in SQL. The logic is identical.
+- **D:** Correct — `.isna()` in pandas checks for missing values, which maps to `IS NULL` in SQL. Both return rows where the column has no recorded value.

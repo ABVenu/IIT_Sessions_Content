@@ -1,0 +1,264 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Ravi is building a `Vector` class and wants the `+` operator to add the coordinates of two `Vector` objects together. Which magic method should he define inside the class to make `v1 + v2` work?,,,,,,3,,"`__sum__(self, other)`","`__plus__(self, other)`","`__add__(self, other)`","`__combine__(self, other)`",,69ef226b396172e046ad4268,0,text,"- **C is correct.** Python maps the `+` operator to the `__add__` magic method. When you write `v1 + v2`, Python internally calls `v1.__add__(v2)`. Defining this method inside your class lets you control what `+` means for your objects.
+- **A is incorrect.** `__sum__` is not a recognized magic method in Python; it does not map to any operator.
+- **B is incorrect.** `__plus__` is not a valid dunder method in Python.
+- **D is incorrect.** `__combine__` is not a standard magic method recognized by Python's operator system."
+mcsc,markdown,Ananya is writing an `Employee` class and wants to ensure that the `salary` attribute **cannot be accessed directly** from outside the class. Which of the following correctly declares `salary` as a **private** variable?,,,,,,3,,`self.salary = 50000`,`self._salary = 50000`,`self.__salary = 50000`,`self.#salary = 50000`,,69ef226b396172e046ad4268,0,text,"- **C is correct.** In Python, a variable prefixed with **two underscores** (`__`) is private. Python applies name mangling, renaming it internally to `_ClassName__salary`, making it inaccessible directly via `obj.__salary` from outside the class.
+- **A is incorrect.** No underscores means the variable is **public** — accessible from anywhere.
+- **B is incorrect.** A single underscore (`_`) is the convention for **protected** — accessible within the class and its subclasses. It is only a naming convention; Python does not enforce it.
+- **D is incorrect.** `#` is not valid Python syntax for access control."
+mcsc,markdown,Rahul has an `Employee` class with a private `__salary` attribute. He wants to allow other parts of the program to safely **read** the salary without exposing the variable directly. What is the recommended approach?,,,,,,2,,Remove the double underscores to make `salary` a public variable,Define a getter method `get_salary()` that returns `self.__salary`,Use Python's built-in `read()` function on the attribute,Access it directly using `emp.__salary`,,69ef226b396172e046ad4268,0,text,"- **B is correct.** A **getter** method is a regular method defined inside the class whose sole purpose is to return the value of a private variable. It provides controlled, read-only access from outside the class.
+- **A is incorrect.** Making the variable public defeats the entire purpose of encapsulation — it removes all access protection.
+- **C is incorrect.** Python has no built-in `read()` function for object attributes.
+- **D is incorrect.** Accessing `emp.__salary` from outside the class raises an `AttributeError` because Python's name mangling makes the attribute inaccessible by that name outside the class."
+mcsc,markdown,"Sanya has modified some Python files in her local project and staged them using `git add`. She now wants to **save a snapshot** of those changes to her local repository with the message `""Fix login bug""`. Which command should she run?",,,,,,3,,"`git push -m ""Fix login bug""`","`git save ""Fix login bug""`","`git commit -m ""Fix login bug""`","`git add -m ""Fix login bug""`",,69ef226b396172e046ad4268,0,text,"- **C is correct.** `git commit -m ""message""` saves all staged changes as a permanent snapshot in the **local** repository. The `-m` flag is followed by the commit message.
+- **A is incorrect.** `git push` sends commits to the **remote** repository — it does not accept `-m` and does not create a commit.
+- **B is incorrect.** `git save` is not a valid Git command.
+- **D is incorrect.** `git add` is used to **stage** files, not to create a commit. It does not accept a `-m` flag."
+mcsc,markdown,"Karan is studying the following code:
+
+```python
+class BankAccount:
+    def __init__(self):
+        self.balance = 5000
+
+    def __deduct(self, amount):
+        self.balance -= amount
+
+    def withdraw(self, amount):
+        if self.balance >= amount:
+            self.__deduct(amount)
+            print(f""Remaining balance: {self.balance}"")
+        else:
+            print(""Insufficient funds"")
+
+acc = BankAccount()
+acc.__deduct(200)
+```
+
+What will happen when `acc.__deduct(200)` is called on the last line?",,,,,,2,,The balance will be reduced to `4800`,An `AttributeError` is raised because `__deduct` is private and cannot be called from outside the class,A `TypeError` is raised because `__deduct` requires two arguments but only one was provided,The code works fine because Python does not actually enforce private access restrictions,,69ef226b396172e046ad4268,0.5,text,"- **B is correct.** `__deduct` is a private method (double underscore prefix). Python applies **name mangling**, internally renaming it to `_BankAccount__deduct`. Calling `acc.__deduct(200)` from outside the class looks for a method named `__deduct` which doesn't exist under that name externally, raising `AttributeError: 'BankAccount' object has no attribute '__deduct'`.
+- **A is incorrect.** The private method cannot be reached from outside — Python never executes the deduction logic.
+- **C is incorrect.** While `self` counts as one argument, the issue here is access restriction, not argument count. The error is an `AttributeError`, not a `TypeError`.
+- **D is incorrect.** Python **does** enforce private access through name mangling, which effectively blocks direct external access."
+mcsc,markdown,Divya wants to create a custom exception `InsufficientFundsError` that stores a descriptive message and the current `balance`. Which of the following correctly defines this custom exception?,,,,,,2,,"```python
+class InsufficientFundsError:
+    def __init__(self, message, balance):
+        self.message = message
+        self.balance = balance
+```","```python
+class InsufficientFundsError(Exception):
+    def __init__(self, message, balance):
+        super().__init__(message)
+        self.balance = balance
+```","```python
+class InsufficientFundsError(Exception):
+    def __init__(self, message, balance):
+        self.message = message
+        self.balance = balance
+```","```python
+class InsufficientFundsError(ValueError):
+    pass
+```",,69ef226b396172e046ad4268,0.5,text,"- **B is correct.** It inherits from `Exception` (making it a valid Python exception), calls `super().__init__(message)` to register the message with the base `Exception` class (so `str(e)` shows the message), and also stores `balance` as a custom instance variable.
+- **A is incorrect.** It does not inherit from `Exception`, so it cannot be raised with `raise` or caught with a standard `except` block.
+- **C is incorrect.** Although it inherits from `Exception`, it does **not** call `super().__init__(message)`. The message is stored on `self.message` but not passed to the base class, so `str(e)` will not display it correctly — this violates the expected exception behavior.
+- **D is incorrect.** It inherits from `ValueError` with no custom attributes, which doesn't satisfy the requirement of storing a `balance` value."
+mcmc,markdown,Priya is reviewing the concept of Polymorphism in Python. Which of the following statements are **correct**? *(Select all that apply.)*,,,,,,,,Duck Typing requires both classes to inherit from a common base class for Polymorphism to work,Method Overriding is one form of Polymorphism — the child class redefines a method inherited from the parent,"`5 + 3` evaluating to `8` while `""hello"" + "" world""` evaluating to `""hello world""` is an example of Operator Overloading, which is a form of Polymorphism",Polymorphism allows the same function or operator to behave differently depending on the type or class of the object,"2, 3, 4",69ef226b396172e046ad4268,0.5,text,"- **A is incorrect.** Duck Typing explicitly does **not** require a common base class. It only requires that the object has the needed method — if it ""quacks like a duck"", it is treated as a duck. `Pen` and `Eraser` can both have a `perform_task()` method without being related by inheritance.
+- **B is correct.** When a child class redefines a parent's method, calling that method on a child object executes the child's version. The same method name produces different behavior depending on the class — this is Polymorphism.
+- **C is correct.** The `+` operator behaves differently for `int` and `str`. Python internally calls `int.__add__()` for integers and `str.__add__()` for strings — the operator's behavior is overloaded based on data type. This is Operator Overloading, a key mechanism of Polymorphism.
+- **D is correct.** This is the exact definition of Polymorphism: *same interface, different behavior based on context (type or class)*."
+mcmc,markdown,Meena has just joined a software team and is learning about Version Control Systems. Which of the following statements about VCS concepts are **correct**? *(Select all that apply.)*,,,,,,,,"The **trunk/main/master** branch represents the primary, stable, production-ready codebase",A **branch** allows a developer to work on a new feature in isolation without affecting the main codebase,A **tag** is used to permanently delete a specific commit from the repository's history,**Merging** is the process of combining a feature branch back into the main branch once the feature is complete and verified,"1, 2, 4",69ef226b396172e046ad4268,0.5,text,"- **A is correct.** The trunk (also called `main` or `master`) is the primary line of development — the stable, production-ready version of the codebase that all developers share.
+- **B is correct.** Branches create an isolated copy of the codebase where changes don't affect anyone else. Once the feature is ready and reviewed, it is merged back.
+- **C is incorrect.** A **tag** is a human-friendly named pointer to a specific commit, used to mark release points (e.g., `v1.0-stable`). It does **not** delete anything. Tags are read-only labels, not destructive operations.
+- **D is correct.** Merging takes the changes from a feature branch and integrates them into the main branch, combining both histories into one unified codebase."
+mcmc,markdown,"Sameer runs the following code:
+
+```python
+class AgeError(Exception):
+    def __init__(self, message, age):
+        super().__init__(f""{message}: {age}"")
+        self.age = age
+
+def verify_age(age):
+    if age < 0:
+        raise AgeError(""Negative age not allowed"", age)
+    elif age > 120:
+        raise AgeError(""Age exceeds maximum limit"", age)
+    return ""Valid age""
+
+try:
+    result = verify_age(-5)
+    print(result)
+except AgeError as e:
+    print(""Caught:"", e)
+    print(""Age value:"", e.age)
+except ValueError:
+    print(""Not a number"")
+finally:
+    print(""Done"")
+```
+
+Which of the following statements are **correct**? *(Select all that apply.)*",,,,,,,,The output includes the line `Caught: Negative age not allowed: -5`,The `finally` block does not run because an exception was raised,`e.age` correctly holds the value `-5` because it was stored as an instance variable in `AgeError.__init__`,Both the `except AgeError` block and the `except ValueError` block execute when `verify_age(-5)` is called,"1, 3",69ef226b396172e046ad4268,1,text,"- **A is correct.** `verify_age(-5)` raises `AgeError(""Negative age not allowed"", -5)`. The constructor calls `super().__init__(""Negative age not allowed: -5"")`, so `str(e)` is `""Negative age not allowed: -5""`. The `except AgeError` block prints `Caught: Negative age not allowed: -5`.
+- **B is incorrect.** The `finally` block **always** runs — whether an exception was raised, caught, or not. It is designed to execute cleanup code unconditionally. The last line of output is `Done`.
+- **C is correct.** Inside `AgeError.__init__`, `self.age = age` stores the raw integer value `-5` as an instance variable on the exception object. After `except AgeError as e`, `e.age` accesses this stored value directly.
+- **D is incorrect.** Only the **first matching** `except` block runs. Since `AgeError` is raised and the first `except AgeError` clause matches, Python executes it and then skips all remaining `except` clauses. The `except ValueError` block is never reached."
+mcmc,markdown,"Tanvir has been asked to contribute to a team project hosted on GitHub. His workflow is:
+1. Copy the remote repository to his laptop
+2. Create and modify Python files locally
+3. Stage all his new files
+4. Commit with the message `""Add initial files""`
+5. Upload his commits to the remote repository
+
+Which of the following statements about the Git commands involved are **correct**? *(Select all that apply.)*",,,,,,,,`git clone <url>` copies the entire remote repository — including its full commit history — to his local machine,`git add .` stages all modified and newly created files in the current directory for the next commit,"`git commit -m ""Add initial files""` automatically pushes the committed changes to the remote repository",`git push` uploads the locally committed changes to the central (remote) repository,"1, 2, 4",69ef226b396172e046ad4268,1,text,"- **A is correct.** `git clone <url>` does not just download the current files — it downloads the **full repository**, including every commit, branch, and tag in the history. This is what makes Git a **distributed** VCS.
+- **B is correct.** `git add .` stages all changes (modifications, new files, deletions) in the current working directory. It is the broadest staging command; use it carefully as it includes everything.
+- **C is incorrect.** `git commit` only saves a snapshot to the **local** repository. It has no network communication whatsoever. A separate `git push` command is required to send the commit to the remote repository.
+- **D is correct.** `git push` takes all commits that exist locally but not on the remote and uploads them. It is the final step in the standard `add → commit → push` workflow."
+subjective,markdown,"### The Library Book Loan System
+
+You are building the backend for a digital library. The library manages books, each with a limited number of physical copies. When a member tries to borrow a book, the system must check if copies are available. When they try to return one, the system must ensure they aren't returning more copies than were ever loaned out. Any violation should raise a **custom exception** — not a generic Python error.
+
+**Your task:** Implement this system in Python using Encapsulation, Getters & Setters, and Custom Exception Handling.
+
+---
+
+### Requirements
+
+**1. Custom Exception: `BookNotAvailableError`**
+- Inherits from `Exception`
+- Constructor accepts: `message` (str) and `title` (str — the book's title)
+- Must call `super().__init__()` with the message
+- Must also store `title` as an instance variable
+
+**2. Custom Exception: `InvalidReturnError`**
+- Inherits from `Exception`
+- Constructor accepts: `message` (str) and `title` (str)
+- Same structure as above
+
+**3. Class: `Book`**
+- All three core attributes must be **private**:
+  - `__title` (str)
+  - `__total_copies` (int)
+  - `__available_copies` (int) — starts equal to `__total_copies`
+- **Getter methods:**
+  - `get_title()` — returns `__title`
+  - `get_available_copies()` — returns `__available_copies`
+  - `get_total_copies()` — returns `__total_copies`
+- **Setter method:**
+  - `set_total_copies(n)` — updates `__total_copies` only if `n > 0`, otherwise prints `""Invalid: copies must be greater than 0""`
+- **Method `borrow()`:**
+  - If `__available_copies > 0`: decrement it by 1 and print a confirmation message
+  - Otherwise: raise `BookNotAvailableError` with an appropriate message and the book's title
+- **Method `return_book()`:**
+  - If `__available_copies < __total_copies`: increment `__available_copies` by 1 and print a confirmation message
+  - Otherwise: raise `InvalidReturnError` (all copies are already in — nothing was borrowed)
+
+**4. Demo**
+- Create a `Book` object: title `""Clean Code""`, `2` total copies
+- Successfully borrow it twice (both should succeed)
+- Attempt to borrow a third time — handle the `BookNotAvailableError` and print the error and the book title from the exception
+- Return one copy successfully
+- Attempt to return when all copies are already back — handle the `InvalidReturnError`
+
+---
+
+### Expected Output (approximate format)
+
+```
+Borrowed: Clean Code. Copies left: 1
+Borrowed: Clean Code. Copies left: 0
+Error: No copies available for ""Clean Code""
+Book title from exception: Clean Code
+Returned: Clean Code. Copies left: 1
+Error: All copies of ""Clean Code"" are already returned
+```
+
+---
+
+### Submission
+
+- Code and run using VS Code or any online compiler
+- Once everything is working, paste your code in the code editor / answer box",,,,,,,,,,,,,69ef226b396172e046ad4268,0.5,markdown,"```python
+# --- Custom Exceptions ---
+
+class BookNotAvailableError(Exception):
+    def __init__(self, message, title):
+        super().__init__(message)
+        self.title = title
+
+
+class InvalidReturnError(Exception):
+    def __init__(self, message, title):
+        super().__init__(message)
+        self.title = title
+
+
+# --- Book Class ---
+
+class Book:
+    def __init__(self, title, total_copies):
+        self.__title = title
+        self.__total_copies = total_copies
+        self.__available_copies = total_copies   # All copies start as available
+
+    # Getters
+    def get_title(self):
+        return self.__title
+
+    def get_available_copies(self):
+        return self.__available_copies
+
+    def get_total_copies(self):
+        return self.__total_copies
+
+    # Setter with validation
+    def set_total_copies(self, n):
+        if n > 0:
+            self.__total_copies = n
+        else:
+            print(""Invalid: copies must be greater than 0"")
+
+    def borrow(self):
+        if self.__available_copies > 0:
+            self.__available_copies -= 1
+            print(f""Borrowed: {self.__title}. Copies left: {self.__available_copies}"")
+        else:
+            raise BookNotAvailableError(
+                f'No copies available for ""{self.__title}""',
+                self.__title
+            )
+
+    def return_book(self):
+        if self.__available_copies < self.__total_copies:
+            self.__available_copies += 1
+            print(f""Returned: {self.__title}. Copies left: {self.__available_copies}"")
+        else:
+            raise InvalidReturnError(
+                f'All copies of ""{self.__title}"" are already returned',
+                self.__title
+            )
+
+
+# --- Demo ---
+
+book = Book(""Clean Code"", 2)
+
+# Two successful borrows
+book.borrow()
+book.borrow()
+
+# Third borrow — triggers BookNotAvailableError
+try:
+    book.borrow()
+except BookNotAvailableError as e:
+    print(f""Error: {e}"")
+    print(f""Book title from exception: {e.title}"")
+
+# Successful return
+book.return_book()
+
+# Over-return — triggers InvalidReturnError
+book.return_book()   # This brings copies back to 2 (all returned)
+try:
+    book.return_book()
+except InvalidReturnError as e:
+    print(f""Error: {e}"")
+```"

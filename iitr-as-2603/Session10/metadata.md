@@ -1,3 +1,5 @@
+lecture Id: 147438
+
 Course Name: Certification in Agentic Systems and Design
 
 Target Audience : Students from any backgorund may not be necessarily form tech background
