@@ -4,60 +4,68 @@
 
 ## QC Iteration 1
 
-**Date:** 2026-04-25
+**Date:** 2026-04-29
 
-### Evaluation Criteria
+---
+
+### Criteria Scores
 
 | Criteria | Rating / Result |
 |---|---|
-| Content Coverage | 5 / 5 |
-| Creativity | 5 / 5 |
-| Structural Adherence | 5 / 5 |
-| No Logical Mistakes | True |
-| No Presentation Mistakes | True |
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
 
 ---
 
 ### Detailed Assessment
 
 **Content Coverage — 5/5**
-- All four core topics from metadata are fully covered: Trend vs Seasonality, Time-aware Splits, Rolling Windows, and Evaluation for Time Series.
-- Sub-topics expanded maturely: Noise & Cyclical Patterns, Walk-Forward Validation, Lag Features, Baseline Models (Naive Forecast, Seasonal Naive, Rolling Mean Forecast), and a complete end-to-end workflow code block.
-- Context of the previous session (Unsupervised Learning, K-Means, PCA) is clearly established in the opening section.
-- Key Takeaways section present with 5 bullet points and a forward-looking bridge sentence.
-- Quick Reference Table present with all commands, libraries, and terminologies used.
+All four topics from the session metadata are fully covered:
+- Trend vs Seasonality: Both concepts explained with Official Definition, In Simple Words, Real-Life Example, sample data table, and a comparison table. Noise and Cyclical Patterns mentioned briefly as a callout note.
+- Time-Aware Splits: Data Leakage explained, Chronological Split covered in full with sample data, Walk-Forward Validation included as a concise paragraph with a comparison table.
+- Rolling Windows: Fully explained with analogy, Python code, verified sample output table, and window-size guidance. Lag Features included as a brief code-only sub-section.
+- Evaluation for Time Series: MAPE covered fully with definition, formula, step-by-step calculation table, Python code, and edge-case warning. MAE/RMSE correctly referenced from prior session without re-teaching. Baseline Models section included.
 
 **Creativity — 5/5**
-- All new concepts introduced with the three-layer formula: Official Definition → In Simple Words → Real-Life Example.
-- Indian-context examples used throughout: smartphone adoption in India (trend), Diwali/Christmas festive sales (seasonality), rupee-based MAPE example, pizza delivery on Friday nights.
-- Relatable analogies used: weight tracking (time series intro), grocery store navigation (unsupervised link), exam answer-sheet cheating (data leakage), weather forecaster walking forward (walk-forward validation), stock market 30-day MA (rolling window).
-- Comparison tables add visual variety and break monotony.
+- "DNA of a time series" metaphor for Trend and Seasonality.
+- "Peek at the answer sheet" analogy for Data Leakage.
+- Weight-tracking, running distance, stock market moving average, pizza delivery, smartphone sales, ice cream sales — all relatable, diverse real-life examples suited to a non-tech audience.
+- Callout note format used effectively for Noise/Cyclical Patterns to keep the main flow clean.
 
 **Structural Adherence — 5/5**
-- Notes start directly with the `# Lecture Title` — no metadata headers.
-- No "Part 1 / Section A" style numbering used.
-- 3-Sentence Rule followed throughout — no paragraph exceeds 3 sentences.
-- Connecting sentences used at each major section transition (e.g., transition from Trend/Seasonality into Time-Aware Splits, and from Rolling Windows into Evaluation).
-- Every code block followed by a "How the code works" bullet list.
-- All code is complete and runnable from start to finish — no partial snippets.
-- Every single line of code has an inline comment.
+- Consistent use of H2 for main sections, H3 for sub-sections throughout.
+- Every concept follows the pattern: Official Definition → In Simple Words → Real-Life Example → Sample Data or Code → How the code works / observations.
+- All image references are present and properly formatted.
+- Key Takeaways section present and aligned with all session topics.
+- Glossary (14 terms) at the end, covering all new terminology introduced.
+- No session numbers used in cross-references; titles used instead.
 
 **No Logical Mistakes — True**
-- Time series definition and order-dependency reasoning is accurate.
-- Trend and Seasonality are correctly distinguished with accurate characteristics.
-- Data Leakage explanation is technically correct — future values in training set is the core problem.
-- Walk-Forward Validation steps are logically correct and well-sequenced.
-- Rolling window NaN behavior on initial rows is correctly explained.
-- MAE, RMSE, MAPE formulas are all mathematically accurate.
-- End-to-end code: rolling features created before split; chronological split uses `iloc` correctly; `dropna()` applied after feature engineering and before split — all logically sound.
+All numerical values independently verified:
+- Rolling mean Jan 3: (200+220+215)/3 = 211.67 ✓
+- Rolling mean Jan 8: (245+260+270)/3 = 258.33 ✓
+- Rolling std Jan 3: sample std(200,220,215) = 10.41 ✓
+- Rolling std Jan 9: sample std(260,270,265) = 5.00 ✓
+- Rolling max Jan 6: max(230,250,245) = 250 ✓
+- MAPE Day 3: |150-160|/150 = 6.7% ✓
+- MAPE Day 4: |300-280|/300 = 6.7% ✓
+- MAPE final: (10+5+6.7+6.7+4)/5 = 6.48% ✓
+- Chronological split: 80% of 10 months = 8 train (Jan–Aug), 2 test (Sep–Oct) ✓
 
 **No Presentation Mistakes — True**
-- All markdown tables render correctly with proper column separators.
-- All code fenced with triple backticks and `python` language tag.
-- Heading hierarchy (H1 → H2 → H3) is consistent throughout.
-- Bold formatting used for key terms, not for decorative purposes.
-- Horizontal rules (`---`) used consistently to separate major sections.
+- Date-day mapping in the Seasonality sample table verified: 2024-01-01 = Monday, Jan 5 = Friday, Jan 6 = Saturday, Jan 12 = Friday, Jan 13 = Saturday — all correct.
+- Tables are consistently formatted with header separators.
+- Bold used correctly to highlight key values in sample output tables.
+- No orphaned section headers, no broken markdown.
+- Code blocks use correct Python syntax throughout.
 
 ---
 
-**Result: All criteria at maximum rating. No further iteration required.**
+### Verdict
+
+**PASS — All QC criteria met. No further iteration required.**
+
+Notes are appropriately lighter for the target audience (non-tech background), covering exactly the 4 session topics without re-teaching previously covered evaluation metrics (MAE, RMSE), and without session number references.
