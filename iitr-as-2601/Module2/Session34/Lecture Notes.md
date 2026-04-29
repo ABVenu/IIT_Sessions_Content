@@ -27,6 +27,8 @@ But in a real ML project, you never train just one model. You train multiple —
 
 **Real-Life Example:** Imagine a cricket team selector comparing three bowlers. Bowler A has the best economy rate, Bowler B has the most wickets, and Bowler C is consistent in both. A comparison table immediately shows you this without looking at each bowler's stats separately. A metric comparison table does exactly the same for your ML models.
 
+![Metric comparison table — models and scores side by side](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session34/session34_metric_comparison_table.png)
+
 ---
 
 ### Building a Metric Table in Python — Classification Example
@@ -197,6 +199,8 @@ Looking at the comparison tables above, you might wonder: *"Why does a simple mo
 
 **Real-Life Example:** A school teacher evaluating essays. A simple rule like "more than 300 words = Pass" is fast and transparent but misses nuance. A teacher who reads every essay carefully, checking vocabulary, grammar, argument structure, and originality — that is a complex evaluation. Sometimes the complex approach gives better grades. But for a quick placement test, the simple rule is surprisingly good.
 
+![Model complexity spectrum — from simple assumptions to flexible models](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session34/session34_model_complexity_spectrum.png)
+
 ---
 
 ### The Complexity Scale of Common Models
@@ -231,6 +235,8 @@ This is the single most important concept when comparing models by complexity.
 - **Underfitting:** A student who studied only 2 chapters out of 10. They cannot answer questions from the old exam or the new one.
 
 **Real-Life Example:** A weather prediction model. An underfitting model always predicts "25°C, sunny" regardless of the season — far too simple. An overfitting model has memorised the exact weather for every date in last year's data, but next year's patterns are slightly different — it fails. A well-fitted model captures general seasonal patterns and adapts reliably to new data.
+
+![Underfitting vs good fit vs overfitting](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session34/session34_overfitting_underfitting.png)
 
 ---
 
@@ -330,6 +336,8 @@ Imagine you spent 3 hours training a complex Random Forest on 100,000 rows of da
 **In Simple Words:** It is like saving your game progress. You play for hours, reach Level 10, and click Save. The next time you play, you load your save file and continue from Level 10 — you do not restart from Level 1 every single time. Saving a trained model works exactly the same way.
 
 **Real-Life Example:** Think about the spam filter in your email inbox. That model was trained once on millions of emails, then saved. Every time a new email arrives, the email server **loads** the saved model and runs the email through it in milliseconds. If it had to retrain from scratch for each email, your inbox would never load.
+
+![Model persistence — train, save to disk, load, predict](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session34/session34_model_persistence_save_load.png)
 
 ---
 
@@ -468,6 +476,8 @@ The **Model Selection Checklist** is your answer — a structured set of questio
 **Official Definition:** A **Model Selection Checklist** is a step-by-step decision guide that helps you choose the most appropriate machine learning algorithm based on your problem's specific constraints — such as data size, problem type, interpretability requirements, and performance targets.
 
 **In Simple Words:** It is like a doctor asking a patient: "How old are you? Any allergies? What are the symptoms?" before prescribing medicine. Without this checklist, you might prescribe a complex Random Forest for a problem that a 3-line Logistic Regression would solve in seconds.
+
+![Model selection checklist — structured decision path](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session34/session34_model_selection_checklist_flow.png)
 
 ---
 
