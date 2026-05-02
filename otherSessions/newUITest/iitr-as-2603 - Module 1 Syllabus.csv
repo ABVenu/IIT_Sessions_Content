@@ -1,0 +1,17 @@
+,Certification in Agentic Systems and Design (IITRAS-2603),
+,Module 1 Evaluation Syllabus,
+,Title,Topics Covered
+,"Introduction to Programming, Python Basics & Development Env Setup","Python Setup – installing Python, working with VS Code and Terminal, writing and executing Python programs ⬥  Core Fundamentals – variables and data types ⬥  operators - arithmatic, comparision ⬥  "
+,Operators & Conditional Statements,"operators - logical, assignment operators ⬥  expressions ⬥  Conditional Operators if / elif / else ⬥  Input/Output – using input() and print() for user interaction"
+,Loops & Iterations,for loops ⬥ while loops ⬥ simple iteration exercises
+,Lists & Functions,lists ⬥ indexing ⬥ defining functions ⬥ modular code
+,"Strings, Dictionaries & Classes",string operations ⬥ dictionaries ⬥  inbuilt functions ⬥  basics of classes
+,Version Control and GitHub Basics,Version Control Basics – tracking changes and maintaining code history ⬥  Git Workflow – cloning repositories and managing local code copies ⬥  Core Commands – add commit and push for saving changes to repositories ⬥  GitHub Repositories – syncing local work with remote repositories ⬥  Collaboration Concepts – overview of branching merging and resolving conflicts
+,NumPy: Numerical Foundations,Why NumPy? ⬥  Creating arrays ⬥  Basic array math ⬥  Shape and Reshape ⬥  Performance vs Python lists
+,Pandas: Indexing & Filtering,"Data Loading – read_csv and dataframe structure ⬥  Indexing – understanding indexes, column selection, row selection using loc and iloc ⬥  Filtering – boolean filtering and conditional selection ⬥  Sorting – sorting dataframes by columns ⬥  Missing Values – detecting and handling using isna, fillna, dropna"
+,Pandas: Aggregation & Combining Data,"Aggregation – groupby operations and basic aggregations (sum, mean, count) ⬥  Advanced Aggregation – multiple aggregations using agg ⬥  Data Cleanup – renaming columns and dropping columns ⬥  Combining Data – merging datasets using merge and join"
+,SQL: Querying Data with SELECT and WHERE,SQL Basics – tables rows and columns understanding datasets ⬥  SELECT Queries – selecting columns using SELECT and DISTINCT ⬥  Filtering Data – using WHERE with comparison and logical operators ⬥  Sorting and Limiting – ORDER BY and LIMIT ⬥  Pandas vs SQL – mapping dataframe selection and filtering to SQL queries
+,SQL: Aggregation and Joining Tables,"Aggregation – GROUP BY with aggregate functions (COUNT, SUM, AVG) ⬥  Group Filtering – HAVING with grouped results ⬥  Joining Tables – INNER JOIN and LEFT JOIN concepts ⬥  Multi-table Queries – combining information across tables ⬥  Pandas vs SQL – mapping pandas groupby and merge to SQL operations"
+,,
+,Note:,
+,All the topics covered in the live sessions will be considered as part of the evaluation syllabus.,

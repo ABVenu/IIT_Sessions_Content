@@ -1,0 +1,162 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"After a long day of testing, an e-commerce company's AI chatbot is found to respond with *""Please contact support for assistance""* to almost every customer complaint — not because it lacks knowledge, but because it stops at the very first answer it generates without ever reviewing it. According to the concepts covered in this session, which mechanism is the chatbot missing?",,,,,,3,,Chain-of-thought reasoning,One-shot prompting,Self-reflection,User feedback loop,,,,69f5a2f8450c4eed6a7575af,0,markdown,"Self-reflection is the mechanism by which an AI reviews, evaluates, and revises its own output before presenting it to the user. The chatbot in this scenario generates the first possible response and stops — it has no built-in habit of asking itself: *""Is this actually useful? Is this the best I can do?""* That deliberate second-check is exactly what self-reflection provides.
+
+- **A is incorrect:** Chain-of-thought is a reasoning technique that helps the AI think step by step before answering — it does not address whether the AI re-evaluates the quality of its output after generating it.
+- **B is incorrect:** One-shot prompting is a prompting strategy (send one prompt, accept the first response) — it is not a quality-check mechanism and is actually the root of the problem described.
+- **D is incorrect:** A user feedback loop requires a human to read the response and send corrections. The chatbot's problem is that it is not self-checking; whether or not users are correcting it is a separate issue."
+mcsc,markdown,"Nadia is designing a self-correction prompt for an AI research assistant. She wants the AI to first produce a draft answer, then carefully analyse its own weaknesses, and finally produce a better version using those insights. Which of the following sequences correctly represents the three stages of a self-correction prompt?",,,,,,4,,Critique → Rewrite → Generate,Generate → Rewrite → Critique,Critique → Generate → Rewrite,Generate → Critique → Rewrite,,,,69f5a2f8450c4eed6a7575af,0,markdown,"The three stages of a self-correction prompt are defined as: **Stage 1 — Generate** (produce the initial response), **Stage 2 — Critique** (the AI reviews what it just wrote and identifies what is missing, incorrect, or weak), and **Stage 3 — Rewrite** (the AI produces an improved version based on its own critique). The critique must come before the rewrite — that is what makes self-correction different from simply asking the AI to ""write a good answer."" Without the critique step, the AI has no map of what to fix.
+
+- **A** places Critique first before anything has been generated — nothing to critique yet.
+- **B** places Rewrite before Critique — the AI is rewriting without knowing what needs fixing.
+- **C** starts with Critique before a draft exists, then generates, then rewrites — logically impossible."
+mcsc,markdown,"Rohan uses the EVAL framework to review an AI-generated response. The AI was asked: *""What are the advantages and disadvantages of remote work for small businesses?""* The response lists only advantages — nothing about disadvantages. Using the EVAL framework, which criterion has most clearly failed?",,,,,,4,,Validity,Layout,Adequacy,Exactness,,,,69f5a2f8450c4eed6a7575af,0,markdown,"**Exactness** (the ""E"" in EVAL) asks: *""Did the AI answer exactly what was asked — not a related topic, not a simplified version, but the actual question?""* The original question explicitly asked for both advantages AND disadvantages. The AI answered only one dimension, which means it did not answer exactly what was asked. That is an Exactness failure.
+
+- **Validity (V)** checks whether the specific facts, names, and claims can be verified — not the concern here; the listed advantages may be perfectly accurate.
+- **Adequacy (A)** checks whether the depth of the response is sufficient — the issue is not depth within what was answered, but that half of the question was entirely skipped.
+- **Layout (L)** checks whether the format matches what was requested — no specific format was prescribed here."
+mcsc,markdown,"A learner asks an AI: *""Who founded Microsoft?""* The AI responds: *""Microsoft was founded by Steve Jobs and Steve Wozniak in 1975 as a personal computing company.""* What type of AI response quality failure does this represent?",,,,,,4,,Vagueness,Wrong format,Incomplete coverage,Hallucination,,,,69f5a2f8450c4eed6a7575af,0,markdown,"**Hallucination** occurs when an AI confidently states something false with the full markers of a real fact — a specific name, a year, and a description. Microsoft was actually founded by Bill Gates and Paul Allen, not Steve Jobs and Steve Wozniak (who co-founded Apple). The AI has produced a completely wrong answer but delivered it with the same confidence and detail as if it were true. That is the hallucination pattern — and it is dangerous precisely because it sounds convincing.
+
+- **Vagueness (A)** would mean the answer is technically true but too general to be useful — the opposite of what happened here (the answer is specific, just wrong).
+- **Wrong format (B)** would mean the structure of the response does not match what was requested.
+- **Incomplete coverage (C)** would mean part of the question was skipped — here, the question was fully answered, just incorrectly."
+mcsc,markdown,"Karan is on Round 2 of iterative prompting to improve a business email. The current version has a strong, confident opening and a clear call to action — both of which work well. However, the second paragraph contains technical jargon that the intended reader (a non-technical small business owner) would not understand. What is the MOST effective Round 3 follow-up prompt?",,,,,,2,,This email is still not right. Rewrite it completely.,The opening and call to action are strong — keep them exactly as they are. Rewrite only the second paragraph: remove all technical jargon and use plain business language a non-technical reader can follow.,"Make this email clearer, simpler, and more professional overall.",Can you improve this email and make it easier to read?,,,,69f5a2f8450c4eed6a7575af,0.5,markdown,"Best practice for iterative prompting has two rules working together: **acknowledge what is already working** (so the AI does not discard the good parts) and **target exactly one specific problem** (so the improvement is controlled and precise). Option B does both — it explicitly tells the AI to keep the opening and call to action, then directs it to fix only the second paragraph with a clear, specific instruction (remove jargon, use plain language).
+
+- **A** asks for a full rewrite — this risks losing the strong opening and call to action that were already working. Throwing away good work is the common mistake iterative prompting is designed to avoid.
+- **C** targets multiple vague things simultaneously (""clearer, simpler, more professional""). Without specificity, the AI has no precise target, and the result will be another generic improvement.
+- **D** is vague and gives the AI no indication of what specifically is wrong — it will likely produce a different version of the same quality."
+mcsc,markdown,"A logistics company wants to deploy an AI agent that generates shipping delay notifications to customers — processing 5,000 notifications per day automatically, with no human reading each individual notification. Every notification must always include: (1) the specific reason for the delay, (2) an estimated new delivery date, and (3) an apology. Which prompting strategy is MOST appropriate for this agent?",,,,,,3,,One-shot prompting — because delay notifications are simple and do not need complex prompts,Iterative prompting — because a human reviewer can check each notification and send corrections,Reflection-based prompting — because the agent must autonomously verify quality criteria without human oversight at scale,User feedback loops — because customers can report bad notifications and the agent will improve over time,,,,69f5a2f8450c4eed6a7575af,0.5,markdown,"**Reflection-based prompting** is the right choice when an agent must maintain consistent quality autonomously — without a human present for each interaction. The three required elements (reason, estimated date, apology) are clear, measurable criteria that can be embedded directly in an internal feedback loop. The agent checks its own output against those criteria and revises automatically, every time, at any volume.
+
+- **One-shot prompting (A)** provides no mechanism to verify that all three elements appear in every notification — a notification missing the estimated date would go out uncorrected.
+- **Iterative prompting (B)** requires a human to review each round — completely impractical at 5,000 notifications per day.
+- **User feedback loops (D)** are reactive — customers receive a bad notification first, then report it. The quality failure has already reached the customer. That is too late."
+mcmc,markdown,Ananya is building an internal feedback loop for an AI agent that generates social media captions for a fashion brand. She wants the loop to run efficiently and produce consistent results. Which of the following represent well-designed feedback loop practices? **Select ALL that apply.**,,,,,,,,"Setting a maximum of 3 revision cycles; if criteria are still not met after 3 cycles, flagging the issue instead of looping further","Using the criterion: *""Does the caption include at least one relevant hashtag and a call to action? (Yes/No)""*","Using the criterion: *""Is the caption engaging and on-brand? (Yes/No)""*",Saving the tested prompt flow as a reusable template where only the product details change for each new caption,"Running as many revision cycles as needed until the output ""feels right"" before delivering",,"1, 2, 4",69f5a2f8450c4eed6a7575af,0.5,markdown,"- **A is correct:** Limiting the loop to a maximum of 2–3 cycles is a core efficiency principle. If the agent cannot meet criteria in that many cycles, the problem is in the prompt design — not something more loops will fix. A maximum cycle limit also prevents production agents from running indefinitely.
+- **B is correct:** ""Does it include a hashtag and a call to action?"" is a specific, binary, and fully checkable criterion. The AI can verify this exactly — it either included them or it did not.
+- **C is incorrect:** ""Engaging and on-brand"" is subjective — the AI has no concrete definition to check against. Subjective criteria break the self-evaluation mechanism because ""somewhat"" becomes a valid answer. Strong criteria must be measurable.
+- **D is correct:** Saving working prompt flows as reusable templates (changing only the TASK) is Principle 3 of optimising feedback loops. It makes the quality system scalable and ensures consistency across hundreds of captions without redesigning the loop each time.
+- **E is incorrect:** ""Until it feels right"" is not a measurable stopping condition and represents exactly the kind of infinite loop that well-designed feedback loops must prevent. Production agents need hard stopping points."
+mcmc,markdown,"Preethi is reviewing a colleague's AI agent that produces customer onboarding summaries. The agent works correctly sometimes, but the outputs are inconsistent — some summaries are formal, some are casual, some are structured bullet lists, and others are long unbroken paragraphs. Which MISSING components from the agent prompt flow are MOST LIKELY causing this inconsistency? **Select ALL that apply.**",,,,,,,,"Role (System Instruction) — defining who the agent is, its expertise, and its default tone and behaviour",Task — the specific assignment with details about the customer being onboarded,Reflection + Feedback Criteria — measurable quality checks the agent runs on its own output before delivering,"Output Format — specifying exactly how the summary should be structured, the length, and the presentation",Chain-of-thought reasoning steps embedded within the task description,,"1, 3, 4",69f5a2f8450c4eed6a7575af,0.5,markdown,"- **A is correct:** Without a Role, the agent defaults to a random tone — sometimes formal, sometimes casual — depending on how the task happens to be phrased. The Role locks in the agent's default behaviour, expertise, and communication style across every run. Removing the Role removes the consistency anchor.
+- **B is incorrect:** The Task defines what to do for a specific customer — varying this is expected and intentional. The inconsistency is in tone and format, not in what is being summarised.
+- **C is correct:** Without Reflection Criteria, the agent does not self-check whether its output meets a quality standard before delivering. Inconsistent quality (some good, some poor) is exactly what reflection criteria are designed to catch and correct.
+- **D is correct:** Without an Output Format instruction, the agent freely chooses its own structure — bullet points one time, paragraph the next. Specifying the exact format is what enforces structural consistency across all runs.
+- **E is incorrect:** Chain-of-thought reasoning helps improve reasoning quality within a single response — it does not control tone or format consistency across different runs of the agent."
+mcmc,markdown,Faisal is designing an internal feedback loop for an autonomous agent that writes brief property reviews for a travel booking platform. The reviews will be published without human review. Which of the following criteria are well-suited for a reliable internal feedback loop? **Select ALL that apply.**,,,,,,,,"*""Does the review mention at least one specific property feature (e.g., location, check-in experience, room quality)? (Yes/No)""*","*""Is the review under 80 words? (Yes/No)""*","*""Is this a good review? (Yes/No)""*","*""Does the review avoid making audience-specific claims (e.g., 'ideal for families' or 'perfect for business travellers') that were not part of the verified information? (Yes/No)""*","*""Does the review end with a clear overall recommendation sentence? (Yes/No)""*","*""Is the tone positive and enthusiastic? (Yes/No)""*","1, 2, 4, 5",69f5a2f8450c4eed6a7575af,1,markdown,"- **A is correct:** Specific and binary — the AI can check whether it mentioned a named feature. This is an inclusion check.
+- **B is correct:** Word count is perfectly measurable. The AI can verify this exactly with no ambiguity.
+- **C is incorrect:** ""Is this a good review?"" is entirely subjective. The AI cannot self-evaluate against this criterion because ""good"" has no definition it can check — this is the textbook example of a weak feedback loop criterion.
+- **D is correct:** This is a clear rule — did the review make a claim about a specific audience type without verified data? The AI can check whether sentences like ""ideal for families"" appear in the output. This is measurable.
+- **E is correct:** Specific and binary — the agent can check whether a concluding recommendation sentence exists before marking the review as accepted.
+- **F is incorrect:** ""Positive and enthusiastic"" is vague and subjective. A strong version of this criterion would be: *""Does the review avoid negative language and use at least one positive adjective? (Yes/No)""* — that version is checkable. As stated, F gives the AI no concrete definition to evaluate against."
+mcmc,markdown,A quality assurance team is reviewing five AI-generated responses using the five types of bad AI responses covered in the session. Which of the following statements correctly identify the type of quality failure in each described response? **Select ALL that apply.**,,,,,,,,"An AI asked for *""a numbered list of 5 budget travel tips""* returns a continuous paragraph of travel advice — this is a **Wrong Format** failure.","An AI states: *""The Bharat Ratna was first awarded in 1950 to C. V. Raman""* (the actual year was 1954 and the first recipient was C. Rajagopalachari) — this is a **Vagueness** failure.","An AI responds to *""What are the pros and cons of online learning?""* with only a list of pros, completely skipping cons — this is an **Incomplete Coverage** failure.","An AI opens with *""Social media is clearly harmful for teenagers,""* then lists five mental health benefits of social media in the body, and concludes *""Therefore, social media is harmful and teenagers should avoid it""* — this is a **Logical Contradiction** failure.","An AI answers *""How do I build a website?""* with: *""You can use web development tools to build websites. Programming knowledge is important.""* — this is a **Hallucination** failure.",,"1, 3, 4",69f5a2f8450c4eed6a7575af,1,markdown,"- **A is correct:** The user specified both the format (numbered list) and quantity (5 tips). The AI ignored both and returned a paragraph. This is a Wrong Format failure — the output structure does not match the explicit instruction.
+- **B is incorrect:** Stating specific wrong facts (wrong year, wrong person) with full confidence is **Hallucination**, not Vagueness. Hallucination produces false details that sound like real facts. Vagueness is when the answer is too general to be useful — the opposite of what happened here.
+- **C is correct:** The question explicitly asked for both pros and cons. The AI covered only one dimension and silently skipped the other. That is Incomplete Coverage — part of the question was never answered.
+- **D is correct:** The AI's body presents evidence directly contradicting its opening claim and conclusion. Stating ""social media is harmful"" while listing mental health benefits, then concluding ""therefore it is harmful,"" is a Logical Contradiction — two claims that cannot both be true, with a conclusion that ignores the evidence in its own response.
+- **E is incorrect:** This is **Vagueness**, not Hallucination. The response is technically true but so general that it gives the user nothing actionable — no specific tools, no steps, no starting point. A person trying to build a website is no better off after reading it. That is the Vagueness failure pattern."
+subjective,markdown,"# Subjective Assignment — Self-Reflection and Feedback Loops
+
+---
+
+## Practical Task — Build a Quality-Controlled Agent Prompt Flow
+
+### Scenario
+
+You are an AI workflow consultant hired by a regional coaching institute. The institute's grading team reviews hundreds of student essays each day, and they want to automate the feedback process using an AI agent.
+
+Every piece of feedback the agent produces must:
+- Acknowledge at least one specific strength in the student's writing
+- Identify the single most important area for improvement
+- Maintain an encouraging, constructive tone — never harsh or discouraging
+- Stay under 120 words
+
+The institute has been piloting an AI agent for two months, and the grading head has reported two recurring problems:
+
+1. **Problem A:** The feedback often only criticises — it skips acknowledging the student's strengths entirely, which damages student motivation.
+2. **Problem B:** The tone is inconsistent — some feedback reads as harsh and blunt, while others are warm and encouraging. Students from the same batch are getting completely different experiences.
+
+---
+
+### Your Task
+
+Design a **complete, production-ready agent prompt flow** that solves both reported problems. Your prompt flow must include all five sections listed below, each clearly labelled.
+
+---
+
+**[ROLE]**
+Define who this agent is:
+- Its area of expertise and persona
+- Its default communication tone
+- At least one explicit constraint on what it must never do
+
+---
+
+**[TASK]**
+Write a sample task with placeholders for:
+- Student name
+- Essay topic
+- Essay content (the submitted essay text)
+
+The task must make clear what the agent is expected to produce.
+
+---
+
+**[REFLECTION + FEEDBACK CRITERIA]**
+Design exactly **4 measurable (Yes/No) criteria** the agent will use to self-evaluate its own output.
+
+For each criterion, write **one sentence** explaining which of the two reported problems (Problem A or Problem B) it directly addresses and why.
+
+---
+
+**[OUTPUT FORMAT]**
+Specify exactly how the final feedback should be presented:
+- The structure (sections or flow)
+- The word limit
+- Any tone or language markers the agent must follow
+
+---
+
+**[LOOP INSTRUCTION]**
+Write the loop instruction the agent will follow, including:
+- What to do if any criterion is answered No
+- The maximum number of revision cycles allowed
+- What the agent should state if it cannot satisfy all criteria within that limit
+
+---
+
+**Design Note (Required)**
+
+After your prompt flow, write a brief note of **3 to 5 sentences** that explains:
+- Why you chose the specific constraints you placed in the ROLE section
+- How your four reflection criteria specifically address Problem A and Problem B from the scenario
+- What would happen to the agent's output if these criteria were removed
+
+---
+
+### Submission Instructions
+
+- Create a Google Doc in your Google Drive. Suggested folder path (for your reference): `Module 2 > Session11 > Assignment Submission`
+- Write your prompt flow with clearly labelled sections and proper formatting. Use headings for each section: [ROLE], [TASK], [REFLECTION + FEEDBACK CRITERIA], [OUTPUT FORMAT], [LOOP INSTRUCTION], and Design Note.
+- Once the document is ready, click the **Share** button and copy the link.
+- Make sure the sharing settings are set to **""Anyone with the link can view""** (public sharing is required for review).
+- Paste and submit the Google Doc link in the answer box.
+",,,,,,,,,,,,,,,69f5a2f8450c4eed6a7575af,1,markdown,"**Answer Explanation (Ideal Solution Walkthrough)**
+
+A strong submission will show mastery of the four-component agent prompt flow structure covered in the session.
+
+**[ROLE]** — A well-defined role anchors the agent's default behaviour. An ideal Role for this agent would establish a persona such as *""a supportive writing coach with expertise in student essay feedback""*, set the tone explicitly (*""always encouraging, never critical without a follow-up suggestion""*), and include a hard constraint such as *""never deliver feedback that does not include at least one specific positive observation.""* This directly prevents Problem B (tone inconsistency) because the Role applies to every single run.
+
+**[TASK]** — A clear task with placeholders ensures the agent always knows what it is working with. A strong task would read: *""Read the essay titled [ESSAY TOPIC] submitted by [STUDENT NAME]. Provide personalised feedback that acknowledges a specific strength, identifies the most important area to improve, and ends with an encouraging closing sentence. Keep the feedback under 120 words.""*
+
+**[REFLECTION CRITERIA]** — The four criteria must be measurable (Yes/No). An ideal set addressing both problems:
+1. *""Does the feedback explicitly mention at least one specific thing the student did well? (Yes/No)""* — addresses Problem A directly.
+2. *""Does the feedback identify exactly one area for improvement — not a list of criticisms? (Yes/No)""* — prevents the agent from defaulting to a criticism-heavy response.
+3. *""Does the feedback use encouraging language and avoid harsh or blunt phrasing? (Yes/No)""* — addresses Problem B directly.
+4. *""Is the feedback under 120 words? (Yes/No)""* — enforces the word limit criterion.
+
+**[OUTPUT FORMAT]** — Specifying the format prevents structural inconsistency. An ideal format instruction: *""Present the feedback as 2–3 short paragraphs. Paragraph 1: specific strength. Paragraph 2: the improvement area with one actionable suggestion. Paragraph 3: encouraging closing. No bullet points. No technical grading language.""*
+
+**[LOOP INSTRUCTION]** — The loop instruction must include a cap: *""If any criterion is answered No, identify which criterion failed, revise the feedback, and re-evaluate. Maximum 3 cycles. If all criteria are still not satisfied after 3 cycles, deliver the best current version and flag: 'Criterion [X] could not be satisfied — manual review recommended.'""*
+
+**Design Note** — The best notes will connect the ROLE constraints directly to Problem B (tone) and the reflection criteria directly to Problem A (missing strengths). They will also note that removing the criteria would mean the agent self-approves its first draft — reintroducing both original problems.
+
+**Alternative approaches** that are also valid:
+- Using an internal checklist format instead of explicit Yes/No criteria (as long as all four elements are present)
+- Adding a fifth criterion for personalisation (e.g., mentioning the student's name or essay topic in the feedback body)
+- Referencing the student's specific essay content in the improvement suggestion rather than giving generic advice"

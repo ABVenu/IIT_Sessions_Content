@@ -1,14 +1,18 @@
-# Lecture Notes QC Report — Session 11: SQL: Aggregation and Joining Tables
+# Lecture Notes QC Report — Session 11: SQL Aggregation and Joining Tables
 
 ---
 
 ## QC Iteration 1
 
-**Date:** 2026-04-25
+**Date:** 2026-04-30
+**File Assessed:** `Lecture Notes Released.md`
+**Session:** iitr-as-2603 / Session 11
 
-### Evaluation Criteria
+---
 
-| Criteria | Score / Result |
+### QC Scores
+
+| Criterion | Rating / Result |
 |---|---|
 | **Content Coverage** | 5 / 5 |
 | **Creativity** | 5 / 5 |
@@ -16,57 +20,57 @@
 | **No Logical Mistakes** | True |
 | **No Presentation Mistakes** | True |
 
-### Detailed Evaluation Notes
+---
+
+### Detailed Evaluation
 
 **Content Coverage — 5/5**
-- All five topic areas from the metadata are fully covered:
-  - Aggregation with COUNT, SUM, AVG, MAX, MIN — each with dedicated sections and code examples
-  - GROUP BY with multiple query examples (per customer, per city, with ORDER BY)
-  - HAVING with three progressively complex examples including combined WHERE + HAVING
-  - INNER JOIN and LEFT JOIN both covered in full depth, including aliases and the IS NULL pattern
-  - Multi-table queries (3+ table joins) covered with a chained INNER JOIN example
-  - Pandas vs SQL mapping covers both groupby↔GROUP BY and merge↔JOIN with a side-by-side code comparison
-- SQL Execution Order is included as an added bonus insight — critical for beginners and often missed
-- A capstone "Putting It All Together" query ties every concept into one real-world business problem
+All topics listed in the Live Topic Coverage report are fully addressed in the notes:
+- COUNT, SUM, AVG, MAX, MIN with GROUP BY — covered in dedicated sections with multiple code examples and the COUNT(*) vs COUNT(column) NULL distinction explicitly explained.
+- HAVING — covered with WHERE vs HAVING comparison table and the combined WHERE + HAVING example.
+- INNER JOIN and LEFT JOIN — both covered with syntax, ON conditions, table aliases, and the LEFT JOIN + IS NULL interview pattern.
+- Multi-table queries — three-table and four-table chained JOIN examples included, plus aggregation combined with joins.
+- Pandas vs SQL mapping — comprehensive side-by-side table and a full code example in both pandas and SQL.
+- Primary key / Foreign key — introduced before the JOIN sections as foundational context.
+- SQL Execution Order — covered explicitly with a numbered list and an accompanying diagram image.
 
 **Creativity — 5/5**
-- Relatable Indian analogies throughout: tea stall (aggregation), Aadhaar card (JOIN concept), school report card (AVG), classroom roll call (LEFT JOIN), party entrance (WHERE vs HAVING)
-- Progressive learning narrative: starts simple (COUNT on one table) → builds up to multi-table JOINs combined with GROUP BY and HAVING
-- "Business Question" framing for the final combined query makes it feel like a real analyst task
-- Comparison tables (WHERE vs HAVING, INNER JOIN vs LEFT JOIN) add visual clarity
-- Side-by-side Pandas/SQL example bridges prior Python knowledge to new SQL skills
+- Consistent use of relatable real-life analogies throughout: tea stall (aggregation), classroom attendance register (COUNT), Aadhaar card (JOIN), supermarket billing (GROUP BY), roll call + attendance sheet (LEFT JOIN).
+- Images placed at conceptually appropriate points to reinforce abstract ideas visually.
+- "Common Doubt" and "Common Mistake" callouts anticipate learner confusion and address it proactively.
+- A complete business-scenario query at the end synthesises all concepts taught.
+- Pandas ↔ SQL side-by-side comparison serves dual audiences (prior pandas experience vs pure SQL learners).
 
 **Structural Adherence — 5/5**
-- Notes begin directly with `# SQL: Aggregation and Joining Tables` — no metadata preamble
-- "What We Covered So Far and What's Coming Next" section correctly references Session 10 content (SELECT, WHERE, ORDER BY, LIMIT, Pandas vs SQL filtering) and frames the current session's agenda
-- Every new keyword/concept follows the 3-part rule: Official Definition → In Simple Words → Real-Life Example
-- No paragraph exceeds 3 sentences; bullet points used consistently for lists, steps, and code explanations
-- Smooth connecting sentences transition between every topic section
-- Common mistakes and doubts are integrated inline (not in separate sections)
-- All code blocks contain full, runnable SQL with a comment on every single line
-- Each code block is followed by a "How the code works" bulleted explanation
-- Key Takeaways section present (5 bullet points + forward link to future topics)
-- Quick Reference Table present with 18 entries covering all commands, terms, and concepts
+- Every major concept follows the standard format: Official Definition → In Simple Words → Real-Life Example → Code → How the code works.
+- Section hierarchy is clean: H1 title → H2 sections → H3 not overused.
+- Code blocks use proper ` ```sql ` and ` ```python ` language tags.
+- Comparison tables (WHERE vs HAVING, INNER JOIN vs LEFT JOIN) are present where contrasts are needed.
+- Key Takeaways section summarises all major learnings in bullet form.
+- Important Commands / Terminologies reference table provided at the end for quick lookup.
 
 **No Logical Mistakes — True**
-- COUNT(*) vs COUNT(column) distinction is technically accurate (NULL handling)
-- GROUP BY golden rule correctly stated: non-aggregated SELECT columns must be in GROUP BY
-- SQL execution order is correct: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
-- HAVING correctly defined as post-aggregation filter; WHERE correctly defined as pre-group filter
-- INNER JOIN and LEFT JOIN behaviour described accurately including NULL propagation for LEFT JOIN
-- The LEFT JOIN + IS NULL anti-join pattern is correctly explained
-- Pandas merge() and groupby() equivalences are accurate
+- SQL execution order (FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT) is correctly stated and matches SQL standard.
+- COUNT(*) counting NULLs and COUNT(column) ignoring NULLs is correctly described.
+- GROUP BY golden rule ("every non-aggregated SELECT column must appear in GROUP BY") is accurately stated.
+- INNER JOIN exclusion of non-matching rows and LEFT JOIN retention with NULLs are logically correct.
+- The LEFT JOIN + IS NULL pattern for "find records absent from another table" is correctly implemented.
+- All code examples produce logically valid SQL.
 
 **No Presentation Mistakes — True**
-- Consistent use of backticks for all SQL keywords and function names inline
-- Heading hierarchy is clean: H1 → H2 only (no H3 used inconsistently)
-- All comparison tables are properly formatted with header separators
-- Code blocks use correct SQL and Python language identifiers
-- Aliases introduced and explained before use in multi-table sections
-- No orphaned headings, no broken lists, no mismatched bullets
+- Markdown tables are consistently aligned with header separator rows.
+- Code block fences are properly opened and closed; no unclosed blocks detected.
+- Column prefixing (`o.order_id`, `c.customer_name`) is consistent throughout all multi-table examples.
+- Alias definitions (`AS o`, `AS c`) always precede their use in the same query.
+- Image alt-text is descriptive and matches the concept being illustrated.
+- No spelling or grammar issues observed.
 
 ---
 
-### QC Result: PASSED — No Improvisation Required
+### Outcome
 
-All criteria met the expected result. Notes are approved as final.
+All five QC criteria meet the expected standard. **No further iterations required.**
+
+The `Lecture Notes Released.md` file is approved for student release without modification.
+
+---
