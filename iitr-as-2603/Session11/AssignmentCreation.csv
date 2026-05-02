@@ -1,0 +1,321 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"QuickServe is a food delivery company. Their `orders` table records every order placed — but some orders have a missing `delivery_time` value (i.e., NULL) because the delivery has not yet been logged. The operations manager wants to know the **total number of orders** in the table, including those with missing delivery times.
+
+Which query gives the correct count?",,,,,,2,,`SELECT COUNT(delivery_time) AS total_orders FROM orders;`,`SELECT COUNT(*) AS total_orders FROM orders;`,`SELECT SUM(*) AS total_orders FROM orders;`,`SELECT AVG(*) AS total_orders FROM orders;`,,,69f2e3d38926a39a7a2dd6b5,0,markdown,"`COUNT(*)` counts every row in the table regardless of NULL values in any column — it simply counts how many rows exist. `COUNT(delivery_time)` would only count rows where `delivery_time` is not NULL, which would give a smaller number and miss unlogged orders. `SUM(*)` and `AVG(*)` are invalid SQL syntax — these functions require a specific column name, not `*`."
+mcsc,markdown,"Priya is a data analyst at a retail chain. She has a `sales` table with columns `city`, `product`, and `sale_amount`. She wants to calculate the **total sales amount for each city** separately. Which SQL clause should she use to separate the results by city before applying the aggregate function?",,,,,,3,,WHERE,HAVING,GROUP BY,ORDER BY,,,69f2e3d38926a39a7a2dd6b5,0,markdown,`GROUP BY` groups rows that share the same value in the specified column and applies an aggregate function (like `SUM`) independently to each group — exactly what Priya needs. `WHERE` filters individual rows before any grouping happens. `HAVING` filters groups after aggregation. `ORDER BY` only sorts the final result and does not create any grouping.
+mcsc,markdown,"A university database has two tables: `students` and `exam_results`. Not every student has appeared for the exam, so some students have no corresponding row in `exam_results`. You want to retrieve a list of **all students**, showing their exam marks where available and NULL for students who didn't appear.
+
+Which join type should you use?",,,,,,2,,INNER JOIN — returns only students who have exam records,LEFT JOIN — returns all students; NULL for those with no exam records,CROSS JOIN — pairs every student with every exam result,INNER JOIN with a WHERE clause checking for NULL,,,69f2e3d38926a39a7a2dd6b5,0,markdown,"`LEFT JOIN` keeps every row from the left table (`students`) and brings in the matching rows from the right table (`exam_results`). If a student has no exam record, the exam columns appear as NULL in the result. `INNER JOIN` would exclude students with no exam record entirely. `CROSS JOIN` creates a Cartesian product (every student paired with every exam row), which is not what's needed."
+mcsc,markdown,"An e-commerce platform has an `orders` table. Each row in `orders` contains a `customer_id` column that links the order to the matching row in the `customers` table. The `customer_id` in the `customers` table uniquely identifies each customer.
+
+What is the `customer_id` column in the `orders` table called?",,,,,,4,,Primary Key,Index Key,Super Key,Foreign Key,,,69f2e3d38926a39a7a2dd6b5,0,markdown,"A **Foreign Key** is a column in one table that references the Primary Key of another table, creating a link between the two. Here, `customer_id` in `orders` references `customer_id` in `customers` — it is a Foreign Key in `orders`. The `customer_id` in `customers` is the **Primary Key** because it uniquely identifies each customer. A Super Key is a broader concept from relational theory, and an Index Key is a database performance concept, not a relational key type."
+mcsc,markdown,"A logistics analyst runs this query on a delivery database:
+
+```sql
+SELECT city, COUNT(*) AS delivery_count
+FROM deliveries
+WHERE status = 'completed'
+GROUP BY city
+HAVING COUNT(*) > 100
+ORDER BY delivery_count DESC;
+```
+
+In which order does SQL **actually execute** this query — regardless of the order it was written?",,,,,,2,,SELECT → WHERE → GROUP BY → HAVING → ORDER BY,FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY,FROM → GROUP BY → WHERE → HAVING → SELECT → ORDER BY,WHERE → FROM → GROUP BY → HAVING → ORDER BY → SELECT,,,69f2e3d38926a39a7a2dd6b5,0.5,markdown,"SQL's internal execution order is fixed: **FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT**. The database first identifies the table (FROM), filters individual rows (WHERE), groups the filtered rows (GROUP BY), filters the groups (HAVING), then selects and formats the output (SELECT), and finally sorts the result (ORDER BY). This explains why you cannot use a SELECT alias in a HAVING clause in most databases — HAVING runs before SELECT."
+mcsc,markdown,"A junior analyst writes the following query to find customers who have spent more than ₹5,000 in total:
+
+```sql
+SELECT customer_id, SUM(order_amount) AS total_spent
+FROM orders
+WHERE SUM(order_amount) > 5000
+GROUP BY customer_id;
+```
+
+Why will this query **fail with an error**?",,,,,,2,,`WHERE` does not support the `>` operator,"`WHERE` runs before grouping, so `SUM(order_amount)` has not been computed yet when WHERE is evaluated",`SUM` cannot be combined with `GROUP BY` in the same query,"`WHERE` can only filter text columns, not numeric ones",,,69f2e3d38926a39a7a2dd6b5,0.5,markdown,"SQL processes clauses in a fixed order: `WHERE` runs **before** `GROUP BY`. At the Where stage, rows have not yet been grouped, so aggregate functions like `SUM()` have not been calculated — they don't exist yet at that point. This is exactly why SQL provides the `HAVING` clause: to filter on aggregated results **after** grouping. The correct version of this query uses `HAVING SUM(order_amount) > 5000` instead of `WHERE SUM(order_amount) > 5000`."
+mcmc,markdown,"*Select all that apply.*
+
+A startup's database has a `sales` table with columns `department`, `employee_id`, and `sale_amount`. An analyst writes the following query:
+
+```sql
+SELECT department, SUM(sale_amount) AS total_sales, COUNT(*) AS num_sales
+FROM sales
+GROUP BY department;
+```
+
+Which of the following statements about this query are **correct**? *(Select all that apply)*",,,,,,,,`department` must appear in the `GROUP BY` clause because it is not inside an aggregate function,"`SUM(sale_amount)` computes the total separately for each department, not across the entire table",`GROUP BY` can only be applied to a single column per query,The final result will contain one row per unique `department` value,,"1, 2, 4",69f2e3d38926a39a7a2dd6b5,0.5,markdown,"- **(A) Correct** — The Golden Rule of GROUP BY: every non-aggregated column in the SELECT clause must appear in GROUP BY. Since `department` is not wrapped in an aggregate function, it must be listed in GROUP BY.
+- **(B) Correct** — GROUP BY creates separate groups (one per department), and `SUM` runs independently within each group.
+- **(C) Incorrect** — GROUP BY can group by multiple columns simultaneously (e.g., `GROUP BY city, department`).
+- **(D) Correct** — Each unique value in the grouping column becomes exactly one output row."
+mcmc,markdown,"*Select all that apply.*
+
+An HR recruitment platform has a `candidates` table and an `interviews` table, linked by `candidate_id`. A recruiter runs an INNER JOIN between the two tables to build a report.
+
+Which of the following statements correctly describe the behavior of this INNER JOIN? *(Select all that apply)*",,,,,,,,Only candidates who have at least one matching row in the `interviews` table will appear in the result,Candidates with no interview records will appear in the result with NULL values in the interview columns,The `ON` clause specifies which columns to match between the two tables,"Short table aliases (e.g., `AS c` for candidates, `AS i` for interviews) can be used to write cleaner column references",,"1, 3, 4",69f2e3d38926a39a7a2dd6b5,0.5,markdown,"- **(A) Correct** — INNER JOIN returns only rows where a match exists in **both** tables. Candidates with no interview record are excluded entirely.
+- **(B) Incorrect** — This describes LEFT JOIN behavior. In an INNER JOIN, unmatched rows do not appear at all — they are not included with NULLs.
+- **(C) Correct** — The `ON` clause defines the join condition (e.g., `ON candidates.candidate_id = interviews.candidate_id`).
+- **(D) Correct** — Table aliases are standard SQL practice. Using `AS c` and `AS i` lets you write `c.candidate_name` instead of `candidates.candidate_name`."
+mcmc,markdown,"*Select all that apply.*
+
+Meera is building a customer spending report for an e-commerce company. She writes the following query:
+
+```sql
+SELECT c.customer_name,
+       COUNT(o.order_id)      AS order_count,
+       SUM(o.order_amount)    AS total_spent
+FROM customers AS c
+LEFT JOIN orders AS o ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.customer_name
+HAVING SUM(o.order_amount) > 10000
+ORDER BY total_spent DESC;
+```
+
+Which of the following statements about this query are **correct**? *(Select all that apply)*",,,,,,,,Customers who have never placed an order will NOT appear in the final output,The LEFT JOIN ensures all customers are included in the intermediate result before HAVING filters them,"`COUNT(o.order_id)` correctly returns 0 for customers who have no orders, rather than NULL",Replacing `HAVING SUM(o.order_amount) > 10000` with `WHERE o.order_amount > 10000` would produce the same result,,"1, 2, 3",69f2e3d38926a39a7a2dd6b5,1,markdown,"- **(A) Correct** — After the LEFT JOIN, customers with no orders have `o.order_amount = NULL`. `SUM(NULL)` evaluates to NULL, and `NULL > 10000` is false, so those customers are filtered out by HAVING.
+- **(B) Correct** — LEFT JOIN first brings all customers into the result set (with NULLs for missing order data). HAVING then filters based on the aggregated totals per group.
+- **(C) Correct** — `COUNT(o.order_id)` counts non-NULL values. For a customer with no matching orders, `o.order_id` is NULL after the LEFT JOIN, so `COUNT` returns 0 — not NULL.
+- **(D) Incorrect** — `WHERE o.order_amount > 10000` filters **individual rows** (only keeping orders larger than ₹10,000 per single order). This is fundamentally different from the HAVING clause, which filters the **total per customer**. A customer who placed twenty orders of ₹800 each (total ₹16,000) would be excluded by the WHERE version but included by the HAVING version."
+mcmc,markdown,"*Select all that apply.*
+
+A telecom company wants to identify employees who have made **more than 100 calls** AND whose **average call duration exceeds 5 minutes**. They have an `employees` table and a `calls` table linked by `employee_id`. Which of the following queries correctly implement this requirement? *(Select all that apply)*",,,,,,,,"```sql
+SELECT e.employee_name,
+       COUNT(c.call_id)  AS call_count,
+       AVG(c.duration)   AS avg_duration
+FROM employees AS e
+INNER JOIN calls AS c ON e.employee_id = c.employee_id
+GROUP BY e.employee_id, e.employee_name
+HAVING COUNT(c.call_id) > 100 AND AVG(c.duration) > 5;
+```","```sql
+SELECT e.employee_name,
+       COUNT(c.call_id)  AS call_count,
+       AVG(c.duration)   AS avg_duration
+FROM employees AS e
+INNER JOIN calls AS c ON e.employee_id = c.employee_id
+WHERE COUNT(c.call_id) > 100 AND AVG(c.duration) > 5
+GROUP BY e.employee_id, e.employee_name;
+```","```sql
+SELECT e.employee_name,
+       COUNT(c.call_id)  AS call_count,
+       AVG(c.duration)   AS avg_duration
+FROM employees AS e
+LEFT JOIN calls AS c ON e.employee_id = c.employee_id
+GROUP BY e.employee_id, e.employee_name
+HAVING COUNT(c.call_id) > 100 AND AVG(c.duration) > 5;
+```","```sql
+SELECT e.employee_name,
+       COUNT(c.call_id)  AS call_count,
+       AVG(c.duration)   AS avg_duration
+FROM employees AS e
+INNER JOIN calls AS c ON e.employee_id = c.employee_id
+GROUP BY e.employee_name
+HAVING COUNT(c.call_id) > 100 AND AVG(c.duration) > 5;
+```",,"1, 3",69f2e3d38926a39a7a2dd6b5,1,markdown,"- **(A) Correct** — This is the standard correct approach: INNER JOIN to link employees with their calls, GROUP BY both `employee_id` and `employee_name` (to ensure uniqueness), and HAVING to apply both aggregate conditions.
+- **(B) Incorrect** — Aggregate functions (`COUNT`, `AVG`) cannot be used inside a `WHERE` clause. WHERE runs before grouping, so aggregated values don't exist yet. This will throw a SQL error.
+- **(C) Correct** — LEFT JOIN also works here. Employees with no calls will have `COUNT = 0` and `AVG = NULL`, both of which fail the HAVING conditions, so they are automatically excluded. The final result is identical to Option A.
+- **(D) Incorrect** — `GROUP BY e.employee_name` alone is a logical error. If two employees share the same name (e.g., two people named ""Rahul""), their call records would be merged into a single group, producing incorrect counts and averages. A unique identifier like `employee_id` must always be included in GROUP BY."
+subjective,markdown,"# Assignment — Subjective: SQL Aggregation and Joining Tables
+
+---
+
+## Question 1 — FoodRush Operations Analytics
+
+**Background:**
+
+FoodRush is a growing food delivery startup operating across multiple Indian cities. Their engineering team has set up a relational database to track customers, restaurants, and orders. As a newly onboarded data analyst, your first task is to run a series of analytical SQL queries to help the operations team understand their business better.
+
+The database schema is as follows:
+
+| Table | Columns |
+|---|---|
+| `customers` | `customer_id` (PK), `customer_name`, `city` |
+| `restaurants` | `restaurant_id` (PK), `restaurant_name`, `city`, `cuisine` |
+| `orders` | `order_id` (PK), `customer_id` (FK), `restaurant_id` (FK), `order_amount`, `order_date`, `status` |
+
+The `status` column in `orders` can be one of: `'delivered'`, `'cancelled'`, or `'pending'`.
+
+**Setup — Use the following Python code to create the database and load sample data:**
+
+```python
+import sqlite3
+
+conn = sqlite3.connect('foodrush.db')
+cursor = conn.cursor()
+
+cursor.executescript(""""""
+CREATE TABLE IF NOT EXISTS customers (
+    customer_id   INTEGER PRIMARY KEY,
+    customer_name TEXT,
+    city          TEXT
+);
+
+CREATE TABLE IF NOT EXISTS restaurants (
+    restaurant_id   INTEGER PRIMARY KEY,
+    restaurant_name TEXT,
+    city            TEXT,
+    cuisine         TEXT
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    order_id      INTEGER PRIMARY KEY,
+    customer_id   INTEGER,
+    restaurant_id INTEGER,
+    order_amount  REAL,
+    order_date    TEXT,
+    status        TEXT,
+    FOREIGN KEY (customer_id)   REFERENCES customers(customer_id),
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants(restaurant_id)
+);
+
+INSERT OR IGNORE INTO customers VALUES
+(1, 'Arjun Sharma',  'Delhi'),
+(2, 'Priya Mehta',   'Mumbai'),
+(3, 'Kiran Rao',     'Delhi'),
+(4, 'Sneha Patel',   'Bangalore'),
+(5, 'Rahul Nair',    'Mumbai'),
+(6, 'Aisha Khan',    'Delhi');
+
+INSERT OR IGNORE INTO restaurants VALUES
+(1, 'Spice Garden', 'Delhi',     'Indian'),
+(2, 'Burger Hub',   'Delhi',     'Fast Food'),
+(3, 'Pizza Palace', 'Mumbai',    'Italian'),
+(4, 'Dosa Corner',  'Bangalore', 'South Indian'),
+(5, 'Wok Express',  'Delhi',     'Chinese');
+
+INSERT OR IGNORE INTO orders VALUES
+(1,  1, 1, 450.0, '2024-01-10', 'delivered'),
+(2,  1, 2, 320.0, '2024-01-15', 'delivered'),
+(3,  1, 5, 580.0, '2024-02-01', 'delivered'),
+(4,  2, 3, 900.0, '2024-01-20', 'delivered'),
+(5,  2, 3, 750.0, '2024-02-05', 'cancelled'),
+(6,  3, 1, 400.0, '2024-01-25', 'delivered'),
+(7,  3, 2, 280.0, '2024-02-10', 'delivered'),
+(8,  3, 1, 500.0, '2024-02-15', 'delivered'),
+(9,  4, 4, 350.0, '2024-01-30', 'delivered'),
+(10, 5, 3, 620.0, '2024-02-20', 'pending'),
+(11, 1, 1, 410.0, '2024-03-01', 'delivered'),
+(12, 3, 5, 680.0, '2024-03-05', 'delivered');
+"""""")
+
+conn.commit()
+print(""Database setup complete."")
+```
+
+---
+
+**Your Tasks:**
+
+Write separate SQL queries (executed via Python using `cursor.execute()` and printed using a loop) for each of the following analytical questions. Print a clear heading before each query's output.
+
+---
+
+**Task 1 — Restaurant Revenue Report**
+
+The operations team wants to know which restaurants are their strongest performers. Write a SQL query to find, for each restaurant, the **total revenue** (sum of `order_amount`) and the **number of delivered orders** (where `status = 'delivered'`). Include **only restaurants that have completed more than 2 delivered orders**. Show the restaurant name alongside the numbers, and sort by total revenue in **descending order**.
+
+Expected output columns: `restaurant_name`, `delivered_orders`, `total_revenue`
+
+---
+
+**Task 2 — Full Customer Order Summary**
+
+The marketing team wants to know how active each customer is. Write a SQL query to list **all customers** along with the total number of orders they have placed and their total spend. Customers who have **never placed an order** must still appear in the result (with 0 orders and 0.0 total spend). Sort by total spend in descending order.
+
+Expected output columns: `customer_name`, `city`, `total_orders`, `total_spent`
+
+*Hint: Think carefully about which join type to use so that customers with no orders are not dropped.*
+
+---
+
+**Task 3 — Delhi High-Spenders**
+
+The growth team is running a loyalty campaign specifically for high-value customers in Delhi. Write a SQL query to find all customers from **Delhi** who have placed **more than 1 order** AND have a **total spend exceeding ₹1,000**. Display their name, number of orders, and total spend, sorted by total spend in descending order.
+
+Expected output columns: `customer_name`, `total_orders`, `total_spent`
+
+---
+
+**Task 4 — Multi-Table Customer–Restaurant Spend Breakdown**
+
+The business intelligence team wants a detailed breakdown of how much each customer has spent at each individual restaurant. Write a SQL query that joins all three tables (`customers`, `orders`, `restaurants`) to show: for every customer–restaurant combination, the customer's name, the restaurant's name, the number of orders placed at that restaurant, and the total amount spent there. Show only combinations where the **total spend at that restaurant exceeds ₹500**. Sort by customer name (ascending) and then by total spent at restaurant (descending).
+
+Expected output columns: `customer_name`, `restaurant_name`, `orders_at_restaurant`, `total_spent_at_restaurant`
+
+---
+
+**Submission Instructions:**
+
+- Code all four tasks in **VS Code** in a single `.py` file (e.g., `foodrush_analytics.py`).
+- Run the file and verify that all four query outputs appear correctly in the terminal.
+- Once verified, **submit the code in the code editor / answer box** in the LMS.",,,,,,,,,,,,,,69f2e3d38926a39a7a2dd6b5,1,markdown,"```python
+import sqlite3
+
+conn = sqlite3.connect('foodrush.db')
+cursor = conn.cursor()
+
+# --- Task 1: Restaurant Revenue Report ---
+print(""\n--- Task 1: Restaurant Revenue Report ---"")
+query1 = """"""
+SELECT
+    r.restaurant_name,
+    COUNT(o.order_id)      AS delivered_orders,
+    SUM(o.order_amount)    AS total_revenue
+FROM restaurants AS r
+INNER JOIN orders AS o ON r.restaurant_id = o.restaurant_id
+WHERE o.status = 'delivered'
+GROUP BY r.restaurant_id, r.restaurant_name
+HAVING COUNT(o.order_id) > 2
+ORDER BY total_revenue DESC;
+""""""
+for row in cursor.execute(query1):
+    print(row)
+
+# --- Task 2: Full Customer Order Summary ---
+print(""\n--- Task 2: Full Customer Order Summary ---"")
+query2 = """"""
+SELECT
+    c.customer_name,
+    c.city,
+    COUNT(o.order_id)               AS total_orders,
+    COALESCE(SUM(o.order_amount), 0) AS total_spent
+FROM customers AS c
+LEFT JOIN orders AS o ON c.customer_id = o.customer_id
+GROUP BY c.customer_id, c.customer_name, c.city
+ORDER BY total_spent DESC;
+""""""
+for row in cursor.execute(query2):
+    print(row)
+
+# --- Task 3: Delhi High-Spenders ---
+print(""\n--- Task 3: Delhi High-Spenders ---"")
+query3 = """"""
+SELECT
+    c.customer_name,
+    COUNT(o.order_id)   AS total_orders,
+    SUM(o.order_amount) AS total_spent
+FROM customers AS c
+INNER JOIN orders AS o ON c.customer_id = o.customer_id
+WHERE c.city = 'Delhi'
+GROUP BY c.customer_id, c.customer_name
+HAVING COUNT(o.order_id) > 1 AND SUM(o.order_amount) > 1000
+ORDER BY total_spent DESC;
+""""""
+for row in cursor.execute(query3):
+    print(row)
+
+# --- Task 4: Customer–Restaurant Spend Breakdown ---
+print(""\n--- Task 4: Customer–Restaurant Spend Breakdown ---"")
+query4 = """"""
+SELECT
+    c.customer_name,
+    r.restaurant_name,
+    COUNT(o.order_id)   AS orders_at_restaurant,
+    SUM(o.order_amount) AS total_spent_at_restaurant
+FROM customers AS c
+INNER JOIN orders AS o ON c.customer_id = o.customer_id
+INNER JOIN restaurants AS r ON o.restaurant_id = r.restaurant_id
+GROUP BY c.customer_id, c.customer_name, r.restaurant_id, r.restaurant_name
+HAVING SUM(o.order_amount) > 500
+ORDER BY c.customer_name ASC, total_spent_at_restaurant DESC;
+""""""
+for row in cursor.execute(query4):
+    print(row)
+
+conn.close()
+```"

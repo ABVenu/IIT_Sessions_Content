@@ -1,0 +1,154 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,An e-commerce startup is building an AI assistant that always answers customer questions using the company's actual rules — not guesses from the internet. The developers decide to implement an architecture where the AI first searches a knowledge base before generating a response. What is this architecture called?,,,,,,2,,Recursive Attention Generation,Retrieval-Augmented Generation,Random Answer Generator,Reinforcement-Aided Generation,,,,69f2ebbd5392aa3a5a59562b,0,markdown,"RAG stands for **Retrieval-Augmented Generation**. It is an AI architecture where a retrieval system first fetches relevant documents from a knowledge base, and then passes that content to an LLM to generate a final answer grounded in real data — not model memory.
+
+- The first option is incorrect — ""Recursive Attention Generation"" is a made-up term.
+- The third option is incorrect — ""Random Answer Generator"" is not a real architecture.
+- The fourth option is incorrect — ""Reinforcement-Aided Generation"" is not what RAG means."
+mcsc,markdown,"Aarav is designing a RAG pipeline. After the user types a question, he wants one specific component to convert that question into a vector and search the vector database to return the most relevant policy paragraphs. Which component of the RAG pipeline handles this job?",,,,,,3,,Generator,Prompt Builder,Retriever,Knowledge Source,,,,69f2ebbd5392aa3a5a59562b,0,markdown,"The **Retriever** is the component that converts the user query into an embedding vector and searches the vector database (e.g., ChromaDB) to return the top-K most similar document chunks. It does not generate an answer — that is the Generator's job. The Prompt Builder assembles the retrieved chunks into a structured prompt. Knowledge Sources are the raw documents stored in the system."
+mcsc,markdown,"ShopEasy has written five documents: a return policy, a refund policy, a shipping policy, a warranty policy, and a cancellation policy. They upload all five into their RAG system so the AI can consult them when answering customer queries. What are these five documents called in RAG terminology?",,,,,,3,,Embeddings,Vector Chunks,Knowledge Sources,Context Builders,,,,69f2ebbd5392aa3a5a59562b,0,markdown,"**Knowledge Sources** are the documents from which the retrieval system fetches relevant information to answer questions. They are the reference books handed to the LLM before the exam. In this case, the five policy documents are the knowledge sources of the RAG system.
+
+- Embeddings are the numerical vector representations of text, not the documents themselves.
+- ""Vector Chunks"" is not the correct term; chunks are pieces of knowledge sources.
+- ""Context Builders"" is not a RAG component."
+mcsc,markdown,"Meera runs her RAG script, indexes her policy documents, and then shuts down her laptop. The next day, she restarts the script and wants all the previously indexed embeddings to still be available without re-indexing. Which ChromaDB client mode should she have used when setting up the vector database?",,,,,,4,,`EphemeralClient`,`InMemoryClient`,`TemporaryClient`,`PersistentClient`,,,,69f2ebbd5392aa3a5a59562b,0,markdown,"`chromadb.PersistentClient(path=...)` saves data to disk at the specified path, so all stored embeddings and documents survive after the script stops running. This is the mode used in the session's e-commerce RAG implementation with `path=""./chroma_policy_db""`.
+
+The other listed options are either non-existent or in-memory modes that lose data when the process terminates."
+mcsc,markdown,"A RAG-powered customer support bot is configured with `top_k = 1` for all queries. A customer asks: *""What is the express shipping timeline, and can I return an electronic item if I change my mind?""* What is the most likely problem with this configuration for this query?",,,,,,3,,The query will fail to embed correctly because it has two topics.,ChromaDB will raise an error when a query spans multiple categories.,"Only one chunk will be retrieved, likely missing the relevant context for one of the two topics in the question.",The LLM will refuse to answer unless exactly 3 chunks are provided.,,,,69f2ebbd5392aa3a5a59562b,0.5,markdown,"`top_k = 1` tells the retriever to return only the single most similar chunk. When a customer asks a multi-topic question (shipping + returns), the retriever will return only the chunk closest in vector space — likely shipping or returns, but not both. This means the LLM will have incomplete context and may give an answer that addresses only one part of the question.
+
+- A multi-topic query embeds fine into a single vector.
+- ChromaDB does not raise errors for cross-category queries.
+- The LLM has no hard requirement on chunk count."
+mcsc,markdown,"While inspecting the output of `retrieve_policy_content()`, Rohan notices a `distance` value of `0.08` for one chunk and `0.67` for another. Both were retrieved for the query: *""How long does standard shipping take?""* What does the lower distance value of `0.08` indicate?",,,,,,3,,The chunk with `0.08` has fewer tokens and is cheaper to process.,The chunk with `0.08` is less relevant because smaller numbers mean less overlap.,The chunk with `0.08` is more semantically similar to the query — lower cosine distance means higher relevance.,"The distance represents the number of matching keywords, so `0.08` means very few matching words.",,,,69f2ebbd5392aa3a5a59562b,0.5,markdown,"In ChromaDB with `""hnsw:space"": ""cosine""`, the **distance** is a cosine distance metric. A **lower distance** means the two vectors point in nearly the same direction — i.e., the chunk is semantically very close to the query. A distance of `0.08` means very high similarity; `0.67` means much lower similarity. This is not about keyword matching or token count — it is about semantic vector closeness."
+mcmc,markdown,The `index_policy_documents()` function in the e-commerce RAG system uses `collection.upsert(...)` instead of `collection.add(...)` to store policy chunks. Which of the following statements about `upsert` are correct? *(Select all that apply.)*,,,,,,,,It inserts a new record if the given ID does not already exist in the collection.,It updates an existing record if the given ID already exists in the collection.,It raises a `DuplicateIDError` if the same ID is added twice.,It is safe to run multiple times without creating duplicate entries.,It permanently deletes all existing embeddings before inserting new ones.,,"1, 2, 4",69f2ebbd5392aa3a5a59562b,0.5,markdown,"- **First option is correct** — `upsert` inserts a new record when the ID is not found.
+- **Second option is correct** — `upsert` updates the existing record when the ID is already present.
+- **Third option is incorrect** — `add` raises a duplicate error, not `upsert`. That is precisely why `upsert` is preferred here.
+- **Fourth option is correct** — Because `upsert` handles both insert and update cases, re-running the indexing script is safe and idempotent.
+- **Fifth option is incorrect** — `upsert` does not delete unrelated embeddings; it only touches the records with the matching IDs."
+mcmc,markdown,"A developer is deciding how to store a large warranty policy document in a RAG system. A colleague suggests storing the entire document as a single chunk. Which of the following statements about document chunking are correct, and support the case for breaking the document into smaller chunks instead? *(Select all that apply.)*",,,,,,,,"Smaller chunks allow the retriever to pinpoint the exact paragraph relevant to the query, rather than returning the entire document.",Storing the entire document as one chunk ensures complete context is always available and improves answer quality.,Smaller chunks reduce the amount of irrelevant information injected into the LLM prompt.,Proper chunking improves retrieval accuracy because each chunk focuses on one specific topic.,The LLM automatically breaks large chunks into smaller pieces before generating an answer.,,"1, 3, 4",69f2ebbd5392aa3a5a59562b,0.5,markdown,"- **First option is correct** — Smaller chunks are more precise retrieval targets; the retriever can find the exact relevant paragraph.
+- **Second option is incorrect** — Storing the whole document as one chunk means it may be returned even when only one line is relevant, wasting tokens and confusing the LLM.
+- **Third option is correct** — Focused chunks mean the prompt contains only the relevant content, reducing noise.
+- **Fourth option is correct** — One-topic-per-chunk makes similarity search more accurate since the chunk's embedding captures a specific concept.
+- **Fifth option is incorrect** — The LLM does not perform chunking; chunking is done as a pre-processing step before indexing."
+mcmc,markdown,"Sneha is debugging her RAG system. For the query *""Will I get a refund if my product arrived damaged?""*, she expects the refund policy and warranty policy chunks to be retrieved. However, the system keeps retrieving the shipping policy chunk as one of the top results. Which of the following could be valid reasons for this problem? *(Select all that apply.)*",,,,,,,,"The `top_k` value is set to 1, so only the single most similar chunk is returned, and the shipping chunk happens to be closest in vector space due to surface-level semantic overlap.","The refund and warranty policy chunks were never indexed into the ChromaDB collection, so they are not searchable.","The embedding model generated poor-quality vectors for the refund and warranty chunks, causing their vectors to be far from the query vector even though they are topically relevant.",ChromaDB's cosine similarity always ranks shipping-related content higher than refund content regardless of the query.,"The query phrasing (""arrived damaged"") does not closely match the language in the refund/warranty chunks, leading to lower similarity scores for those chunks.",,"1, 2, 3, 5",69f2ebbd5392aa3a5a59562b,1,markdown,"- **First option is correct** — A `top_k=1` setting returns only one result. If the shipping chunk has any linguistic overlap with ""arrived"" (delivery-related), it may edge out the refund chunk.
+- **Second option is correct** — If the policy chunks were not indexed via `collection.upsert(...)`, they cannot be retrieved at all.
+- **Third option is correct** — Embedding quality matters. If the model generated poor vectors, semantic similarity search will not work correctly even for topically relevant chunks.
+- **Fourth option is incorrect** — ChromaDB does not have any category preference; it ranks purely by vector distance. Shipping content is not inherently ranked higher.
+- **Fifth option is correct** — Retrieval is based on semantic similarity of vectors. If the query phrasing is very different from the language in the policy chunks, their vector distances will be higher, causing them to rank lower."
+mcmc,markdown,"In the e-commerce RAG pipeline built in this session, the `build_grounded_prompt(query, chunks)` function is a critical step. Which of the following statements correctly describe what this function does and why it matters? *(Select all that apply.)*",,,,,,,,It converts the customer's natural language query into an embedding vector for ChromaDB search.,"It assembles all retrieved policy chunks into a structured, labeled context block that the LLM can read.",It instructs the LLM via the prompt to answer only using the provided policy context and not from general knowledge.,It labels each retrieved chunk with its source document name so the LLM knows which policy it came from.,It directly calls the OpenAI API to get the LLM's final response.,It includes a fallback rule instructing the LLM to say it does not have enough information if the answer is not present in the retrieved context.,"2, 3, 4, 6",69f2ebbd5392aa3a5a59562b,1,markdown,"- **First option is incorrect** — Embedding creation is done by `create_embeddings()`, not the prompt builder.
+- **Second option is correct** — The function loops through all retrieved chunks and combines them into a labeled `context` string injected into the prompt.
+- **Third option is correct** — The prompt explicitly says: *""Answer the customer's question using ONLY the policy context provided below.""* This is what grounds the LLM.
+- **Fourth option is correct** — Each chunk is labeled with `Policy Chunk {index} | Source: {source}` so the LLM has transparent attribution.
+- **Fifth option is incorrect** — Calling the OpenAI API is handled by `generate_answer_from_context()`, not the prompt builder.
+- **Sixth option is correct** — The prompt includes the rule: *""If the answer is not present in the context, say: 'I do not have enough information in the provided policy documents.'""* — this is the LLM's fallback instruction."
+subjective,markdown,"Priya is the HR Manager at **InnoTech Solutions**, a 200-person startup. The company has written detailed internal HR policies, but employees constantly send Priya emails asking questions that are already answered in those documents. Priya spends hours every week answering the same repetitive questions.
+
+She decides to build an **HR Policy Assistant** — a RAG-powered chatbot that lets employees type a question and instantly receive a policy-grounded answer. Rather than guessing or relying on generic AI responses, the assistant will retrieve the actual company policy and use it to generate the reply.
+
+Your task is to build this assistant from scratch using Python, ChromaDB, and any LLM API of your choice — applying everything you learned about the RAG pipeline in this session.
+
+### What You Must Build
+
+Create a Python script called `hr_policy_rag.py` inside a project folder `hr-policy-rag`.
+
+#### Step 1 — Define Your HR Policy Documents
+
+Create **at least 4 HR policy documents** as Python dictionaries (similar to `POLICY_DOCUMENTS` in the session). Each document must have:
+
+- A unique `id`
+- A `text` field with 3–5 sentences of policy content
+- A `metadata` field with `category` and `source` keys
+
+Your 4 policies must cover these topics (write your own policy content — do not copy from the session):
+
+| Policy | Example Topics to Cover |
+| ------ | ----------------------- |
+| **Leave Policy** | Annual leave days, sick leave rules, carry-forward rules |
+| **Work From Home Policy** | WFH days per week, eligibility criteria, approval process |
+| **Appraisal Policy** | Appraisal cycle timing, rating scale, increment linkage |
+| **Code of Conduct** | Workplace behavior standards, data privacy rules, conflict of interest |
+
+#### Step 2 — Build These Functions
+
+Implement the following functions in your script:
+
+| Function | What It Should Do |
+| -------- | ----------------- |
+| `create_embeddings(texts)` | Send text list to an embedding model of your choice and return embedding vectors |
+| `setup_vector_database()` | Create a ChromaDB `PersistentClient` with a collection named `hr_policy_collection` using cosine similarity |
+| `index_hr_documents(collection)` | Index your 4 HR policy documents into ChromaDB using `upsert` |
+| `retrieve_hr_content(collection, query, top_k=3)` | Embed the query, search ChromaDB, and return top-K chunks with text, metadata, and distance |
+| `build_grounded_prompt(query, chunks)` | Assemble a prompt that injects retrieved chunks as context and instructs the LLM to answer only from that context |
+| `generate_answer(query, chunks)` | Call your chosen LLM with the grounded prompt and return the response text |
+| `answer_with_rag(collection, query, top_k=3)` | The complete pipeline: retrieve → print chunks → generate answer |
+
+#### Step 3 — Test With Employee Queries
+
+Test your assistant with **at least 3 different employee queries**, one per policy area. Print the retrieved chunks and the final answer for each. Examples (you may write different ones):
+
+- *""How many days of annual leave am I entitled to per year?""*
+- *""Do I need manager approval before working from home?""*
+- *""When is the appraisal cycle conducted and how is the increment decided?""*
+
+#### Step 4 — Side-by-Side Comparison
+
+For **one query of your choice**, print:
+
+1. The answer generated **without RAG** (LLM answering from memory only, using a `generate_answer_without_retrieval(query)` function).
+2. The answer generated **with RAG** (using your complete pipeline).
+
+Label both outputs clearly in the terminal so the difference is visible.
+
+### Constraints & Guidance
+
+- Write your own HR policy text — do not copy the e-commerce policies from the session. The content must reflect a realistic HR context.
+- You may use **any LLM API** for embeddings and generation — OpenAI, Google Gemini, or any other provider. **Gemini API has a free tier** and is a good option if you do not have OpenAI credits.
+- Use `PersistentClient` so your ChromaDB data survives between runs.
+- Use `upsert` (not `add`) when indexing documents.
+- Your grounded prompt must include a fallback instruction: if the policy context does not answer the question, the LLM should say so instead of guessing.
+- Store your API key as an environment variable — never hardcode it in the script. (e.g. `OPENAI_API_KEY` for OpenAI, `GEMINI_API_KEY` for Gemini, etc.)
+
+### Submission Instructions
+
+- Create a repo called `agentic-systems` in your GitHub account (if already created, use the same one) — clone it locally (skip if already cloned).
+- Inside the repo, create a folder called `module2` (skip if already exists).
+- Inside `module2`, create a folder called `Session29`.
+- Inside `Session29`, create your `hr-policy-rag` project folder containing:
+  - `hr_policy_rag.py` — your complete implementation
+  - `requirements.txt` — listing `chromadb` and the SDK for your chosen LLM provider (e.g. `openai`, `google-generativeai`, etc.)
+  - `.gitignore` — ignoring `venv/`, `chroma_hr_policy_db/`, and `.env`
+  - A brief `README.md` — 3–5 lines describing what the project does and how to run it
+- Add, commit, and push all files to GitHub.
+- Submit the GitHub link to the `Session29` folder (not the root repo link) as your submission.",,,,,,,,,,,,,,,69f2ebbd5392aa3a5a59562b,0.5,markdown,"**Approach Overview:**
+
+The solution follows the same five-component RAG pattern taught in the session: Knowledge Sources → Embeddings → Vector Database → Retriever → Generator.
+
+**Key implementation decisions:**
+
+1. **Policy design:** Each policy document covers one specific HR area, keeping chunks focused so retrieval is precise.
+2. **`upsert` over `add`:** Prevents duplicate-ID errors if the script is re-run after the ChromaDB folder already exists.
+3. **Grounded prompt design:** The prompt must include the rule *""Answer only from the policy context below. If the answer is not in the context, say you do not have enough information.""* — this prevents hallucination.
+4. **Side-by-side comparison:** Calling the LLM without any retrieved context (just the raw employee question) produces a generic, company-unaware answer. With RAG, the answer reflects the exact policies written by the student — demonstrating the core value of grounding.
+5. **`top_k=3`:** This balanced default ensures enough context for multi-aspect queries without adding noisy, irrelevant chunks.
+
+**Example model output for query `""How many days of annual leave am I entitled to per year?""`:**
+
+```
+WITHOUT RAG:
+Most companies provide between 12 to 24 days of paid annual leave per year, depending on company policy and local labor laws. Please check your HR handbook for specifics.
+
+WITH RAG:
+================================================================================
+Customer Query: How many days of annual leave am I entitled to per year?
+================================================================================
+Result 1 | Source: leave_policy | Category: leave | Distance: 0.0812
+...
+
+Final RAG Answer:
+As per InnoTech Solutions' Leave Policy, all full-time employees are entitled to 18 days of paid annual leave per calendar year. Unused leaves up to 5 days may be carried forward to the next year. Leaves beyond this limit will lapse.
+```
+
+**Alternative approaches:**
+
+- Students may use any LLM provider — OpenAI (`gpt-4o-mini`, `gpt-4o`), Google Gemini (`gemini-1.5-flash`, `gemini-2.0-flash` — free tier available), or any other API. The RAG pipeline logic remains identical regardless of provider.
+- Students may add metadata filtering (e.g., `where={""category"": ""leave""}`) to make retrieval more precise.
+- More policy documents (5+) are acceptable and encouraged."
