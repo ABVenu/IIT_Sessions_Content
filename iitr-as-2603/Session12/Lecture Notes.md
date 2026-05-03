@@ -20,11 +20,15 @@ Before writing a single line of code or making any chart, every good data analys
 
 EDA is not a one-time step. You keep going back to it as you discover new things about the data.
 
+![EDA means inspecting and summarising data before deeper analysis — like checking ingredients before cooking or a doctor reviewing a file before a diagnosis](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12/session12-eda-inspect-first.png)
+
 ---
 
 ## The EDA Inspection Checklist
 
 Every time you pick up a new dataset, go through this checklist in order. Each step answers a specific question about the data.
+
+![Four-step EDA checklist: load and peek, column types and missing values, summary statistics, then distributions and outliers](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12/session12-eda-four-step-checklist.png)
 
 **Step 1 — Load and Peek at the Data**
 
@@ -111,6 +115,8 @@ import matplotlib.pyplot as plt            # import pyplot module and give it th
 ```
 
 The alias `plt` is a standard convention — every Python developer uses it, so always follow this pattern.
+
+![Matplotlib is your drawing board — a flexible foundation for building line, bar, histogram, and custom static charts in Python](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12/session12-matplotlib-drawing-board.png)
 
 ---
 
@@ -212,6 +218,8 @@ plt.show()                                     # show the chart
 - Too few bins (e.g., 3) hides the shape. Too many bins (e.g., 100) makes it look like noise.
 - Start with 10–15 bins and adjust based on what looks clear.
 
+![Line charts show trends over time, bar charts compare categories, and histograms show how one numeric column is distributed across bins](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12/session12-chart-types-line-bar-hist.png)
+
 ---
 
 ## Introduction to Plotly — Interactive Charts
@@ -221,6 +229,8 @@ Matplotlib gives you static charts — images you can save and share. **Plotly**
 - **Official Definition:** **Plotly** is a Python graphing library that produces interactive, web-based visualisations.
 - **In Simple Words:** If Matplotlib is a printed graph, Plotly is a touchscreen dashboard. The viewer can hover over a bar to see the exact value, zoom into a time range, or click to hide a line.
 - **Real-Life Example:** Business dashboards you see on websites — where you hover over a sales chart and it shows you the exact number — are typically built with tools like Plotly.
+
+![Matplotlib excels at polished static figures you can save and share; Plotly adds hover tooltips, zoom, and filtering for interactive exploration](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12/session12-static-vs-interactive-plotly.png)
 
 ```python
 import plotly.express as px                   # import Plotly Express (the easy-to-use version of Plotly)
@@ -319,6 +329,8 @@ A chart is not a story by itself. **Data Storytelling** is the skill of combinin
 - **Data** — The numbers and facts (the "what happened")
 - **Visuals** — The charts that make the data scannable (the "here's the proof")
 - **Narrative** — The explanation that gives context and recommendation (the "so what and what next")
+
+![A strong data story combines three pillars: the facts (data), charts that make them scannable (visuals), and narrative that explains why it matters and what to do next](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12/session12-data-storytelling-three-pillars.png)
 
 **Practical Techniques for Data Storytelling:**
 
