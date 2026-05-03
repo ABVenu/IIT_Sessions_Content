@@ -69,3 +69,53 @@ All numerical values independently verified:
 **PASS — All QC criteria met. No further iteration required.**
 
 Notes are appropriately lighter for the target audience (non-tech background), covering exactly the 4 session topics without re-teaching previously covered evaluation metrics (MAE, RMSE), and without session number references.
+
+---
+
+## QC Iteration 2 — Post-Live Alignment Check
+
+**Date:** 2026-05-03
+
+**Context:** Post-session review against Live Topic Coverage report. All 4 planned topics (Trend vs Seasonality, Time-aware Splits, Rolling Windows, Evaluation for Time Series) were marked as **covered** in the live session. No content removal required; notes transferred as-is to `Lecture Notes Released.md`.
+
+---
+
+### Criteria Scores
+
+| Criteria | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+
+---
+
+### Detailed Assessment
+
+**Content Coverage — 5/5**
+Live Topic Coverage confirms full coverage of all planned topics:
+- Trend vs Seasonality: Covered (instructor also taught the noise/random component — present in notes as a callout note).
+- Time-Aware Splits: Covered with chronological ordering, data leakage explanation, and Walk-Forward Validation note.
+- Rolling Windows: Covered (lag features taught in the same segment — present in notes as a dedicated sub-section).
+- Evaluation for Time Series: Covered (baseline model workflow taught — present in notes as a dedicated section).
+All extra emphases mentioned in the live coverage (noise component, lag features, baseline workflow, applied contexts) are already present in the notes.
+
+**Creativity — 5/5**
+No change from Iteration 1. All relatable analogies, diverse real-life examples, and callout note usage retained.
+
+**Structural Adherence — 5/5**
+No change from Iteration 1. Structure, heading hierarchy, definition → example → code pattern, image references, Key Takeaways, and Glossary all intact.
+
+**No Logical Mistakes — True**
+No modifications made; all verified calculations from Iteration 1 remain valid.
+
+**No Presentation Mistakes — True**
+No modifications made; all table formatting, markdown syntax, and code blocks remain correct.
+
+---
+
+### Verdict
+
+**PASS — Notes fully aligned with live session coverage. `Lecture Notes Released.md` created without modification.**
