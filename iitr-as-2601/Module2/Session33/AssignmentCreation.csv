@@ -1,0 +1,258 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Meera records her cafe's total sales every evening for 90 days. She wants to use this data to understand how sales change over time. What makes this dataset a time series dataset?
+
+- It contains many rows, so it is automatically a time series
+- The order of records by date matters for understanding the pattern
+- The sales values are numeric, so the data must be time series data
+- The dataset can be shuffled without losing meaning",,,,,,2,,"It contains many rows, so it is automatically a time series",The order of records by date matters for understanding the pattern,"The sales values are numeric, so the data must be time series data",The dataset can be shuffled without losing meaning,,69f70dfcbe48d425eaf1932e,0,markdown,"A time series is a sequence of data points recorded at successive points in time. The key feature is that the order matters. In Meera's cafe data, Day 10 comes after Day 9, and shuffling the rows would destroy the meaning of the pattern. Option A is incorrect because row count does not define time series data. Option C is incorrect because numeric data can also exist in regular non-time-series datasets. Option D is the opposite of time series behavior; shuffling time series data removes the time relationship."
+mcsc,markdown,"A fitness app tracks the number of active users every month. Over three years, the number generally rises from 20,000 users to 85,000 users, even though a few months show small drops. Which time series pattern is this mainly showing?
+
+- Positive trend
+- Weekly seasonality
+- Future leakage
+- Random split",,,,,,1,,Positive trend,Weekly seasonality,Future leakage,Random split,,69f70dfcbe48d425eaf1932e,0,markdown,"A trend is the long-term direction of a time series. Since the app's active users generally increase over several years, the series shows a positive trend. Small month-to-month drops do not remove the overall upward direction. Option B is incorrect because weekly seasonality refers to a repeating weekly cycle, which is not described here. Option C is incorrect because future leakage is a train-test split problem. Option D is incorrect because random split is a data splitting method, not a pattern in the data."
+mcsc,markdown,"A pizza delivery platform sees high order volumes every Friday and Saturday, while Monday to Thursday orders stay lower. This pattern repeats almost every week. What is this an example of?
+
+- Flat trend
+- Weekly seasonality
+- Mean Absolute Percentage Error
+- Naive forecast",,,,,,2,,Flat trend,Weekly seasonality,Mean Absolute Percentage Error,Naive forecast,,69f70dfcbe48d425eaf1932e,0,markdown,"Seasonality is a regular repeating pattern that occurs at a fixed interval. Since the order spike repeats every week on Friday and Saturday, this is weekly seasonality. Option A is incorrect because the question describes a repeated weekly cycle, not a long-term flat direction. Option C is a model evaluation metric. Option D is a baseline forecasting method where the next value is predicted as the current value."
+mcsc,markdown,"Kabir is preparing a time series model to predict next month's sales. He randomly shuffles all monthly sales records before splitting them into train and test sets. What is the biggest risk in this approach?
+
+- The model may train much slower than usual
+- The test set may contain only low sales values
+- Future data may leak into the training set, making evaluation unrealistic
+- The model will be unable to calculate rolling averages",,,,,,3,,The model may train much slower than usual,The test set may contain only low sales values,"Future data may leak into the training set, making evaluation unrealistic",The model will be unable to calculate rolling averages,,69f70dfcbe48d425eaf1932e,0,markdown,"Random splitting is unsafe for time series because future records can enter the training set while earlier records remain in the test set. This creates future leakage: the model gets information it would not have in a real forecasting situation. Option A may or may not happen and is not the core issue. Option B is not the main guaranteed risk. Option D is incorrect because rolling averages can still be calculated, but the evaluation would be logically wrong."
+mcsc,markdown,"A grocery chain has 10 months of sales data and wants an 80:20 chronological split for forecasting:
+
+| Month | Sales |
+|------:|------:|
+| Jan | 80 |
+| Feb | 85 |
+| Mar | 90 |
+| Apr | 88 |
+| May | 95 |
+| Jun | 100 |
+| Jul | 102 |
+| Aug | 105 |
+| Sep | 110 |
+| Oct | 115 |
+
+Which split is correct?
+
+- Train on Sep-Oct and test on Jan-Aug
+- Randomly choose any 8 months for training and any 2 months for testing
+- Train on Jan-Aug and test on Sep-Oct
+- Train on Jan, Mar, May, Jul, Sep and test on Feb, Apr, Jun, Aug, Oct",,,,,,3,,Train on Sep-Oct and test on Jan-Aug,Randomly choose any 8 months for training and any 2 months for testing,Train on Jan-Aug and test on Sep-Oct,"Train on Jan, Mar, May, Jul, Sep and test on Feb, Apr, Jun, Aug, Oct",,69f70dfcbe48d425eaf1932e,0.5,markdown,"For time series, the correct split is chronological: older data goes into training, newer data goes into testing. With 10 months and an 80:20 split, the first 8 months (Jan-Aug) should be training data, and the last 2 months (Sep-Oct) should be test data. Option A reverses time and trains on the future. Option B causes future leakage. Option D breaks the time order by alternating months between train and test."
+mcsc,markdown,"An analyst creates a 3-day rolling mean on this sales series: Day 1 = 100, Day 2 = 120, Day 3 = 110, Day 4 = 130. What should be the 3-day rolling mean for Day 4?
+
+- 110.00
+- 115.00
+- 120.00
+- 130.00",,,,,,3,,110.00,115.00,120.00,130.00,,69f70dfcbe48d425eaf1932e,0.5,markdown,"A 3-day rolling mean for Day 4 uses Day 2, Day 3, and Day 4: `(120 + 110 + 130) / 3 = 120`. Option A incorrectly averages Day 1-Day 3. Option B is the average of all four days, which is not a 3-day rolling window. Option D is only the Day 4 value, not an average."
+mcmc,markdown,"Which of the following statements about rolling windows and lag features are TRUE? (Select all that apply)
+
+- A rolling window computes statistics over a fixed-size recent time period
+- A 7-day rolling mean can help smooth noisy daily values
+- A lag feature uses a past value, such as yesterday's sales, as a new feature
+- A rolling window should use future test values while creating training features",,,,,,,,A rolling window computes statistics over a fixed-size recent time period,A 7-day rolling mean can help smooth noisy daily values,"A lag feature uses a past value, such as yesterday's sales, as a new feature",A rolling window should use future test values while creating training features,"1, 2, 3",69f70dfcbe48d425eaf1932e,0.5,markdown,"- **A — CORRECT:** A rolling window slides through time and computes statistics such as mean, standard deviation, or maximum over a fixed-size window.
+- **B — CORRECT:** Rolling means smooth noisy day-to-day fluctuations and make the underlying pattern easier to see.
+- **C — CORRECT:** Lag features bring previous values forward, such as `lag_1` for yesterday's sales or `lag_7` for the value from one week ago.
+- **D — INCORRECT:** Using future test values while creating training features would cause future leakage. Time series features must respect time order."
+mcmc,markdown,"A forecasting team is evaluating a time series model. Which of the following are valid evaluation or comparison ideas covered in the session? (Select all that apply)
+
+- Use MAE to measure average absolute error
+- Use RMSE when large errors are especially costly
+- Use MAPE to express error as a percentage of actual value
+- Skip baseline models because complex models are always better",,,,,,,,Use MAE to measure average absolute error,Use RMSE when large errors are especially costly,Use MAPE to express error as a percentage of actual value,Skip baseline models because complex models are always better,"1, 2, 3",69f70dfcbe48d425eaf1932e,0.5,markdown,"- **A — CORRECT:** MAE can be used for time series forecasting because forecasting is a regression problem.
+- **B — CORRECT:** RMSE is useful when large errors should be penalized more strongly.
+- **C — CORRECT:** MAPE expresses error as a percentage, making it useful when comparing different scales.
+- **D — INCORRECT:** The session clearly states that every complex model should be compared against simple baselines such as naive forecast, seasonal naive, or rolling mean forecast."
+mcmc,markdown,"An online grocery company forecasts demand for three product categories. Which statements about MAPE are correct? (Select all that apply)
+
+- MAPE reports prediction error as a percentage of the actual value
+- MAPE makes it easier to compare errors across products with different sales scales
+- MAPE works safely even when actual values are zero
+- If actual sales are 200 and predicted sales are 180, the percentage error for that point is 10%",,,,,,,,MAPE reports prediction error as a percentage of the actual value,MAPE makes it easier to compare errors across products with different sales scales,MAPE works safely even when actual values are zero,"If actual sales are 200 and predicted sales are 180, the percentage error for that point is 10%","1, 2, 4",69f70dfcbe48d425eaf1932e,1,markdown,"- **A — CORRECT:** MAPE stands for Mean Absolute Percentage Error and expresses error as a percentage.
+- **B — CORRECT:** Because MAPE is scale-independent, it helps compare models across products with different sales volumes.
+- **C — INCORRECT:** MAPE breaks down when actual values are zero or very close to zero because the formula divides by the actual value. In such cases, MAE is safer.
+- **D — CORRECT:** The absolute error is `|200 - 180| = 20`; `20 / 200 = 0.10`, so the percentage error is 10%."
+mcmc,markdown,"Rohan is designing a forecasting workflow for daily website traffic. Which decisions correctly follow time series principles from the session? (Select all that apply)
+
+- Sort the dataset by date before splitting or creating time-based features
+- Train on older records and test on newer records
+- Compare the model against a naive forecast or rolling mean baseline
+- Shuffle all rows first so that the model sees every kind of pattern equally",,,,,,,,Sort the dataset by date before splitting or creating time-based features,Train on older records and test on newer records,Compare the model against a naive forecast or rolling mean baseline,Shuffle all rows first so that the model sees every kind of pattern equally,"1, 2, 3",69f70dfcbe48d425eaf1932e,1,markdown,"- **A — CORRECT:** Time series data must be sorted by time so that the sequence is meaningful.
+- **B — CORRECT:** Chronological split is the correct time-aware split: past data for training, future data for testing.
+- **C — CORRECT:** Baselines are essential because they show whether a complex model is actually better than a simple forecasting rule.
+- **D — INCORRECT:** Shuffling rows breaks time order and can cause future leakage during training and evaluation."
+subjective,markdown,"### Cafe Sales Forecasting With Rolling Features and Baselines
+
+**Background:**
+
+BeanBox Cafe records its daily sales in rupees. The owner wants a simple forecasting workflow that respects time order, creates useful recent-history features, and compares simple baseline forecasts before attempting any complex model.
+
+You are the data analyst assigned to prepare this workflow in Python.
+
+---
+
+**Your program must complete all of the following steps:**
+
+**Step 1 — Create the Daily Sales Dataset**  
+Use the dataset generation code provided below. Do not change the dates or sales values.
+
+**Step 2 — Prepare the Time Series**  
+Convert the `date` column to datetime format and set it as the DataFrame index. Make sure the data is sorted from oldest date to newest date.
+
+**Step 3 — Create Rolling Window Features**  
+Create the following columns:
+- `rolling_mean_3`: 3-day rolling average of sales
+- `rolling_std_3`: 3-day rolling standard deviation of sales
+- `rolling_max_3`: 3-day rolling maximum sales value
+
+**Step 4 — Create Lag Features**  
+Create the following columns:
+- `lag_1`: previous day's sales
+- `lag_7`: sales from 7 days ago
+
+**Step 5 — Build a Chronological Train-Test Split**  
+Use the first 80% of rows as training data and the last 20% as test data. Do not shuffle the data.
+
+**Step 6 — Compare Two Baseline Forecasts on the Test Data**
+Create these two baseline predictions:
+- `naive_forecast`: predict today's sales as yesterday's sales using `lag_1`
+- `rolling_mean_forecast`: predict today's sales using the 3-day rolling mean
+
+**Step 7 — Evaluate With MAPE**  
+Write a function to calculate MAPE and print the MAPE for both baseline forecasts on the test set.
+
+**Step 8 — Print the Final Output**  
+Print:
+- The first 10 rows of the DataFrame after feature creation
+- The train and test date ranges
+- The MAPE values for both baseline forecasts
+- A short sentence stating which baseline performed better
+
+---
+
+**Dataset Generation Code — Use exactly as given:**
+
+```python
+import pandas as pd
+
+data = {
+    ""date"": pd.date_range(start=""2024-01-01"", periods=30, freq=""D""),
+    ""sales"": [
+        200, 220, 215, 230, 250, 245, 260, 270, 265, 280,
+        300, 295, 310, 330, 325, 340, 360, 355, 370, 390,
+        410, 405, 420, 440, 435, 450, 470, 465, 480, 500
+    ]
+}
+
+df = pd.DataFrame(data)
+```
+
+---
+
+**Expected Output:**
+
+1. A DataFrame preview showing rolling and lag feature columns.
+2. Clear train and test date ranges based on chronological splitting.
+3. MAPE values for `naive_forecast` and `rolling_mean_forecast`.
+4. A printed comparison sentence identifying the better baseline.
+
+**Submission Instructions:**
+- Code all the steps mentioned above in VS Code in a single `.py` file (for example, `cafe_sales_time_series.py`)
+- Run the code and verify it works correctly
+- Then submit the code in the code editor/answer box in the LMS",,,,,,,,,,,,,69f70dfcbe48d425eaf1932e,0.5,markdown,"This task tests the core time series workflow from the session: preserving date order, creating rolling window features, creating lag features, avoiding random train-test split, evaluating forecasts with MAPE, and comparing against simple baselines. The dataset has a clear upward trend, so the learner must make predictions using only past information.
+
+Key solution steps:
+1. Convert the `date` column to datetime and set it as the index.
+2. Use `.rolling(window=3)` to create rolling mean, standard deviation, and maximum features.
+3. Use `.shift(1)` and `.shift(7)` to create lag features.
+4. Use a chronological 80:20 split, not a random split.
+5. Evaluate `lag_1` and `rolling_mean_3` as baseline forecasts using MAPE.
+6. Drop rows with missing forecast values from the test comparison before calculating MAPE.
+
+**Complete reference solution:**
+
+```python
+import numpy as np
+import pandas as pd
+
+data = {
+    ""date"": pd.date_range(start=""2024-01-01"", periods=30, freq=""D""),
+    ""sales"": [
+        200, 220, 215, 230, 250, 245, 260, 270, 265, 280,
+        300, 295, 310, 330, 325, 340, 360, 355, 370, 390,
+        410, 405, 420, 440, 435, 450, 470, 465, 480, 500
+    ]
+}
+
+df = pd.DataFrame(data)
+
+# Step 2: Prepare the time series
+df[""date""] = pd.to_datetime(df[""date""])
+df = df.sort_values(""date"")
+df = df.set_index(""date"")
+
+# Step 3: Rolling window features
+df[""rolling_mean_3""] = df[""sales""].rolling(window=3).mean()
+df[""rolling_std_3""] = df[""sales""].rolling(window=3).std()
+df[""rolling_max_3""] = df[""sales""].rolling(window=3).max()
+
+# Step 4: Lag features
+df[""lag_1""] = df[""sales""].shift(1)
+df[""lag_7""] = df[""sales""].shift(7)
+
+# Step 5: Chronological train-test split
+split_index = int(len(df) * 0.8)
+train_df = df.iloc[:split_index]
+test_df = df.iloc[split_index:].copy()
+
+# Step 6: Baseline forecasts
+test_df[""naive_forecast""] = test_df[""lag_1""]
+test_df[""rolling_mean_forecast""] = test_df[""rolling_mean_3""]
+
+# Step 7: MAPE function
+def calculate_mape(actual, predicted):
+    actual = np.array(actual)
+    predicted = np.array(predicted)
+    return np.mean(np.abs((actual - predicted) / actual)) * 100
+
+comparison_df = test_df.dropna(subset=[""naive_forecast"", ""rolling_mean_forecast""])
+
+naive_mape = calculate_mape(comparison_df[""sales""], comparison_df[""naive_forecast""])
+rolling_mean_mape = calculate_mape(
+    comparison_df[""sales""],
+    comparison_df[""rolling_mean_forecast""]
+)
+
+# Step 8: Final output
+print(""DataFrame preview after feature creation:"")
+print(df.head(10))
+
+print(""\nTrain date range:"")
+print(train_df.index.min().date(), ""to"", train_df.index.max().date())
+
+print(""\nTest date range:"")
+print(test_df.index.min().date(), ""to"", test_df.index.max().date())
+
+print(f""\nNaive Forecast MAPE: {naive_mape:.2f}%"")
+print(f""Rolling Mean Forecast MAPE: {rolling_mean_mape:.2f}%"")
+
+if naive_mape < rolling_mean_mape:
+    print(""The naive forecast performed better because it had the lower MAPE."")
+elif rolling_mean_mape < naive_mape:
+    print(""The rolling mean forecast performed better because it had the lower MAPE."")
+else:
+    print(""Both baseline forecasts performed equally based on MAPE."")
+```
+
+**Why this solution is correct:**
+- The date column is used as the index, preserving the time-series structure.
+- Rolling features are calculated only from the current and previous rows in each window.
+- Lag features use past values, not future values.
+- The split is chronological, so training data comes before test data.
+- MAPE expresses each baseline's error as a percentage, which matches the evaluation method covered in the session.
+- The baselines are simple but meaningful starting points before building a complex model."

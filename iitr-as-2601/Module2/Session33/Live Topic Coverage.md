@@ -1,0 +1,6 @@
+| topic/sub topic | status | remarks |
+| --- | --- | --- |
+| Trend vs Seasonality | covered | Long‑term trend vs predictable repeating seasonality; market/stock-style examples and discussion of seasonal patterns with code/visual context. Instructor also spent time on the random/noise component as the third piece of typical time‑series decomposition. |
+| Time-aware splits | covered | Compared random shuffling vs preserving chronological order for train/test; first segment for training and later segment for evaluation (e.g. 80/20); leakage risk if future leaks into train; referenced implementation idea such as no shuffle when splitting ordered rows. |
+| Rolling windows | covered | Rolling means as smoothing and as engineered predictors (e.g. window sizes 3, 7); small vs large windows; stock‑style intuition. Instructor also taught lag features in the same feature‑engineering segment (closely tied to rolling for tabular forecasting). |
+| Evaluation for time series | covered | Forecasting framed like regression evaluation; R², RMSE, MAE; evaluate on genuinely later time periods after chronological splits; compared forecasts from different models (e.g. linear regression vs gradient boosting). Baseline‑model workflow and broader applied contexts (inventory, electricity, crypto, passengers style cases, etc.) were extra emphases tied to forecasting practice. |
