@@ -23,4 +23,4 @@ detailed subtopics to be covered:
 - Understand Why Memory is Important in Agents — Connect context and state to memory, showing how memory enables continuity and intelligent behavior;
 - Explore Types of Agent Memory (High-Level) — Introduce short-term and long-term memory as foundational categories;
 - Understand the Working of Memory in an Agent — Explain how memory is stored, retrieved, and used in the interaction flow;
-- Compare Agent Behavior With and Without Memory  — Analyze side-by-side examples to reinforce the practical impact of memory on agent performance;"
+- Compare Agent Behavior With and Without Memory  — Analyze side-by-side examples to reinforce the practical impact of memory on agent performance;
