@@ -145,4 +145,3 @@ After **60–75 minutes** of session time, take **one** break of **5–8 minutes
 **If you need to end on the clock:** deliver **Block 11** takeaways as **first 4 bullets only** + send full list async; shorten **Closing activity** to **chat-only**, no voices.
 
 ---
-
