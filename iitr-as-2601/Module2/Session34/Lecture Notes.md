@@ -38,46 +38,42 @@ But in a real ML project, you never train just one model. You train multiple —
 # ML Workshop: Building a Metric Comparison Table (Classification)
 # ============================================================
 
-import pandas as pd                                          # For creating DataFrames and tables
-import numpy as np                                           # For numerical operations
-from sklearn.datasets import load_breast_cancer             # A built-in binary classification dataset
-from sklearn.model_selection import train_test_split        # For splitting data into train and test
-from sklearn.preprocessing import StandardScaler            # For scaling features to the same range
+import pandas as pd
+import numpy as np
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-from sklearn.linear_model import LogisticRegression         # Simple, linear classification model
-from sklearn.tree import DecisionTreeClassifier             # Tree-based classification model
-from sklearn.ensemble import RandomForestClassifier         # Ensemble of many decision trees
-
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score  # Metric functions
-
-# ---- Step 1: Load a real dataset ----
+# ---- Step 1: Load dataset ----
 data = load_breast_cancer()                                  # 569 patient records, 30 medical features
-X    = data.data                                             # Feature matrix (measurements)
-y    = data.target                                           # Target (0 = malignant, 1 = benign)
+X    = data.data
+y    = data.target                                           # 0 = malignant, 1 = benign
 
 # ---- Step 2: Train-test split ----
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42                     # 80% train, 20% test, fixed seed for reproducibility
+    X, y, test_size=0.2, random_state=42
 )
 
 # ---- Step 3: Scale features — essential for Logistic Regression ----
-scaler  = StandardScaler()                                   # Create a scaler object
-X_train = scaler.fit_transform(X_train)                     # Fit on train data, then transform it
-X_test  = scaler.transform(X_test)                          # Only transform test — never fit on test data
+scaler  = StandardScaler()
+X_train = scaler.fit_transform(X_train)                     # Fit on train data, then transform
+X_test  = scaler.transform(X_test)                          # Only transform — never fit on test
 
-# ---- Step 4: Define all models in a dictionary for easy looping ----
+# ---- Step 4: Define two models in a dictionary for easy looping ----
 models = {
-    "Logistic Regression": LogisticRegression(max_iter=1000),          # max_iter ensures the solver converges
-    "Decision Tree":       DecisionTreeClassifier(random_state=42),    # Fixed seed for reproducible tree structure
-    "Random Forest":       RandomForestClassifier(n_estimators=100, random_state=42)  # 100 trees in the forest
+    "Logistic Regression": LogisticRegression(max_iter=1000),
+    "Random Forest":       RandomForestClassifier(n_estimators=100, random_state=42)
 }
 
-# ---- Step 5: Train each model, predict, and collect all metrics ----
-results = []                                                 # Empty list to collect one row per model
-for model_name, model in models.items():                    # Loop through each model name and object
-    model.fit(X_train, y_train)                             # Train the model on training data
-    y_pred = model.predict(X_test)                          # Predict labels for the test set
-    results.append({                                        # Append a dictionary with all metric values
+# ---- Step 5: Train each model, predict, and collect metrics ----
+results = []
+for model_name, model in models.items():
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    results.append({
         "Model":     model_name,
         "Accuracy":  round(accuracy_score(y_test, y_pred),  4),
         "Precision": round(precision_score(y_test, y_pred), 4),
@@ -85,32 +81,28 @@ for model_name, model in models.items():                    # Loop through each 
         "F1-Score":  round(f1_score(y_test, y_pred),        4)
     })
 
-# ---- Step 6: Convert to DataFrame and display the comparison table ----
-comparison_df = pd.DataFrame(results)                       # Convert list of dicts into a DataFrame
-comparison_df = comparison_df.set_index("Model")            # Use model name as row label
-print(comparison_df)                                        # Display the final side-by-side table
+# ---- Step 6: Display the comparison table ----
+comparison_df = pd.DataFrame(results).set_index("Model")
+print(comparison_df)
 ```
 
 **How the code works:**
 
-- `load_breast_cancer()` provides a real medical dataset — no need to build our own. It has 569 patient records and 30 features like tumour radius and texture.
+- `load_breast_cancer()` provides a real medical dataset with 569 patient records and 30 features like tumour radius and texture. **We will reuse this same dataset in every code block that follows.**
 - `StandardScaler` normalises all features to the same scale. This is mandatory for Logistic Regression — without it, features with larger numbers (like tumour area) would dominate and distort the model.
-- Storing models in a **dictionary** is a clean pattern — one `for` loop handles training, predicting, and metric calculation for all three models.
-- `results.append(...)` collects one row per model. Each row is a dictionary mapping metric names to values.
-- `pd.DataFrame(results)` converts this list of rows into a neat, readable table.
+- Storing models in a **dictionary** is a clean pattern — one `for` loop handles training, predicting, and metric calculation for both models.
+- `results.append(...)` collects one row per model. `pd.DataFrame(results)` converts this list into a neat, readable table.
 
 **Sample Output — Metric Comparison Table:**
 
 | Model | Accuracy | Precision | Recall | F1-Score |
 |---|---|---|---|---|
 | Logistic Regression | 0.9737 | 0.9726 | 0.9859 | 0.9792 |
-| Decision Tree | 0.9474 | 0.9577 | 0.9577 | 0.9577 |
 | Random Forest | 0.9649 | 0.9589 | 0.9859 | 0.9722 |
 
 - **Logistic Regression** achieves the highest F1-Score despite being the simplest model — an important insight.
-- **Decision Tree** trails slightly. In the next section, you will understand exactly why.
-- **Random Forest** sits between the two — better than Decision Tree but very close to Logistic Regression.
-- Without this table, you would have to jump between three separate outputs to reach the same conclusion.
+- **Random Forest** is more complex but only marginally improves precision — the added complexity does not justify the difference here.
+- Without this table, you would have to jump between separate outputs to reach the same conclusion.
 
 ---
 
@@ -120,68 +112,58 @@ The same pattern works for regression. The only difference is the metrics used �
 
 ```python
 # ============================================================
-# ML Workshop: Building a Metric Comparison Table (Regression)
+# ML Workshop: Metric Comparison Table (Regression)
 # ============================================================
+# Regression needs a numeric target — we switch to the California housing dataset here.
 
 import pandas as pd
 import numpy as np
-from sklearn.datasets import fetch_california_housing        # Built-in regression dataset (house prices)
+from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
-from sklearn.linear_model import LinearRegression            # Simple linear regression model
-from sklearn.tree import DecisionTreeRegressor               # Tree-based regression model
-from sklearn.ensemble import RandomForestRegressor           # Ensemble regression model
-
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score  # Regression metrics
-
-# ---- Step 1: Load California housing dataset ----
-data     = fetch_california_housing()                        # 20,640 rows, 8 features, target = house price
-X, y     = data.data, data.target                           # Features and target (median house value)
-
-# ---- Step 2: Split and scale ----
+data    = fetch_california_housing()                         # 20,640 rows, 8 features, target = house price
+X, y    = data.data, data.target
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-scaler   = StandardScaler()
-X_train  = scaler.fit_transform(X_train)                    # Fit on train data only
-X_test   = scaler.transform(X_test)                         # Apply same scaling to test data
+scaler  = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test  = scaler.transform(X_test)
 
-# ---- Step 3: Define regression models ----
 models = {
     "Linear Regression": LinearRegression(),
-    "Decision Tree":     DecisionTreeRegressor(random_state=42),
     "Random Forest":     RandomForestRegressor(n_estimators=100, random_state=42)
 }
 
-# ---- Step 4: Train, predict, and compute metrics ----
 results = []
 for model_name, model in models.items():
-    model.fit(X_train, y_train)                             # Train the model
-    y_pred = model.predict(X_test)                          # Predict on test set
-    rmse   = np.sqrt(mean_squared_error(y_test, y_pred))    # Compute RMSE (sklearn gives MSE, we take square root)
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    rmse   = np.sqrt(mean_squared_error(y_test, y_pred))    # sklearn returns MSE — we take the square root
     results.append({
         "Model": model_name,
-        "MAE":   round(mean_absolute_error(y_test, y_pred), 4),   # Lower is better
-        "RMSE":  round(rmse, 4),                                   # Lower is better
-        "R²":    round(r2_score(y_test, y_pred), 4)                # Closer to 1.0 is better
+        "MAE":   round(mean_absolute_error(y_test, y_pred), 4),
+        "RMSE":  round(rmse, 4),
+        "R²":    round(r2_score(y_test, y_pred), 4)
     })
 
-# ---- Step 5: Display table ----
 comparison_df = pd.DataFrame(results).set_index("Model")
 print(comparison_df)
 ```
 
 **How the code works:**
 
-- `fetch_california_housing()` gives us a large, realistic regression dataset — house price prediction using 8 features like average rooms and location.
-- `np.sqrt(mean_squared_error(...))` manually computes RMSE because scikit-learn's function returns MSE (the square), not RMSE.
-- For regression metrics: **lower MAE and RMSE = better**; **R² closer to 1.0 = better** (R² of 1.0 means perfect predictions).
+- `fetch_california_housing()` gives a realistic regression dataset — house price prediction using 8 features like average rooms and location.
+- `np.sqrt(mean_squared_error(...))` manually computes RMSE because scikit-learn returns MSE (the square), not RMSE.
+- For regression metrics: **lower MAE and RMSE = better**; **R² closer to 1.0 = better**.
 
 **Sample Output:**
 
 | Model | MAE | RMSE | R² |
 |---|---|---|---|
 | Linear Regression | 0.5332 | 0.7456 | 0.5758 |
-| Decision Tree | 0.4744 | 0.7296 | 0.5951 |
 | Random Forest | 0.3277 | 0.5022 | 0.8052 |
 
 - **Random Forest** clearly dominates — lowest MAE, lowest RMSE, and highest R².
@@ -248,36 +230,22 @@ The most reliable way to detect these problems is to compare **training accuracy
 # ============================================================
 # Detecting Overfitting vs. Underfitting by Varying Complexity
 # ============================================================
+# We continue using the same breast cancer dataset — X_train, X_test are already ready.
 
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.tree import DecisionTreeClassifier             # We will test this at different depths
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 import pandas as pd
 
-# ---- Prepare data ----
-data = load_breast_cancer()
-X_train, X_test, y_train, y_test = train_test_split(
-    data.data, data.target, test_size=0.2, random_state=42
-)
-scaler  = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test  = scaler.transform(X_test)
-
-# ---- Test Decision Trees at five different complexity levels ----
 results = []
-for depth in [1, 3, 5, 10, None]:                          # None = unlimited depth = maximum complexity
+for depth in [1, 5, None]:                                  # None = unlimited depth = maximum complexity
     model = DecisionTreeClassifier(max_depth=depth, random_state=42)
-    model.fit(X_train, y_train)                             # Train on training data
-
+    model.fit(X_train, y_train)
     train_acc = accuracy_score(y_train, model.predict(X_train))   # Score on training data
-    test_acc  = accuracy_score(y_test,  model.predict(X_test))    # Score on test data (what really matters)
-
+    test_acc  = accuracy_score(y_test,  model.predict(X_test))    # Score on test data (what matters)
     results.append({
-        "Max Depth":      str(depth) if depth else "Unlimited",
-        "Train Accuracy": round(train_acc, 4),
-        "Test Accuracy":  round(test_acc, 4),
+        "Max Depth":        str(depth) if depth else "Unlimited",
+        "Train Accuracy":   round(train_acc, 4),
+        "Test Accuracy":    round(test_acc, 4),
         "Gap (Train-Test)": round(train_acc - test_acc, 4)  # Large gap = overfitting signal
     })
 
@@ -286,8 +254,8 @@ print(pd.DataFrame(results).set_index("Max Depth"))
 
 **How the code works:**
 
-- `max_depth` controls how deep the decision tree grows. A depth of 1 makes a very simple tree with a single decision; `None` allows the tree to grow until every training point is perfectly classified.
-- We compute accuracy on **both** training and test data for each depth level — this is the key to spotting overfitting.
+- `max_depth` controls how deep the decision tree grows. A depth of 1 makes a very simple tree; `None` allows the tree to grow until every training point is perfectly classified.
+- We compute accuracy on **both** training and test data — this is the key to spotting overfitting.
 - The `Gap (Train-Test)` column is the red-flag indicator: a **large gap means the model is overfitting**.
 
 **Sample Output:**
@@ -295,15 +263,13 @@ print(pd.DataFrame(results).set_index("Max Depth"))
 | Max Depth | Train Accuracy | Test Accuracy | Gap (Train-Test) |
 |---|---|---|---|
 | 1 | 0.9253 | 0.9123 | 0.0130 |
-| 3 | 0.9538 | 0.9386 | 0.0152 |
 | 5 | 0.9714 | 0.9474 | 0.0240 |
-| 10 | 0.9956 | 0.9123 | 0.0833 |
 | Unlimited | 1.0000 | 0.9035 | 0.0965 |
 
-- At **depth 1**, the model **underfits** — it is too shallow to learn the data's real patterns, so both scores are moderate.
-- At **depth 5**, training and test scores are both solid, and the gap is small — this is the **sweet spot**.
-- At **Unlimited depth**, the training score hits 100% — perfect — but the test score drops back to 90%. The tree has memorised every training point, including noise. This is classic **overfitting**.
-- **The lesson:** Never judge a model only by its training score. A suspiciously perfect training score with a much lower test score is always a red flag.
+- At **depth 1**, the model **underfits** — too shallow to learn real patterns; both scores are moderate.
+- At **depth 5**, scores are solid and the gap is small — this is the **sweet spot**.
+- At **Unlimited depth**, training hits 100% but test drops to 90%. The tree has memorised every training point including noise — classic **overfitting**.
+- **The lesson:** Never judge a model only by its training score. A perfect training score with a much lower test score is always a red flag.
 
 ---
 
@@ -349,54 +315,33 @@ Imagine you spent 3 hours training a complex Random Forest on 100,000 rows of da
 # ============================================================
 # Model Persistence: Saving and Loading with joblib
 # ============================================================
+# Continuing from above — X_train, X_test, and scaler are already prepared.
 
-import joblib                                                # The official recommended library for sklearn models
+import joblib
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 
-# ---- Step 1: Train the model as usual ----
-data = load_breast_cancer()
-X_train, X_test, y_train, y_test = train_test_split(
-    data.data, data.target, test_size=0.2, random_state=42
-)
-scaler  = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test  = scaler.transform(X_test)
-
-model = RandomForestClassifier(n_estimators=100, random_state=42)   # Create the model
-model.fit(X_train, y_train)                                          # Train the model
+# ---- Step 1: Train the model ----
+rf_model = RandomForestClassifier(n_estimators=100, random_state=42)
+rf_model.fit(X_train, y_train)
 print("Model trained successfully!")
 
-# ---- Step 2: Save the trained model to a file ----
-joblib.dump(model, 'random_forest_model.joblib')            # Serialise and write the model to disk
-print("Model saved as 'random_forest_model.joblib'")
+# ---- Step 2: Save the trained model and scaler ----
+joblib.dump(rf_model, 'random_forest_model.joblib')         # Serialise and write model to disk
+joblib.dump(scaler,   'scaler.joblib')                      # Always save the scaler alongside the model
+print("Model and scaler saved!")
 
-# ---- CRITICAL: Also save the scaler! ----
-joblib.dump(scaler, 'scaler.joblib')                        # Save the fitted scaler separately
-print("Scaler saved as 'scaler.joblib'")
-
-# ============================================================
-# In a completely different script or a later session:
-# ============================================================
-
-# ---- Step 3: Load the model back from disk ----
-loaded_model  = joblib.load('random_forest_model.joblib')   # Reconstruct the model object from file
-loaded_scaler = joblib.load('scaler.joblib')                # Load the same scaler that was used during training
-print("Model and scaler loaded successfully!")
-
-# ---- Step 4: Use the loaded model to make predictions on new data ----
-X_test_scaled = loaded_scaler.transform(X_test)             # Scale new data using the loaded (pre-fitted) scaler
-predictions   = loaded_model.predict(X_test_scaled)         # Make predictions using the loaded model
+# ---- Step 3: Load and use in a later session ----
+loaded_model  = joblib.load('random_forest_model.joblib')   # Reconstruct the model from file
+loaded_scaler = joblib.load('scaler.joblib')                # Load the same fitted scaler
+predictions   = loaded_model.predict(loaded_scaler.transform(X_test))
 print(f"First 10 predictions: {predictions[:10]}")
 ```
 
 **How the code works:**
 
-- `joblib.dump(model, 'filename.joblib')` **serialises** (converts) the entire trained model — including all its learned parameters and tree structures — and writes it as a binary file to your disk.
+- `joblib.dump(model, 'filename.joblib')` **serialises** the entire trained model — including all learned parameters and tree structures — and writes it as a binary file to disk.
 - `joblib.load('filename.joblib')` reads the file and **reconstructs** the model object exactly as it was after training. You can call `.predict()` on it immediately.
-- **Saving the scaler is critical** — this is the most common mistake beginners make. When you load the model later and get new data, you must scale it using the **exact same scaler** that was fitted on training data. A freshly created `StandardScaler()` has not been fitted yet and would produce completely different scaling values, giving your model incorrect inputs and garbage predictions.
+- **Saving the scaler is critical** — the most common beginner mistake. When you load the model later, you must scale new data using the **exact same fitted scaler**. A freshly created `StandardScaler()` would produce completely different values, giving your model wrong inputs and garbage predictions.
 
 ---
 
@@ -408,39 +353,30 @@ print(f"First 10 predictions: {predictions[:10]}")
 # ============================================================
 # Model Persistence: Saving and Loading with pickle
 # ============================================================
+# Continuing from above — X_train is already prepared.
 
-import pickle                                               # Python's built-in serialisation library
+import pickle
 from sklearn.linear_model import LogisticRegression
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
 
-# ---- Train a model ----
-data = load_breast_cancer()
-X_train, X_test, y_train, y_test = train_test_split(
-    data.data, data.target, test_size=0.2, random_state=42
-)
-scaler  = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-model   = LogisticRegression(max_iter=1000)
-model.fit(X_train, y_train)
+lr_model = LogisticRegression(max_iter=1000)
+lr_model.fit(X_train, y_train)
 
-# ---- Save the model using pickle ----
-with open('logistic_model.pkl', 'wb') as f:                # 'wb' = write binary — model data is not plain text
-    pickle.dump(model, f)                                  # Serialise and write the model into the file
+# ---- Save with pickle ----
+with open('logistic_model.pkl', 'wb') as f:                # 'wb' = write binary
+    pickle.dump(lr_model, f)
 print("Model saved with pickle!")
 
-# ---- Load the model back using pickle ----
-with open('logistic_model.pkl', 'rb') as f:                # 'rb' = read binary — open for reading
-    loaded_model = pickle.load(f)                          # Deserialise and reconstruct the model object
+# ---- Load with pickle ----
+with open('logistic_model.pkl', 'rb') as f:                # 'rb' = read binary
+    loaded_model = pickle.load(f)
 print("Model loaded with pickle!")
 ```
 
 **How the code works:**
 
-- `'wb'` stands for "write binary." We always use binary mode because serialised model data is not human-readable text — it is a structured byte sequence.
-- `'rb'` stands for "read binary." Same reason — we open the file in binary mode to read the byte sequence back.
-- `pickle.dump(object, file)` writes the object to the file; `pickle.load(file)` reads it back and reconstructs it.
+- `'wb'` = "write binary." Model data is not plain text — it is a structured byte sequence, so binary mode is required.
+- `'rb'` = "read binary." Same reason — read the byte sequence back and reconstruct it.
+- `pickle.dump(object, file)` writes the object; `pickle.load(file)` reads it back.
 
 ---
 
@@ -579,63 +515,49 @@ No matter what the checklist recommends, always follow this sequence inside ever
 # ============================================================
 # The Full Selection Protocol: Compare → Select → Save
 # ============================================================
+# Continuing from above — X_train, X_test, scaler, y_train, y_test are already prepared.
 
-import pandas as pd
 import joblib
-from sklearn.datasets import load_breast_cancer
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.linear_model import LogisticRegression            # Step 1: simplest model
-from sklearn.tree import DecisionTreeClassifier                # Step 2: medium complexity
-from sklearn.ensemble import RandomForestClassifier            # Step 3: highest complexity
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import f1_score
 
-# ---- Prepare data ----
-data = load_breast_cancer()
-X_train, X_test, y_train, y_test = train_test_split(
-    data.data, data.target, test_size=0.2, random_state=42
-)
-scaler  = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test  = scaler.transform(X_test)
-
-# ---- Define models in increasing order of complexity ----
+# ---- Define two models: simplest first, most complex last ----
 models = {
     "Logistic Regression (Simple)": LogisticRegression(max_iter=1000),
-    "Decision Tree (Medium)":       DecisionTreeClassifier(max_depth=5, random_state=42),
     "Random Forest (Complex)":      RandomForestClassifier(n_estimators=100, random_state=42)
 }
 
-# ---- Train all models and collect F1 scores ----
-results = {}                                                   # Store name → {model, F1}
+# ---- Train both models and collect F1 scores ----
+results = {}
 for name, model in models.items():
-    model.fit(X_train, y_train)                               # Train the model
-    f1 = f1_score(y_test, model.predict(X_test))             # Compute F1-Score on test set
+    model.fit(X_train, y_train)
+    f1 = f1_score(y_test, model.predict(X_test))
     results[name] = {"model_object": model, "F1-Score": round(f1, 4)}
     print(f"{name}: F1 = {f1:.4f}")
 
-# ---- Apply complexity filter: pick the simplest model within 2% of the best ----
-best_f1       = max(v["F1-Score"] for v in results.values())  # Identify the highest F1 across all models
+# ---- Pick the simplest model within 2% of the best ----
+best_f1       = max(v["F1-Score"] for v in results.values())
 selected_name = None
-for name, info in results.items():                            # Loop from simplest to most complex (dict insertion order)
-    if best_f1 - info["F1-Score"] <= 0.02:                   # Is this model within 2 percentage points of best?
-        selected_name = name                                  # Yes — pick it (first match = simplest qualifying model)
+for name, info in results.items():                            # dict order = simplest to most complex
+    if best_f1 - info["F1-Score"] <= 0.02:                   # within 2 percentage points of best?
+        selected_name = name
         break
 
-selected_model = results[selected_name]["model_object"]       # Retrieve the actual model object
+selected_model = results[selected_name]["model_object"]
 print(f"\nSelected Model: {selected_name}")
 
-# ---- Save the selected model and scaler ----
-joblib.dump(selected_model, 'selected_model.joblib')          # Save chosen model to disk
-joblib.dump(scaler,         'scaler.joblib')                  # Save scaler — never forget this step
+# ---- Save the winner and scaler ----
+joblib.dump(selected_model, 'selected_model.joblib')
+joblib.dump(scaler,         'scaler.joblib')
 print("Selected model and scaler saved successfully!")
 ```
 
 **How the code works:**
 
-- The models dictionary is defined in order — **simplest to most complex**. Python dictionaries preserve insertion order, so when we loop through them the first match of the complexity filter is always the simplest qualifying model.
-- `best_f1 - info["F1-Score"] <= 0.02` checks: "Is this model's F1-Score within 2 percentage points of the absolute best?" If yes, it qualifies as "good enough."
-- The loop hits Logistic Regression first. If it satisfies the 2% condition, it is immediately selected and the loop stops — no need to choose a more complex model.
+- The models dictionary is ordered **simplest to most complex**. Python preserves insertion order, so the first match in the complexity filter is always the simplest qualifying model.
+- `best_f1 - info["F1-Score"] <= 0.02` checks: "Is this model within 2 percentage points of the absolute best?" If yes, it qualifies.
+- The loop hits Logistic Regression first. If it satisfies the 2% condition, it is selected immediately — no need for the more complex model.
 - Both the selected model and the fitted scaler are saved. The project is now ready for deployment.
 
 ---
