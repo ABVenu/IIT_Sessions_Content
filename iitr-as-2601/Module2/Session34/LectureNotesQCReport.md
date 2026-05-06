@@ -1,11 +1,14 @@
 # Lecture Notes QC Report — Session 34
-**Session Title:** ML Workshop: Model Selection & Comparison
-**QC Run:** Iteration 1
-**Date:** 2026-04-29
+
+## QC Run: Iteration 1
+
+**Date:** 2026-05-06  
+**File Reviewed:** `Lecture Notes Released.md`  
+**Reviewer:** AI Agent (post-session alignment pass)
 
 ---
 
-## QC Evaluation
+### QC Criteria Scores
 
 | Criteria | Score / Result |
 |---|---|
@@ -17,82 +20,54 @@
 
 ---
 
-## Detailed Evaluation Notes
+### Detailed Assessment
 
-### Content Coverage — 5/5
+**Content Coverage — 5/5**
+- All four planned topics are fully covered: Metric Tables (classification + regression examples), Comparison by Complexity (with overfitting/underfitting code and golden rules), Model Persistence (joblib + pickle with practical tips), and Model Selection Checklist (6-question checklist + decision flow + full protocol code).
+- Two additional topics taught in session are properly added: "The Big Picture: From Saved Model to a Live Application" (Gradio deployment overview) and "Model Monitoring: Keeping Your Deployed Model Healthy" (data drift, concept drift, human-in-the-loop).
+- The Quick Reference table at the end is expanded to include all new terms (Gradio, Streamlit, Model Monitoring, Data Drift, Human-in-the-Loop, Model Deployment).
 
-All four topics from the metadata are fully addressed with depth appropriate for a 2-hour 15-minute session:
+**Creativity — 5/5**
+- Each concept is introduced with the three-part pattern: Official Definition → In Simple Words → Real-Life Example.
+- Relatable Indian analogies used throughout: cricket team selector (metric table), school marksheet (comparison table), Spinny.com car price estimator (deployment), doctor reviewing diagnoses (model monitoring), custom-tailored vs one-size shirt (model complexity), save-game analogy (model persistence), doctor asking patient questions (selection checklist).
+- Analogies are varied, fresh, and contextually appropriate for the target audience.
 
-- **Metric Tables:** Two complete working code examples (classification using breast cancer dataset; regression using California housing dataset). Sample output tables shown for each. The concept is introduced with Official Definition, In Simple Words, and Real-Life Example.
-- **Comparison by Complexity:** Full complexity scale table covering 7 model types. Overfitting vs. Underfitting covered with definition, analogy, and a runnable code example that tests Decision Tree at 5 different depth levels. The Golden Rule section and Occam's Razor principle round out the topic.
-- **Model Persistence:** `joblib` (primary method) and `pickle` (secondary method) both demonstrated with complete, working code. Critical "always save the scaler" tip highlighted. Comparison table between the two methods included. Practical tips section covers versioning, post-load testing, and security.
-- **Selection Checklist:** 6-question framework with tables for each question. Decision flow diagram. "Start Simple, Go Complex" protocol with a complete, production-style code implementation that compares models, applies a 2% complexity filter, and saves the winner.
+**Structural Adherence — 5/5**
+- Notes open with session context referencing the previous Time Series session, followed by a clear "What You Will Learn" bullet list including the newly added topics.
+- 3-sentence rule followed throughout — no paragraph exceeds three sentences.
+- All code blocks are complete (start to finish), with a comment on every meaningful line, followed by a "How the code works" bulleted explanation.
+- Images from the original notes are fully retained with their original URLs.
+- Key Takeaways section (6 bullets) wraps up all topics including deployment and monitoring.
+- Quick Reference Table is present and expanded at the end.
+- No metadata, no "Part 1/Section A" labels, no instruction text in the file.
 
-### Creativity — 5/5
+**No Logical Mistakes — True**
+- Metric comparison tables are numerically consistent and directionally correct (lower MAE/RMSE = better; R² closer to 1 = better; large train-test gap = overfitting signal).
+- Overfitting/underfitting detection code correctly trains on train, evaluates on both, and computes the gap.
+- The "Start Simple, Go Complex" protocol code correctly iterates simplest-to-complex and picks the first model within 2% of best.
+- Deployment flow diagram accurately reflects the data scientist vs application team boundary.
+- Model monitoring section correctly explains data drift, concept drift, and the human-in-the-loop pattern.
 
-Multiple varied real-life analogies used throughout:
-- Cricket selector comparing bowlers → Metric Table
-- School marksheet → Metric Table
-- One-size-fits-all shirt vs. tailored shirt → Model Complexity
-- Weather model → Overfitting/Underfitting
-- Memorising exam questions → Overfitting
-- Email spam filter → Model Persistence
-- Game save file → Model Persistence
-- Doctor asking questions before prescribing → Selection Checklist
-- Bank loan officer → Interpretability question
-
-Indian professional context maintained appropriately (doctor, bank, insurance examples). Tone is plain and conversational throughout.
-
-### Structural Adherence — 5/5
-
-- ✅ Notes begin directly with `# Lecture Title` — no metadata header
-- ✅ Direct heading style (`## Metric Tables: Comparing Models Side by Side`) — no "Part 1 / Section A"
-- ✅ "What You Will Learn" section references previous session (Time Series: Trend, Seasonality, Rolling Windows, MAPE) and lists 4 clear learning outcomes for this session
-- ✅ 3-Sentence Rule followed throughout — no paragraph exceeds 3 sentences
-- ✅ Connecting sentences link every major section transition
-- ✅ Each new concept has Official Definition → In Simple Words → Real-Life Example
-- ✅ All code blocks are complete (no snippets or half-code)
-- ✅ Every line of code carries a plain-English comment
-- ✅ "How the code works" bullet list follows every code block
-- ✅ Key Takeaways section has 5 bullet points + 1 forward-looking sentence connecting to future sessions
-- ✅ Quick Reference Table at the end covers all terms, commands, and libraries used
-
-### No Logical Mistakes — True
-
-- Code examples verified: `fit_transform` used only on training data; `transform` used on test data.
-- `np.sqrt(mean_squared_error(...))` correctly used to derive RMSE from scikit-learn's MSE function.
-- Dictionary insertion order relied upon for simplest-first model selection — valid in Python 3.7+.
-- `joblib.dump` / `joblib.load` syntax is correct.
-- `pickle` used with `'wb'`/`'rb'` binary modes as required.
-- Complexity filter logic (`best_f1 - info["F1-Score"] <= 0.02`) correctly identifies the simplest model within 2% of the best.
-- No re-teaching of metrics already covered in prior sessions (MAE, RMSE, MAPE, Accuracy, Precision, Recall, F1 referenced but not re-explained).
-
-### No Presentation Mistakes — True
-
-- All markdown tables are correctly formatted with header separators.
-- Code fences properly opened and closed.
-- Bold text used consistently for key terms on first introduction.
-- `##` and `###` heading levels used correctly throughout.
-- No orphan headings or empty sections.
-- Horizontal rules (`---`) used consistently between major sections.
-- Callout blockquote (`> Key Insight`) used once for Occam's Razor — appropriate emphasis without overuse.
+**No Presentation Mistakes — True**
+- All markdown tables are correctly formatted with `|---|` separator rows.
+- All code blocks use triple-backtick fences with the `python` language tag.
+- All section headers follow a consistent H2 → H3 hierarchy.
+- Bold and italic text used consistently and sparingly for emphasis.
+- No broken internal links; all image URLs preserved from the original notes.
 
 ---
 
-## Overlap Check with Previous Sessions
+### Actions Taken
 
-| Topic in Session 34 | Overlap with Session 33 (Time Series)? | Status |
-|---|---|---|
-| Metric Tables | Session 33 covered MAPE, MAE, RMSE but did NOT cover building comparison tables across multiple models | ✅ No overlap — new skill |
-| Comparison by Complexity | Not covered in Session 33 | ✅ No overlap |
-| Model Persistence (joblib/pickle) | Not covered in Session 33 | ✅ No overlap |
-| Selection Checklist | Not covered in Session 33 | ✅ No overlap |
-| Individual metrics (MAE, RMSE, F1) | Covered in earlier sessions — referenced as "already familiar" in notes, not re-taught | ✅ Correctly handled |
+- All planned topics from `Lecture Notes.md` retained without modification.
+- Two new sections added to cover extra content taught in session (confirmed via Live Topic Coverage report):
+  1. **The Big Picture: From Saved Model to a Live Application** — Gradio conceptual overview, end-to-end deployment flow, Gradio vs Streamlit comparison.
+  2. **Model Monitoring: Keeping Your Deployed Model Healthy** — Why models degrade (data drift, concept drift), what to track, human-in-the-loop concept.
+- "What You Will Learn" section updated to include the two new topics.
+- "Key Takeaways" updated with a new bullet covering deployment and monitoring.
+- Quick Reference Table expanded with 5 new terms.
+- `Lecture Notes Released.md` created in the same folder as `Lecture Notes.md`.
 
 ---
 
-## Result
-
-**Expected QC result achieved in Iteration 1. No improvisation required.**
-
-All three rating criteria scored 5/5. No logical mistakes found. No presentation mistakes found. Content is appropriately scoped for a 2-hour 15-minute session and does not overlap with Session 33 (Time Series) or earlier sessions.
+### QC Result: PASSED — No further iteration required

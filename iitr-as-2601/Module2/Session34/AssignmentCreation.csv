@@ -1,0 +1,377 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya, a data scientist at a fintech company, has just trained three models — Logistic Regression, Decision Tree, and Random Forest — to predict credit card defaults. Instead of checking each model's Accuracy, Precision, Recall, and F1-Score separately from different output cells, she wants to see all models and all metrics laid out in a single, clean, readable view.
+
+What is the name of the structured tool she is building?
+
+- Confusion Matrix
+- Correlation Matrix
+- Metric Comparison Table
+- Feature Importance Plot",,,,,,3,,Confusion Matrix,Correlation Matrix,Metric Comparison Table,Feature Importance Plot,,69facff6fe16ff9a6e7ecfe8,0,markdown,"A **Metric Comparison Table** (also called a Model Comparison Table) is a DataFrame that displays the performance scores of multiple models across multiple evaluation metrics side by side — exactly what Priya needs. It is built by collecting one dictionary of results per model, converting the list into a `pd.DataFrame`, and calling `.set_index(""Model"")`.
+
+- **A is wrong:** A Confusion Matrix shows correct vs. incorrect predictions for a *single* model only.
+- **B is wrong:** A Correlation Matrix shows linear relationships *between features*, not model performance.
+- **D is wrong:** A Feature Importance Plot ranks individual features by their predictive power in a single model — it does not compare multiple models."
+mcsc,markdown,"An ML engineer at a hospital tech company spent 3 hours training a Random Forest model on 500,000 patient records to predict readmission risk. The model will be embedded into a hospital application where it must return predictions instantly whenever a nurse submits a patient record — without retraining from scratch each time.
+
+Which Python library is **officially recommended by scikit-learn** for saving this model efficiently?
+
+- pickle
+- numpy
+- pandas
+- joblib",,,,,,4,,pickle,numpy,pandas,joblib,,69facff6fe16ff9a6e7ecfe8,0,markdown,"`joblib` is the officially recommended library for saving scikit-learn models. It is specially optimised for objects that contain large NumPy arrays internally — like Random Forests with hundreds of decision trees — making it faster and more memory-efficient than `pickle` for ML models. The saving syntax is simply `joblib.dump(model, 'filename.joblib')` and loading is `joblib.load('filename.joblib')`.
+
+- **A is wrong:** `pickle` works for any Python object but is not optimised for large array-heavy ML models. The session explicitly recommends `joblib` over `pickle` for sklearn models.
+- **B is wrong:** `numpy` is a numerical computing library — it cannot serialise and save ML model objects.
+- **C is wrong:** `pandas` is a data manipulation library — it cannot save trained model objects."
+mcsc,markdown,"A developer builds a Decision Tree classifier for an e-commerce customer churn prediction system. After training, he observes the following scores:
+
+- **Training Accuracy:** 99.6%
+- **Test Accuracy:** 73.2%
+
+What problem does this clearly indicate?
+
+- Underfitting — the model is too simple to learn real patterns
+- Data Drift — the production data has changed over time
+- Overfitting — the model has memorised the training data
+- Label Drift — the definition of ""churn"" has changed",,,,,,3,,Underfitting — the model is too simple to learn real patterns,Data Drift — the production data has changed over time,Overfitting — the model has memorised the training data,"Label Drift — the definition of ""churn"" has changed",,69facff6fe16ff9a6e7ecfe8,0,markdown,"**Overfitting** is characterised by a very high training accuracy combined with a significantly lower test accuracy — a large Train-Test Gap. Here the gap is 99.6% − 73.2% = **26.4%**, which is a classic, unmistakable overfitting signal. The Decision Tree has grown deep enough to memorise every training point (including noise), but fails to generalise to new, unseen data.
+
+- **A is wrong:** Underfitting shows *low accuracy on both* training and test data. A 99.6% training score rules out underfitting entirely.
+- **B is wrong:** Data Drift is a post-deployment phenomenon where real-world input data shifts over time — it is not observed during the initial train/test evaluation.
+- **D is wrong:** Label Drift refers to a change in the target variable's definition, which is again a post-deployment issue unrelated to the train-test gap."
+mcsc,markdown,"After weeks of model experimentation, Aditya finalises his best Random Forest classifier for a product recommendation engine. The application server must serve recommendations to thousands of users per minute. Rather than retraining the model from scratch for each prediction request, Aditya writes `joblib.dump(model, 'recommender_rf_v1.joblib')` and hands the file to the application team.
+
+Which core ML concept is Aditya practising?
+
+- Cross Validation
+- Hyperparameter Tuning
+- Model Persistence
+- Model Monitoring",,,,,,3,,Cross Validation,Hyperparameter Tuning,Model Persistence,Model Monitoring,,69facff6fe16ff9a6e7ecfe8,0,markdown,"**Model Persistence** is the process of saving a trained ML model to disk so it can be loaded and reused later — without needing to retrain. This is exactly what Aditya is doing: train once, save the result, and the application loads it for instant real-time predictions. The analogy from the session: it is like saving a game at Level 10 — you do not restart from Level 1 every time you play.
+
+- **A is wrong:** Cross Validation is a technique for evaluating model performance reliably across multiple data folds — it is used during training evaluation, not saving.
+- **B is wrong:** Hyperparameter Tuning is the process of searching for optimal model settings like `n_estimators` or `max_depth`.
+- **D is wrong:** Model Monitoring is the ongoing tracking of a deployed model's accuracy in production to detect degradation over time."
+mcsc,markdown,"A regulatory compliance team at a national bank commissions a Loan Approval Model. The product manager delivers one non-negotiable requirement: *""Every rejection decision must be explainable in plain language — to the customer who was rejected and to the banking regulator. A black-box model is legally unacceptable.""*
+
+According to the **6-Question Model Selection Checklist**, which factor should be treated as the **primary constraint** when selecting a model for this use case?
+
+- Dataset size — choose the model designed for the largest number of rows
+- Training speed — choose the fastest model to reduce infrastructure costs
+- Interpretability — choose a model whose decisions can be explained in simple language
+- Non-linearity handling — choose a model that captures complex non-linear patterns",,,,,,3,,Dataset size — choose the model designed for the largest number of rows,Training speed — choose the fastest model to reduce infrastructure costs,Interpretability — choose a model whose decisions can be explained in simple language,Non-linearity handling — choose a model that captures complex non-linear patterns,,69facff6fe16ff9a6e7ecfe8,0.5,markdown,"Question 3 of the Model Selection Checklist asks: *""Do you need to explain the model's decisions to a non-technical person?""* When the answer is **Yes** — as it is here due to legal and regulatory requirements — **Interpretability becomes the primary filter**. This immediately eliminates black-box models like Random Forest (Medium interpretability), Gradient Boosting (Low), and Neural Networks (Very Low).
+
+The appropriate choices in this scenario are:
+- **Logistic Regression** — Very High interpretability; each feature's coefficient shows its exact contribution to the decision.
+- **Shallow Decision Tree (depth 3–7)** — High interpretability; generates human-readable if-then rules that a loan officer can walk a customer through.
+
+Dataset size, training speed, and non-linearity handling are secondary considerations that come *after* the interpretability constraint has been satisfied."
+mcsc,markdown,"A data scientist runs a complexity experiment on a classification dataset, training three Decision Tree classifiers with different depth limits:
+
+| Max Depth | Train Accuracy | Test Accuracy | Gap (Train − Test) |
+|---|---|---|---|
+| 1 | 0.9253 | 0.9123 | 0.0130 |
+| 5 | 0.9714 | 0.9474 | 0.0240 |
+| Unlimited | 1.0000 | 0.9035 | 0.0965 |
+
+Which row represents the **""sweet spot""** — strong generalisation with an acceptable overfitting gap?
+
+- Max Depth = 1, because it has the smallest train-test gap of all three
+- Max Depth = 5, because it achieves the highest test accuracy with a small, acceptable gap
+- Unlimited Depth, because it achieves a perfect training accuracy of 1.0000
+- All three are equally valid — the choice depends on personal preference",,,,,,2,,"Max Depth = 1, because it has the smallest train-test gap of all three","Max Depth = 5, because it achieves the highest test accuracy with a small, acceptable gap","Unlimited Depth, because it achieves a perfect training accuracy of 1.0000",All three are equally valid — the choice depends on personal preference,,69facff6fe16ff9a6e7ecfe8,0.5,markdown,"**Max Depth = 5** is the sweet spot because it achieves the **highest test accuracy (0.9474)** with only a modest 0.0240 gap — strong generalisation without significant overfitting.
+
+- **Max Depth = 1** underfits — the tree is too shallow to learn real patterns. Both train (0.9253) and test (0.9123) scores are moderate, and the small gap here is not a virtue; it simply reflects that neither score is good.
+- **Unlimited Depth** overfits severely — perfect 1.0000 training accuracy but test accuracy actually *drops* to 0.9035. The 0.0965 gap (nearly 10%) is a clear red flag. The model has memorised every training point including noise.
+- **The rule:** Never judge a model by its training score alone. The sweet spot is where test accuracy peaks before the gap becomes problematic — not the extreme (shallowest or deepest)."
+mcmc,markdown,"Meera trains a Logistic Regression model using `StandardScaler` to normalise her features before fitting. She saves only the trained model: `joblib.dump(lr_model, 'lr_model.joblib')` — but **forgets to save the scaler**. Six months later, a colleague loads the model and passes **raw, unscaled** test data directly to `loaded_model.predict(X_test_raw)`.
+
+Which of the following are **correct consequences** of this mistake? *(Select all that apply)*
+
+- The model receives feature values on completely different scales than it was trained on, causing incorrect predictions
+- Scikit-learn will immediately raise a `ValueError` and refuse to run `predict()`
+- The model silently produces wrong predictions without raising any error or warning
+- The correct practice is to always save and load the fitted scaler alongside the model",,,,,,,,"The model receives feature values on completely different scales than it was trained on, causing incorrect predictions",Scikit-learn will immediately raise a `ValueError` and refuse to run `predict()`,The model silently produces wrong predictions without raising any error or warning,The correct practice is to always save and load the fitted scaler alongside the model,"1, 3, 4",69facff6fe16ff9a6e7ecfe8,0.5,markdown,"- **A is correct:** `StandardScaler` was fitted on training data to produce zero mean and unit variance. If raw unscaled data is passed (e.g., a feature like ""tumour area"" with values in the hundreds), the model receives inputs in a completely different distribution from what it learned on — causing its coefficients to produce incorrect predictions.
+- **B is incorrect:** Scikit-learn's `predict()` has **no mechanism to detect** that input data was not scaled. It performs the matrix multiplication regardless, making no complaint. This silent failure is what makes the mistake so dangerous.
+- **C is correct:** This is the most critical risk — the model runs without errors but outputs meaningless or dangerously wrong predictions. In a medical context, this could mean wrong diagnoses.
+- **D is correct:** The rule from the session: *""Always save preprocessing objects alongside the model.""* The correct pattern is `joblib.dump(scaler, 'scaler.joblib')` paired with `joblib.dump(model, 'model.joblib')`. Both must be loaded and used in sequence."
+mcmc,markdown,"A fraud detection model was deployed at a payment gateway in 2023 and initially achieved 94% accuracy. By early 2026, accuracy has dropped to 77%. The engineering team investigates the root cause of performance degradation.
+
+Which of the following could be **valid reasons** for this accuracy drop? *(Select all that apply)*
+
+- Fraudsters have adopted entirely new attack patterns (e.g., AI-generated synthetic identities) that were not present in the 2023 training data
+- The `.joblib` model file has physically deteriorated on the server's storage drive over time
+- Average transaction amounts have increased significantly due to inflation, shifting the feature distribution away from training data
+- The company's compliance team redefined which transaction categories are legally classified as ""fraudulent""",,,,,,,,"Fraudsters have adopted entirely new attack patterns (e.g., AI-generated synthetic identities) that were not present in the 2023 training data",The `.joblib` model file has physically deteriorated on the server's storage drive over time,"Average transaction amounts have increased significantly due to inflation, shifting the feature distribution away from training data","The company's compliance team redefined which transaction categories are legally classified as ""fraudulent""","1, 3, 4",69facff6fe16ff9a6e7ecfe8,0.5,markdown,"- **A is correct:** This is **Concept Drift** — the underlying relationship between features (transaction patterns) and the label (fraud) has changed because fraudsters evolved their tactics. The model never saw these new patterns during training and cannot recognise them.
+- **B is incorrect:** `.joblib` files are binary files stored on disk — they do not ""deteriorate"" over time. A file either loads correctly or is corrupted by a specific event (disk failure, file tampering). Normal age does not degrade a saved model file.
+- **C is correct:** This is **Data Drift** — the distribution of the input feature (transaction amount) has shifted. The model was trained on 2023 transaction amounts; 2026 amounts look significantly different due to inflation, so the model's learned thresholds are no longer appropriate.
+- **D is correct:** This is **Label Drift** — the definition of the target variable itself has changed. The model was trained on the old definition of ""fraud""; new compliance rules mean some transactions it learned as ""not fraud"" are now classified as fraud (and vice versa)."
+mcmc,markdown,"A startup's ML team is building a customer churn predictor for their sales platform. The full business context is:
+
+- **Dataset:** 750 labelled customer records (historical churn data)
+- **Task:** Binary classification — Will the customer churn? (Yes / No)
+- **Business Constraint:** The regional sales managers must present churn reasons to clients in plain language during review meetings — every prediction must be explainable
+
+Applying the **6-Question Model Selection Checklist** systematically, which models are **appropriate choices** for this use case? *(Select all that apply)*
+
+- Logistic Regression
+- Gradient Boosting (e.g., XGBoost)
+- Neural Network (Deep Learning)
+- Shallow Decision Tree (max_depth = 3–7)",,,,,,,,Logistic Regression,"Gradient Boosting (e.g., XGBoost)",Neural Network (Deep Learning),Shallow Decision Tree (max_depth = 3–7),"1, 4",69facff6fe16ff9a6e7ecfe8,1,markdown,"Systematically applying the checklist:
+
+1. **Problem Type:** Binary Classification → candidates are Logistic Regression, Decision Tree, Random Forest, SVM.
+2. **Data Size:** 750 rows = **Small dataset** → prefer Logistic Regression, SVM, shallow Decision Tree. Complex models like Random Forest and Gradient Boosting need much more data to generalise — on 750 rows, they are likely to overfit.
+3. **Interpretability:** **Required** (sales managers must explain decisions) → eliminates any black-box model.
+
+Evaluating each option:
+- **A (Logistic Regression):** ✅ Very Low complexity, **Very High interpretability**, works reliably on small datasets. Each feature's coefficient directly quantifies its influence on churn probability — highly explainable.
+- **B (Gradient Boosting):** ❌ Very High complexity, **Low interpretability**, requires large datasets to avoid overfitting. Fails on both the data size and interpretability criteria.
+- **C (Neural Network):** ❌ Highest complexity, **Very Low interpretability** (complete black box), requires large datasets. Fails all three relevant criteria.
+- **D (Shallow Decision Tree):** ✅ Medium complexity, **High interpretability** — generates human-readable if-then rules (e.g., ""If tenure < 12 months AND support_tickets > 3 → Churn""). Perfect for a sales team presentation."
+mcmc,markdown,"A data scientist applies the **""Start Simple, Go Complex"" protocol** on a classification problem. After training three models (added to the results dictionary in order from simplest to most complex), the F1-Scores are:
+
+| Model | F1-Score |
+|---|---|
+| Logistic Regression | 0.9185 |
+| Decision Tree | 0.9340 |
+| Random Forest | 0.9390 |
+
+She now applies the **2% complexity filter** — the code logic is:
+```python
+best_f1 = max(v[""F1-Score""] for v in results.values())
+for name, info in results.items():   # iterates simplest → most complex
+    if best_f1 - info[""F1-Score""] <= 0.02:
+        selected_name = name
+        break
+```
+
+Which of the following statements are **correct**? *(Select all that apply)*
+
+- The best F1-Score is 0.9390, so the 2% threshold cutoff is 0.9190
+- Logistic Regression (F1 = 0.9185) does **not** qualify because it falls just below the 0.9190 cutoff
+- Decision Tree (F1 = 0.9340) qualifies under the 2% filter
+- Decision Tree would be selected as the final model because it is the simplest qualifying model in the iteration order",,,,,,,,"The best F1-Score is 0.9390, so the 2% threshold cutoff is 0.9190",Logistic Regression (F1 = 0.9185) does **not** qualify because it falls just below the 0.9190 cutoff,Decision Tree (F1 = 0.9340) qualifies under the 2% filter,Decision Tree would be selected as the final model because it is the simplest qualifying model in the iteration order,"1, 2, 3, 4",69facff6fe16ff9a6e7ecfe8,1,markdown,"Working through the filter logic step by step:
+
+- **A is correct:** `best_f1 = 0.9390`. The cutoff = `0.9390 − 0.02 = 0.9190`. Any model scoring **≥ 0.9190** qualifies as ""within 2% of the best.""
+- **B is correct:** Logistic Regression scores 0.9185. Since 0.9185 < 0.9190, `best_f1 - 0.9185 = 0.0205 > 0.02` — the condition `<= 0.02` is **False**. Logistic Regression does NOT qualify. (It misses by just 0.0005, but the filter is strict.)
+- **C is correct:** Decision Tree scores 0.9340. Since 0.9340 ≥ 0.9190, `best_f1 - 0.9340 = 0.0050 ≤ 0.02` — the condition is **True**. Decision Tree qualifies.
+- **D is correct:** The loop iterates in insertion order (simplest → most complex). Logistic Regression is checked first — it fails. Decision Tree is checked second — it passes and the loop `break`s immediately. Decision Tree is selected. The loop never even evaluates Random Forest, because we stop at the first qualifying (simplest) model.
+
+**The key insight:** The purpose of this filter is to avoid the *unnecessary* complexity and maintenance cost of a more complex model when a simpler one is nearly as good. Here, Decision Tree achieves 0.9340 vs. Random Forest's 0.9390 — a gap of just 0.5% — making the added complexity of Random Forest unjustifiable."
+subjective,markdown,"## The Tumour Triage Pipeline: Build, Compare, Select & Preserve
+
+You are an ML intern at **MediScan Analytics**, a company that builds decision-support tools for hospitals. Your team has been asked to produce a production-ready artefact for the **Tumour Risk Classifier** — a tool that predicts whether a tumour is malignant or benign based on diagnostic measurements taken from cell samples.
+
+Before the model can be handed to the application engineering team (who will wrap it in a Gradio interface for doctors to use), your manager needs you to complete the full model evaluation, selection, and persistence pipeline — across five structured parts.
+
+---
+
+### Part 1 — Build a Metric Comparison Table
+
+Train the following three models on the **`load_breast_cancer()`** dataset from sklearn. Use `test_size=0.2` and `random_state=42` for the train-test split. Apply `StandardScaler` to features (fit only on training data, then transform both sets).
+
+| Model | Parameters |
+|---|---|
+| Logistic Regression | `max_iter=1000` |
+| Decision Tree | `max_depth=5`, `random_state=42` |
+| Random Forest | `n_estimators=100`, `random_state=42` |
+
+Display a metric comparison table (as a `pd.DataFrame`) showing **Accuracy, Precision, Recall, and F1-Score** for all three models side by side. Set `""Model""` as the row index.
+
+---
+
+### Part 2 — Overfitting Check on the Decision Tree
+
+For the **Decision Tree model only**, compute and print:
+- Training Accuracy
+- Test Accuracy
+- Train-Test Gap (Train Accuracy − Test Accuracy)
+
+Based on the gap value, print a one-line diagnostic:
+- If gap > 0.05 → print `""⚠ Overfitting detected — gap exceeds 5%""`
+- If training accuracy < 0.85 → print `""⚠ Underfitting detected — training accuracy too low""`
+- Otherwise → print `""✓ Model is at the sweet spot — acceptable gap""`
+
+---
+
+### Part 3 — Apply the ""Start Simple, Go Complex"" Protocol
+
+Using the **2% F1-Score complexity filter**, programmatically identify and print the selected model.
+
+Requirements:
+- Define your models dictionary in order **from simplest to most complex** (Logistic Regression → Decision Tree → Random Forest)
+- Compute F1-Score for each model on the test set
+- Find the best F1-Score across all models
+- Iterate simplest-to-most-complex: select the **first** model whose F1-Score is within 2 percentage points of the best
+- Print: `""Selected Model: <model_name> | F1-Score: <score>""`
+
+---
+
+### Part 4 — Save the Selected Model
+
+Use `joblib` to save both of the following to disk:
+- The **selected model** as `tumour_classifier_v1.joblib`
+- The **fitted StandardScaler** as `tumour_scaler_v1.joblib`
+
+Print a confirmation message after each save:
+```
+✓ Model saved as tumour_classifier_v1.joblib
+✓ Scaler saved as tumour_scaler_v1.joblib
+```
+
+---
+
+### Part 5 — Verify Model Persistence
+
+Load both saved files back from disk using `joblib.load()`. Apply the loaded scaler to transform `X_test`, then run `model.predict()` using the loaded model.
+
+Print the **first 10 predictions alongside their actual labels** in a readable format, for example:
+
+```
+Predictions vs Actual (first 10):
+Predicted: [1 0 0 1 1 0 0 0 1 1]
+Actual:    [1 0 0 1 1 0 0 0 1 1]
+```
+
+If the two rows match, the pipeline has been verified successfully end-to-end.
+
+---
+
+### Submission Instructions
+
+- Code all five parts in VS Code in a **single `.py` file** named `tumour_pipeline.py`
+- Run the code and verify it executes successfully — all five parts should produce visible output in the terminal
+- Then **submit the code in the code editor / answer box in the LMS**",,,,,,,,,,,,,69facff6fe16ff9a6e7ecfe8,1,markdown,"**Ideal solution walkthrough:**
+
+```python
+# ============================================================
+# Tumour Triage Pipeline — Model Selection & Persistence
+# ============================================================
+
+import pandas as pd
+import numpy as np
+import joblib
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+
+# ---- Load dataset and split ----
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# ---- Scale features ----
+scaler  = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test  = scaler.transform(X_test)
+
+# ============================================================
+# Part 1 — Metric Comparison Table
+# ============================================================
+models_dict = {
+    ""Logistic Regression"": LogisticRegression(max_iter=1000),
+    ""Decision Tree"":       DecisionTreeClassifier(max_depth=5, random_state=42),
+    ""Random Forest"":       RandomForestClassifier(n_estimators=100, random_state=42)
+}
+
+table_results = []
+trained_models = {}
+for name, model in models_dict.items():
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    trained_models[name] = model
+    table_results.append({
+        ""Model"":     name,
+        ""Accuracy"":  round(accuracy_score(y_test, y_pred),  4),
+        ""Precision"": round(precision_score(y_test, y_pred), 4),
+        ""Recall"":    round(recall_score(y_test, y_pred),    4),
+        ""F1-Score"":  round(f1_score(y_test, y_pred),        4)
+    })
+
+comparison_df = pd.DataFrame(table_results).set_index(""Model"")
+print(""=== Part 1: Metric Comparison Table ==="")
+print(comparison_df)
+print()
+
+# ============================================================
+# Part 2 — Overfitting Check on Decision Tree
+# ============================================================
+dt_model   = trained_models[""Decision Tree""]
+train_acc  = accuracy_score(y_train, dt_model.predict(X_train))
+test_acc   = accuracy_score(y_test,  dt_model.predict(X_test))
+gap        = round(train_acc - test_acc, 4)
+
+print(""=== Part 2: Overfitting Check — Decision Tree ==="")
+print(f""Train Accuracy : {train_acc:.4f}"")
+print(f""Test Accuracy  : {test_acc:.4f}"")
+print(f""Train-Test Gap : {gap:.4f}"")
+
+if gap > 0.05:
+    print(""⚠ Overfitting detected — gap exceeds 5%"")
+elif train_acc < 0.85:
+    print(""⚠ Underfitting detected — training accuracy too low"")
+else:
+    print(""✓ Model is at the sweet spot — acceptable gap"")
+print()
+
+# ============================================================
+# Part 3 — ""Start Simple, Go Complex"" — 2% F1-Score Filter
+# ============================================================
+f1_results = {}
+for name, model in trained_models.items():
+    f1 = f1_score(y_test, model.predict(X_test))
+    f1_results[name] = {""model_object"": model, ""F1-Score"": round(f1, 4)}
+
+best_f1       = max(v[""F1-Score""] for v in f1_results.values())
+selected_name = None
+for name, info in f1_results.items():
+    if best_f1 - info[""F1-Score""] <= 0.02:
+        selected_name = name
+        break
+
+print(""=== Part 3: Complexity Filter ==="")
+print(f""Best F1-Score : {best_f1}"")
+print(f""Selected Model: {selected_name} | F1-Score: {f1_results[selected_name]['F1-Score']}"")
+print()
+
+# ============================================================
+# Part 4 — Save Selected Model and Scaler
+# ============================================================
+selected_model = f1_results[selected_name][""model_object""]
+joblib.dump(selected_model, ""tumour_classifier_v1.joblib"")
+print(""✓ Model saved as tumour_classifier_v1.joblib"")
+joblib.dump(scaler, ""tumour_scaler_v1.joblib"")
+print(""✓ Scaler saved as tumour_scaler_v1.joblib"")
+print()
+
+# ============================================================
+# Part 5 — Verify Model Persistence
+# ============================================================
+loaded_model  = joblib.load(""tumour_classifier_v1.joblib"")
+loaded_scaler = joblib.load(""tumour_scaler_v1.joblib"")
+
+X_test_original = data.data[train_test_split(
+    np.arange(len(data.data)), test_size=0.2, random_state=42
+)[1]]
+X_test_scaled  = loaded_scaler.transform(X_test_original)
+predictions    = loaded_model.predict(X_test_scaled)
+actual_labels  = y_test
+
+print(""=== Part 5: Persistence Verification ==="")
+print(""Predictions vs Actual (first 10):"")
+print(f""Predicted: {predictions[:10]}"")
+print(f""Actual:    {actual_labels[:10]}"")
+```
+
+**Key points in the solution:**
+- `scaler.fit_transform(X_train)` fits AND transforms training data in one step; `scaler.transform(X_test)` only transforms (never fits on test data).
+- The models dictionary is ordered simplest → most complex so the 2% filter loop selects the simplest qualifying model first.
+- `joblib.dump` serialises both the model and the scaler; `joblib.load` reconstructs them exactly.
+- In Part 5, the loaded scaler must be applied before calling `predict()` — using the loaded scaler (not a new one) guarantees the same scaling transformation used during training.
+
+**Alternative approaches:**
+- `pickle` could be used in place of `joblib`, but `joblib` is preferred for sklearn models.
+- `precision_score` and `recall_score` default to binary averaging, which is appropriate for this binary classification dataset.
+- Descriptive filenames like `tumour_classifier_v1.joblib` follow the versioning best practice covered in the session."
