@@ -4,113 +4,54 @@
 
 ## QC Iteration 1
 
-**Date:** 2 May 2026
+**Date:** 2026-05-05
+
+**File Reviewed:** `Lecture Notes Released.md`
 
 ---
 
-### Evaluation Criteria
+### QC Scorecard
 
-| Criterion | Rating / Result |
-|---|---|
-| Content Coverage | **5 / 5** |
-| Creativity | **5 / 5** |
-| Structural Adherence | **5 / 5** |
-| No Logical Mistakes | **True** |
-| No Presentation Mistakes | **True** |
-
----
-
-### Detailed Assessment
-
-#### Content Coverage — 5/5
-
-All 12 detailed subtopics from the session metadata are fully addressed with dedicated sections and working code examples:
-
-| Subtopic | Covered? | Section |
+| Criteria | Rating / Result | Notes |
 |---|---|---|
-| Expand the E-Commerce Knowledge Base | ✅ | From Snippets to Real Documents — Expanding the Knowledge Base |
-| Ingest Documents Using Document Loaders | ✅ | Document Loaders — Bringing Documents Into Your Pipeline (PDF + Text + Multi-file) |
-| Process and Organize Document Data | ✅ | Processing and Organizing Document Data |
-| Apply Chunking to Policy Documents | ✅ | Chunking — Splitting Documents into Meaningful Pieces |
-| Configure Chunk Size and Overlap | ✅ | Understanding Chunk Size and Overlap — Getting It Right |
-| Compare Chunking Outcomes | ✅ | Comparing Different Chunk Configurations (code with 3 configs) |
-| Generate Embeddings for Policy Chunks | ✅ | Generating Embeddings for Policy Chunks |
-| Store Policy Data in a Vector Database | ✅ | Covered within Embeddings section using Chroma.from_documents |
-| Build the Retrieval Layer for User Queries | ✅ | Building the Retrieval Layer for User Queries |
-| Construct Prompt Templates for Responses | ✅ | Constructing Prompt Templates for Response Generation |
-| Build an End-to-End Multi-Document RAG System | ✅ | Building the End-to-End Multi-Document RAG System (9-step pipeline) |
-| Handle Updates to Policy Documents | ✅ | Handling Updates to Policy Documents (Full Rebuild + Incremental) |
-
-Depth is suitable for a 2-hour 15-minute session. Every code section includes a "How the code works" breakdown. Cost considerations and common doubts are woven in.
+| **Content Coverage** | **5 / 5** | All topics marked "Covered" in the Live Topic Coverage report are addressed: document loading (pypdf + PdfReader), parsing and cleaning, fixed-size chunking with overlap, semantic and hierarchical chunking (brief overview), embeddings (text-embedding-3-small 1536 dims vs text-embedding-3-large 3072 dims), ChromaDB persistent client with metadata storage, retrieval layer, prompt template (build_prompt), end-to-end pipeline, requirements.txt bulk install, virtualenv setup, env vars for API key, OCR digression with Microsoft use case. Topics marked "Not Covered" (text-file/webpage loaders, step-by-step document update workflow) are correctly omitted from in-session content but referenced where appropriate. |
+| **Creativity** | **5 / 5** | Session-specific analogies preserved and expanded: job-handover analogy for chunk overlap, dictionary sectioning for chunking rationale. Added ASCII workflow diagram for visual learners. Comparison tables for chunking strategies and embedding models. Real-life examples tailored to Indian students (filing cabinet, bank clerk). Code structured in clearly labeled sections. |
+| **Structural Adherence** | **5 / 5** | ✓ Starts directly with `# Lecture Title` — no metadata block. ✓ 3-sentence paragraph rule observed throughout. ✓ Smooth connecting sentences used between all major sections. ✓ Simple Explanation Rule (Official Definition → In Simple Words → Real-Life Example) applied for every new term: Document Ingestion, pypdf, Chunk Overlap, Embedding, Vector Database, Fixed-Size Chunking. ✓ Full code provided (not snippets) with a comment on every single line. ✓ "How the Code Works" section follows the code block. ✓ Context of previous session included at the top. ✓ Key Takeaways (5 bullet points) at end. ✓ Quick Reference Table at end. |
+| **No Logical Mistakes** | **True** | Chunk overlap arithmetic verified: chunk_size=120, overlap=30 → Chunk 2 starts at index 90 (word 91 in 1-based), which equals 120-30=90 ✓. Embedding dimensions verified: text-embedding-3-small=1536, text-embedding-3-large=3072 ✓. ChromaDB API: PersistentClient, get_or_create_collection, upsert, query — all correct ✓. OpenAI embeddings API: client.embeddings.create with model and input params ✓. Temperature=0.2 for factual generation — logically sound ✓. RAG flow (pre-processing vs runtime) accurately described ✓. |
+| **No Presentation Mistakes** | **True** | All Markdown headings correctly hierarchical (H1 → H2 → H3). Code fences properly opened and closed. All tables have header rows and alignment separators. No orphaned bullet points. No broken lists. No sentence fragments. Bold used consistently for key terms only. Backticks used correctly for inline code. |
 
 ---
 
-#### Creativity — 5/5
+### Overall QC Result: ✅ PASS
 
-- **Consistent Real-World Theme:** A fictional company "ShopEasy" with four specific policy files is used throughout, giving the session a coherent, realistic narrative.
-- **Analogy Variety:** Six distinct, fresh analogies are used:
-  - Office scanner → Document Loaders
-  - Vegetable market → full pipeline vs snippets
-  - Washing vegetables before cutting → Processing before Chunking
-  - Newspaper paragraphs → Chunking
-  - Book index → purpose of Chunking
-  - Music streaming fingerprint → Embeddings
-  - Hospital fill-in-the-blank form → Prompt Templates
-- **Progressive Complexity:** Notes build from single-file loading → multi-file loading → chunking → embedding → retrieval → generation → full system → updates, ensuring no cognitive jump.
-- **Comparison Table for Chunk Sizes:** Adds a practical reference students can reuse.
-- **"Putting It All Together" summary table:** Visually maps every stage to its tool and function in one glance.
+**All criteria met on first iteration. No revision required.**
 
 ---
 
-#### Structural Adherence — 5/5
+### Content Coverage Detail
 
-Checked against all rules from `LectureNotesPrompt4.md`:
-
-| Rule | Status |
-|---|---|
-| Clean start with `# Lecture Title` | ✅ Starts with `# Building a RAG Pipeline` |
-| No metadata at top (no Target Audience, Duration) | ✅ |
-| Direct headings (no "Part 1", "Section A") | ✅ All headings are descriptive |
-| 3-Sentence Rule in paragraphs | ✅ No paragraph exceeds 3 sentences |
-| Bold text for important terms | ✅ Consistently applied |
-| Connecting sentences between topics | ✅ Every section transition has an explicit bridge sentence |
-| Simple Explanation Rule (Official Def + In Simple Words + Real-Life Example) | ✅ Applied to: Document Loader, Chunking, RecursiveCharacterTextSplitter, Embedding, Retrieval Layer, Prompt Template |
-| Integrated Learning (reasons, doubts, errors within bullets) | ✅ Common Doubts integrated inline, not in separate sections |
-| Full code with every-line comments | ✅ All 9 code blocks have per-line comments |
-| "How the code works" bullet list after every code block | ✅ Present after each of the 9 code blocks |
-| Context of previous session | ✅ Previous session (RAG Architecture and Pipeline) summarised in opening section |
-| What will be covered — learning objectives | ✅ Bullet list of 7 learning goals in opening section |
-| Key Takeaways (3–5 bullets + future topics link) | ✅ 5 bullets, last one links to memory + chat interface in future sessions |
-| Quick Reference Table at end | ✅ 22-row terminology and commands table |
-
----
-
-#### No Logical Mistakes — True
-
-- All Python import paths are accurate for LangChain's current package structure (`langchain_openai`, `langchain_community`, `langchain.text_splitter`, `langchain.prompts`).
-- `chunk_overlap` behaviour is correctly explained (last N characters of a chunk repeated at start of next chunk).
-- `Chroma.from_documents()` and `Chroma()` (load from disk) usage is logically consistent and distinct.
-- The `embedding_function` parameter is correctly used when loading an existing Chroma store.
-- Top-K tuning guidance (k=2 vs k=4 vs k=8) is accurate and balanced.
-- Full Rebuild vs Incremental Update approaches are logically sound and the caveat about stale chunks in incremental update is correctly flagged.
-- The end-to-end pipeline code is self-contained and follows a correct sequential flow.
-- `temperature=0` effect is correctly described.
+| Topic from Live Topic Coverage | Covered in Notes | Location in Notes |
+|---|---|---|
+| Session narrative — production RAG from minimal RAG | ✓ | "Why Strings Are Not Enough" section |
+| Expand knowledge base — multiple policy documents | ✓ | "Complete Production RAG Workflow" + Project Structure |
+| Ingest Documents — PDFs | ✓ | "Step 1 — Document Loading" + `load_pdf_file` code |
+| Ingest Documents — Text/Webpage (Not Covered in session) | Referenced only | Brief note in code comments |
+| Process and Organize Document Data | ✓ | "Step 2 — Parsing and Cleaning" + `clean_text` code |
+| Apply Chunking to Policy Documents | ✓ | "Step 3 — Chunking" + `chunk_text` code |
+| Configure Chunk Size and Overlap | ✓ | "Chunk Overlap" subsection with job-handover analogy |
+| Compare Chunking Outcomes | ✓ | "How to Choose Chunk Size" subsection + chunking strategies table |
+| Generate Embeddings for Policy Chunks | ✓ | "Step 4 — Generating Embeddings" + `create_embeddings` code |
+| Store Policy Data in Vector Database | ✓ | "Step 5 — Storing in Vector Database" + `index_chunks` code |
+| Build Retrieval Layer | ✓ | `retrieve_chunks` code + "How the Code Works" explanation |
+| Construct Prompt Templates | ✓ | `build_prompt` code with system prompt |
+| Build End-to-End Multi-Document RAG System | ✓ | `build_knowledge_base` + `answer_question` + complete main block |
+| Handle Updates to Policy Documents (Not Covered in session) | ✓ Referenced | "Handling Policy Document Updates" section with conceptual explanation |
+| Extra: requirements.txt / pip install -r | ✓ | "Setting Up the Project" section |
+| Extra: env vars for API keys | ✓ | "Setting the API Key as an Environment Variable" section |
+| Extra: centralised model constants | ✓ | `LLM_MODEL` and `EMBEDDING_MODEL` constants in code |
+| Extra: virtualenv setup | ✓ | bash commands in "Setting Up the Project" |
+| Extra: OCR digression | ✓ | OCR note in "Step 1 — Document Loading" |
 
 ---
 
-#### No Presentation Mistakes — True
-
-- All 9 code blocks are correctly fenced with triple backticks and language tag.
-- All markdown tables use proper `|` formatting with separator rows.
-- Bold (`**text**`) and inline code (`` `code` ``) are consistently applied.
-- Horizontal rules (`---`) are used consistently as section separators.
-- No broken headings, unclosed formatting, or orphaned symbols observed.
-- Section hierarchy (H1 → H2 → H3) is clean and logical.
-
----
-
-### QC Result: ✅ PASSED
-
-All five criteria met the expected standard on the first iteration. No improvisation required.
-
----
+*QC completed on 2026-05-05. No further iterations required.*

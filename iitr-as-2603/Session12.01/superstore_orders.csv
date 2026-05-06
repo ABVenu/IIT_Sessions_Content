@@ -1,0 +1,501 @@
+Order ID,Order Date,Ship Mode,Customer Name,Segment,Region,Category,Sub-Category,Product Name,Sales,Quantity,Discount,Profit
+CA-2021-001009,2021-11-17,First Class,Lisa Davis,Home Office,West,Furniture,Furnishings,Desk Lamp,514.13,1,0.0,125.65
+CA-2023-001280,2023-11-14,Standard Class,William Shah,Home Office,Central,Technology,Accessories,Webcam HD,2543.09,4,0.1,777.98
+CA-2024-001483,2024-08-06,Standard Class,David Wilson,Home Office,West,Office Supplies,Art,Staedtler Markers Set,283.03,2,0.0,69.72
+CA-2023-001336,2023-02-13,Standard Class,Michael Kumar,Consumer,South,Technology,Phones,Motorola Moto G,121.3,5,0.0,43.92
+CA-2021-001001,2021-10-18,Standard Class,Rahul Martinez,Corporate,East,Furniture,Bookcases,5-Shelf Bookcase,556.9,3,0.0,112.48
+CA-2023-001268,2023-11-06,Same Day,Thomas Jones,Consumer,West,Office Supplies,Binders,Cardinal Binder,173.15,1,0.0,57.81
+CA-2023-001318,2023-02-21,Standard Class,Karen Anderson,Consumer,Central,Office Supplies,Envelopes,Window Envelopes Box,18.61,2,0.0,5.67
+CA-2023-001284,2023-11-16,First Class,Joseph Johnson,Consumer,West,Technology,Copiers,Ricoh Copier Pro,652.26,3,0.0,272.1
+CA-2021-001093,2021-10-11,Second Class,Rahul Mehta,Home Office,West,Furniture,Chairs,Visitor Chair,388.91,1,0.0,87.54
+CA-2024-001447,2024-03-27,Standard Class,Anjali Sharma,Consumer,South,Furniture,Bookcases,Glass Door Cabinet,119.58,4,0.0,17.97
+CA-2024-001415,2024-05-30,Standard Class,Arjun Joshi,Consumer,West,Technology,Phones,Nokia 3310,1237.01,5,0.0,462.5
+CA-2021-001069,2021-08-07,Standard Class,Thomas Sharma,Home Office,Central,Furniture,Bookcases,Glass Door Cabinet,1591.0,3,0.3,207.68
+CA-2023-001320,2023-05-05,Standard Class,Pooja Mehta,Home Office,South,Technology,Copiers,Xerox WorkCentre,1695.89,2,0.0,610.96
+CA-2023-001337,2023-12-11,Standard Class,James Patel,Corporate,East,Office Supplies,Art,Staedtler Markers Set,310.18,3,0.1,46.86
+CA-2021-001027,2021-11-11,Standard Class,Kavita Smith,Consumer,East,Office Supplies,Binders,Cardinal Binder,165.29,2,0.0,12.89
+CA-2021-001095,2021-05-28,Second Class,Barbara Gonzalez,Consumer,Central,Office Supplies,Fasteners,Rubber Bands Box,135.39,4,0.0,45.16
+CA-2022-001172,2022-03-10,Standard Class,Deepak Joshi,Consumer,Central,Office Supplies,Envelopes,Bubble Mailers,68.38,3,0.0,22.86
+CA-2022-001134,2022-11-28,First Class,John Wilson,Home Office,East,Office Supplies,Paper,Recycled Paper,255.59,3,0.3,7.55
+CA-2024-001431,2024-12-03,Standard Class,Kavita Joshi,Consumer,South,Office Supplies,Labels,File Folder Labels,242.58,5,0.1,22.16
+CA-2021-001044,2021-09-12,Second Class,Richard Williams,Corporate,West,Furniture,Bookcases,Glass Door Cabinet,259.47,5,0.2,59.26
+CA-2021-001045,2021-10-16,Standard Class,Lisa Shah,Corporate,South,Technology,Machines,Epson Inkjet,602.95,5,0.0,270.52
+CA-2021-001107,2021-04-02,Standard Class,Richard Hernandez,Consumer,South,Technology,Copiers,Konica Bizhub,942.83,3,0.0,348.6
+CA-2021-001100,2021-05-21,Standard Class,David Martinez,Consumer,Central,Furniture,Chairs,Ergonomic Office Chair,317.21,4,0.0,131.39
+CA-2021-001088,2021-12-19,Standard Class,Priya Garcia,Consumer,West,Furniture,Furnishings,Filing Cabinet,1047.3,3,0.0,406.14
+CA-2022-001196,2022-04-05,Second Class,Kavita Martinez,Consumer,West,Office Supplies,Labels,Avery Labels Sheet,57.26,5,0.2,9.96
+CA-2021-001122,2021-09-03,First Class,Charles Sharma,Consumer,Central,Furniture,Tables,Folding Table,495.14,4,0.0,26.38
+CA-2024-001470,2024-06-10,Standard Class,Joseph Smith,Home Office,South,Furniture,Tables,Study Table,2133.57,5,0.2,616.42
+CA-2021-001068,2021-11-08,Second Class,Deepak Johnson,Consumer,West,Furniture,Tables,Conference Table,435.47,1,0.4,31.47
+CA-2021-001110,2021-12-12,Second Class,David Smith,Consumer,South,Furniture,Chairs,Ergonomic Office Chair,368.09,4,0.0,28.3
+CA-2021-001051,2021-02-08,Standard Class,Arjun Hernandez,Corporate,South,Technology,Phones,Nokia 3310,398.36,3,0.2,64.59
+CA-2023-001342,2023-12-30,Standard Class,Linda Hernandez,Corporate,Central,Office Supplies,Storage,Steelcase Filing Box,9.52,2,0.2,0.9
+CA-2022-001149,2022-05-07,Standard Class,Richard Johnson,Corporate,West,Technology,Copiers,Xerox WorkCentre,824.41,5,0.0,65.22
+CA-2021-001019,2021-01-20,Same Day,William Gonzalez,Corporate,East,Office Supplies,Binders,Staples Heavy Binder,448.41,3,0.0,101.02
+CA-2022-001163,2022-01-10,Standard Class,Deepak Gupta,Consumer,West,Office Supplies,Binders,Avery Premium Binder,86.1,1,0.0,23.39
+CA-2023-001315,2023-12-30,Standard Class,Lisa Gonzalez,Corporate,South,Furniture,Tables,Study Table,162.65,1,0.1,27.14
+CA-2024-001448,2024-09-21,First Class,Susan Wilson,Corporate,South,Technology,Phones,Apple iPhone 14,441.29,3,0.2,27.35
+CA-2023-001272,2023-07-26,Standard Class,Jennifer Brown,Consumer,East,Furniture,Bookcases,Glass Door Cabinet,556.39,5,0.1,142.25
+CA-2021-001032,2021-12-28,Second Class,Pooja Johnson,Home Office,East,Technology,Copiers,Ricoh Copier Pro,1093.8,1,0.1,344.53
+CA-2021-001037,2021-12-20,Standard Class,Kavita Jones,Consumer,West,Office Supplies,Envelopes,Window Envelopes Box,254.32,3,0.0,34.25
+CA-2024-001417,2024-09-19,Second Class,Anjali Garcia,Home Office,East,Technology,Copiers,Xerox WorkCentre,1758.04,4,0.2,62.2
+CA-2021-001092,2021-02-15,Standard Class,Kiran Wilson,Corporate,West,Technology,Machines,HP LaserJet,692.52,1,0.1,220.11
+CA-2022-001131,2022-10-29,Same Day,Jennifer Gonzalez,Consumer,Central,Office Supplies,Fasteners,Rubber Bands Box,690.6,4,0.0,263.24
+CA-2023-001346,2023-10-08,Same Day,Mary Gupta,Home Office,Central,Office Supplies,Storage,Steelcase Filing Box,553.74,3,0.3,95.26
+CA-2022-001127,2022-11-23,Second Class,Arjun Garcia,Corporate,East,Furniture,Bookcases,Glass Door Cabinet,429.44,4,0.0,138.4
+CA-2024-001486,2024-10-03,Standard Class,Lisa Davis,Home Office,East,Furniture,Furnishings,Filing Cabinet,199.56,1,0.1,70.72
+CA-2024-001443,2024-01-24,Standard Class,Michael Garcia,Consumer,East,Technology,Copiers,Xerox WorkCentre,2703.07,4,0.0,381.19
+CA-2023-001253,2023-04-13,Second Class,Suresh Thomas,Consumer,South,Furniture,Tables,Study Table,181.27,3,0.0,72.02
+CA-2023-001252,2023-12-26,Standard Class,Patricia Garcia,Corporate,East,Office Supplies,Paper,A4 Copy Paper Ream,186.11,4,0.3,32.89
+CA-2024-001379,2024-10-11,Standard Class,Michael Shah,Consumer,South,Office Supplies,Paper,Graph Paper Pad,418.38,4,0.0,128.86
+CA-2024-001487,2024-10-17,Standard Class,Kiran Smith,Corporate,Central,Technology,Machines,Canon Multifunction,811.04,2,0.2,219.8
+CA-2023-001361,2023-12-24,Standard Class,Vikram Williams,Consumer,Central,Office Supplies,Binders,Cardinal Binder,438.4,1,0.0,45.51
+CA-2021-001112,2021-10-08,Same Day,Linda Martinez,Home Office,South,Technology,Accessories,Webcam HD,2274.15,2,0.5,93.37
+CA-2021-001067,2021-10-23,Standard Class,Patricia Kumar,Consumer,Central,Office Supplies,Labels,File Folder Labels,435.49,3,0.2,43.3
+CA-2022-001130,2022-05-18,Standard Class,Meena Lopez,Corporate,East,Office Supplies,Storage,Magazine File Box,116.4,3,0.0,32.52
+CA-2024-001466,2024-08-30,Standard Class,David Thomas,Home Office,East,Technology,Accessories,HDMI Cable,1051.81,4,0.2,117.52
+CA-2022-001246,2022-11-20,Standard Class,Linda Anderson,Consumer,West,Office Supplies,Labels,Avery Labels Sheet,29.56,3,0.1,2.8
+CA-2023-001330,2023-09-21,Standard Class,Karen Verma,Home Office,West,Furniture,Furnishings,Filing Cabinet,78.01,3,0.0,10.64
+CA-2023-001306,2023-10-11,Second Class,Thomas Garcia,Consumer,West,Technology,Accessories,Webcam HD,342.04,4,0.4,25.62
+CA-2024-001384,2024-08-05,Standard Class,Pooja Verma,Corporate,South,Furniture,Furnishings,Coat Rack,482.84,4,0.0,60.02
+CA-2021-001028,2021-10-11,Second Class,Suresh Lopez,Corporate,Central,Office Supplies,Binders,Staples Heavy Binder,63.76,2,0.0,20.15
+CA-2024-001454,2024-05-23,Standard Class,Michael Sharma,Consumer,South,Technology,Machines,Brother Fax Machine,826.0,3,0.1,262.99
+CA-2021-001058,2021-12-04,Standard Class,Karen Anderson,Corporate,Central,Technology,Accessories,Webcam HD,2701.44,2,0.1,247.66
+CA-2024-001469,2024-05-23,Same Day,Priya Thomas,Corporate,South,Office Supplies,Fasteners,Rubber Bands Box,151.12,3,0.0,43.4
+CA-2021-001054,2021-11-20,Standard Class,Susan Sharma,Corporate,West,Technology,Phones,Motorola Moto G,568.66,3,0.0,161.57
+CA-2024-001423,2024-10-05,Standard Class,Joseph Verma,Consumer,East,Furniture,Chairs,Executive Chair,262.31,3,0.2,66.97
+CA-2022-001157,2022-07-13,Standard Class,John Williams,Corporate,West,Technology,Accessories,HDMI Cable,496.77,4,0.0,26.72
+CA-2023-001310,2023-10-26,Standard Class,Susan Hernandez,Corporate,East,Technology,Phones,Motorola Moto G,823.88,4,0.2,131.94
+CA-2024-001468,2024-10-11,Standard Class,William Smith,Corporate,South,Technology,Phones,Samsung Galaxy S23,774.27,3,0.1,62.08
+CA-2021-001026,2021-11-12,Second Class,Thomas Garcia,Home Office,West,Furniture,Bookcases,5-Shelf Bookcase,571.12,1,0.0,127.83
+CA-2022-001141,2022-11-15,Standard Class,Anjali Martinez,Corporate,Central,Furniture,Chairs,Visitor Chair,1143.83,5,0.0,251.05
+CA-2021-001010,2021-02-25,Standard Class,Kavita Miller,Consumer,East,Technology,Copiers,Konica Bizhub,4067.31,2,0.2,596.75
+CA-2021-001057,2021-11-07,Standard Class,Sarah Mehta,Consumer,South,Technology,Machines,Brother Fax Machine,688.68,5,0.1,81.88
+CA-2021-001085,2021-03-25,Second Class,Deepak Anderson,Consumer,South,Office Supplies,Storage,Storage Bin,155.04,1,0.0,14.63
+CA-2022-001249,2022-11-30,Standard Class,Robert Joshi,Corporate,West,Furniture,Furnishings,Monitor Stand,1264.01,2,0.1,473.72
+CA-2021-001118,2021-12-05,Standard Class,Mary Williams,Home Office,West,Furniture,Bookcases,Glass Door Cabinet,386.39,5,0.0,51.9
+CA-2023-001277,2023-12-05,Standard Class,Amit Miller,Consumer,West,Technology,Copiers,Konica Bizhub,793.75,5,0.0,98.11
+CA-2024-001491,2024-01-16,Second Class,Pooja Jones,Consumer,West,Furniture,Furnishings,Monitor Stand,51.78,2,0.4,7.16
+CA-2024-001446,2024-10-22,Standard Class,David Williams,Corporate,West,Technology,Copiers,Konica Bizhub,299.99,2,0.1,113.79
+CA-2024-001457,2024-10-11,Standard Class,Susan Singh,Corporate,West,Furniture,Furnishings,Monitor Stand,396.84,4,0.0,121.1
+CA-2024-001396,2024-02-06,Standard Class,Priya Martinez,Corporate,Central,Furniture,Chairs,Visitor Chair,79.96,1,0.0,14.64
+CA-2021-001090,2021-07-31,First Class,Susan Kumar,Consumer,East,Office Supplies,Paper,A4 Copy Paper Ream,155.88,1,0.0,55.98
+CA-2021-001094,2021-08-17,Second Class,Patricia Patel,Corporate,South,Furniture,Bookcases,3-Shelf Bookcase,75.59,1,0.1,13.15
+CA-2024-001465,2024-11-02,Second Class,Neha Shah,Consumer,South,Office Supplies,Paper,Graph Paper Pad,177.31,4,0.0,73.39
+CA-2022-001175,2022-10-12,Standard Class,Priya Kumar,Corporate,South,Furniture,Bookcases,Glass Door Cabinet,251.97,1,0.0,97.82
+CA-2022-001142,2022-11-18,Same Day,Susan Jones,Consumer,West,Office Supplies,Binders,Cardinal Binder,475.97,4,0.0,193.5
+CA-2022-001240,2022-06-26,First Class,Robert Sharma,Consumer,West,Furniture,Bookcases,3-Shelf Bookcase,958.36,4,0.1,175.34
+CA-2022-001169,2022-11-26,Standard Class,Neha Mehta,Corporate,South,Furniture,Furnishings,Coat Rack,985.9,1,0.0,147.19
+CA-2024-001460,2024-09-18,Same Day,Mary Martinez,Consumer,East,Furniture,Chairs,Mesh Back Chair,790.0,5,0.0,308.9
+CA-2021-001008,2021-09-24,First Class,Lisa Patel,Home Office,West,Technology,Accessories,Laptop Stand,299.8,3,0.2,55.77
+CA-2024-001480,2024-04-01,Standard Class,Michael Lopez,Corporate,East,Furniture,Furnishings,Desk Lamp,407.91,1,0.0,116.72
+CA-2023-001308,2023-11-18,Standard Class,Susan Anderson,Home Office,South,Furniture,Tables,Folding Table,577.6,5,0.1,86.55
+CA-2024-001428,2024-12-22,Standard Class,John Jones,Corporate,West,Furniture,Furnishings,Filing Cabinet,103.11,1,0.1,33.86
+CA-2024-001479,2024-11-16,Standard Class,Charles Garcia,Consumer,Central,Technology,Accessories,Logitech Mouse,2345.15,3,0.1,628.42
+CA-2024-001494,2024-05-21,Standard Class,Mary Garcia,Corporate,South,Furniture,Furnishings,Filing Cabinet,143.79,3,0.1,30.93
+CA-2021-001034,2021-10-09,Standard Class,Jennifer Jones,Consumer,Central,Office Supplies,Paper,Graph Paper Pad,81.13,2,0.2,4.3
+CA-2023-001288,2023-01-02,Standard Class,Thomas Garcia,Consumer,East,Furniture,Tables,Conference Table,258.95,5,0.2,72.76
+CA-2024-001422,2024-02-13,First Class,Barbara Sharma,Consumer,East,Technology,Phones,Apple iPhone 14,305.7,1,0.0,133.84
+CA-2024-001376,2024-04-30,Second Class,Arjun Brown,Consumer,South,Office Supplies,Storage,Storage Bin,96.67,2,0.0,18.31
+CA-2022-001168,2022-11-01,Same Day,Robert Anderson,Home Office,Central,Furniture,Tables,Study Table,115.16,3,0.0,36.1
+CA-2023-001351,2023-10-08,Second Class,Neha Garcia,Corporate,South,Furniture,Furnishings,Monitor Stand,951.53,2,0.0,133.7
+CA-2023-001344,2023-12-03,Standard Class,Vikram Davis,Consumer,West,Technology,Machines,HP LaserJet,3631.1,1,0.4,354.2
+CA-2023-001305,2023-12-30,Standard Class,John Verma,Consumer,South,Furniture,Tables,Conference Table,504.62,2,0.1,42.1
+CA-2023-001314,2023-12-13,Standard Class,David Smith,Consumer,East,Technology,Machines,Brother Fax Machine,474.31,3,0.3,61.79
+CA-2021-001076,2021-03-05,Standard Class,Amit Davis,Consumer,West,Office Supplies,Binders,Staples Heavy Binder,8.14,3,0.0,2.82
+CA-2023-001292,2023-01-17,Standard Class,Michael Anderson,Corporate,Central,Office Supplies,Art,Highlighters Set,99.83,2,0.4,3.34
+CA-2022-001166,2022-01-13,Standard Class,William Hernandez,Consumer,Central,Furniture,Bookcases,3-Shelf Bookcase,551.53,2,0.1,56.75
+CA-2022-001137,2022-06-08,Standard Class,James Martinez,Consumer,Central,Furniture,Furnishings,Filing Cabinet,414.1,1,0.2,68.46
+CA-2024-001392,2024-12-08,Standard Class,Kavita Smith,Corporate,East,Office Supplies,Art,Sticky Notes Multipack,163.47,4,0.2,49.74
+CA-2024-001497,2024-05-18,Standard Class,Kiran Johnson,Consumer,East,Technology,Machines,Canon Multifunction,1707.48,1,0.2,117.46
+CA-2024-001432,2024-06-28,Standard Class,Karen Anderson,Consumer,West,Technology,Copiers,Ricoh Copier Pro,590.64,5,0.2,43.32
+CA-2024-001413,2024-11-02,Standard Class,Rahul Davis,Consumer,South,Technology,Copiers,Xerox WorkCentre,2118.82,5,0.4,238.37
+CA-2022-001221,2022-12-14,Second Class,Lisa Davis,Corporate,Central,Office Supplies,Labels,Price Tag Labels Roll,83.09,5,0.3,5.09
+CA-2021-001124,2021-11-09,First Class,Rahul Gupta,Consumer,West,Furniture,Chairs,Mesh Back Chair,1988.29,2,0.2,293.05
+CA-2024-001401,2024-06-13,First Class,Deepak Joshi,Home Office,West,Furniture,Bookcases,3-Shelf Bookcase,59.28,1,0.2,11.92
+CA-2024-001382,2024-01-23,Standard Class,Anjali Patel,Consumer,West,Office Supplies,Binders,Cardinal Binder,81.08,4,0.1,9.27
+CA-2021-001040,2021-11-25,First Class,Vikram Wilson,Home Office,West,Office Supplies,Binders,Staples Heavy Binder,545.07,5,0.2,114.81
+CA-2023-001254,2023-10-24,Standard Class,Sarah Sharma,Consumer,West,Furniture,Bookcases,Glass Door Cabinet,405.2,4,0.0,154.21
+CA-2022-001177,2022-08-05,Standard Class,William Garcia,Consumer,East,Furniture,Furnishings,Monitor Stand,283.54,1,0.3,67.17
+CA-2024-001453,2024-02-08,Standard Class,David Smith,Consumer,Central,Furniture,Chairs,Ergonomic Office Chair,60.18,4,0.1,21.0
+CA-2024-001420,2024-09-25,Standard Class,Karen Verma,Consumer,Central,Office Supplies,Paper,Premium Photo Paper,60.08,1,0.0,13.88
+CA-2021-001091,2021-09-25,Standard Class,Robert Sharma,Consumer,Central,Furniture,Bookcases,Glass Door Cabinet,203.52,3,0.1,33.0
+CA-2024-001482,2024-06-24,Same Day,Charles Lopez,Home Office,East,Office Supplies,Fasteners,Rubber Bands Box,410.71,5,0.4,33.28
+CA-2022-001139,2022-12-12,Standard Class,Jennifer Verma,Corporate,East,Furniture,Furnishings,Monitor Stand,420.03,1,0.4,15.94
+CA-2023-001311,2023-02-20,Standard Class,Anjali Williams,Consumer,Central,Furniture,Tables,Folding Table,225.56,3,0.0,37.57
+CA-2022-001235,2022-10-31,Standard Class,Amit Thomas,Home Office,South,Office Supplies,Labels,File Folder Labels,97.76,5,0.3,11.23
+CA-2022-001218,2022-05-03,Standard Class,Suresh Garcia,Consumer,West,Office Supplies,Labels,Avery Labels Sheet,340.95,4,0.0,68.24
+CA-2021-001007,2021-11-20,Standard Class,Linda Shah,Corporate,West,Furniture,Furnishings,Filing Cabinet,1147.66,3,0.0,256.97
+CA-2023-001263,2023-10-07,Standard Class,Susan Verma,Home Office,East,Office Supplies,Labels,File Folder Labels,131.58,1,0.2,25.32
+CA-2022-001203,2022-06-26,Standard Class,Robert Miller,Consumer,South,Office Supplies,Storage,Magazine File Box,158.07,1,0.0,18.3
+CA-2023-001251,2023-10-11,Standard Class,Rahul Garcia,Consumer,West,Furniture,Bookcases,Glass Door Cabinet,256.14,4,0.0,52.33
+CA-2023-001360,2023-11-27,Second Class,Susan Garcia,Consumer,West,Technology,Phones,Apple iPhone 14,755.25,5,0.1,176.46
+CA-2024-001455,2024-11-06,Second Class,Robert Gupta,Corporate,South,Furniture,Furnishings,Monitor Stand,183.18,3,0.5,9.65
+CA-2022-001241,2022-12-05,Standard Class,Susan Williams,Consumer,South,Technology,Copiers,Konica Bizhub,777.29,2,0.0,56.9
+CA-2022-001187,2022-11-25,Standard Class,William Singh,Consumer,East,Furniture,Chairs,Ergonomic Office Chair,407.19,1,0.0,76.32
+CA-2021-001036,2021-08-24,Second Class,Meena Smith,Consumer,East,Office Supplies,Paper,Recycled Paper,137.94,4,0.2,37.29
+CA-2023-001257,2023-10-01,First Class,Jessica Patel,Home Office,Central,Office Supplies,Envelopes,Window Envelopes Box,193.88,3,0.3,40.16
+CA-2024-001383,2024-04-05,Standard Class,William Jones,Consumer,East,Furniture,Bookcases,3-Shelf Bookcase,390.13,2,0.2,66.82
+CA-2021-001025,2021-02-28,Standard Class,Joseph Davis,Consumer,Central,Furniture,Tables,Study Table,144.29,3,0.0,11.22
+CA-2024-001421,2024-10-27,Standard Class,Neha Shah,Consumer,Central,Office Supplies,Labels,Price Tag Labels Roll,739.2,1,0.0,298.33
+CA-2021-001023,2021-06-29,First Class,Michael Gonzalez,Corporate,East,Office Supplies,Binders,Cardinal Binder,449.76,4,0.5,39.33
+CA-2023-001287,2023-04-06,Standard Class,Linda Sharma,Home Office,South,Furniture,Chairs,Mesh Back Chair,298.67,5,0.0,114.49
+CA-2021-001097,2021-11-07,Standard Class,John Shah,Corporate,West,Technology,Phones,Motorola Moto G,926.77,2,0.1,87.99
+CA-2023-001364,2023-10-04,Second Class,Jessica Smith,Consumer,West,Technology,Copiers,Xerox WorkCentre,842.47,3,0.2,102.09
+CA-2023-001296,2023-10-23,Second Class,Barbara Sharma,Home Office,West,Technology,Copiers,Konica Bizhub,3501.75,1,0.0,694.52
+CA-2023-001295,2023-09-10,Standard Class,Deepak Mehta,Corporate,West,Office Supplies,Art,Pilot Pens Pack,513.89,5,0.1,80.97
+CA-2022-001236,2022-02-17,Same Day,Michael Sharma,Consumer,Central,Office Supplies,Fasteners,Paper Clips Box,201.44,3,0.3,17.11
+CA-2022-001180,2022-07-27,Second Class,Sarah Hernandez,Consumer,South,Office Supplies,Art,Pilot Pens Pack,212.72,3,0.0,80.13
+CA-2021-001111,2021-11-12,Standard Class,Neha Gonzalez,Corporate,East,Office Supplies,Binders,Staples Heavy Binder,20.28,2,0.1,3.61
+CA-2024-001474,2024-11-15,Standard Class,Vikram Mehta,Corporate,South,Furniture,Bookcases,Glass Door Cabinet,362.49,1,0.0,26.64
+CA-2024-001441,2024-12-02,Standard Class,Jessica Singh,Home Office,West,Office Supplies,Fasteners,Binder Clips Pack,540.76,3,0.0,58.52
+CA-2022-001244,2022-06-03,First Class,William Lopez,Consumer,Central,Technology,Machines,Brother Fax Machine,3598.64,2,0.0,1485.37
+CA-2022-001197,2022-10-02,Standard Class,Linda Davis,Corporate,Central,Furniture,Bookcases,5-Shelf Bookcase,581.94,1,0.0,138.91
+CA-2023-001260,2023-11-04,Second Class,Kiran Jones,Corporate,South,Technology,Phones,Nokia 3310,2739.67,1,0.1,519.59
+CA-2021-001102,2021-11-05,Standard Class,James Williams,Consumer,South,Office Supplies,Art,Pilot Pens Pack,47.86,2,0.1,13.87
+CA-2021-001082,2021-12-20,Standard Class,Michael Gonzalez,Consumer,South,Technology,Accessories,Dell USB Hub,1753.62,3,0.1,555.82
+CA-2022-001238,2022-07-02,Standard Class,Joseph Shah,Corporate,Central,Office Supplies,Fasteners,Rubber Bands Box,161.0,3,0.1,53.12
+CA-2022-001182,2022-06-23,Standard Class,Karen Patel,Home Office,South,Furniture,Chairs,Mesh Back Chair,507.68,2,0.0,90.79
+CA-2022-001178,2022-09-07,First Class,Meena Anderson,Consumer,South,Office Supplies,Envelopes,Window Envelopes Box,327.25,2,0.0,20.4
+CA-2022-001220,2022-07-24,Standard Class,Kavita Patel,Corporate,South,Office Supplies,Binders,Cardinal Binder,181.84,2,0.0,33.17
+CA-2023-001301,2023-07-16,Second Class,Mary Sharma,Home Office,South,Office Supplies,Fasteners,Staple Remover,18.43,2,0.2,1.83
+CA-2024-001489,2024-12-09,First Class,David Patel,Consumer,South,Technology,Phones,Apple iPhone 14,844.45,5,0.2,101.15
+CA-2021-001052,2021-11-30,Standard Class,Joseph Patel,Consumer,East,Office Supplies,Envelopes,Window Envelopes Box,57.79,2,0.0,6.72
+CA-2024-001456,2024-05-24,Same Day,Arjun Anderson,Consumer,Central,Office Supplies,Envelopes,Manila Envelopes Pack,163.14,3,0.1,23.57
+CA-2023-001334,2023-12-01,Second Class,Lisa Smith,Home Office,East,Office Supplies,Envelopes,Manila Envelopes Pack,49.1,3,0.0,18.6
+CA-2022-001247,2022-11-21,Standard Class,Michael Verma,Consumer,East,Furniture,Chairs,Executive Chair,669.01,1,0.2,116.65
+CA-2024-001472,2024-08-30,First Class,Richard Martinez,Corporate,East,Office Supplies,Art,Staedtler Markers Set,103.22,2,0.1,11.64
+CA-2023-001353,2023-11-20,Second Class,Deepak Thomas,Corporate,West,Furniture,Bookcases,3-Shelf Bookcase,612.07,2,0.1,108.34
+CA-2024-001404,2024-03-06,Second Class,Robert Brown,Corporate,South,Office Supplies,Fasteners,Binder Clips Pack,123.25,5,0.0,45.82
+CA-2022-001128,2022-01-31,Second Class,Jessica Anderson,Consumer,South,Technology,Copiers,Xerox WorkCentre,755.68,4,0.3,143.11
+CA-2024-001390,2024-07-06,Standard Class,Jennifer Jones,Consumer,West,Office Supplies,Art,Pilot Pens Pack,168.32,4,0.2,25.35
+CA-2021-001048,2021-10-23,First Class,Arjun Sharma,Corporate,West,Furniture,Furnishings,Desk Lamp,139.56,1,0.0,55.08
+CA-2022-001133,2022-11-01,Same Day,Richard Hernandez,Consumer,South,Office Supplies,Paper,Recycled Paper,133.37,1,0.2,13.34
+CA-2024-001424,2024-09-22,Second Class,Lisa Garcia,Corporate,Central,Office Supplies,Art,Highlighters Set,266.85,3,0.5,23.88
+CA-2021-001013,2021-08-04,Standard Class,Patricia Shah,Home Office,South,Furniture,Furnishings,Coat Rack,388.94,1,0.1,61.4
+CA-2022-001147,2022-12-17,Standard Class,Kavita Gupta,Corporate,East,Technology,Phones,OnePlus Nord,1154.38,4,0.2,143.43
+CA-2022-001198,2022-07-05,Standard Class,Sarah Anderson,Consumer,South,Office Supplies,Binders,Staples Heavy Binder,583.74,1,0.1,48.51
+CA-2022-001158,2022-04-16,First Class,John Davis,Home Office,West,Furniture,Bookcases,Glass Door Cabinet,508.78,5,0.1,29.68
+CA-2021-001049,2021-03-03,Standard Class,Lisa Williams,Home Office,East,Technology,Phones,Samsung Galaxy S23,2941.42,4,0.2,754.2
+CA-2021-001021,2021-10-09,Standard Class,Thomas Johnson,Corporate,Central,Technology,Machines,Epson Inkjet,548.05,3,0.0,100.52
+CA-2022-001183,2022-05-27,Second Class,Robert Patel,Consumer,South,Furniture,Bookcases,Glass Door Cabinet,1161.28,4,0.1,159.21
+CA-2022-001164,2022-10-26,Standard Class,Sarah Singh,Corporate,South,Furniture,Bookcases,3-Shelf Bookcase,410.07,2,0.0,69.9
+CA-2024-001442,2024-11-09,First Class,James Verma,Consumer,West,Furniture,Tables,Folding Table,143.44,3,0.0,50.43
+CA-2022-001192,2022-09-20,Standard Class,Suresh Gonzalez,Consumer,Central,Office Supplies,Binders,Cardinal Binder,39.34,4,0.4,5.64
+CA-2024-001458,2024-11-28,Second Class,Sarah Jones,Consumer,Central,Furniture,Chairs,Mesh Back Chair,1158.74,4,0.1,388.14
+CA-2023-001279,2023-06-05,Second Class,Deepak Lopez,Consumer,East,Technology,Machines,HP LaserJet,417.77,5,0.0,115.62
+CA-2022-001245,2022-11-01,Standard Class,David Brown,Corporate,West,Office Supplies,Paper,Premium Photo Paper,134.29,1,0.0,41.11
+CA-2024-001488,2024-01-14,First Class,Thomas Lopez,Corporate,South,Technology,Copiers,Konica Bizhub,4272.54,2,0.0,347.31
+CA-2023-001285,2023-12-02,Same Day,Vikram Gonzalez,Consumer,East,Technology,Machines,Canon Multifunction,1072.54,1,0.1,182.82
+CA-2021-001006,2021-11-18,Standard Class,William Verma,Home Office,East,Furniture,Furnishings,Filing Cabinet,448.12,1,0.0,51.08
+CA-2024-001439,2024-03-15,First Class,Linda Davis,Consumer,Central,Furniture,Bookcases,5-Shelf Bookcase,414.89,2,0.0,55.57
+CA-2021-001042,2021-09-14,Same Day,Karen Kumar,Consumer,South,Furniture,Furnishings,Monitor Stand,986.86,4,0.1,319.0
+CA-2022-001208,2022-11-16,Standard Class,Karen Martinez,Home Office,East,Office Supplies,Paper,Graph Paper Pad,34.54,5,0.2,3.59
+CA-2022-001165,2022-09-03,Standard Class,Sarah Joshi,Consumer,West,Technology,Machines,Brother Fax Machine,736.16,2,0.1,65.2
+CA-2023-001326,2023-06-23,Standard Class,David Williams,Consumer,South,Furniture,Bookcases,3-Shelf Bookcase,282.67,3,0.1,55.65
+CA-2022-001188,2022-03-28,Standard Class,Michael Brown,Consumer,South,Technology,Phones,Samsung Galaxy S23,1053.49,2,0.0,395.42
+CA-2021-001113,2021-12-16,Standard Class,Deepak Williams,Home Office,East,Technology,Phones,Nokia 3310,2681.82,3,0.2,626.66
+CA-2024-001407,2024-12-03,Standard Class,Arjun Mehta,Consumer,Central,Technology,Phones,OnePlus Nord,238.11,3,0.1,43.48
+CA-2022-001237,2022-11-29,Second Class,William Joshi,Corporate,South,Technology,Accessories,Logitech Mouse,629.6,3,0.0,136.89
+CA-2022-001138,2022-03-22,Standard Class,Charles Gonzalez,Corporate,West,Office Supplies,Labels,File Folder Labels,48.55,2,0.1,9.57
+CA-2023-001343,2023-10-25,Standard Class,John Martinez,Corporate,South,Furniture,Tables,Conference Table,193.37,5,0.0,45.63
+CA-2024-001461,2024-12-16,Second Class,Suresh Gonzalez,Home Office,Central,Technology,Phones,Motorola Moto G,1058.72,4,0.4,143.86
+CA-2021-001059,2021-04-20,Standard Class,Suresh Lopez,Corporate,Central,Office Supplies,Fasteners,Binder Clips Pack,643.46,1,0.0,109.02
+CA-2021-001099,2021-12-26,Standard Class,Vikram Verma,Corporate,South,Office Supplies,Storage,Storage Bin,197.05,2,0.3,11.42
+CA-2021-001104,2021-10-23,Standard Class,Jennifer Verma,Consumer,South,Furniture,Bookcases,5-Shelf Bookcase,1394.47,5,0.1,432.12
+CA-2023-001300,2023-08-01,Standard Class,Linda Verma,Consumer,Central,Furniture,Chairs,Ergonomic Office Chair,2092.96,5,0.0,475.33
+CA-2022-001223,2022-11-16,Standard Class,Vikram Gonzalez,Consumer,South,Office Supplies,Binders,Staples Heavy Binder,13.87,4,0.1,1.66
+CA-2024-001377,2024-10-17,Standard Class,Robert Hernandez,Corporate,Central,Office Supplies,Fasteners,Binder Clips Pack,84.66,4,0.0,12.49
+CA-2022-001204,2022-09-14,Standard Class,Linda Williams,Consumer,Central,Furniture,Tables,Study Table,410.47,5,0.0,157.77
+CA-2021-001022,2021-03-09,Standard Class,Barbara Gupta,Consumer,West,Furniture,Furnishings,Desk Lamp,239.38,5,0.0,24.17
+CA-2023-001290,2023-10-09,Standard Class,William Brown,Consumer,East,Office Supplies,Art,Staedtler Markers Set,108.89,5,0.2,29.01
+CA-2024-001493,2024-11-20,Second Class,Meena Davis,Consumer,South,Office Supplies,Binders,Cardinal Binder,350.75,4,0.1,80.89
+CA-2021-001038,2021-06-25,First Class,Patricia Gonzalez,Consumer,West,Technology,Copiers,Xerox WorkCentre,155.82,1,0.2,46.88
+CA-2021-001114,2021-10-10,First Class,Kiran Davis,Corporate,East,Office Supplies,Labels,Price Tag Labels Roll,44.94,2,0.0,11.13
+CA-2022-001170,2022-10-06,Second Class,Michael Martinez,Consumer,South,Technology,Copiers,Xerox WorkCentre,905.27,5,0.1,215.53
+CA-2022-001231,2022-11-24,Standard Class,Kiran Wilson,Consumer,East,Furniture,Bookcases,5-Shelf Bookcase,499.7,5,0.0,63.51
+CA-2022-001194,2022-02-03,Standard Class,Robert Hernandez,Consumer,Central,Technology,Accessories,Laptop Stand,886.6,2,0.0,74.9
+CA-2021-001117,2021-03-30,Second Class,Karen Jones,Consumer,Central,Furniture,Bookcases,5-Shelf Bookcase,371.79,1,0.1,37.12
+CA-2022-001162,2022-10-03,Second Class,Vikram Mehta,Consumer,West,Technology,Accessories,Logitech Mouse,1423.67,4,0.0,131.86
+CA-2022-001129,2022-02-05,Standard Class,Pooja Gupta,Home Office,Central,Furniture,Furnishings,Coat Rack,231.31,3,0.2,20.55
+CA-2024-001437,2024-06-11,First Class,Amit Jones,Consumer,Central,Office Supplies,Storage,Magazine File Box,107.99,3,0.2,16.24
+CA-2022-001195,2022-08-15,Second Class,James Garcia,Corporate,West,Technology,Accessories,Logitech Mouse,463.11,5,0.2,109.67
+CA-2021-001033,2021-11-18,Standard Class,Arjun Thomas,Home Office,South,Office Supplies,Art,Highlighters Set,54.14,3,0.2,9.8
+CA-2023-001370,2023-11-04,First Class,Pooja Wilson,Corporate,East,Office Supplies,Labels,Avery Labels Sheet,349.09,1,0.0,23.6
+CA-2023-001327,2023-11-17,Standard Class,Sarah Lopez,Corporate,Central,Technology,Phones,OnePlus Nord,2203.37,5,0.3,152.63
+CA-2023-001317,2023-11-20,Standard Class,Kavita Wilson,Home Office,South,Technology,Machines,Epson Inkjet,870.01,4,0.3,66.15
+CA-2023-001291,2023-10-06,Standard Class,William Kumar,Consumer,West,Furniture,Chairs,Ergonomic Office Chair,40.65,4,0.1,6.85
+CA-2021-001121,2021-03-02,Standard Class,Priya Miller,Home Office,East,Furniture,Furnishings,Monitor Stand,956.69,5,0.1,326.6
+CA-2021-001096,2021-02-18,Standard Class,Kavita Verma,Corporate,West,Office Supplies,Fasteners,Rubber Bands Box,77.07,2,0.4,5.76
+CA-2022-001200,2022-11-24,Second Class,Suresh Smith,Consumer,East,Furniture,Furnishings,Monitor Stand,227.07,1,0.4,4.59
+CA-2021-001086,2021-11-19,Standard Class,Patricia Smith,Home Office,South,Office Supplies,Binders,Avery Premium Binder,192.88,2,0.2,22.38
+CA-2022-001230,2022-11-10,Standard Class,Deepak Lopez,Consumer,East,Office Supplies,Fasteners,Binder Clips Pack,87.83,1,0.0,11.82
+CA-2021-001115,2021-07-19,Standard Class,Anjali Mehta,Consumer,West,Office Supplies,Envelopes,Manila Envelopes Pack,350.02,4,0.3,15.3
+CA-2022-001144,2022-09-24,Standard Class,Karen Miller,Consumer,South,Furniture,Tables,Folding Table,1962.42,1,0.0,616.36
+CA-2021-001079,2021-11-13,Same Day,Linda Patel,Corporate,West,Furniture,Furnishings,Coat Rack,455.24,2,0.1,156.81
+CA-2024-001476,2024-10-09,Standard Class,Kavita Jones,Consumer,East,Furniture,Bookcases,3-Shelf Bookcase,209.17,2,0.1,78.11
+CA-2024-001399,2024-12-19,Standard Class,Robert Gupta,Consumer,South,Office Supplies,Fasteners,Staple Remover,81.4,4,0.0,21.5
+CA-2021-001106,2021-06-02,Standard Class,William Williams,Corporate,South,Technology,Accessories,Webcam HD,2644.76,1,0.0,178.58
+CA-2023-001363,2023-05-19,Same Day,Susan Kumar,Consumer,South,Furniture,Tables,Study Table,196.86,2,0.0,11.73
+CA-2024-001430,2024-09-20,Second Class,Kavita Gonzalez,Consumer,South,Office Supplies,Labels,File Folder Labels,7.42,3,0.0,3.27
+CA-2021-001017,2021-10-28,Standard Class,Sarah Wilson,Corporate,West,Technology,Phones,Samsung Galaxy S23,1063.77,2,0.1,59.58
+CA-2021-001089,2021-05-19,Standard Class,David Williams,Consumer,East,Technology,Machines,Canon Multifunction,206.0,5,0.0,74.26
+CA-2022-001140,2022-11-29,Standard Class,Deepak Brown,Home Office,Central,Furniture,Tables,Folding Table,427.14,4,0.0,108.56
+CA-2023-001309,2023-09-09,Standard Class,Thomas Sharma,Consumer,East,Furniture,Furnishings,Desk Lamp,652.8,3,0.0,126.72
+CA-2021-001000,2021-10-01,Second Class,John Smith,Corporate,West,Technology,Accessories,Logitech Mouse,337.09,5,0.0,43.66
+CA-2024-001464,2024-12-11,Standard Class,Neha Hernandez,Consumer,East,Furniture,Tables,Computer Desk,562.07,5,0.0,194.35
+CA-2024-001408,2024-12-20,Second Class,James Gupta,Consumer,Central,Furniture,Furnishings,Desk Lamp,103.45,5,0.5,7.7
+CA-2023-001345,2023-10-03,Standard Class,Lisa Lopez,Consumer,West,Furniture,Furnishings,Desk Lamp,441.97,1,0.0,84.31
+CA-2021-001046,2021-10-12,Second Class,Priya Brown,Corporate,West,Technology,Machines,Epson Inkjet,2656.01,2,0.0,917.5
+CA-2021-001055,2021-10-16,Same Day,David Lopez,Corporate,Central,Furniture,Furnishings,Filing Cabinet,307.55,4,0.3,45.68
+CA-2023-001256,2023-10-13,First Class,Meena Thomas,Consumer,South,Technology,Copiers,Konica Bizhub,1163.64,1,0.0,250.11
+CA-2022-001227,2022-12-30,First Class,Pooja Smith,Home Office,Central,Technology,Copiers,Konica Bizhub,2148.87,5,0.2,142.91
+CA-2023-001324,2023-11-16,Second Class,Rahul Patel,Consumer,East,Technology,Phones,Samsung Galaxy S23,472.85,2,0.2,121.34
+CA-2024-001387,2024-10-20,Standard Class,Arjun Singh,Corporate,South,Furniture,Chairs,Visitor Chair,898.29,3,0.0,57.61
+CA-2022-001239,2022-12-29,Standard Class,Susan Shah,Corporate,Central,Technology,Copiers,Ricoh Copier Pro,2197.41,2,0.0,764.0
+CA-2021-001012,2021-05-29,Standard Class,William Joshi,Consumer,South,Technology,Accessories,HDMI Cable,3741.6,4,0.0,894.95
+CA-2024-001459,2024-12-21,Standard Class,Sarah Wilson,Consumer,East,Furniture,Bookcases,Glass Door Cabinet,120.98,1,0.0,46.08
+CA-2021-001072,2021-08-05,Standard Class,William Wilson,Consumer,West,Technology,Copiers,Ricoh Copier Pro,820.89,5,0.1,242.06
+CA-2023-001335,2023-11-09,First Class,Barbara Jones,Consumer,West,Furniture,Tables,Conference Table,520.4,2,0.0,194.85
+CA-2023-001362,2023-11-09,Standard Class,Jennifer Sharma,Consumer,West,Furniture,Tables,Folding Table,1037.21,3,0.1,343.06
+CA-2023-001299,2023-10-17,Standard Class,Amit Gonzalez,Corporate,Central,Office Supplies,Binders,Staples Heavy Binder,569.93,5,0.5,33.04
+CA-2022-001150,2022-11-19,Second Class,James Miller,Consumer,Central,Furniture,Furnishings,Monitor Stand,2167.24,1,0.2,533.6
+CA-2024-001389,2024-03-03,First Class,Thomas Smith,Consumer,Central,Technology,Accessories,Laptop Stand,2119.11,5,0.2,465.28
+CA-2022-001191,2022-06-23,Standard Class,Charles Patel,Corporate,East,Office Supplies,Storage,Plastic Drawer Set,183.46,2,0.1,14.83
+CA-2022-001156,2022-11-22,Standard Class,Sarah Miller,Corporate,West,Office Supplies,Paper,A4 Copy Paper Ream,55.17,3,0.0,11.52
+CA-2023-001352,2023-08-01,First Class,Deepak Kumar,Consumer,East,Office Supplies,Paper,Premium Photo Paper,69.57,4,0.3,8.46
+CA-2023-001274,2023-01-03,Standard Class,Suresh Wilson,Home Office,East,Office Supplies,Envelopes,Manila Envelopes Pack,85.38,3,0.0,27.26
+CA-2024-001495,2024-10-22,Standard Class,Vikram Anderson,Corporate,Central,Furniture,Furnishings,Monitor Stand,1088.87,3,0.2,281.94
+CA-2023-001267,2023-11-07,Second Class,Neha Singh,Home Office,East,Office Supplies,Fasteners,Staple Remover,124.92,2,0.0,15.11
+CA-2021-001020,2021-10-10,Second Class,Lisa Shah,Corporate,West,Office Supplies,Labels,Price Tag Labels Roll,179.53,3,0.0,16.66
+CA-2022-001148,2022-08-05,Standard Class,Barbara Thomas,Consumer,East,Technology,Copiers,Ricoh Copier Pro,3726.3,4,0.1,328.26
+CA-2024-001381,2024-06-19,Second Class,Kiran Wilson,Corporate,West,Office Supplies,Art,Sticky Notes Multipack,440.96,1,0.0,118.86
+CA-2021-001061,2021-11-02,Standard Class,John Jones,Consumer,East,Furniture,Furnishings,Coat Rack,358.7,1,0.3,44.61
+CA-2023-001354,2023-11-18,Standard Class,Lisa Hernandez,Consumer,Central,Office Supplies,Binders,Avery Premium Binder,88.96,5,0.4,11.6
+CA-2024-001452,2024-07-10,Standard Class,Mary Patel,Consumer,Central,Technology,Phones,Samsung Galaxy S23,187.57,3,0.5,10.07
+CA-2023-001281,2023-09-04,Standard Class,Robert Joshi,Consumer,East,Furniture,Bookcases,5-Shelf Bookcase,50.06,5,0.2,13.14
+CA-2023-001302,2023-06-12,Standard Class,Rahul Williams,Consumer,Central,Technology,Machines,Epson Inkjet,277.23,3,0.0,113.03
+CA-2021-001080,2021-08-27,Standard Class,Thomas Gonzalez,Consumer,South,Furniture,Chairs,Executive Chair,1929.41,4,0.0,738.4
+CA-2021-001016,2021-05-26,Second Class,Patricia Singh,Consumer,East,Technology,Copiers,Ricoh Copier Pro,1279.3,3,0.0,362.9
+CA-2024-001478,2024-10-15,Standard Class,David Mehta,Consumer,West,Technology,Accessories,Dell USB Hub,208.21,4,0.0,40.1
+CA-2022-001233,2022-09-28,Standard Class,Jennifer Hernandez,Corporate,Central,Furniture,Bookcases,5-Shelf Bookcase,66.81,5,0.2,6.35
+CA-2021-001108,2021-08-13,Second Class,Meena Gonzalez,Consumer,East,Office Supplies,Art,Sticky Notes Multipack,647.13,1,0.2,36.95
+CA-2021-001060,2021-10-22,Standard Class,Vikram Thomas,Corporate,Central,Technology,Copiers,Xerox WorkCentre,4269.46,2,0.1,520.5
+CA-2024-001402,2024-09-03,Second Class,Patricia Lopez,Consumer,West,Furniture,Furnishings,Coat Rack,612.37,1,0.0,190.78
+CA-2023-001262,2023-05-31,Standard Class,Kiran Hernandez,Corporate,South,Technology,Accessories,Dell USB Hub,2032.46,3,0.2,603.53
+CA-2023-001307,2023-04-14,Standard Class,Susan Singh,Consumer,South,Office Supplies,Storage,Magazine File Box,119.46,2,0.3,22.23
+CA-2024-001451,2024-08-10,Second Class,David Verma,Consumer,South,Furniture,Chairs,Visitor Chair,182.23,5,0.5,13.52
+CA-2022-001248,2022-10-25,Standard Class,John Gupta,Consumer,South,Furniture,Tables,Computer Desk,152.15,4,0.0,7.77
+CA-2021-001065,2021-04-20,First Class,Thomas Thomas,Consumer,East,Furniture,Tables,Study Table,45.07,4,0.4,5.79
+CA-2023-001355,2023-12-15,First Class,Priya Thomas,Consumer,East,Furniture,Chairs,Mesh Back Chair,284.99,2,0.3,13.49
+CA-2021-001073,2021-03-14,Second Class,Neha Miller,Consumer,Central,Office Supplies,Envelopes,Bubble Mailers,193.92,3,0.0,62.88
+CA-2021-001083,2021-12-25,First Class,Lisa Lopez,Consumer,West,Furniture,Chairs,Executive Chair,137.96,2,0.1,24.66
+CA-2022-001213,2022-10-05,Standard Class,John Williams,Consumer,Central,Technology,Copiers,Konica Bizhub,744.84,1,0.1,31.83
+CA-2023-001250,2023-05-02,Standard Class,Priya Anderson,Home Office,Central,Technology,Phones,Motorola Moto G,1331.96,1,0.0,140.33
+CA-2022-001225,2022-10-28,First Class,John Verma,Consumer,Central,Furniture,Tables,Study Table,319.08,5,0.2,66.58
+CA-2023-001356,2023-06-21,First Class,Deepak Patel,Consumer,West,Office Supplies,Labels,Price Tag Labels Roll,109.11,4,0.2,33.61
+CA-2024-001499,2024-11-04,Second Class,Linda Miller,Consumer,West,Furniture,Chairs,Ergonomic Office Chair,1471.68,3,0.2,365.49
+CA-2022-001135,2022-10-04,First Class,William Verma,Home Office,South,Technology,Copiers,Konica Bizhub,293.06,1,0.0,100.36
+CA-2022-001202,2022-11-12,Standard Class,Anjali Williams,Corporate,East,Office Supplies,Envelopes,Manila Envelopes Pack,17.38,2,0.0,2.68
+CA-2023-001265,2023-12-22,Standard Class,John Gonzalez,Corporate,East,Office Supplies,Labels,File Folder Labels,232.27,5,0.3,44.32
+CA-2023-001286,2023-12-17,Standard Class,James Verma,Home Office,South,Office Supplies,Storage,Storage Bin,326.15,2,0.0,100.26
+CA-2024-001398,2024-08-09,Standard Class,Barbara Patel,Home Office,West,Technology,Machines,Brother Fax Machine,1110.85,4,0.0,366.61
+CA-2023-001269,2023-03-05,First Class,Priya Verma,Consumer,Central,Furniture,Bookcases,3-Shelf Bookcase,139.29,1,0.2,11.09
+CA-2022-001189,2022-12-21,Same Day,Jessica Patel,Consumer,East,Technology,Phones,OnePlus Nord,2608.08,5,0.2,719.28
+CA-2021-001039,2021-04-01,Second Class,Jessica Thomas,Corporate,West,Technology,Copiers,Konica Bizhub,927.42,2,0.2,282.72
+CA-2024-001397,2024-02-27,Standard Class,Meena Brown,Consumer,South,Furniture,Furnishings,Monitor Stand,455.1,2,0.2,29.47
+CA-2023-001372,2023-11-22,Standard Class,Kiran Brown,Home Office,West,Technology,Machines,HP LaserJet,467.1,3,0.0,199.6
+CA-2022-001243,2022-04-12,Same Day,Sarah Davis,Corporate,West,Office Supplies,Fasteners,Rubber Bands Box,73.44,2,0.0,18.46
+CA-2021-001066,2021-03-15,First Class,Lisa Miller,Consumer,Central,Office Supplies,Storage,Storage Bin,753.36,1,0.0,210.01
+CA-2023-001313,2023-02-06,Standard Class,Anjali Verma,Consumer,West,Technology,Copiers,Konica Bizhub,1313.79,3,0.2,77.0
+CA-2024-001429,2024-09-03,Standard Class,Jennifer Gupta,Consumer,Central,Furniture,Tables,Folding Table,1091.86,1,0.5,56.71
+CA-2024-001378,2024-03-16,Standard Class,Sarah Garcia,Corporate,Central,Furniture,Furnishings,Coat Rack,82.06,5,0.3,4.32
+CA-2021-001041,2021-02-25,Standard Class,Kavita Shah,Consumer,West,Office Supplies,Fasteners,Binder Clips Pack,105.56,3,0.0,23.01
+CA-2022-001210,2022-11-12,Standard Class,Mary Lopez,Consumer,South,Office Supplies,Storage,Magazine File Box,10.82,3,0.0,4.83
+CA-2022-001217,2022-12-05,Standard Class,Jennifer Mehta,Corporate,East,Technology,Machines,Canon Multifunction,885.86,3,0.1,117.53
+CA-2024-001400,2024-12-11,Second Class,Pooja Hernandez,Consumer,Central,Furniture,Chairs,Executive Chair,135.37,1,0.5,10.64
+CA-2024-001496,2024-12-20,Standard Class,Richard Garcia,Consumer,South,Office Supplies,Binders,Staples Heavy Binder,25.05,4,0.4,2.48
+CA-2023-001339,2023-09-24,Standard Class,William Jones,Corporate,South,Furniture,Chairs,Visitor Chair,146.98,4,0.2,13.21
+CA-2024-001467,2024-02-25,First Class,Michael Garcia,Home Office,South,Furniture,Furnishings,Filing Cabinet,313.42,3,0.1,91.03
+CA-2021-001098,2021-04-23,Second Class,Sarah Thomas,Consumer,West,Office Supplies,Paper,Recycled Paper,154.54,4,0.0,22.51
+CA-2023-001298,2023-10-07,Standard Class,James Garcia,Consumer,West,Furniture,Tables,Folding Table,189.01,4,0.0,39.32
+CA-2024-001438,2024-12-06,Standard Class,Robert Brown,Consumer,West,Technology,Accessories,Dell USB Hub,2613.51,4,0.0,853.1
+CA-2022-001167,2022-08-11,Standard Class,Anjali Gonzalez,Consumer,Central,Office Supplies,Art,Pilot Pens Pack,117.07,5,0.5,3.57
+CA-2021-001053,2021-06-24,First Class,Anjali Martinez,Corporate,South,Office Supplies,Art,Staedtler Markers Set,103.14,1,0.1,35.57
+CA-2022-001126,2022-12-19,Standard Class,Mary Gonzalez,Consumer,Central,Office Supplies,Envelopes,Bubble Mailers,26.78,4,0.1,8.39
+CA-2024-001440,2024-12-14,Second Class,John Miller,Corporate,South,Office Supplies,Binders,Avery Premium Binder,162.62,5,0.1,32.85
+CA-2022-001193,2022-01-03,Standard Class,Kiran Anderson,Corporate,Central,Technology,Phones,Nokia 3310,524.52,5,0.1,49.52
+CA-2021-001071,2021-11-09,Standard Class,Priya Kumar,Consumer,East,Office Supplies,Storage,Steelcase Filing Box,17.56,4,0.4,1.2
+CA-2023-001341,2023-10-25,Standard Class,Joseph Miller,Consumer,East,Office Supplies,Envelopes,Bubble Mailers,36.0,1,0.0,2.59
+CA-2023-001373,2023-11-19,Standard Class,Arjun Shah,Consumer,West,Technology,Machines,Brother Fax Machine,503.88,1,0.1,52.08
+CA-2022-001153,2022-10-14,Standard Class,Rahul Martinez,Consumer,East,Technology,Accessories,Webcam HD,1940.9,4,0.1,566.05
+CA-2022-001179,2022-11-10,Standard Class,Meena Gupta,Corporate,South,Technology,Machines,Epson Inkjet,712.85,3,0.2,189.28
+CA-2021-001119,2021-10-20,Second Class,Anjali Hernandez,Consumer,Central,Furniture,Bookcases,Glass Door Cabinet,411.85,2,0.1,85.31
+CA-2023-001304,2023-11-04,First Class,John Sharma,Corporate,West,Office Supplies,Labels,File Folder Labels,67.69,5,0.3,9.17
+CA-2023-001273,2023-04-21,Second Class,Kavita Patel,Corporate,East,Office Supplies,Art,Staedtler Markers Set,223.82,2,0.0,75.37
+CA-2023-001350,2023-11-27,First Class,Susan Smith,Consumer,East,Office Supplies,Storage,Plastic Drawer Set,374.03,3,0.2,77.22
+CA-2023-001289,2023-11-27,Standard Class,David Davis,Home Office,South,Technology,Copiers,Konica Bizhub,2114.5,5,0.3,142.76
+CA-2023-001297,2023-10-24,Standard Class,Patricia Garcia,Corporate,Central,Office Supplies,Envelopes,Window Envelopes Box,92.25,2,0.3,21.43
+CA-2021-001120,2021-04-20,Standard Class,Neha Verma,Consumer,South,Office Supplies,Storage,Magazine File Box,68.42,4,0.0,15.73
+CA-2024-001435,2024-09-14,First Class,Mary Martinez,Corporate,Central,Furniture,Furnishings,Desk Lamp,71.6,3,0.1,19.92
+CA-2022-001232,2022-11-27,Standard Class,Pooja Verma,Consumer,East,Technology,Phones,Motorola Moto G,1100.0,1,0.0,270.07
+CA-2021-001002,2021-07-12,Second Class,Vikram Williams,Home Office,West,Office Supplies,Labels,File Folder Labels,169.84,5,0.3,18.18
+CA-2023-001293,2023-10-18,Standard Class,Vikram Patel,Corporate,West,Technology,Phones,OnePlus Nord,968.74,4,0.0,108.41
+CA-2022-001152,2022-09-26,Same Day,John Singh,Consumer,Central,Furniture,Bookcases,5-Shelf Bookcase,1140.39,1,0.0,483.42
+CA-2022-001229,2022-05-05,Second Class,Rahul Mehta,Home Office,South,Office Supplies,Art,Staedtler Markers Set,153.22,3,0.3,4.9
+CA-2023-001347,2023-02-13,Standard Class,Barbara Anderson,Consumer,South,Office Supplies,Fasteners,Rubber Bands Box,771.3,3,0.1,67.34
+CA-2024-001391,2024-07-22,Standard Class,Linda Johnson,Corporate,West,Furniture,Tables,Computer Desk,255.32,3,0.1,93.17
+CA-2021-001024,2021-12-08,First Class,Rahul Anderson,Consumer,South,Office Supplies,Fasteners,Rubber Bands Box,444.18,2,0.0,162.1
+CA-2021-001063,2021-12-13,Same Day,Charles Davis,Consumer,West,Furniture,Furnishings,Desk Lamp,908.08,1,0.2,210.76
+CA-2022-001181,2022-08-04,Second Class,Jessica Miller,Corporate,East,Technology,Machines,Brother Fax Machine,2066.91,5,0.0,548.78
+CA-2023-001259,2023-02-06,Standard Class,Richard Miller,Consumer,South,Office Supplies,Labels,Price Tag Labels Roll,174.37,2,0.1,53.74
+CA-2023-001321,2023-02-16,Standard Class,Sarah Wilson,Consumer,West,Office Supplies,Storage,Storage Bin,327.0,1,0.0,112.53
+CA-2023-001359,2023-09-14,Standard Class,Jessica Johnson,Corporate,Central,Furniture,Chairs,Mesh Back Chair,69.73,3,0.0,27.3
+CA-2024-001471,2024-12-07,Standard Class,Barbara Williams,Corporate,South,Office Supplies,Binders,Cardinal Binder,536.1,5,0.0,180.9
+CA-2021-001030,2021-04-16,Second Class,Rahul Williams,Consumer,West,Office Supplies,Labels,Avery Labels Sheet,412.75,3,0.0,53.51
+CA-2021-001056,2021-09-11,Standard Class,Pooja Anderson,Corporate,West,Technology,Copiers,Konica Bizhub,652.88,5,0.2,137.18
+CA-2024-001475,2024-06-08,Standard Class,Vikram Hernandez,Corporate,Central,Furniture,Chairs,Ergonomic Office Chair,1915.97,2,0.5,131.16
+CA-2022-001216,2022-10-06,Standard Class,Anjali Singh,Corporate,East,Office Supplies,Storage,Plastic Drawer Set,124.72,5,0.0,34.45
+CA-2024-001418,2024-10-13,First Class,Jessica Shah,Corporate,South,Technology,Phones,Motorola Moto G,1053.34,1,0.1,370.67
+CA-2021-001123,2021-02-05,First Class,Patricia Singh,Consumer,Central,Office Supplies,Fasteners,Staple Remover,77.05,3,0.0,19.39
+CA-2022-001132,2022-05-18,Second Class,Joseph Patel,Corporate,West,Technology,Accessories,Dell USB Hub,190.72,3,0.2,12.04
+CA-2023-001303,2023-05-31,Second Class,Sarah Martinez,Consumer,East,Office Supplies,Paper,Recycled Paper,45.3,2,0.3,4.79
+CA-2023-001374,2023-10-19,Second Class,Richard Mehta,Consumer,Central,Office Supplies,Art,Sticky Notes Multipack,428.94,1,0.5,37.78
+CA-2021-001014,2021-12-08,Standard Class,Sarah Williams,Consumer,East,Furniture,Tables,Study Table,505.13,5,0.0,157.02
+CA-2021-001011,2021-11-12,Standard Class,Mary Singh,Consumer,East,Furniture,Chairs,Mesh Back Chair,357.76,1,0.0,108.2
+CA-2021-001081,2021-02-04,Second Class,Suresh Gonzalez,Corporate,Central,Furniture,Tables,Conference Table,1291.49,4,0.3,240.39
+CA-2023-001325,2023-03-08,Standard Class,Vikram Gonzalez,Consumer,East,Furniture,Bookcases,3-Shelf Bookcase,769.53,1,0.1,147.17
+CA-2024-001477,2024-06-12,First Class,David Lopez,Consumer,Central,Technology,Machines,Canon Multifunction,1945.0,2,0.1,692.95
+CA-2024-001498,2024-05-09,Same Day,Kiran Kumar,Home Office,Central,Office Supplies,Fasteners,Binder Clips Pack,145.4,4,0.2,44.28
+CA-2022-001159,2022-02-09,First Class,Jessica Singh,Consumer,Central,Furniture,Chairs,Mesh Back Chair,483.17,4,0.4,32.8
+CA-2023-001282,2023-10-25,Standard Class,Barbara Gonzalez,Corporate,South,Office Supplies,Envelopes,Bubble Mailers,182.17,5,0.2,21.22
+CA-2023-001261,2023-10-30,Standard Class,Priya Verma,Consumer,East,Office Supplies,Paper,Premium Photo Paper,320.24,5,0.4,45.47
+CA-2021-001047,2021-05-19,Same Day,Neha Garcia,Consumer,East,Furniture,Bookcases,5-Shelf Bookcase,422.33,2,0.0,185.71
+CA-2021-001109,2021-10-27,Standard Class,Lisa Thomas,Corporate,Central,Technology,Phones,Apple iPhone 14,550.86,4,0.0,36.88
+CA-2022-001145,2022-10-30,First Class,Deepak Kumar,Corporate,West,Technology,Accessories,Logitech Mouse,1043.79,2,0.2,154.1
+CA-2023-001276,2023-07-27,Second Class,Charles Patel,Corporate,South,Furniture,Tables,Folding Table,405.74,3,0.4,8.84
+CA-2024-001416,2024-11-04,Standard Class,Charles Davis,Consumer,East,Technology,Phones,Nokia 3310,180.26,4,0.2,14.48
+CA-2021-001064,2021-02-06,Second Class,Neha Anderson,Consumer,West,Office Supplies,Binders,Cardinal Binder,110.57,5,0.2,9.44
+CA-2023-001368,2023-10-28,Second Class,Meena Davis,Consumer,Central,Technology,Machines,HP LaserJet,996.55,3,0.0,170.34
+CA-2023-001371,2023-12-28,Standard Class,Lisa Patel,Consumer,Central,Furniture,Chairs,Ergonomic Office Chair,822.59,2,0.0,216.27
+CA-2022-001199,2022-11-02,Standard Class,Charles Hernandez,Home Office,West,Office Supplies,Binders,Cardinal Binder,114.93,1,0.0,19.15
+CA-2024-001492,2024-09-16,Standard Class,Anjali Johnson,Consumer,East,Office Supplies,Envelopes,Manila Envelopes Pack,25.4,4,0.5,2.47
+CA-2023-001275,2023-10-21,Second Class,Michael Hernandez,Home Office,Central,Technology,Phones,Apple iPhone 14,1651.19,1,0.0,694.62
+CA-2024-001426,2024-12-19,Standard Class,Amit Jones,Corporate,West,Technology,Accessories,Dell USB Hub,676.55,2,0.1,56.7
+CA-2024-001450,2024-01-14,First Class,John Johnson,Consumer,South,Technology,Copiers,Xerox WorkCentre,808.65,3,0.3,51.44
+CA-2022-001154,2022-07-05,Second Class,Patricia Smith,Home Office,West,Furniture,Chairs,Ergonomic Office Chair,494.97,2,0.0,54.65
+CA-2021-001101,2021-11-29,Standard Class,Jennifer Gonzalez,Consumer,Central,Technology,Phones,Nokia 3310,432.15,1,0.3,73.68
+CA-2022-001207,2022-11-01,Same Day,Rahul Brown,Home Office,West,Technology,Copiers,Ricoh Copier Pro,589.4,2,0.4,52.64
+CA-2023-001332,2023-11-23,Second Class,David Gupta,Corporate,South,Office Supplies,Paper,Premium Photo Paper,622.88,3,0.4,67.28
+CA-2024-001405,2024-08-26,First Class,William Lopez,Home Office,West,Office Supplies,Art,Sticky Notes Multipack,424.43,1,0.1,66.45
+CA-2023-001357,2023-10-06,Standard Class,Barbara Garcia,Consumer,East,Furniture,Tables,Computer Desk,618.79,3,0.0,221.19
+CA-2024-001444,2024-03-11,Standard Class,John Williams,Corporate,Central,Technology,Accessories,Webcam HD,207.87,3,0.1,60.86
+CA-2023-001333,2023-12-28,Standard Class,Jessica Wilson,Corporate,East,Office Supplies,Art,Sticky Notes Multipack,461.45,3,0.0,106.58
+CA-2023-001316,2023-05-10,Standard Class,James Mehta,Consumer,Central,Furniture,Tables,Computer Desk,2154.17,4,0.0,767.63
+CA-2023-001319,2023-10-09,Second Class,Mary Garcia,Consumer,East,Furniture,Bookcases,5-Shelf Bookcase,1579.75,2,0.2,376.91
+CA-2023-001278,2023-10-09,Standard Class,Robert Hernandez,Corporate,South,Technology,Phones,OnePlus Nord,357.01,2,0.2,61.2
+CA-2021-001105,2021-10-01,Standard Class,Amit Williams,Corporate,Central,Furniture,Furnishings,Filing Cabinet,435.79,1,0.2,104.96
+CA-2023-001329,2023-02-19,Second Class,Robert Smith,Consumer,West,Furniture,Furnishings,Filing Cabinet,1516.35,4,0.4,232.2
+CA-2022-001228,2022-03-19,Standard Class,Amit Anderson,Corporate,West,Office Supplies,Binders,Avery Premium Binder,135.14,5,0.2,6.15
+CA-2022-001206,2022-09-26,Second Class,Anjali Gonzalez,Consumer,East,Technology,Phones,Samsung Galaxy S23,1116.02,1,0.1,145.64
+CA-2024-001411,2024-05-15,Standard Class,Priya Davis,Corporate,East,Technology,Accessories,HDMI Cable,895.21,2,0.0,123.78
+CA-2021-001075,2021-03-19,Standard Class,Joseph Lopez,Home Office,East,Office Supplies,Envelopes,Manila Envelopes Pack,423.19,5,0.0,166.47
+CA-2023-001312,2023-05-21,Standard Class,Susan Smith,Consumer,South,Office Supplies,Fasteners,Paper Clips Box,51.63,3,0.4,6.82
+CA-2023-001270,2023-10-13,Standard Class,Jessica Kumar,Consumer,Central,Technology,Accessories,HDMI Cable,1181.28,1,0.0,222.56
+CA-2022-001143,2022-09-30,First Class,Anjali Verma,Consumer,West,Furniture,Tables,Computer Desk,568.51,1,0.2,175.66
+CA-2021-001004,2021-05-30,Second Class,Vikram Martinez,Consumer,East,Technology,Accessories,Laptop Stand,3863.52,5,0.0,694.33
+CA-2022-001176,2022-10-27,Second Class,Priya Brown,Corporate,West,Office Supplies,Envelopes,Window Envelopes Box,28.24,3,0.2,5.03
+CA-2022-001160,2022-10-19,First Class,Jennifer Verma,Corporate,East,Furniture,Bookcases,3-Shelf Bookcase,841.47,1,0.1,275.71
+CA-2024-001380,2024-02-07,First Class,Deepak Gupta,Corporate,East,Office Supplies,Fasteners,Binder Clips Pack,127.34,4,0.0,41.08
+CA-2023-001369,2023-03-26,Standard Class,Kiran Jones,Corporate,West,Technology,Phones,Nokia 3310,1100.62,5,0.0,199.14
+CA-2022-001155,2022-04-15,Standard Class,Suresh Smith,Consumer,West,Furniture,Furnishings,Coat Rack,429.98,5,0.5,6.11
+CA-2023-001283,2023-09-17,Standard Class,William Thomas,Corporate,East,Furniture,Chairs,Mesh Back Chair,345.83,5,0.2,105.81
+CA-2023-001358,2023-09-21,Standard Class,Meena Sharma,Consumer,Central,Office Supplies,Paper,A4 Copy Paper Ream,6.14,4,0.0,1.75
+CA-2023-001348,2023-10-19,Standard Class,William Anderson,Corporate,Central,Office Supplies,Fasteners,Rubber Bands Box,792.3,2,0.2,153.04
+CA-2024-001433,2024-04-13,Standard Class,Pooja Davis,Consumer,Central,Furniture,Bookcases,Glass Door Cabinet,41.32,3,0.0,12.65
+CA-2022-001214,2022-12-07,First Class,Barbara Brown,Consumer,West,Furniture,Tables,Computer Desk,1230.67,1,0.0,525.21
+CA-2022-001151,2022-12-23,Second Class,Vikram Thomas,Corporate,Central,Technology,Accessories,Laptop Stand,476.98,3,0.0,192.28
+CA-2023-001266,2023-10-08,Standard Class,Vikram Anderson,Home Office,West,Office Supplies,Labels,File Folder Labels,792.31,3,0.5,14.17
+CA-2024-001425,2024-01-12,Standard Class,Susan Mehta,Consumer,Central,Office Supplies,Envelopes,Manila Envelopes Pack,137.44,2,0.0,13.3
+CA-2024-001409,2024-12-18,Standard Class,Barbara Shah,Consumer,West,Furniture,Tables,Computer Desk,1269.08,4,0.0,403.64
+CA-2023-001365,2023-10-11,Second Class,Mary Garcia,Corporate,South,Technology,Machines,Canon Multifunction,1001.38,4,0.4,147.76
+CA-2023-001323,2023-07-02,First Class,David Martinez,Consumer,South,Technology,Phones,Samsung Galaxy S23,517.37,2,0.0,34.56
+CA-2021-001029,2021-07-24,First Class,Jessica Anderson,Consumer,West,Furniture,Bookcases,3-Shelf Bookcase,1038.64,3,0.1,200.29
+CA-2023-001294,2023-10-09,Standard Class,Anjali Miller,Home Office,Central,Furniture,Bookcases,Glass Door Cabinet,463.25,4,0.0,126.76
+CA-2024-001463,2024-11-24,Standard Class,Karen Thomas,Consumer,East,Furniture,Tables,Conference Table,505.97,1,0.1,85.96
+CA-2023-001328,2023-11-25,Standard Class,Robert Johnson,Consumer,Central,Furniture,Bookcases,3-Shelf Bookcase,678.11,1,0.0,165.56
+CA-2023-001338,2023-10-11,Standard Class,Kiran Williams,Corporate,South,Technology,Phones,Nokia 3310,400.21,4,0.0,73.83
+CA-2021-001018,2021-02-22,Standard Class,Anjali Jones,Consumer,Central,Furniture,Bookcases,5-Shelf Bookcase,202.0,3,0.4,34.28
+CA-2024-001388,2024-12-24,Standard Class,Patricia Shah,Corporate,South,Office Supplies,Storage,Steelcase Filing Box,739.23,5,0.0,180.3
+CA-2022-001201,2022-10-28,Second Class,Patricia Jones,Consumer,East,Technology,Accessories,Laptop Stand,1328.91,2,0.3,188.5
+CA-2021-001031,2021-01-08,Same Day,Richard Mehta,Home Office,South,Furniture,Chairs,Visitor Chair,306.96,2,0.0,99.78
+CA-2022-001222,2022-07-14,Standard Class,Mary Miller,Consumer,South,Office Supplies,Labels,Price Tag Labels Roll,63.0,1,0.1,5.15
+CA-2021-001084,2021-03-21,Same Day,David Gonzalez,Consumer,South,Technology,Accessories,Webcam HD,438.44,5,0.1,150.31
+CA-2024-001395,2024-05-02,Standard Class,Linda Williams,Corporate,West,Technology,Accessories,Laptop Stand,1385.97,5,0.3,94.45
+CA-2022-001205,2022-06-03,Second Class,Susan Smith,Consumer,Central,Office Supplies,Art,Staedtler Markers Set,753.76,5,0.2,79.11
+CA-2022-001161,2022-07-25,Second Class,Deepak Sharma,Corporate,Central,Furniture,Bookcases,5-Shelf Bookcase,338.64,4,0.1,92.65
+CA-2022-001173,2022-01-11,Second Class,Rahul Gupta,Corporate,East,Office Supplies,Paper,Premium Photo Paper,96.83,4,0.2,8.44
+CA-2024-001473,2024-04-27,Standard Class,Mary Hernandez,Corporate,South,Office Supplies,Art,Pilot Pens Pack,556.88,4,0.4,44.07
+CA-2021-001035,2021-08-18,Standard Class,Vikram Sharma,Home Office,West,Technology,Copiers,Xerox WorkCentre,468.69,4,0.3,111.2
+CA-2024-001449,2024-02-25,Standard Class,Meena Verma,Corporate,Central,Furniture,Furnishings,Monitor Stand,225.55,5,0.1,82.64
+CA-2024-001412,2024-09-16,Standard Class,William Thomas,Consumer,East,Furniture,Tables,Study Table,1057.81,3,0.0,106.72
+CA-2023-001367,2023-10-11,Second Class,Mary Lopez,Consumer,East,Office Supplies,Storage,Steelcase Filing Box,681.23,2,0.1,119.18
+CA-2021-001005,2021-11-02,Standard Class,Priya Miller,Consumer,Central,Technology,Machines,Brother Fax Machine,517.17,4,0.0,54.74
+CA-2024-001394,2024-11-19,Second Class,Robert Smith,Corporate,West,Furniture,Tables,Computer Desk,323.64,4,0.0,110.07
+CA-2021-001074,2021-10-21,Standard Class,Jessica Patel,Consumer,South,Furniture,Tables,Conference Table,564.39,1,0.2,58.24
+CA-2022-001226,2022-03-25,Standard Class,Kavita Williams,Consumer,East,Office Supplies,Paper,Premium Photo Paper,620.46,2,0.3,52.26
+CA-2021-001015,2021-10-01,Same Day,Arjun Miller,Consumer,East,Office Supplies,Fasteners,Rubber Bands Box,454.85,2,0.0,202.01
+CA-2022-001185,2022-06-10,Standard Class,Pooja Smith,Consumer,West,Furniture,Furnishings,Filing Cabinet,503.13,4,0.1,191.05
+CA-2023-001349,2023-03-03,Standard Class,Barbara Joshi,Home Office,Central,Office Supplies,Binders,Avery Premium Binder,68.34,4,0.5,2.93
+CA-2024-001406,2024-03-05,Second Class,John Jones,Consumer,South,Technology,Machines,Epson Inkjet,1016.34,5,0.0,114.95
+CA-2023-001264,2023-10-31,Second Class,Mary Wilson,Corporate,West,Furniture,Bookcases,3-Shelf Bookcase,401.94,2,0.0,146.39
+CA-2024-001436,2024-07-02,Standard Class,Robert Verma,Consumer,Central,Furniture,Bookcases,5-Shelf Bookcase,379.14,1,0.1,37.66
+CA-2022-001234,2022-04-08,Second Class,James Sharma,Home Office,West,Technology,Copiers,Konica Bizhub,3876.55,5,0.3,297.45
+CA-2022-001209,2022-06-14,First Class,Richard Patel,Consumer,South,Furniture,Chairs,Executive Chair,977.52,5,0.2,305.02
+CA-2022-001211,2022-10-25,Standard Class,Karen Gupta,Corporate,East,Technology,Accessories,Logitech Mouse,2604.0,1,0.2,782.2
+CA-2022-001219,2022-11-26,First Class,John Hernandez,Consumer,South,Furniture,Tables,Folding Table,181.01,1,0.0,21.37
+CA-2024-001410,2024-01-21,Standard Class,Patricia Gupta,Consumer,South,Technology,Machines,Canon Multifunction,947.97,4,0.1,63.13
+CA-2024-001490,2024-11-20,Standard Class,Jennifer Jones,Home Office,South,Office Supplies,Labels,Price Tag Labels Roll,42.92,1,0.2,3.76
+CA-2021-001116,2021-12-21,Standard Class,William Anderson,Corporate,East,Furniture,Bookcases,5-Shelf Bookcase,508.83,1,0.1,74.24
+CA-2024-001403,2024-10-31,Second Class,Barbara Sharma,Consumer,West,Office Supplies,Paper,Premium Photo Paper,98.65,5,0.0,32.61
+CA-2022-001215,2022-08-04,Standard Class,Susan Mehta,Corporate,South,Technology,Accessories,Webcam HD,3958.21,5,0.2,385.95
+CA-2023-001271,2023-05-21,Second Class,Linda Wilson,Home Office,South,Furniture,Chairs,Executive Chair,430.95,1,0.4,65.31
+CA-2024-001462,2024-03-04,Standard Class,Sarah Kumar,Home Office,South,Furniture,Chairs,Executive Chair,475.61,3,0.3,90.22
+CA-2024-001385,2024-10-19,Standard Class,Neha Johnson,Consumer,Central,Office Supplies,Labels,Price Tag Labels Roll,662.67,3,0.0,160.77
+CA-2021-001077,2021-10-24,Standard Class,Joseph Kumar,Consumer,West,Furniture,Bookcases,Glass Door Cabinet,462.94,5,0.0,142.28
+CA-2024-001481,2024-12-27,Standard Class,Karen Kumar,Consumer,South,Technology,Copiers,Konica Bizhub,444.02,1,0.2,133.76
+CA-2023-001340,2023-10-24,Standard Class,Jennifer Brown,Corporate,Central,Technology,Machines,Brother Fax Machine,548.01,3,0.0,102.92
+CA-2023-001322,2023-02-22,Same Day,John Joshi,Corporate,East,Furniture,Bookcases,3-Shelf Bookcase,1786.08,3,0.1,257.37
+CA-2022-001184,2022-12-12,Standard Class,Amit Williams,Corporate,South,Furniture,Chairs,Ergonomic Office Chair,880.67,4,0.3,120.07
+CA-2024-001485,2024-08-25,Standard Class,Kiran Lopez,Consumer,South,Furniture,Tables,Study Table,1920.44,2,0.4,200.43
+CA-2024-001386,2024-11-05,Second Class,Jennifer Davis,Corporate,West,Furniture,Bookcases,3-Shelf Bookcase,440.51,1,0.2,81.92
+CA-2023-001366,2023-10-16,Standard Class,Patricia Verma,Home Office,South,Furniture,Bookcases,3-Shelf Bookcase,431.48,3,0.1,21.08
+CA-2022-001190,2022-02-04,Standard Class,William Davis,Consumer,South,Technology,Copiers,Xerox WorkCentre,173.09,5,0.2,41.01
+CA-2022-001136,2022-10-23,Standard Class,Anjali Anderson,Consumer,East,Office Supplies,Fasteners,Paper Clips Box,22.24,1,0.0,2.36
+CA-2021-001043,2021-10-11,First Class,Pooja Singh,Consumer,South,Office Supplies,Binders,Cardinal Binder,80.32,1,0.1,12.29
+CA-2021-001087,2021-03-16,Second Class,Amit Williams,Corporate,East,Technology,Copiers,Konica Bizhub,899.96,4,0.0,376.6
+CA-2023-001258,2023-12-11,Standard Class,Joseph Smith,Consumer,South,Furniture,Furnishings,Filing Cabinet,488.14,3,0.1,82.8
+CA-2022-001146,2022-05-07,Second Class,Priya Singh,Home Office,East,Office Supplies,Paper,Graph Paper Pad,138.67,3,0.0,55.54
+CA-2022-001174,2022-10-13,Standard Class,Jessica Miller,Consumer,South,Furniture,Tables,Study Table,420.03,1,0.1,132.03
+CA-2022-001242,2022-09-07,Second Class,Kavita Patel,Consumer,West,Technology,Accessories,Webcam HD,554.07,4,0.0,36.06
+CA-2024-001414,2024-10-08,Standard Class,Karen Smith,Home Office,South,Office Supplies,Art,Pilot Pens Pack,408.59,2,0.0,91.4
+CA-2024-001427,2024-01-30,Standard Class,Kiran Lopez,Consumer,East,Technology,Copiers,Xerox WorkCentre,406.59,3,0.5,35.75
+CA-2022-001125,2022-01-02,Standard Class,Kiran Jones,Consumer,South,Technology,Copiers,Konica Bizhub,757.44,2,0.0,224.66
+CA-2021-001003,2021-04-03,Standard Class,Vikram Martinez,Home Office,East,Technology,Machines,HP LaserJet,1001.69,2,0.0,134.03
+CA-2024-001484,2024-08-26,First Class,Neha Verma,Corporate,Central,Office Supplies,Envelopes,Manila Envelopes Pack,93.53,4,0.1,21.88
+CA-2024-001393,2024-11-02,Standard Class,Karen Brown,Consumer,Central,Furniture,Bookcases,3-Shelf Bookcase,355.46,4,0.2,87.0
+CA-2022-001212,2022-10-26,Standard Class,Priya Joshi,Consumer,East,Office Supplies,Fasteners,Rubber Bands Box,186.65,1,0.2,24.91
+CA-2022-001224,2022-05-02,Standard Class,Suresh Singh,Home Office,Central,Office Supplies,Binders,Avery Premium Binder,17.12,4,0.3,2.05
+CA-2021-001103,2021-10-04,Second Class,Pooja Williams,Consumer,East,Technology,Phones,Apple iPhone 14,1080.19,5,0.1,278.0
+CA-2024-001434,2024-10-04,Second Class,Sarah Smith,Home Office,South,Office Supplies,Art,Pilot Pens Pack,60.1,1,0.1,9.95
+CA-2021-001062,2021-10-15,Standard Class,Thomas Lopez,Corporate,South,Technology,Accessories,Logitech Mouse,519.22,1,0.3,111.64
+CA-2021-001070,2021-02-25,Same Day,Neha Williams,Home Office,South,Office Supplies,Labels,Price Tag Labels Roll,207.62,5,0.0,40.99
+CA-2024-001419,2024-07-02,Standard Class,Robert Gupta,Consumer,Central,Furniture,Chairs,Executive Chair,734.76,3,0.0,70.11
+CA-2022-001171,2022-09-13,Standard Class,Mary Sharma,Consumer,East,Office Supplies,Labels,Price Tag Labels Roll,87.68,1,0.0,37.38
+CA-2022-001186,2022-08-23,First Class,Neha Martinez,Consumer,Central,Office Supplies,Storage,Plastic Drawer Set,137.07,2,0.0,41.15
+CA-2023-001331,2023-10-04,Second Class,Susan Gupta,Corporate,East,Furniture,Tables,Folding Table,893.88,1,0.2,175.59
+CA-2021-001078,2021-01-16,First Class,Jennifer Lopez,Consumer,South,Furniture,Chairs,Visitor Chair,75.47,3,0.2,15.01
+CA-2021-001050,2021-05-17,Standard Class,Patricia Kumar,Corporate,Central,Office Supplies,Storage,Storage Bin,513.56,2,0.2,56.03
+CA-2024-001445,2024-11-27,Standard Class,Arjun Shah,Home Office,East,Furniture,Bookcases,3-Shelf Bookcase,46.9,4,0.2,6.85
+CA-2024-001375,2024-09-05,Standard Class,Pooja Sharma,Consumer,West,Office Supplies,Labels,File Folder Labels,49.48,5,0.0,9.67
+CA-2023-001255,2023-12-20,Standard Class,Robert Sharma,Home Office,South,Furniture,Tables,Study Table,218.68,3,0.0,30.41

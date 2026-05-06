@@ -60,10 +60,20 @@ The dataset we will use throughout this session is a **superstore orders dataset
 
 ![Reading a CSV with pandas pulls a flat file off disk into a DataFrame df — turning a spreadsheet file into rows and columns you can filter, aggregate, and plot](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/session12.1/session12.1-csv-to-dataframe.png)
 
+> **Dataset Download**
+> Download the dataset here before running the code: [superstore_orders.csv](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/7d306aa3-1e1d-436b-a0cf-859aa16be18c/rLqCnXcOklADSidT.csv)
+>
+> You can either download it and place it in the same folder as your notebook, or load it directly from the URL using `pd.read_csv(url)` as shown in the code below.
+
 ```python
 # ── Load the dataset ─────────────────────────────────────────────────────────
 
-df = pd.read_csv('superstore_orders.csv')   # read the CSV file into a DataFrame called df
+# Option A — load directly from the URL (no download needed)
+url = 'https://coding-platform.s3.amazonaws.com/dev/lms/tickets/7d306aa3-1e1d-436b-a0cf-859aa16be18c/rLqCnXcOklADSidT.csv'
+df = pd.read_csv(url)               # read the CSV directly from the web into a DataFrame called df
+
+# Option B — load from a local file (if you downloaded the CSV to your notebook folder)
+# df = pd.read_csv('superstore_orders.csv')
 
 # ── First look at size ───────────────────────────────────────────────────────
 
@@ -83,7 +93,7 @@ print(df.tail())                            # shows the last 5 rows to check for
 
 **How the code works:**
 - `pd.read_csv('filename.csv')` reads the file from disk and stores it in the variable `df`
-- `df.shape` returns a tuple like `(9994, 13)` — meaning 9994 rows and 13 columns
+- `df.shape` returns a tuple like `(500, 13)` — meaning 500 rows and 13 columns
 - `df.head()` and `df.tail()` let you see a small sample without printing thousands of rows
 - Always check `shape` first — it tells you immediately how large the dataset is
 
@@ -522,7 +532,8 @@ warnings.filterwarnings('ignore')
 
 # ── 1. Load and inspect ──────────────────────────────────────────────────────
 
-df = pd.read_csv('superstore_orders.csv')              # load dataset
+url = 'https://coding-platform.s3.amazonaws.com/dev/lms/tickets/7d306aa3-1e1d-436b-a0cf-859aa16be18c/rLqCnXcOklADSidT.csv'
+df = pd.read_csv(url)                                  # load dataset directly from URL
 print(f"Dataset loaded: {df.shape[0]} rows × {df.shape[1]} columns")   # confirm shape
 
 # ── 2. Quick readiness check ─────────────────────────────────────────────────
