@@ -1,68 +1,25 @@
-# Lecture Notes QC Report — Session 13: Short-Term vs Long-Term Memory
+# QC Report — Session 13: Short-Term vs Long-Term Memory in AI Agents
+
+**File Reviewed:** `Lecture Notes Released.md`
+**Date:** 2026-05-08
+**Iteration:** 1
 
 ---
 
-## Iteration 1
+## QC Criteria Ratings
 
-**Date:** 2026-05-02
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | 5 / 5 | All Learning Objectives from the Live Topic Coverage report are addressed. Every explicitly covered LO (Differentiate STM/LTM, Context Window, Limitations, Buffer/Window/Summary strategies, Episodic/Semantic/Procedural LTM, Basic Implementation, Memory Selection) has a dedicated section with definitions, examples, and comparisons. The one partially-covered LO (stateless vs stateful framing) is retained as intended. Extra topics taught in session (Python slicing, ChromaDB/Pinecone/vector DB preview, cost trade-offs, implicit learning, user-preference override) are all present within the notes. |
+| **Creativity** | 5 / 5 | Notes use varied and contextually relevant real-life analogies throughout (notepad on a phone call, doctor's patient file, whiteboard with fixed space, cricket commentator, journalist writing a running summary, photocopying transcripts). Three well-designed student activities use concrete scenarios. Milestone callouts provide learner orientation. Code walkthroughs use meaningful inline comments that map to the narrative. |
+| **Structural Adherence** | 5 / 5 | Consistent hierarchy: H2 sections → H3 subsections → definitions (Official → Simple → Real-Life) → use-case bullets → key behaviour bullets → comparison tables → activity/milestone callouts. All images are retained with descriptive alt text. Code blocks use language tags. Tables use uniform column alignment. |
+| **No Logical Mistakes** | True | All technical claims are accurate: token-based context window mechanics, FIFO-style message eviction, cost scaling, the three STM strategies (with correct trade-offs), the three LTM types, and pseudo-code implementations are all logically consistent with how LLM-based agents actually work. Python slicing (`full_history[-WINDOW_SIZE:]`) is correct. |
+| **No Presentation Mistakes** | True | No broken markdown, no orphaned headers, no misaligned table pipes, no image links with missing alt text, no code blocks left unclosed. All sections flow in a logical reading order. |
 
-### QC Scores
+---
 
-| Criteria | Rating / Result |
-|---|---|
-| **Content Coverage** | 5 / 5 |
-| **Creativity** | 5 / 5 |
-| **Structural Adherence** | 5 / 5 |
-| **No Logical Mistakes** | True |
-| **No Presentation Mistakes** | True |
+## Summary
 
-### Detailed Remarks
+All five QC criteria meet the expected threshold (Content Coverage ≥ 5, Creativity ≥ 5, Structural Adherence ≥ 5, No Logical Mistakes = True, No Presentation Mistakes = True). No changes to the released notes are required.
 
-**Content Coverage (5/5):**
-All 8 detailed subtopics from the session metadata are fully addressed:
-- Memory role recap and why it enables continuity, personalisation, and better decisions ✓
-- Short-Term vs Long-Term Memory differentiation with comparison table ✓
-- Conversation history as short-term memory — context window mechanics explained step-by-step ✓
-- Three limitations of context-window-based memory (token limits, increasing cost, performance degradation) ✓
-- All three short-term memory strategies (Buffer, Window, Summary) with definitions, use cases, risks, and pseudo-code ✓
-- All three long-term memory types (Episodic, Semantic, Procedural) with definitions, examples, and storage methods ✓
-- Pseudo-implementations of all three strategies with full code and "How the code works" explanations ✓
-- Memory selection logic (relevance vs recency, four selection approaches) and storage awareness section ✓
-Content depth is appropriate for a 2-hour 15-minute session.
-
-**Creativity (5/5):**
-- Diverse, relatable analogies used throughout — customer care notepad, doctor's patient file, library desk, cricket commentator, journalist's Day-10 recap, Ravi in Pune, whiteboard with 100 words, legal AI agent
-- Connecting sentences bridge every major section to the next without abrupt jumps
-- Plain Indian English maintained consistently — conversational, warm, and approachable
-- The library analogy in the context section (previous session = knowing the library exists; this session = learning how it is organised) is particularly strong
-
-**Structural Adherence (5/5):**
-- File starts directly with `# Short-Term vs Long-Term Memory in AI Agents` — no metadata header
-- Context section correctly references previous session (Session 12) content without naming the session number
-- Headings are direct and descriptive (`## How Conversation History Works as Short-Term Memory`)
-- 3-sentence rule followed across all prose paragraphs
-- Official Definition / In Simple Words / Real-Life Example pattern applied to every new technical concept
-- Full code provided for all three strategies with single-line English comments on every line
-- "How the code works" bulleted explanations follow every code block
-- Key Takeaways section present with 5 bullets + forward-looking link to future sessions
-- Quick Reference Table covers 18 terms and commands at the end of the file
-- File saved in the correct location: `Session13/Lecture Notes.md`
-
-**No Logical Mistakes (True):**
-- Context window mechanics are technically accurate — conversation history is passed in full with every LLM call
-- Python list slicing `full_history[-WINDOW_SIZE:]` is syntactically and logically correct
-- Summary memory's use of `global running_summary` and `.clear()` are correct Python patterns
-- Token approximation (1 token ≈ 0.75 words) is a widely accepted industry estimate
-- Vector database description (numerical embeddings, semantic similarity retrieval) is accurate
-- Long-term memory types (Episodic/Semantic/Procedural) align with standard cognitive science and agent design literature
-
-**No Presentation Mistakes (True):**
-- All Markdown tables use correct pipe (`|`) syntax with header separator rows
-- Python code blocks use triple-backtick fencing with `python` language tag
-- Heading hierarchy is consistent (H1 title → H2 major sections → H3 subsections)
-- Bold text used correctly for important terms and key concepts
-- Horizontal rules (`---`) used to visually separate major sections
-- Bullet points and numbered steps formatted consistently throughout
-
-### Outcome
-All criteria meet or exceed the expected threshold. **No improvisation required. Notes are approved.**
+**QC Result: PASS — No further iteration needed.**

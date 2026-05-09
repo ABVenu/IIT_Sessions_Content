@@ -1,0 +1,245 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya is writing her first Python script to track her monthly budget. She runs the following code:
+
+```python
+income = 50000
+expenses = 18700
+savings = income - expenses
+print(type(savings))
+```
+
+What will be the output?",,,,,,3,,`<class 'float'>`,`<class 'str'>`,`<class 'int'>`,`<class 'number'>`,,,69fc9d19b4de896ae2a487a8,0,markdown,"**Correct answer: C.** `income` (50000) and `expenses` (18700) are both integer literals. Subtracting two integers in Python produces an integer. Therefore `type(savings)` returns `<class 'int'>`.
+
+**A** is wrong: a float is only produced when at least one operand has a decimal point (e.g., `50000.0`).
+
+**B** is wrong: `str` is the string type. Arithmetic on integers never returns a string unless explicitly converted with `str()`.
+
+**D** is wrong: `number` is not a valid Python type name."
+mcsc,markdown,"Rohan is building a ticket booking system. He writes the following code to determine the ticket price based on age:
+
+```python
+age = int(input(""Enter age: ""))
+
+if age < 5:
+    print(""Free"")
+elif age <= 12:
+    print(""Half Price"")
+elif age <= 59:
+    print(""Full Price"")
+else:
+    print(""Senior Discount"")
+```
+
+A user enters **65**. What will be printed?",,,,,,4,,`Full Price`,`Half Price`,`Free`,`Senior Discount`,,,69fc9d19b4de896ae2a487a8,0,markdown,"**Correct answer: D.** The value 65 is checked against each condition in order:
+
+1. `65 < 5` → False
+2. `65 <= 12` → False
+3. `65 <= 59` → False
+4. Falls through to `else` → prints `Senior Discount`
+
+**A** is wrong: `Full Price` applies when `age` is between 13 and 59 inclusive.
+
+**B** is wrong: `Half Price` applies when `age` is between 5 and 12 inclusive.
+
+**C** is wrong: `Free` applies when `age` is less than 5."
+mcsc,markdown,"Sneha needs to find the total marks scored by a student across 5 subjects. She uses a `while` loop:
+
+```python
+marks = [72, 85, 90, 68, 77]
+total = 0
+i = 0
+
+while i < len(marks):
+    total += marks[i]
+    i += 1
+
+print(total)
+```
+
+What will be the output?",,,,,,2,,`390`,`392`,`77`,`0`,,,69fc9d19b4de896ae2a487a8,0,markdown,"**Correct answer: B.** The loop adds each element of `marks`: 72 + 85 + 90 + 68 + 77 = **392**.
+
+**A** is wrong: 390 is incorrect arithmetic — a common slip.
+
+**C** is wrong: 77 is only the last element, not the sum.
+
+**D** is wrong: `total` starts at 0 but accumulates through the loop; the loop runs five times before `i < len(marks)` becomes False."
+mcsc,markdown,"Arjun is building a temperature converter tool. He defines the following function and calls it:
+
+```python
+def celsius_to_fahrenheit(celsius):
+    return (celsius * 9/5) + 32
+
+temps_c = [0, 25, 100]
+result = celsius_to_fahrenheit(temps_c[1])
+print(result)
+```
+
+What will be the output?",,,,,,1,,`77.0`,`32.0`,`212.0`,`25.0`,,,69fc9d19b4de896ae2a487a8,0,markdown,"**Correct answer: A.** `temps_c[1]` is `25`. Using (25 × 9/5) + 32 = 45 + 32 = **77.0**.
+
+**B** is wrong: 32.0 is the result for 0°C (`temps_c[0]`).
+
+**C** is wrong: 212.0 is the result for 100°C (`temps_c[2]`).
+
+**D** is wrong: 25.0 is the Celsius input before conversion — the formula does not return it unchanged."
+mcsc,markdown,"Meera has been working on a data analysis project on her laptop. She cloned the repository two days ago, made changes to `analysis.py`, staged them using `git add analysis.py`, and committed with a meaningful message. Now her colleague cannot see her changes on GitHub.
+
+Which command does Meera still need to run to make her changes visible on the remote repository?",,,,,,3,,`git pull origin main`,`git clone https://github.com/meera/data-project.git`,`git push origin main`,`git merge main`,,,69fc9d19b4de896ae2a487a8,0.5,markdown,"**Correct answer: C.** `git add` stages changes locally. `git commit` records them in local history. The remote on GitHub is updated when commits are **pushed** with `git push origin main` (branch name may vary).
+
+**A** is wrong: `git pull` brings remote changes into your local repo — it does not publish your commits.
+
+**B** is wrong: `git clone` creates a new local copy; it does not upload local commits.
+
+**D** is wrong: `git merge` combines branches locally and does not send commits to the remote by itself."
+mcsc,markdown,"Vikram is analyzing a dataset of 12 monthly sales figures. He stores them in a NumPy array and wants to reshape it into a 3-row, 4-column matrix for region-wise analysis:
+
+```python
+import numpy as np
+sales = np.array([120, 150, 90, 200, 175, 135, 160, 110, 145, 180, 95, 165])
+matrix = sales.reshape(3, 4)
+print(matrix.shape)
+```
+
+What will be the output?",,,,,,3,,"`(4, 3)`","`(12,)`","`(3, 4)`",`ValueError: cannot reshape`,,,69fc9d19b4de896ae2a487a8,0.5,markdown,"**Correct answer: C.** `reshape(3, 4)` lays out 12 elements as 3 rows and 4 columns; 3 × 4 = 12. `matrix.shape` is `(rows, columns)` → **(3, 4)**.
+
+**A** is wrong: that would be the shape after `reshape(4, 3)`.
+
+**B** is wrong: `(12,)` is the original one-dimensional shape before reshaping.
+
+**D** is wrong: no error occurs because the product of the new shape equals the number of elements."
+mcmc,markdown,"Kiran is building a mini student portal. He creates a dictionary to store a student's profile and performs several operations:
+
+```python
+profile = {""name"": ""Aisha"", ""age"": 21, ""grade"": ""A"", ""city"": ""Pune""}
+
+op1 = profile[""name""].upper()
+op2 = profile.get(""email"")
+op3 = len(profile)
+op4 = ""grade"" in profile
+op5 = profile[""score""]
+```
+
+Which of the following statements are **TRUE**?
+
+*Select all that apply.*",,,,,,,,"`op1` evaluates to `""AISHA""`",`op2` evaluates to `None`,`op3` evaluates to `4`,`op4` evaluates to `False`,`op5` raises a `KeyError`,"1, 2, 3, 5",69fc9d19b4de896ae2a487a8,0.5,markdown,"**Correct answers: A, B, C, E.**
+
+- **A:** `profile[""name""]` is `""Aisha""`; `.upper()` → `""AISHA""`.
+- **B:** `.get(""email"")` returns `None` when the key is missing.
+- **C:** The dictionary has four keys (`name`, `age`, `grade`, `city`), so `len(profile)` is `4`.
+- **E:** `profile[""score""]` uses `[]` on a missing key, which raises `KeyError`.
+
+**D** is wrong: `""grade""` is a key in `profile`, so `""grade"" in profile` is `True`, not `False`."
+mcmc,markdown,"Deepa is querying a company's `employees` table with columns: `emp_id`, `name`, `department`, `salary`, `city`. She wants to retrieve the **name and salary** of all employees in the `'HR'` department who earn **more than 45000**.
+
+Which of the following SQL queries correctly return this result?
+
+*Select all that apply.*",,,,,,,,"```sql
+SELECT name, salary FROM employees
+WHERE department = 'HR' AND salary > 45000;
+```","```sql
+SELECT * FROM employees
+WHERE department = 'HR' AND salary > 45000;
+```","```sql
+SELECT name, salary FROM employees
+WHERE department = 'HR' OR salary > 45000;
+```","```sql
+SELECT name, salary FROM employees
+WHERE salary > 45000 AND department = 'HR';
+```","```sql
+SELECT name, salary FROM employees
+WHERE department = 'HR' AND salary > 45000
+ORDER BY salary DESC;
+```","1, 4, 5",69fc9d19b4de896ae2a487a8,0.5,markdown,"**Correct answers: A, D, E.**
+
+**A** is correct: selects only `name` and `salary`, with `department = 'HR'` AND `salary > 45000`.
+
+**D** is correct: `AND` is commutative — the condition order does not change the result.
+
+**E** is correct: `ORDER BY salary DESC` only sorts; it does not change which rows match the `WHERE` clause.
+
+**B** is wrong: `SELECT *` returns all columns, not only `name` and `salary`.
+
+**C** is wrong: `OR` includes HR staff with any salary and non-HR staff above 45000 — it does not require both conditions together."
+mcmc,markdown,"Rahul has a retail DataFrame `df` with columns: `store_id`, `region`, `product`, `units_sold`, `revenue`. He needs to:
+
+1. Filter rows where `revenue` is greater than **10000**
+2. Group the filtered data by `region`
+3. Compute the **total units sold** and **average revenue** per region
+
+Which of the following code snippets correctly complete all three steps?
+
+*Select all that apply.*",,,,,,,,"```python
+filtered = df[df[""revenue""] > 10000]
+result = filtered.groupby(""region"").agg({""units_sold"": ""sum"", ""revenue"": ""mean""})
+```","```python
+filtered = df.loc[df[""revenue""] > 10000]
+result = filtered.groupby(""region"").agg(
+    total_units=(""units_sold"", ""sum""),
+    avg_revenue=(""revenue"", ""mean"")
+)
+```","```python
+result = (df[df[""revenue""] > 10000]
+          .groupby(""region"")
+          .agg({""units_sold"": ""sum"", ""revenue"": ""mean""}))
+```","```python
+result = df.groupby(""region"").agg({""units_sold"": ""sum"", ""revenue"": ""mean""})
+result = result[result[""revenue""] > 10000]
+```","```python
+filtered = df[df[""revenue""] > 10000]
+result = filtered.groupby(""region"")[[""units_sold"", ""revenue""]].mean()
+```","1, 2, 3",69fc9d19b4de896ae2a487a8,1,markdown,"**Correct answers: A, B, C.**
+
+**A–C** all filter rows with `revenue > 10000` first, then group by `region`, and aggregate with **sum** on `units_sold` and **mean** on `revenue`.
+
+**D** is wrong: filtering after aggregation applies the threshold to **per-region averages**, not to individual row-level revenue before grouping.
+
+**E** is wrong: `.mean()` would average both `units_sold` and `revenue`; the task requires **total** units (`sum`) and **average** revenue (`mean`)."
+mcmc,markdown,"Nisha is analysing an e-commerce database with two tables:
+
+- `orders` — columns: `order_id`, `customer_id`, `amount`, `status`
+- `customers` — columns: `customer_id`, `name`, `city`
+
+She wants to find the **total order amount per city**, but only include cities where the **total exceeds ₹100,000**.
+
+Which of the following SQL queries correctly produce this result?
+
+*Select all that apply.*",,,,,,,,"```sql
+SELECT c.city, SUM(o.amount) AS total_amount
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.city
+HAVING SUM(o.amount) > 100000;
+```","```sql
+SELECT c.city, SUM(o.amount) AS total_amount
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id
+WHERE SUM(o.amount) > 100000
+GROUP BY c.city;
+```","```sql
+SELECT c.city, SUM(o.amount) AS total_amount
+FROM orders o
+LEFT JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.city
+HAVING SUM(o.amount) > 100000;
+```","```sql
+SELECT c.city, COUNT(o.amount) AS total_amount
+FROM orders o
+INNER JOIN customers c ON o.customer_id = c.customer_id
+GROUP BY c.city
+HAVING COUNT(o.amount) > 100000;
+```","```sql
+SELECT c.city, SUM(o.amount) AS total_amount
+FROM customers c
+INNER JOIN orders o ON c.customer_id = o.customer_id
+GROUP BY c.city
+HAVING SUM(o.amount) > 100000;
+```","1, 3, 5",69fc9d19b4de896ae2a487a8,1,markdown,"**Correct answers: A, C, E.**
+
+**A** is correct: join orders to customers, group by city, sum amounts, and filter groups with `HAVING SUM(o.amount) > 100000`.
+
+**C** is correct: `LEFT JOIN` still produces the same grouped sums for typical data where every order has a customer; `HAVING` filters city totals the same way.
+
+**E** is correct: swapping `FROM customers` / `JOIN orders` with `INNER JOIN` does not change the inner join result; `HAVING SUM(o.amount) > 100000` is standard.
+
+**B** is wrong: `WHERE` cannot reference `SUM()`; aggregate filters belong in `HAVING`.
+
+**D** is wrong: `COUNT(o.amount)` counts orders, not monetary total — the question asks for sum of amounts."
