@@ -48,6 +48,28 @@
 
 ---
 
+---
+
+## QC Round 4 — Lecture Notes Released.md
+
+**Date:** 2026-05-12
+
+**File:** `Lecture Notes Released.md`
+
+**Reason for this round:** New file generated per `GenerateNotesAccordingtoTranscript.md` prompt — required to use the same/similar examples actually used in the session (washing machine, AC, phone battery, elephants/mountains, Teachable Machine, credit card dataset, textbook/mock exam analogy, Colab demo with logistic regression and gradient boosting).
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| Content Coverage | 5/5 | All 6 metadata subtopics covered: Colab setup (Drive → Open with → Connect more apps → Collaboratory install), ML Workflow (6-step), Problem Framing (3 framing questions, classification vs regression), Features vs Labels (credit card dataset, ID column drop, data leakage), Train/Val/Test Split (textbook/mock exam analogy, 2-step code, random_state, split-first rule), Baselines (62% majority class from session demo, logistic vs gradient boosting comparison, regression DummyRegressor). All extra session topics included: Rule-Based AI history (1950s Dartmouth, washing machine/AC/phone/car examples), Teachable Machine demo walkthrough, Arthur Samuel definition, overfitting. |
+| Creativity | 5/5 | Session-faithful analogies throughout: washing machine/AC/phone battery for Rule-Based AI (directly from transcript), kindergarten teacher showing fruit pictures for ML definition, Teachable Machine bottle vs phone demo described step-by-step, cloud kitchen vs home cooking for Colab, textbook/mock exam/board exam for train-test split (from session), IPL auction and credit card default as regression and classification examples (from session), 62% baseline matched to actual session code output |
+| Structural Adherence | 5/5 | Clean `# Lecture Title` start; no metadata/duration/audience header; context section ("What We Did Before") present; all headings are direct topic headings with no Part/Section/Step prefixes; 3-sentence paragraph rule maintained throughout; all code blocks have full line-by-line English comments on every line; "How the code works" bullet list after every code block; 5-point Key Takeaways with a sentence linking to future topics; Quick Reference Table covering all terms, commands, and libraries used |
+| No Logical Mistakes | True | 80/20 and 60/20/20 split ratios both used and each explained in context. Baseline logic correct: 62% majority class matched to DummyClassifier(strategy="most_frequent"). Regression baseline uses DummyRegressor(strategy="mean") with MAE. Data leakage warning placed correctly after feature/label separation section and within splitting section. Overfitting definition and detection via train/val gap is correct. Two-step split code correctly achieves 60/20/20. |
+| No Presentation Mistakes | True | All markdown tables correctly formatted. All code blocks syntactically valid Python. Consistent heading hierarchy (##, ###). No broken tables, orphaned headers, or formatting inconsistencies. |
+
+**Final Status: PASSED — All criteria at 5/5, no logical or presentation mistakes.**
+
+---
+
 ## QC Round 2
 
 **Date:** 2026-05-09
@@ -61,3 +83,31 @@
 | No Presentation Mistakes | True | Consistent markdown formatting, no orphaned headers, no broken tables |
 
 **Final Status: PASSED — All criteria met at expected level.**
+
+---
+
+## QC Round 4 — Released Notes Alignment (Post-Session)
+
+**Date:** 2026-05-12
+
+**Reason for this round:** `Lecture Notes Released.md` was created from `Lecture Notes.md` by aligning content against the `Live Topic Coverage` report. This QC checks the released version for correctness after the following modifications:
+
+**Removals (topics not taught in session):**
+- Removed "What is Data Leakage and Why Is It Dangerous?" subsection from the Features and Labels section — instructor explicitly deferred data leakage to future sessions.
+- Removed "Avoiding Data Leakage During Splitting" subsection from the Data Splitting section — same deferral.
+- Removed "Data Leakage" row from the Quick Reference Table.
+
+**Additions (extra topics covered in session beyond metadata):**
+- Added **"The Evolution of AI — From Rules to Learning"** section covering: 1950s Dartmouth Conference, Rule-based AI definition, everyday examples (washing machine, AC, motion sensors, traffic lights), Python if-else analogy, limitations with elephant/mountain examples, and the conceptual shift to ML.
+- Added **"Understanding Supervised Learning"** subsection after the ML types table — covers supervised vs unsupervised distinction, two types (Classification and Regression), and why all session work is supervised learning.
+- Added **Colab vs VS Code** comparison table and **Gemini in Colab** bullet point to the Google Colab section.
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| Content Coverage | 5/5 | All 6 metadata subtopics fully present; extra session content (AI evolution, supervised learning, Gemini in Colab) accurately added with proper definitions, analogies, and code; data leakage sections correctly removed as not covered |
+| Creativity | 5/5 | New section uses washing machine, AC, motion sensor, and traffic light analogies (all from transcript); elephant detection and Google Photos mountain search examples illustrate rule-based AI limits memorably; Colab vs VS Code table adds practical clarity; supervised learning "supervisor grading homework" analogy is clear and relatable |
+| Structural Adherence | 5/5 | Clean `# Lecture Title` start, no metadata, context section present, all headings are direct topic headings (no Step/Part/Section prefixes), 3-sentence rule maintained, full code with line-by-line English comments, "How the code works" after every code block, 6-point Key Takeaways (updated to include AI evolution and Gemini), Quick Reference Table expanded with new terms |
+| No Logical Mistakes | True | Rule-based AI section accurately distinguishes it from ML; supervised learning classification/regression mapping is correct; all code blocks carry over from the QC-passed original without modification; baseline, split, and workflow logic all intact |
+| No Presentation Mistakes | True | All 6 original images preserved with S3 URLs; new sections follow consistent markdown formatting; comparison tables render correctly; no orphaned headers or broken table rows |
+
+**Final Status: PASSED — All criteria at 5/5, no logical or presentation mistakes.**

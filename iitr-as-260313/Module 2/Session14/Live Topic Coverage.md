@@ -1,0 +1,14 @@
+| topic/sub topic | status | remarks |
+|---|---|---|
+| Understand the Need for Databases — why CSV/Excel breaks at scale; scalability, consistency, concurrent access, queryability for AI systems | covered | Large CSV/Excel slowness and breakage, unsuitability at company scale, shared-sheet editing/merge conflicts; databases organize rows/columns and support find/update/query; brief mention of speed, concurrency, integrity, relationships, security |
+| Explore Types of Databases — Relational (SQL), NoSQL (document/key-value), Vector, Time-Series; when each is used in AI | covered | Relational vs unrelated data; NoSQL named for unstructured/social-style data (deeper doc/key-value deferred); vector DBs tied to embeddings/RAG; time-series for traffic/load and forecasting |
+| Learn Core SQL Terminologies — tables, rows, columns, schemas, primary keys, foreign keys, constraints, data types (with analogies) | covered | Bank/employees/PPD examples; schema as blueprint; PK (incl. composite) and FK linking tables; NOT NULL, UNIQUE, DEFAULT, CHECK; SQL data types (integer, varchar, text, boolean, date, UUID, etc.) |
+| Explore Where SQL Can Be Written — MySQL vs Supabase walkthrough; Supabase as go-to (browser, no install, ties to later AI work) | covered | Supabase.com signup, GitHub login, project creation; MySQL as optional traditional install; same SQL ideas apply |
+| Connect and Explore the Supabase Interface — dashboard, project, SQL editor, table UI | covered | Dashboard navigation; SQL Editor vs Table Editor; refresh rows; note to run without RLS for now |
+| Create Tables and Insert Data (CREATE & INSERT) — real entity schema in SQL editor | covered | Student-style table: CREATE TABLE and INSERT INTO (single and multi-row) executed in SQL Editor; verify in Table Editor |
+| Read Data with SELECT Queries — retrieve rows/columns; basic query anatomy | not covered | Only brief verbal example (`SELECT * FROM students`); instructor deferred running/practicing SELECT to next session |
+| Update and Delete Records (UPDATE & DELETE) — WHERE for safety | not covered | Deferred to next session with SELECT/WHERE |
+| Write Queries with Filtering — WHERE, comparison/logical operators, LIKE, IN, BETWEEN | not covered | Deferred to next session |
+| Differentiate Structured vs Unstructured Data — tabular vs text/images/audio; relevance to AI | covered | Structured/tabular training data vs unstructured social graphs; images/video as numeric embeddings in later discussion |
+| *(Extra — not in metadata subtopic list)* Embeddings, semantic similarity, RAG | covered | Meaningful time on embeddings, “closer” vectors, and why vector DBs matter for RAG (beyond minimal type listing) |
+| *(Extra — not in metadata subtopic list)* UUIDs at scale, composite PK nuance, end quiz | covered | UUID for unique IDs; composite primary keys; short revision quiz (e.g. DB type, primary key) |

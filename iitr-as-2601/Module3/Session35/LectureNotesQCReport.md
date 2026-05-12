@@ -64,3 +64,42 @@ All 10 subtopics from the metadata are addressed:
 - Bold formatting used consistently for key terms
 - No broken links or missing image references
 - Consistent heading hierarchy (##, ###) throughout
+
+---
+
+## Iteration 2 — Instructor Feedback Revision (12 May 2026)
+
+### Changes Made
+
+1. **Removed "How a Neural Network Learns" subsection entirely** — The forward pass → loss → backpropagation → repeat loop and the gradient descent reference have been deleted per instructor feedback. The instructor will cover learning mechanics verbally at a high level in class.
+2. **Added a brief weight/bias parameter note** — A single concise paragraph was added after the Architecture diagram noting that connections carry a **weight (w)** and neurons have a **bias (b)** as learnable parameters, and that LLM networks can have billions of these — per instructor's note "just high level i will mention w,b parameters."
+3. **Shortened and simplified "Hallucinations — When LLMs Confidently Get It Wrong"** — The section was significantly condensed: the three-example list, the full Activity 4 "Spot the Hallucination" exercise, and the lengthy "Why Does This Happen" paragraph were collapsed into a tight two-paragraph block with one documented real-world example (the fake legal case). The definition block and mitigation list are retained but streamlined.
+4. **Updated intro bullet** — Changed "What neural networks are and how they learn — intuitively, without math" to "What neural networks are — intuitively, without math" to reflect the removal.
+5. **Updated Key Takeaways** — Neural networks bullet now highlights weights (w) and biases (b) and the unstructured-data unlock rather than the training loop.
+
+### Criteria Evaluation
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+
+### Detailed Notes
+
+**Content Coverage — 5/5**
+All instructor-approved topics remain fully covered. The removed subsection (training loop mechanics) was explicitly excluded by the instructor who will handle it verbally. The hallucinations section retains all essential conceptual points — definition, cause, agentic risk, and mitigation — just in a more concise form.
+
+**Creativity — 5/5**
+Three coding activities and two hands-on classroom activities remain. Analogies and real-world examples are preserved throughout. The hallucination real-world incident (fake legal citations) is retained as it is the most impactful illustration.
+
+**Structural Adherence — 5/5**
+All structural conventions maintained: Official Definition → In Simple Words → Real-Life Example for every concept, 3-sentence paragraph rule, connecting sentences between sections, complete code with line-by-line comments, Key Takeaways, and Quick Reference Table.
+
+**No Logical Mistakes — True**
+No new logical errors introduced. The w/b parameter note is factually accurate. The shortened hallucinations section preserves the correct causal explanation (plausible ≠ true, knowledge cutoff).
+
+**No Presentation Mistakes — True**
+No broken headings, formatting regressions, or orphaned references. Removed subsections have no dangling cross-references in the rest of the document.

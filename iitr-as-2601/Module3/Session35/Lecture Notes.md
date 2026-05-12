@@ -10,7 +10,7 @@ Today, we enter a completely new world. This session is the first step in **Modu
 
 **In this session, you will learn:**
 - Why classical ML fails when the input is human language
-- What neural networks are and how they learn — intuitively, without math
+- What neural networks are — intuitively, without math
 - How LLMs evolved and what makes them different from everything before
 - What tokens, context windows, temperature, and hallucinations mean in practice
 - How to count tokens using real code and experiment with temperature using the OpenAI API
@@ -89,18 +89,7 @@ Every neural network has three types of layers:
 
 ![Input, hidden, and output layers stacked — many weighted transformations in sequence, the same deep stack idea behind modern language models](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session35/session35-03-neural-network-layers.png)
 
-### How a Neural Network Learns
-
-The learning process in a neural network follows a simple but powerful loop:
-
-1. **Forward Pass:** Feed the input through all layers and get a prediction.
-2. **Measure the Error:** Compare the prediction to the correct answer using a **loss function** — a number that tells you how wrong the model was.
-3. **Backward Pass (Backpropagation):** Calculate which weights caused the error and nudge them slightly in the right direction.
-4. **Repeat:** Do this millions of times across millions of examples until the model's predictions become accurate.
-
-This "nudging in the right direction" is the same **gradient descent** intuition you saw in Module 2 with linear regression. The principle is identical — the network is finding the lowest point on an error curve by taking small steps downhill.
-
-**Key insight:** Unlike tabular ML which needs pre-defined numeric columns, neural networks can process **unstructured data** — text, images, audio — by first converting it into numbers, then learning from those numbers. This is the unlock that makes LLMs possible.
+Every connection between neurons has a **weight (w)** and each neuron has a **bias (b)** — these are the learnable parameters that the network adjusts to improve its predictions. A single neural network used in LLMs can have **billions** of these parameters. Unlike tabular ML which needs pre-defined numeric columns, neural networks can process **unstructured data** — text, images, audio — by converting it into numbers first, then learning from those numbers. This is the unlock that makes LLMs possible.
 
 ---
 
@@ -462,67 +451,37 @@ print(response_high.text)
 
 ## Hallucinations — When LLMs Confidently Get It Wrong
 
-We have now seen that LLMs generate text by predicting the most likely next token. This leads to a critical and important flaw that every LLM user must understand: **hallucinations**.
+We have now seen that LLMs generate text by predicting the most likely next token. This leads to a critical flaw every LLM user must understand: **hallucinations**.
 
-> **Official Definition:** A **hallucination** in the context of LLMs is when the model generates text that is factually incorrect, fabricated, or unverifiable — but presents it with complete confidence as if it were true.
+> **Official Definition:** A **hallucination** in the context of LLMs is when the model generates text that is factually incorrect or fabricated — but presents it with complete confidence as if it were true.
 >
-> **In Simple Words:** The model is optimised to produce text that *sounds* right — fluent, grammatically correct, and confident. But "sounding right" and "being right" are two different things. The model has no internal fact-checker. It just picks the most plausible next token, and plausible is not the same as true.
+> **In Simple Words:** The model is optimised to produce text that *sounds* right, not text that *is* right. It has no internal fact-checker — it just picks the most plausible next token, and plausible is not the same as true.
 >
-> **Real-Life Example:** Imagine a very confident student who never admits uncertainty. Even when they do not know the answer, they give a detailed, well-worded response that sounds authoritative. You believe them — and then find out they made the whole thing up. That is a hallucinating LLM.
+> **Real-Life Example:** A confident student who never admits uncertainty — even when they do not know the answer, they give a well-worded response that sounds authoritative. You believe them, then find out they made it all up. That is a hallucinating LLM.
 
 ![Fluent, confident wording is not a guarantee of truth — models optimise for plausible next tokens, not a verified facts database](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session35/session35-09-hallucination-fluent-not-true.png)
 
-### Real-World Examples of Hallucinations
+### Why It Happens and Why It Matters
 
-These are not hypothetical — these are documented real events:
+The model was trained to predict plausible next tokens — not to verify facts. It was never taught to check if what it generates is true. LLMs also have a **knowledge cutoff** — they do not know about events after their training date and may still generate a confident but wrong answer when asked about them.
 
-- **The Fake Legal Case:** In 2023, two US lawyers submitted a legal brief in a New York court that cited six completely fabricated court cases — case names, judges, rulings, quotes — all invented by ChatGPT. The cases did not exist. The lawyers were fined and sanctioned.
-- **Medical Misinformation:** Chatbots have confidently cited incorrect drug dosages, non-existent medical studies, and wrong treatment protocols. In healthcare, this can be dangerous.
-- **Fake Quotes:** LLMs regularly attribute made-up quotes to real, famous people. The quote sounds plausible, is written in the person's style, but was never said.
+A real documented example: in 2023, two US lawyers submitted a legal brief citing six completely fabricated court cases — all invented by ChatGPT. The cases did not exist. The lawyers were fined.
 
-### Why Does This Happen?
+When you just read a hallucinated response, the worst case is believing something incorrect. But when an **AI agent** acts on hallucinated information — sending an email, booking a flight, executing a financial transaction — the consequences are real and potentially irreversible. This is why hallucinations are the most important safety concept in this entire module.
 
-The answer is in how LLMs are trained. The model learns to predict the next token from text — it was never taught to check whether what it generates is factually true. It was taught to generate **fluent, coherent, plausible-sounding** text. These are not the same as **accurate** text.
+### How to Reduce Hallucinations
 
-Additionally, LLMs have a **knowledge cutoff** — their training data only goes up to a certain date. Any events after that date are unknown to the model. If you ask about a recent event, the model may still generate a confident response by extrapolating from what it knows — and that extrapolation can be completely wrong.
-
-### Activity 4 — Spot the Hallucination
-
-Read the following LLM-generated responses and identify which parts might be hallucinated. Discuss with your neighbour.
-
-**Response 1:** *"The Eiffel Tower was built in 1889 by Gustave Eiffel for the 1900 World Fair in Paris. It stands 330 metres tall and receives approximately 7 million visitors per year."*
-
-*(Hint: Check the year of the World Fair — it was built for the 1889 World Fair, not 1900. The rest is accurate.)*
-
-**Response 2:** *"Python was created by Guido van Rossum and first released in 1991. The language was named after the BBC television show Monty Python's Flying Circus, which van Rossum was a fan of. Python 4.0 was released in 2023."*
-
-*(Hint: Python 4.0 has not been released. This is a hallucination.)*
-
-**Response 3:** *"The recent Supreme Court ruling of 2025 on data privacy established that all companies must delete user data within 30 days of a request. This applies to all Indian companies under the new IT Act amendment."*
-
-*(Hint: Verify specific rulings independently — LLMs frequently fabricate legal details with great confidence.)*
-
-### Why Hallucinations Are Especially Dangerous in Agentic Systems
-
-When you just read a hallucinated response, the worst case is you believe something incorrect. But when an **AI agent** acts on hallucinated information — sending an email, booking a flight, executing a financial transaction, updating a database — the consequences are real and potentially irreversible.
-
-This is why understanding hallucinations is the most important safety concept in this entire module.
-
-### How to Reduce Hallucinations (Coming Up in Module 3)
-
-You cannot eliminate hallucinations entirely, but you can reduce them significantly:
-
-- **RAG (Retrieval-Augmented Generation):** Instead of relying on the model's memory, retrieve verified documents and feed them into the context. The model answers from the document, not from guesswork. We will build this in a later session.
-- **Constrained Prompts:** Explicitly instruct the model: *"Only answer from the provided text. If you do not know, say 'I don't have enough information.'"*
-- **Human-in-the-Loop:** For high-stakes decisions (medical, legal, financial), always have a human review the model's output before acting on it.
-- **Temperature 0:** For factual tasks, use temperature 0 to reduce randomness and stick to the most likely (usually most accurate) tokens.
+- **RAG (Retrieval-Augmented Generation):** Feed verified documents into the context so the model answers from evidence, not guesswork. We will build this in a later session.
+- **Constrained Prompts:** Tell the model: *"Only answer from the provided text. If you do not know, say 'I don't have enough information.'"*
+- **Human-in-the-Loop:** For high-stakes decisions (medical, legal, financial), always have a human review before acting.
+- **Temperature 0:** For factual tasks, use low temperature to reduce randomness.
 
 ---
 
 ## Key Takeaways
 
 - **Classical ML cannot handle language** because language is variable-length, ambiguous, and cannot be reduced to fixed numeric feature columns — this is why a completely different architecture was needed.
-- **Neural networks** are the foundation of LLMs — they stack many layers of decision-making, learning increasingly abstract patterns from data, and can process unstructured inputs like text by converting them into numbers first.
+- **Neural networks** are the foundation of LLMs — they stack many layers of nodes (neurons), each with learnable weights (w) and biases (b), building increasingly abstract patterns from data; crucially, they can process unstructured inputs like text, images, and audio by converting them into numbers first.
 - **LLMs work by predicting the next token** one at a time — they do not retrieve answers from a database; they generate plausible-sounding text based on patterns learned during pre-training on massive amounts of internet text.
 - **Tokens, context windows, and temperature** are the three most practical parameters to understand when using LLMs — they affect cost, memory, and the character of the output respectively.
 - **Hallucinations are an inherent risk** because fluency and accuracy are different things — LLMs are optimised to sound right, not necessarily to be right; in agentic systems where models take real actions, this risk requires mitigation through RAG, constrained prompts, and human oversight.

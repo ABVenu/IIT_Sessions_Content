@@ -1,0 +1,178 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya is building a food delivery app. When a user taps ""My Orders"", the app needs to fetch the user's past order history from the server — without modifying any data. Which HTTP method should the frontend use for this request?",,,,,,3,,POST,DELETE,GET,PATCH,,,,6a02e0c4ebff52f08fe66dcb,0,markdown,"`GET` is the HTTP method used exclusively to *read or retrieve* data without causing any changes on the server. Here, the app is simply fetching existing order data — no creation, modification, or deletion is involved.
+
+- **POST** — incorrect; POST is used to *create* a new resource (e.g., placing a new order).
+- **DELETE** — incorrect; DELETE is used to *remove* a resource permanently.
+- **PATCH** — incorrect; PATCH is used to *partially update* an existing resource."
+mcsc,markdown,Arjun is testing his e-commerce app and searches for a product using the URL `https://shop.com/product/99999`. The server returns a response with status code **404**. What does this mean?,,,,,,4,,Arjun's request was processed successfully and the product was found,"Arjun is not logged in, so the server rejected his request",The server crashed while trying to find the product,The product with ID 99999 does not exist on the server,,,,6a02e0c4ebff52f08fe66dcb,0,markdown,"**404 Not Found** means the URL or the resource being requested simply does not exist on the server. The client made a valid request, but there is nothing at that location.
+
+- **First option** — incorrect — a successful response would be **200 OK**.
+- **Second option** — incorrect — not being logged in returns **401 Unauthorized**.
+- **Third option** — incorrect — a server-side crash returns **500 Internal Server Error**."
+mcsc,markdown,"Meera's Python script calls a weather API and receives this response: `'{""city"": ""Delhi"", ""temp"": 38, ""condition"": ""Sunny""}'`. She tries to run `print(response[""city""])` immediately but gets a `TypeError`. What is the most likely reason, and how should she fix it?",,,,,,2,,The JSON module is not imported; she should add `import json` and call `json.dumps(response)`,"The response is a plain text string, not a dictionary; she should first call `json.loads(response)` to parse it","She should use `response.city` instead of `response[""city""]` to access string fields","The `temp` field is an integer, which causes JSON to reject the data",,,,6a02e0c4ebff52f08fe66dcb,0,markdown,"API responses arrive as **text strings** over the network — even if they look like dictionaries. You cannot index into a string using `[""city""]`. `json.loads()` (Load String) converts the JSON string into an actual Python dictionary, after which `response[""city""]` works perfectly.
+
+- **First option** — incorrect — `json.dumps()` converts a Python dict *to* a JSON string (the opposite direction).
+- **Third option** — incorrect — Python dictionaries use `[]` notation, not dot notation.
+- **Fourth option** — incorrect — JSON fully supports integer values; that is not the cause of the error."
+mcsc,markdown,"When Riya places an order on Swiggy, the system checks her login session, applies discount codes, calculates delivery time, and fetches restaurant data — all before confirming the order. Which layer of the three-tier application architecture is responsible for this processing?",,,,,,3,,Frontend — it is the layer closest to the user,Database — it stores all order and discount data,Backend — it is the brain that processes requests and enforces business logic,JSON layer — it converts all the data into readable format,,,,6a02e0c4ebff52f08fe66dcb,0,markdown,"The **Backend** is the processing layer — it receives requests from the frontend, runs all business logic (validation, discounts, delivery time calculation), fetches data from the database, and prepares the response. It is the ""kitchen"" of the application.
+
+- **Frontend** — incorrect — it only displays data and captures user input; it does not process logic.
+- **Database** — incorrect — it only stores and retrieves data; it does not apply business rules.
+- **JSON layer** — incorrect — JSON is a data format, not an architectural layer."
+mcsc,markdown,"Rahul is building a REST API for a gym management app. A member wants to update *only their mobile number* in their profile — without changing their name, address, or membership plan. Which of the following API calls correctly follows REST conventions for this operation?",,,,,,3,,"`POST /update-phone` with `{""phone"": ""9876543210""}` in the body","`PUT /members/42` with `{""phone"": ""9876543210""}` in the body","`PATCH /members/42` with `{""phone"": ""9876543210""}` in the body",`GET /members/42?phone=9876543210`,,,,6a02e0c4ebff52f08fe66dcb,0.5,markdown,"**PATCH** is the HTTP method for *partial updates* — it only modifies the fields you include in the request body, leaving all other fields untouched. REST also requires the URL to be resource-based (`/members/42`), not action-based.
+
+- **First option** — incorrect — `POST /update-phone` is not REST style (action in URL), and POST is for *creating* new resources.
+- **Second option** — incorrect — `PUT` performs a *full replacement* of the entire resource. Sending only the phone number would erase all other fields.
+- **Fourth option** — incorrect — `GET` is for reading data; query parameters are not used to send update data. Also, GET requests should not modify server state."
+mcsc,markdown,"Sana logs into her company's HR portal in the morning. Later in the day, she accesses her payslip page. The browser sends a new request to the server — but she is not prompted to log in again. The server still knows who she is. Which component of the API request carries her identity on this second request?",,,,,,3,,Request Body — it stores her credentials so she never has to re-enter them,URL / Endpoint — her username is embedded in the URL path,Headers — an authentication token issued at login is automatically attached to every request,HTTP Method — using GET instead of POST signals that the user is already authenticated,,,,6a02e0c4ebff52f08fe66dcb,0.5,markdown,"When Sana logged in, the server issued an **authentication token** (a digital ID card). Her browser stores this token and automatically attaches it in the **request headers** with every subsequent request. The server reads the token to identify her without asking for credentials again.
+
+- **Request Body** — incorrect — storing credentials in the request body for every call is a security anti-pattern; that is not how modern authentication works.
+- **URL / Endpoint** — incorrect — embedding usernames in URLs is insecure and not standard practice for authentication.
+- **HTTP Method** — incorrect — the HTTP method indicates the type of action (read/create/update/delete), not the user's identity."
+mcmc,markdown,"Divya is testing her hotel booking API. During testing, she encounters various HTTP responses. **Which of the following status code and description pairs are correctly matched?** *(Select all that apply)*",,,,,,,,**201** — A new hotel booking was successfully created after the user submitted their details,"**401** — The user tried to access the admin dashboard, but they only have a guest account (no admin rights)","**400** — The user's booking request was missing the check-in date, which is a required field",**500** — The hotel's database server crashed unexpectedly while processing the request,,,"1, 3, 4",6a02e0c4ebff52f08fe66dcb,0.5,markdown,"- **201 — Correct:** `201 Created` is returned when a new resource (here, a booking) is successfully created on the server.
+- **401 — Incorrect:** Accessing a page without the required *permission* returns `403 Forbidden`. `401 Unauthorized` means the user is not logged in at all or has an invalid token.
+- **400 — Correct:** `400 Bad Request` is returned when the client sends incomplete or invalid data — like a missing required field.
+- **500 — Correct:** `500 Internal Server Error` is returned when the fault is on the server side (e.g., database crash), not the client's."
+mcmc,markdown,"Karan receives the following JSON string from a cricket scores API:
+
+```
+'{""match"": ""IND vs AUS"", ""score"": 287, ""is_completed"": false, ""top_scorers"": [""Rohit"", ""Virat""]}'
+```
+
+After parsing it with `json.loads()`, **which of the following Python operations are valid and produce the described result?** *(Select all that apply)*",,,,,,,,"`data[""score""] + 13` → produces `300`","`data[""is_completed""]` → returns Python `False` (a boolean, not a string)","`data[""top_scorers""][1]` → returns `""Virat""`","`data[""match""] + data[""score""]` → returns `""IND vs AUS287""`",,,"1, 2, 3",6a02e0c4ebff52f08fe66dcb,0.5,markdown,"- **A — Correct:** JSON numbers map to Python `int`/`float`. `287 + 13 = 300` is valid arithmetic.
+- **B — Correct:** JSON `false` maps to Python `False` (boolean). `json.loads()` handles this conversion automatically.
+- **C — Correct:** JSON arrays map to Python `list`. Index `[1]` accesses the second element, `""Virat""`.
+- **D — Incorrect:** You cannot concatenate a `str` and an `int` in Python directly. This would raise a `TypeError`. You would need `str(data[""score""])` first."
+mcmc,markdown,Vikram uses a flight booking app to search for flights from Hyderabad to Bangalore on June 5th. Results appear within 2 seconds. **Which of the following statements correctly describe what happened in the background?** *(Select all that apply)*,,,,,,,,"The frontend sent a request (GET or POST) to the backend with search parameters such as source, destination, and date",The backend directly queried Make My Trip's public website using web scraping to fetch flight data,"The backend processed the request, queried the flight database or a third-party flight API, and prepared the results",The backend formatted the results as a **JSON response** and sent it back to the frontend,The frontend received the JSON response and rendered it as a list of flight cards on the screen,"A status code of **200 OK** was included in the response, indicating the search was successful","1, 3, 4, 5, 6",6a02e0c4ebff52f08fe66dcb,1,markdown,"- **A — Correct:** The frontend always communicates with the backend via an API request, passing the user's search parameters in the request.
+- **B — Incorrect:** Backends do not scrape websites — they call structured **APIs** provided by services like Make My Trip. Web scraping is unreliable and violates terms of service.
+- **C — Correct:** The backend is the processing layer — it receives the request, calls data sources (database or third-party APIs), and prepares the result.
+- **D — Correct:** Backend responses to frontends are almost always formatted as **JSON**.
+- **E — Correct:** The frontend's job is to receive the JSON response and render it visually for the user.
+- **F — Correct:** A successful request-response cycle returns `200 OK` in the status code."
+mcmc,markdown,"Aisha is building a Python-based AI resume screener. Her system takes a candidate's resume text, sends it to OpenAI's API with a scoring prompt, and returns a score and feedback. **Which of the following statements about her system's API architecture are correct?** *(Select all that apply)*",,,,,,,,"Calling `client.responses.create(...)` in Python sends a **POST** request to OpenAI's server under the hood, with the prompt in the request body",The `OpenAI()` client uses the `OPENAI_API_KEY` environment variable as an **authentication token** in the request headers — similar to how any other API uses tokens,"The response from OpenAI arrives as a plain human-readable sentence, so `json` module functions are irrelevant here",Aisha's AI screener lives in the **backend layer** of her application — the frontend just sends the resume text via an API call to Aisha's backend,"If Aisha wants to switch from OpenAI to Gemini, she must completely rewrite her entire application backend from scratch",The overall flow — create client → authenticate → send request → receive JSON response — follows the same pattern as any REST API call,"1, 2, 4, 6",6a02e0c4ebff52f08fe66dcb,1,markdown,"- **A — Correct:** Internally, the OpenAI Python library sends an authenticated **POST** request to OpenAI's servers with the prompt in the JSON request body. The Python SDK just abstracts this away.
+- **B — Correct:** The API key is an authentication token. The OpenAI client attaches it to request headers — exactly like any other API that uses token-based auth.
+- **C — Incorrect:** The OpenAI response is structured data (a JSON object with fields like `output_text`, usage stats, etc.). The Python library may deserialize it for you, but JSON is very much involved under the hood.
+- **D — Correct:** AI agents and model calls happen in the **backend**. The frontend sends the user input to the backend, which then calls the LLM API.
+- **E — Incorrect:** Switching providers requires swapping the client and method calls, but the **overall architecture** (create client → authenticate → call → read response) remains the same. It is not a full rewrite.
+- **F — Correct:** LLM APIs follow the same request-response pattern as all other REST APIs: authenticate, send a structured request, receive a structured JSON response."
+subjective,markdown,"You are a backend developer at a travel startup called **TripZen**. Your team is building a smart travel assistant, and your first task is to write the data processing utility that handles raw JSON responses from a flight search API.
+
+The flight search API returns a JSON string containing a list of available flights. Your utility must process this data, filter out unavailable options, identify the best deal, and prepare a structured booking summary — ready to be sent back to the frontend as a JSON response.
+
+### Your Task
+
+Write a Python program (`flight_deal_finder.py`) that does the following:
+
+**Step 1 — Parse the API Response**
+Parse the following JSON string (simulating a raw API response) into a Python dictionary using `json.loads()`:
+
+```json
+{
+  ""route"": ""Delhi → Mumbai"",
+  ""search_date"": ""2026-06-10"",
+  ""flights"": [
+    {""flight_id"": ""AI-201"", ""airline"": ""Air India"", ""departure"": ""06:00"", ""price"": 4500, ""seats_available"": 3},
+    {""flight_id"": ""6E-305"", ""airline"": ""IndiGo"", ""departure"": ""09:30"", ""price"": 3800, ""seats_available"": 1},
+    {""flight_id"": ""SG-112"", ""airline"": ""SpiceJet"", ""departure"": ""13:15"", ""price"": 3200, ""seats_available"": 0},
+    {""flight_id"": ""UK-444"", ""airline"": ""Vistara"", ""departure"": ""17:45"", ""price"": 5100, ""seats_available"": 5},
+    {""flight_id"": ""6E-890"", ""airline"": ""IndiGo"", ""departure"": ""21:00"", ""price"": 3600, ""seats_available"": 2}
+  ]
+}
+```
+
+**Step 2 — Filter Unavailable Flights**
+From the list of flights, filter out any flight that has **fewer than 2 seats available** (i.e., keep only flights where `seats_available >= 2`).
+
+Print the number of available flights after filtering.
+
+**Step 3 — Find the Best Deal**
+Among the filtered (available) flights, find the one with the **lowest price**.
+
+Print the airline name, flight ID, and price of the cheapest available flight.
+
+**Step 4 — Build a Booking Summary**
+Create a new Python dictionary called `booking_summary` with the following fields:
+- `""route""` — copied from the original data
+- `""selected_flight_id""` — the flight ID of the cheapest available flight
+- `""airline""` — the airline name
+- `""departure""` — the departure time
+- `""price""` — the ticket price
+- `""status""` — set this to `""ready_to_book""`
+
+**Step 5 — Convert to JSON and Print**
+Convert `booking_summary` into a formatted JSON string using `json.dumps()` with `indent=2` and print it.
+
+### Expected Output (approximate)
+
+```
+Available flights after filtering: 3
+Best deal: IndiGo (6E-890) at ₹3600
+
+Booking Summary (JSON):
+{
+  ""route"": ""Delhi → Mumbai"",
+  ""selected_flight_id"": ""6E-890"",
+  ""airline"": ""IndiGo"",
+  ""departure"": ""21:00"",
+  ""price"": 3600,
+  ""status"": ""ready_to_book""
+}
+```
+
+---
+
+### Submission Instructions
+
+- Code all the steps mentioned above in VS Code in a single file called `flight_deal_finder.py`
+- Run the code and verify the output matches the expected result
+- Then submit the code in the code editor / answer box in the LMS",,,,,,,,,,,,,,,6a02e0c4ebff52f08fe66dcb,0.5,markdown,"```python
+import json
+
+# Step 1: Parse the JSON string into a Python dictionary
+json_response = '''
+{
+  ""route"": ""Delhi → Mumbai"",
+  ""search_date"": ""2026-06-10"",
+  ""flights"": [
+    {""flight_id"": ""AI-201"", ""airline"": ""Air India"", ""departure"": ""06:00"", ""price"": 4500, ""seats_available"": 3},
+    {""flight_id"": ""6E-305"", ""airline"": ""IndiGo"", ""departure"": ""09:30"", ""price"": 3800, ""seats_available"": 1},
+    {""flight_id"": ""SG-112"", ""airline"": ""SpiceJet"", ""departure"": ""13:15"", ""price"": 3200, ""seats_available"": 0},
+    {""flight_id"": ""UK-444"", ""airline"": ""Vistara"", ""departure"": ""17:45"", ""price"": 5100, ""seats_available"": 5},
+    {""flight_id"": ""6E-890"", ""airline"": ""IndiGo"", ""departure"": ""21:00"", ""price"": 3600, ""seats_available"": 2}
+  ]
+}
+'''
+
+data = json.loads(json_response)
+
+# Step 2: Filter flights with seats_available >= 2
+available_flights = [f for f in data[""flights""] if f[""seats_available""] >= 2]
+print(f""Available flights after filtering: {len(available_flights)}"")
+
+# Step 3: Find the cheapest available flight
+cheapest = min(available_flights, key=lambda f: f[""price""])
+print(f""Best deal: {cheapest['airline']} ({cheapest['flight_id']}) at ₹{cheapest['price']}"")
+
+# Step 4: Build a booking summary dictionary
+booking_summary = {
+    ""route"": data[""route""],
+    ""selected_flight_id"": cheapest[""flight_id""],
+    ""airline"": cheapest[""airline""],
+    ""departure"": cheapest[""departure""],
+    ""price"": cheapest[""price""],
+    ""status"": ""ready_to_book""
+}
+
+# Step 5: Convert to formatted JSON string and print
+json_output = json.dumps(booking_summary, indent=2)
+print(""\nBooking Summary (JSON):"")
+print(json_output)
+```
+
+- `json.loads()` converts the raw API response string into a nested Python dictionary. The `""flights""` key holds a Python list of dictionaries.
+- The list comprehension `[f for f in data[""flights""] if f[""seats_available""] >= 2]` filters out IndiGo 6E-305 (1 seat) and SpiceJet SG-112 (0 seats), leaving **3 available flights**: AI-201 (3 seats), UK-444 (5 seats), and 6E-890 (2 seats). The cheapest among these is **6E-890 at ₹3600**.
+- `min(available_flights, key=lambda f: f[""price""])` finds the flight dictionary with the lowest price.
+- `booking_summary` picks specific fields and adds `""status""`, transforming API data for the response payload.
+- `json.dumps(booking_summary, indent=2)` serializes the dictionary to a formatted JSON string suitable for an API response.
+
+**Alternative approach:** You can use `sorted(available_flights, key=lambda f: f[""price""])[0]` instead of `min()` with a lambda; both are valid."

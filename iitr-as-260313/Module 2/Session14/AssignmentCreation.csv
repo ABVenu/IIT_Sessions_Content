@@ -1,0 +1,217 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A growing e-commerce startup stores all its order records in a single shared Excel file on a cloud drive. During a big sale event, three employees try to update different orders at the same time — and the file gets corrupted, causing permanent data loss.
+
+Which specific limitation of file-based storage does this scenario most directly illustrate?",,,,,,2,,Lack of visual appeal in presenting data,Inability to handle concurrent access by multiple users,High infrastructure and licensing costs,Absence of automatic data backup features,,,,6a02e113aa77e49c15321fd0,0,markdown,"The scenario directly demonstrates the **concurrent access** problem — multiple users editing the same file simultaneously caused data corruption. Databases solve this using transaction management and locking mechanisms that prevent one user's changes from overwriting another's. Options A, C, and D describe issues that are unrelated to what the scenario shows."
+mcsc,markdown,"A developer creates a `products` table in Supabase with the following definition:
+
+```sql
+CREATE TABLE products (
+    product_id SERIAL PRIMARY KEY,
+    product_name VARCHAR(100) NOT NULL
+);
+```
+
+After running three separate `INSERT INTO` statements — without specifying `product_id` — what values will the database automatically assign to `product_id` for the three rows?",,,,,,3,,Three randomly generated UUID strings,"Three `NULL` values, since the field was not provided","The integers `1`, `2`, and `3` respectively",Three copies of the value `0`,,,,6a02e113aa77e49c15321fd0,0,markdown,"`SERIAL` is an **auto-incrementing integer** type. The database automatically assigns sequential values starting from 1 each time a new row is inserted. Since `product_id` is not provided in the INSERT, the database fills it with 1, 2, 3, and so on. `UUID` produces random strings — that is a different data type. `NULL` is prevented by `PRIMARY KEY`. `0` is never used with `SERIAL`."
+mcsc,markdown,"An AI travel assistant needs to answer questions like: *""Which of my past trips were most similar to a beach holiday in Goa?""* It must search through hundreds of stored trip summaries and return the ones closest in meaning — even if the exact words are completely different.
+
+Which type of database is most appropriate for storing and querying these trip summaries?",,,,,,3,,Relational Database (SQL),Time-Series Database,Vector Database,NoSQL Document Database,,,,6a02e113aa77e49c15321fd0,0,markdown,"**Vector databases** store embeddings (numerical representations of meaning) and can find content that is closest in meaning using semantic similarity. Two trip summaries can use entirely different words but still be mathematically close if they describe similar experiences. Relational databases use SQL which matches exact values, not meaning. Time-series databases handle timestamped sequential data. NoSQL handles flexible formats but cannot do meaning-based retrieval."
+mcsc,markdown,"A developer defines a column in a Supabase table as:
+
+```sql
+age INT CHECK (age > 0)
+```
+
+A data entry operator attempts to insert a new row with `age = -5`. What will the database do?",,,,,,3,,Insert the row and store `-5` as-is,Automatically convert the value to `0` before storing,Reject the row because the `CHECK` constraint is violated,Insert the row but store the `age` column as `NULL`,,,,6a02e113aa77e49c15321fd0,0,markdown,"The `CHECK` constraint validates every incoming value against the defined condition. Since `-5 > 0` is false, the `INSERT` statement fails entirely — the row is not added to the table. The database never silently changes or nullifies values; it simply rejects the operation, protecting data integrity."
+mcsc,markdown,"A logistics company's AI fleet monitoring system records the GPS coordinates and speed of 2,000 delivery vehicles every 5 seconds, around the clock. The system must efficiently answer queries like: *""Show all vehicles that exceeded 80 km/h in the last 10 minutes.""*
+
+Which type of database is most suited for this use case?",,,,,,4,,Relational Database (SQL),NoSQL Document Database,Vector Database,Time-Series Database,,,,6a02e113aa77e49c15321fd0,0.5,markdown,"**Time-series databases** are specifically optimised for data that is indexed by time and queried in time ranges. They handle extremely high-frequency timestamped data (one reading every 5 seconds from 2,000 vehicles = 24,000 writes/minute) far more efficiently than general-purpose databases. Relational databases could store this data but are not optimised for this volume and query pattern. NoSQL and Vector databases serve entirely different purposes."
+mcsc,markdown,"Priya is designing a global AI-powered HR system that will run on independent servers in India, the US, and Germany. Employee records can be created on any regional server and must later be merged into a single central database. She needs a primary key strategy that guarantees no two records — created on different servers — will ever have the same ID.
+
+Which data type should she use for the primary key?",,,,,,4,,"`SERIAL`, because it auto-increments and is easy to manage","`INTEGER`, because databases can synchronise integer counters across servers","`VARCHAR(50)`, because adding a country prefix makes the ID unique","`UUID`, because it generates a globally unique identifier regardless of which server creates the record",,,,6a02e113aa77e49c15321fd0,0.5,markdown,"`UUID` (Universally Unique Identifier) generates a mathematically near-impossible-to-duplicate identifier independently on any server, making it the correct choice for multi-server architectures. `SERIAL` would produce ID = 1 on all three regional servers independently — causing collisions during the central merge. `INTEGER` has the same collision problem. Using `VARCHAR` with a custom country prefix is an error-prone manual workaround with no guarantee of uniqueness."
+mcmc,markdown,"A developer is designing a `users` table for an AI chatbot platform. She wants to enforce data quality rules on the table's columns using SQL constraints.
+
+Which of the following are valid SQL constraints that can be applied to columns in a `CREATE TABLE` statement? *(Select all that apply)*",,,,,,,,`NOT NULL`,`UNIQUE`,`JOIN`,`DEFAULT`,`CHECK`,`FETCH`,"1,2,4,5",6a02e113aa77e49c15321fd0,0.5,markdown,"- `NOT NULL` — Prevents a column from storing empty values. ✓
+- `UNIQUE` — Ensures every value in the column is different across all rows. ✓
+- `JOIN` — This is a **query clause** used to combine tables in a `SELECT` statement, not a table constraint. ✗
+- `DEFAULT` — Automatically sets a value when none is provided during insert. ✓
+- `CHECK` — Validates that inserted values satisfy a specified condition. ✓
+- `FETCH` — This is a cursor navigation command, not a column constraint. ✗"
+mcmc,markdown,A regional school chain transitions from storing all student data in Excel files to a PostgreSQL-based relational database (hosted on Supabase). Which of the following improvements will they directly experience as a result of this migration? *(Select all that apply)*,,,,,,,,Multiple teachers across different branches can update student records simultaneously without overwriting each other's changes,The database will automatically generate attendance graphs and performance dashboards,"A query to find ""all students with fees pending for more than 30 days"" can be executed instantly using SQL",Constraints like `age INT CHECK (age > 5)` will prevent invalid entries at the database level,The school will no longer need internet connectivity since databases function entirely offline,,"1,3,4",6a02e113aa77e49c15321fd0,0.5,markdown,"- A: Correct — databases handle concurrent access safely using transaction management. ✓
+- B: Incorrect — databases store and query data; dashboards require separate BI tools like Tableau or Metabase. ✗
+- C: Correct — SQL allows fast, indexed queries across large datasets that would require full file scans in Excel. ✓
+- D: Correct — `CHECK` and `NOT NULL` constraints enforce data integrity directly at the database level. ✓
+- E: Incorrect — Cloud-hosted databases (like Supabase) require internet; local installations need software setup. ✗"
+mcmc,markdown,"A developer is designing an `event_registrations` table for a conference management platform. The table tracks which attendee registered for which event. One attendee can register for multiple different events, and each event can have many attendees.
+
+Which of the following statements about this table design are correct? *(Select all that apply)*",,,,,,,,`attendee_id` alone cannot serve as the primary key because the same attendee can appear in multiple rows (one per event),"A composite primary key of `(attendee_id, event_id)` ensures the same attendee cannot register for the same event twice",`event_id` alone can serve as the primary key because event IDs are unique across the events catalog,A composite primary key enforces both NOT NULL and UNIQUE behavior on the *combined values* of both columns together,"Adding a separate `SERIAL` column as primary key is a structurally valid alternative, though it would not automatically prevent the same attendee from registering for the same event twice",,"1,2,4,5",6a02e113aa77e49c15321fd0,1,markdown,"- A: Correct — `attendee_id` repeats because one attendee registers for many events, so it cannot be a standalone primary key. ✓
+- B: Correct — the composite key `(attendee_id, event_id)` means the exact same pair cannot appear twice, preventing duplicate registrations. ✓
+- C: Incorrect — `event_id` also repeats because many different attendees register for the same event. ✗
+- D: Correct — a composite primary key applies the combined NOT NULL + UNIQUE constraint to the pair of values as a unit. ✓
+- E: Correct — a `SERIAL` ID column is structurally valid as a primary key, but it only guarantees uniqueness for that auto-generated ID. Preventing duplicate `(attendee_id, event_id)` pairs would require an additional `UNIQUE` constraint on that combination. ✓"
+mcmc,markdown,"An AI customer support system uses RAG (Retrieval Augmented Generation) to answer user questions about a company's product policies. When a user asks *""What is the return policy for electronics purchased above ₹10,000?""*, the system follows a specific multi-step process to generate its response.
+
+Which of the following statements correctly describe how this RAG system works? *(Select all that apply)*",,,,,,,,The user's question is first converted into a numerical vector (embedding) before searching the policy knowledge base,The language model directly scans the policy documents by searching for matching keywords in the text,The vector database returns the policy document(s) whose embeddings are mathematically closest to the question's embedding,The retrieved policy content is provided to the language model as context before it generates its final answer,"RAG reduces hallucinations because the model generates its answer grounded in retrieved factual content, rather than relying purely on its training",RAG works by retraining the language model every time a new policy document is added to the knowledge base,"1,3,4,5",6a02e113aa77e49c15321fd0,1,markdown,"- A: Correct — the query is passed through an embedding model to produce a vector before the similarity search. ✓
+- B: Incorrect — RAG uses semantic (embedding-based) similarity search, not keyword matching. ✗
+- C: Correct — the vector database finds stored embeddings that are mathematically nearest to the query embedding. ✓
+- D: Correct — the retrieved document text is injected into the model's prompt as context before response generation. ✓
+- E: Correct — since the model generates from retrieved facts, it is less likely to fabricate information. ✓
+- F: Incorrect — RAG does not retrain the model. The knowledge base (vector store) is updated independently, without touching the model. ✗"
+subjective,markdown,"
+
+## Subjective Question — BookMind database schema
+
+**Context:**
+
+You have joined a small startup building **""BookMind""** — an AI-powered book recommendation platform. The platform needs a database to track its book catalog, registered readers, and each reader's reading history. This reading history will eventually be used to power personalised recommendations using semantic search.
+
+Your task is to design and implement this database from scratch inside your Supabase project.
+
+---
+
+**Part 1 — Create the Database Schema**
+
+Write and execute `CREATE TABLE` statements in the Supabase SQL Editor to create the following three tables. Apply appropriate data types and constraints as described:
+
+**Table 1: `books`** — stores the platform's book catalog
+
+| Column | Type | Constraints / Notes |
+|---|---|---|
+| `book_id` | `SERIAL` | Primary Key — auto-assigned |
+| `title` | `VARCHAR(200)` | NOT NULL |
+| `author` | `VARCHAR(100)` | NOT NULL |
+| `genre` | `VARCHAR(50)` | NOT NULL |
+| `published_year` | `INT` | CHECK: must be greater than 1800 |
+| `is_available` | `BOOLEAN` | DEFAULT TRUE |
+
+**Table 2: `readers`** — stores reader profiles
+
+| Column | Type | Constraints / Notes |
+|---|---|---|
+| `reader_id` | `SERIAL` | Primary Key — auto-assigned |
+| `full_name` | `VARCHAR(100)` | NOT NULL |
+| `email` | `VARCHAR(150)` | UNIQUE, NOT NULL |
+| `joined_on` | `DATE` | DEFAULT CURRENT_DATE |
+
+**Table 3: `reading_history`** — tracks which reader read which book
+
+| Column | Type | Constraints / Notes |
+|---|---|---|
+| `reader_id` | `INT` | Part of Composite Primary Key |
+| `book_id` | `INT` | Part of Composite Primary Key |
+| `read_on` | `DATE` | DEFAULT CURRENT_DATE |
+| `rating` | `INT` | CHECK: must be between 1 and 5 (inclusive) |
+
+> **Note:** `reading_history` must use a **composite primary key** on `(reader_id, book_id)` — this ensures one reader can only have one history entry per book.
+
+---
+
+**Part 2 — Insert Sample Data**
+
+Write and execute `INSERT INTO` statements to populate the tables:
+
+1. Insert at least **4 books** into the `books` table (use real or fictional book titles with realistic data)
+2. Insert at least **2 readers** into the `readers` table
+3. Insert at least **3 entries** into the `reading_history` table, linking your readers to books they have ""read"" with a rating between 1 and 5
+
+**Constraint Violation Test:**
+- Attempt to insert one entry into `reading_history` with a `rating` value of **`6`**
+- Observe the error message returned by Supabase — this confirms your `CHECK` constraint is working
+
+---
+
+**Submission Instructions:**
+
+- Open your **Supabase project** → go to the **SQL Editor**
+- Write all your SQL queries (all `CREATE TABLE` statements, all `INSERT INTO` statements, and the failed constraint violation insert)
+- Run each query and verify the tables are created and populated correctly
+- Once verified, copy **all your SQL queries** and paste them into the **answer box** in the LMS
+- Make sure your submission includes all three parts: the CREATE TABLE statements, the INSERT INTO statements, and the constraint violation attempt
+
+
+",,,,,,,,,,,,,,,6a02e113aa77e49c15321fd0,0.5,markdown,"### Part 1 — Ideal `CREATE TABLE` Statements
+
+```sql
+-- Table 1: books catalog
+CREATE TABLE books (
+    book_id        SERIAL PRIMARY KEY,
+    title          VARCHAR(200) NOT NULL,
+    author         VARCHAR(100) NOT NULL,
+    genre          VARCHAR(50)  NOT NULL,
+    published_year INT          CHECK (published_year > 1800),
+    is_available   BOOLEAN      DEFAULT TRUE
+);
+
+-- Table 2: reader profiles
+CREATE TABLE readers (
+    reader_id  SERIAL PRIMARY KEY,
+    full_name  VARCHAR(100) NOT NULL,
+    email      VARCHAR(150) UNIQUE NOT NULL,
+    joined_on  DATE DEFAULT CURRENT_DATE
+);
+
+-- Table 3: reading history with composite primary key
+CREATE TABLE reading_history (
+    reader_id INT,
+    book_id   INT,
+    read_on   DATE DEFAULT CURRENT_DATE,
+    rating    INT  CHECK (rating >= 1 AND rating <= 5),
+    PRIMARY KEY (reader_id, book_id)
+);
+```
+
+**Walkthrough:**
+- `books` uses `SERIAL PRIMARY KEY` so `book_id` is auto-assigned (1, 2, 3…). `published_year` has a `CHECK` to block impossible years. `is_available` defaults to `TRUE` — no need to specify it when inserting most books.
+- `readers` uses `UNIQUE NOT NULL` on `email` — every reader must have one and no two readers can share an email address.
+- `reading_history` has **no auto-generated ID** — instead, the combination of `reader_id` and `book_id` together forms the primary key. This means the same reader cannot have two history entries for the same book. The `CHECK` on `rating` blocks any value outside 1–5.
+
+---
+
+### Part 2 — Ideal `INSERT INTO` Statements
+
+```sql
+-- Insert books
+INSERT INTO books (title, author, genre, published_year)
+VALUES
+    ('Atomic Habits',        'James Clear',       'Self-Help',       2018),
+    ('The Alchemist',        'Paulo Coelho',       'Fiction',         1988),
+    ('Deep Work',            'Cal Newport',        'Productivity',    2016),
+    ('Educated',             'Tara Westover',      'Memoir',          2018),
+    ('Sapiens',              'Yuval Noah Harari',  'Non-Fiction',     2011);
+
+-- Insert readers
+INSERT INTO readers (full_name, email)
+VALUES
+    ('Ananya Sharma', 'ananya@example.com'),
+    ('Rohan Mehta',   'rohan@example.com');
+
+-- Insert reading history (reader 1 read books 1, 2, 3 | reader 2 read book 1)
+INSERT INTO reading_history (reader_id, book_id, rating)
+VALUES
+    (1, 1, 5),
+    (1, 2, 4),
+    (1, 3, 3),
+    (2, 1, 4);
+
+-- Constraint violation test — this INSERT should FAIL
+INSERT INTO reading_history (reader_id, book_id, rating)
+VALUES (2, 2, 6);
+-- Expected error: new row for relation ""reading_history"" violates check constraint ""reading_history_rating_check""
+```
+
+**Walkthrough:**
+- `book_id`, `reader_id` are not specified during insert — `SERIAL` assigns them automatically (1, 2, 3…).
+- `joined_on` and `read_on` are not specified — their `DEFAULT CURRENT_DATE` fills in today's date automatically.
+- `is_available` is not specified — it defaults to `TRUE` for all books.
+- The final insert with `rating = 6` violates `CHECK (rating >= 1 AND rating <= 5)`, so Supabase rejects the row entirely and returns a constraint violation error. No partial data is stored.
+
+---
+
+### Alternative Approaches
+
+- **UUID instead of SERIAL:** For a production BookMind platform operating at global scale (or merging data across multiple regional servers), `book_id` and `reader_id` should be `UUID DEFAULT gen_random_uuid()` instead of `SERIAL`. This prevents ID collisions if records are created on different servers and later merged.
+
+- **Foreign keys in `reading_history`:** In a production schema, the `reader_id` and `book_id` columns in `reading_history` should have `FOREIGN KEY` references to `readers(reader_id)` and `books(book_id)` respectively. This ensures you cannot insert a reading history entry for a reader or book that doesn't exist. Foreign keys were introduced in the session but not applied here to keep the task at medium difficulty.
+
+- **BETWEEN shorthand for rating CHECK:** The constraint `CHECK (rating BETWEEN 1 AND 5)` is equivalent to `CHECK (rating >= 1 AND rating <= 5)` and is slightly more readable. Both are valid.
+
+- **Inserting multiple rows in one statement:** All four `reading_history` inserts above use a single `INSERT INTO ... VALUES (row1), (row2), ...` — this is more efficient than four separate `INSERT` statements and is considered better practice."
