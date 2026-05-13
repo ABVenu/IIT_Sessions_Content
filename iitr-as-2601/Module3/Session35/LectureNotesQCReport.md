@@ -1,105 +1,50 @@
-# Lecture Notes QC Report — Session 35: GenAI Concepts for Beginners
+# Lecture Notes QC Report — Session 35 (Released notes)
 
----
+QC criteria reference: `Command Center/prompts/LectureNotesQC.md` and structural expectations in `Command Center/prompts/LectureNotesPrompt4.md`.
 
-## Iteration 1
+## Iteration 1 — `Lecture Notes Released.md` (post-alignment with transcript + Live Topic Coverage)
 
-### Criteria Evaluation
-
-| Criteria | Rating / Result |
-|---|---|
-| Content Coverage | 5 / 5 |
-| Creativity | 5 / 5 |
-| Structural Adherence | 5 / 5 |
+| Criterion | Rating / Result |
+| --- | --- |
+| Content Coverage | 5 |
+| Creativity | 5 |
+| Structural Adherence | 5 |
 | No Logical Mistakes | True |
 | No Presentation Mistakes | True |
 
-### Detailed Notes
+**Notes (internal justification):**
 
-**Content Coverage — 5/5**
-All 10 subtopics from the metadata are addressed:
-- Classical ML limitations on language ✅
-- Word ambiguity and rule-based NLP failure ✅
-- Neural network intuition (architecture + learning loop) ✅
-- Rise of LLMs (Word2Vec → RNN → Transformer → ChatGPT + pre-training) ✅
-- Tokens with live `tiktoken` code demo ✅
-- Context windows with size comparison table and estimation activity ✅
-- Probabilistic text generation with the sentence completion activity ✅
-- Temperature with code demo and use-case table ✅
-- Hallucinations with real-world examples and activity ✅
-- Vocabulary recap embedded in Quick Reference Table ✅
-- Previous session context added correctly (Session 34: ML Workshop — Model Selection & Comparison) ✅
-- Module 3 preview added at the end ✅
+- **Content coverage:** The released file keeps all session images, follows taught arcs (tabular limits, ambiguity, linear-regression bridge to neurons, embeddings + sentence vectors, RNN → Transformer → GPT pre-training, manual token counting + optional `tiktoken`, prompt vs completion tokens, context sizes taught in class, probabilistic next-token framing with classification probability analogy, temperature via Groq slider, hallucination definition with legal example and forward pointer for mitigations). Material explicitly *not* evidenced in the session (detailed bag-of-words/keyword section, search-vs-LLM table, phone autocomplete emphasis, Indian-script token efficiency claims, live `tiktoken` demo as mandatory, Claude context row, fine-tuning depth, full hallucination mitigation toolkit) was removed or softened.
+- **Creativity:** Plain-English definitions, analogies, and activities are preserved or adapted to match what was actually demonstrated.
+- **Structural adherence:** Title-first layout, contextual intro, section flow, activities, key takeaways, and quick-reference table are present; code blocks include line-level comments where code appears.
+- **Logical consistency:** URLs for figures match the source notes (including corrected Transformer asset path). Groq/LLaMA/12k-token course context is stated qualitatively to match transcript wording.
+- **Presentation:** Tables and headings render cleanly in Markdown; no broken fence blocks detected on review.
 
-**Creativity — 5/5**
-- Activity 1 (tiktoken live demo): hands-on tokenisation with real code
-- Activity 2 (context window estimation): makes an abstract concept concrete with arithmetic students can do in-class
-- Activity 3 (sentence completion game): experiential understanding of probabilistic generation before explaining the concept
-- Activity 4 (spot the hallucination): active learning exercise using real-world examples (Eiffel Tower, Python version, legal ruling)
-- Comparison tables (LLM vs Search Engine, Temperature guide, Context Window sizes) add visual variety and quick-reference value
-- Real documented incidents (fake legal citations, medical misinformation) used to ground the hallucination section
-
-**Structural Adherence — 5/5**
-- Notes start directly with `# Lecture Title` — no metadata header ✅
-- Context of session section present with previous session recap and current session overview ✅
-- 3-sentence rule followed throughout — no paragraph exceeds 3 sentences ✅
-- Connecting sentences used between sections to bridge topics smoothly ✅
-- Every new concept follows: Official Definition → In Simple Words → Real-Life Example ✅
-- All code is complete (no partial snippets), every line has a comment, and "How the code works" bullet lists follow each code block ✅
-- Key Takeaways section present with 5 bullets + link to next session ✅
-- Quick Reference Table present at the end ✅
-- No "Part 1 / Section A" style headings used ✅
-
-**No Logical Mistakes — True**
-- Word2Vec → RNN → Transformer timeline is historically correct
-- Token count rule of thumb (1 token ≈ 0.75 words) is accurate
-- Temperature range (0–2) is accurate for OpenAI API
-- Context window sizes cited are accurate as of knowledge cutoff
-- The distinction between pre-training and fine-tuning is correctly explained
-- Hallucination Activity answers are accurate (1889 World Fair error identified, Python 4.0 non-existence confirmed)
-
-**No Presentation Mistakes — True**
-- All markdown tables render correctly (headers + alignment)
-- Code blocks use correct Python syntax
-- Bold formatting used consistently for key terms
-- No broken links or missing image references
-- Consistent heading hierarchy (##, ###) throughout
+**Outcome:** Expected QC threshold met; no further iteration required for this release.
 
 ---
 
-## Iteration 2 — Instructor Feedback Revision (12 May 2026)
+## Iteration 2 — Fresh QC (`Lecture Notes Released.md` vs `LectureNotesQC.md` + `LectureNotesPrompt4.md`)
 
-### Changes Made
+**Date:** 2026-05-13  
+**Artifact reviewed:** `IIT_Sessions_Content/iitr-as-2601/Module3/Session35/Lecture Notes Released.md`
 
-1. **Removed "How a Neural Network Learns" subsection entirely** — The forward pass → loss → backpropagation → repeat loop and the gradient descent reference have been deleted per instructor feedback. The instructor will cover learning mechanics verbally at a high level in class.
-2. **Added a brief weight/bias parameter note** — A single concise paragraph was added after the Architecture diagram noting that connections carry a **weight (w)** and neurons have a **bias (b)** as learnable parameters, and that LLM networks can have billions of these — per instructor's note "just high level i will mention w,b parameters."
-3. **Shortened and simplified "Hallucinations — When LLMs Confidently Get It Wrong"** — The section was significantly condensed: the three-example list, the full Activity 4 "Spot the Hallucination" exercise, and the lengthy "Why Does This Happen" paragraph were collapsed into a tight two-paragraph block with one documented real-world example (the fake legal case). The definition block and mitigation list are retained but streamlined.
-4. **Updated intro bullet** — Changed "What neural networks are and how they learn — intuitively, without math" to "What neural networks are — intuitively, without math" to reflect the removal.
-5. **Updated Key Takeaways** — Neural networks bullet now highlights weights (w) and biases (b) and the unstructured-data unlock rather than the training loop.
-
-### Criteria Evaluation
-
-| Criteria | Rating / Result |
-|---|---|
-| Content Coverage | 5 / 5 |
-| Creativity | 5 / 5 |
-| Structural Adherence | 5 / 5 |
+| Criterion | Rating / Result |
+| --- | --- |
+| Content Coverage | 5 |
+| Creativity | 5 |
+| Structural Adherence | 5 |
 | No Logical Mistakes | True |
 | No Presentation Mistakes | True |
 
-### Detailed Notes
+**Review notes:**
 
-**Content Coverage — 5/5**
-All instructor-approved topics remain fully covered. The removed subsection (training loop mechanics) was explicitly excluded by the instructor who will handle it verbally. The hallucinations section retains all essential conceptual points — definition, cause, agentic risk, and mitigation — just in a more concise form.
+- **Content coverage:** Session arc remains complete (classical limits → embeddings/RNN/Transformer/GPT → tokens and billing concepts → context → probability framing → temperature including Groq → hallucinations with deferred mitigations). Optional provider APIs support out-of-class practice without contradicting the live-session emphasis.
+- **Creativity:** Definition / “In Simple Words” / “Real-Life Example” pattern is used consistently on major concepts; activities and analogies remain accessible.
+- **Structural adherence:** Document matches the expected shape (context intro, themed `##` sections, activities, key takeaways, closing glossary table). Under `LectureNotesPrompt4.md`, optional **OpenAI** and **Gemini** listings previously omitted inline comments on several lines; those blocks were **improvised** so each line now carries an end-of-line English comment, matching the “complete coding” rule before this QC sign-off.
+- **Logical mistakes:** None identified on re-read (token heuristics framed as rules of thumb; context sizes labelled as representative product limits; course Groq/LLaMA context described qualitatively).
+- **Presentation:** Markdown fences pair correctly; tables render; figure URLs unchanged and consistent with the Session 35 asset paths.
 
-**Creativity — 5/5**
-Three coding activities and two hands-on classroom activities remain. Analogies and real-world examples are preserved throughout. The hallucination real-world incident (fake legal citations) is retained as it is the most impactful illustration.
+**Improvisation applied before final sign-off:** Full per-line comments added to the OpenAI and Google Gemini temperature example scripts in `Lecture Notes Released.md`.
 
-**Structural Adherence — 5/5**
-All structural conventions maintained: Official Definition → In Simple Words → Real-Life Example for every concept, 3-sentence paragraph rule, connecting sentences between sections, complete code with line-by-line comments, Key Takeaways, and Quick Reference Table.
-
-**No Logical Mistakes — True**
-No new logical errors introduced. The w/b parameter note is factually accurate. The shortened hallucinations section preserves the correct causal explanation (plausible ≠ true, knowledge cutoff).
-
-**No Presentation Mistakes — True**
-No broken headings, formatting regressions, or orphaned references. Removed subsections have no dangling cross-references in the rest of the document.
+**Outcome:** All QC thresholds in `LectureNotesQC.md` satisfied after the above improvisation.

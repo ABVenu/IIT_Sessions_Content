@@ -1,0 +1,299 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Riya is comparing traditional supervised ML pipelines (spreadsheet-style features, fixed columns) with a friend who wants an app that drafts polite customer emails from bullet points. Riya argues classical tabular models fail here mainly because:
+
+- Email servers reject machine learning models
+- Open-ended language is hard to express as fixed numeric feature columns for every possible phrasing
+- Logistic regression cannot run on a laptop
+- Tabular data always contains more rows than text data
+
+- Email servers reject machine learning models
+- Open-ended language is hard to express as fixed numeric feature columns for every possible phrasing
+- Logistic regression cannot run on a laptop
+- Tabular data always contains more rows than text data",,,,,,2,,Email servers reject machine learning models,Open-ended language is hard to express as fixed numeric feature columns for every possible phrasing,Logistic regression cannot run on a laptop,Tabular data always contains more rows than text data,,6a03f0e8ed393893be626aa7,0,markdown,"Variable-length, meaning-rich text does not map cleanly to a fixed set of numeric columns—the usual **feature engineering bottleneck** for tabular ML. **A** is irrelevant to the modelling limitation. **C** misstates the issue as hardware. **D** confuses row counts with representational limits."
+mcsc,markdown,"Consider the sentence: *""I went to the bank.""* For a naive model that encodes **""bank""** as a single categorical or numeric feature without surrounding context, the main difficulty is that:
+
+- The token is always a spelling error
+- The surface form can correspond to different meanings depending on context (**word ambiguity**)
+- Financial institutions never appear in structured databases
+- The sentence always exceeds practical tokenizer limits
+
+- The token is always a spelling error
+- The surface form can correspond to different meanings depending on context (**word ambiguity**)
+- Financial institutions never appear in structured databases
+- The sentence always exceeds practical tokenizer limits",,,,,,2,,The token is always a spelling error,The surface form can correspond to different meanings depending on context (**word ambiguity**),Financial institutions never appear in structured databases,The sentence always exceeds practical tokenizer limits,,6a03f0e8ed393893be626aa7,0,markdown,"**Word ambiguity** means the same string can label different meanings; context disambiguates—something a lone feature column cannot represent. **A**, **C**, and **D** are factually or logically weak distractors."
+mcsc,markdown,"A common teaching analogy compares one artificial **neuron** (or perceptron) to which classical building block?
+
+- K-Means centroids
+- Linear regression (weighted inputs plus bias, predicting a continuous-style output before any nonlinearity)
+- A relational `JOIN` between tables
+- A UI theme configuration object
+
+- K-Means centroids
+- Linear regression (weighted inputs plus bias, predicting a continuous-style output before any nonlinearity)
+- A relational `JOIN` between tables
+- A UI theme configuration object",,,,,,2,,K-Means centroids,"Linear regression (weighted inputs plus bias, predicting a continuous-style output before any nonlinearity)",A relational `JOIN` between tables,A UI theme configuration object,,6a03f0e8ed393893be626aa7,0,markdown,"A single neuron’s affine combination of inputs plus bias parallels **linear regression** intuition (weights as slopes, bias as intercept) before activation. **A**, **C**, and **D** do not fit that standard analogy."
+mcsc,markdown,"Compared with a classic **RNN** that consumes text strictly step by step, a **Transformer** encoder block is most accurately characterised by:
+
+- Dropping all punctuation tokens
+- Processing all positions in the sequence in parallel and using **attention** to relate tokens
+- Removing hidden layers to guarantee faster training
+- Rasterising each token into an image tensor before prediction
+
+- Dropping all punctuation tokens
+- Processing all positions in the sequence in parallel and using **attention** to relate tokens
+- Removing hidden layers to guarantee faster training
+- Rasterising each token into an image tensor before prediction",,,,,,2,,Dropping all punctuation tokens,Processing all positions in the sequence in parallel and using **attention** to relate tokens,Removing hidden layers to guarantee faster training,Rasterising each token into an image tensor before prediction,,6a03f0e8ed393893be626aa7,0,markdown,"Transformers rely on **self-attention** over the full sequence rather than only a compressed left-to-right hidden state. **A**, **C**, and **D** are incorrect characterisations."
+mcsc,markdown,"For **GPT-style generative pre-training** on large-scale web and book corpora, the dominant **self-supervised** objective is usually described as:
+
+- Predicting house prices from square footage
+- Next-token (next-word) prediction without per-example human task labels for that phase
+- Sorting the vocabulary alphabetically to build an inverted index
+- Hand-labelling every sentence with a sentiment score before any language modelling loss
+
+- Predicting house prices from square footage
+- Next-token (next-word) prediction without per-example human task labels for that phase
+- Sorting the vocabulary alphabetically to build an inverted index
+- Hand-labelling every sentence with a sentiment score before any language modelling loss",,,,,,2,,Predicting house prices from square footage,Next-token (next-word) prediction without per-example human task labels for that phase,Sorting the vocabulary alphabetically to build an inverted index,Hand-labelling every sentence with a sentiment score before any language modelling loss,,6a03f0e8ed393893be626aa7,0.5,markdown,"Large-scale **causal language modelling** (predict the next token) drives pre-training; task labels come later if at all. **A**, **C**, and **D** misdescribe that pipeline."
+mcsc,markdown,"You are budgeting tokens for an English body of text using the heuristic **≈ 0.75 words per token** (equivalently, tokens ≈ words ÷ 0.75). Roughly how many **tokens** should you plan for **90 words**?
+
+- About 34 tokens
+- About 68 tokens
+- About 120 tokens
+- About 200 tokens
+
+- About 34 tokens
+- About 68 tokens
+- About 120 tokens
+- About 200 tokens",,,,,,3,,About 34 tokens,About 68 tokens,About 120 tokens,About 200 tokens,,6a03f0e8ed393893be626aa7,0.5,markdown,"90 ÷ 0.75 = **120**. **A**, **B**, and **D** do not follow the stated rule."
+mcmc,markdown,"Which statements about an LLM **context window** are correct?
+
+*(Select all that apply)*
+
+- It caps how many tokens the model can attend to in **one** forward pass, typically counting both user input and model output for that call
+- If a chat log exceeds the window, earlier turns that fall outside are not visible to the model on that call
+- A larger context window mathematically guarantees factually correct answers
+- **Gemini 1.5 Pro** has been publicly marketed with a context window on the order of **one million** tokens
+
+*(Select all that apply)*
+
+- It caps how many tokens the model can attend to in **one** forward pass, typically counting both user input and model output for that call
+- If a chat log exceeds the window, earlier turns that fall outside are not visible to the model on that call
+- A larger context window mathematically guarantees factually correct answers
+- **Gemini 1.5 Pro** has been publicly marketed with a context window on the order of **one million** tokens",,,,,,,,"It caps how many tokens the model can attend to in **one** forward pass, typically counting both user input and model output for that call","If a chat log exceeds the window, earlier turns that fall outside are not visible to the model on that call",A larger context window mathematically guarantees factually correct answers,**Gemini 1.5 Pro** has been publicly marketed with a context window on the order of **one million** tokens,"1,2,4",6a03f0e8ed393893be626aa7,0.5,markdown,**A** and **B** state the standard definition and overflow behaviour. **D** matches widely published vendor specifications (order-of-magnitude). **C** is false: capacity ≠ correctness.
+mcmc,markdown,"Which statements are generally true about **tokens** and **commercial LLM billing**?
+
+*(Select all that apply)*
+
+- Providers often meter **prompt** (input) tokens separately from **completion** (output) tokens
+- **Subword** tokenisers may split a rare or long technical string into multiple tokens
+- Setting `temperature = 2` halves the per-token price automatically
+- Allowing very long model answers increases completion-token usage and therefore cost or latency
+
+*(Select all that apply)*
+
+- Providers often meter **prompt** (input) tokens separately from **completion** (output) tokens
+- **Subword** tokenisers may split a rare or long technical string into multiple tokens
+- Setting `temperature = 2` halves the per-token price automatically
+- Allowing very long model answers increases completion-token usage and therefore cost or latency",,,,,,,,Providers often meter **prompt** (input) tokens separately from **completion** (output) tokens,**Subword** tokenisers may split a rare or long technical string into multiple tokens,Setting `temperature = 2` halves the per-token price automatically,Allowing very long model answers increases completion-token usage and therefore cost or latency,"1,2,4",6a03f0e8ed393893be626aa7,0.5,markdown,"**A**, **B**, and **D** align with common API pricing and tokenisation practice. **C** is false: temperature controls sampling randomness, not list price."
+mcmc,markdown,"Which statements best characterise **hallucinations** in large language models?
+
+*(Select all that apply)*
+
+- Output can read fluent and authoritative yet be fabricated or factually incorrect
+- Training optimises plausible next-token continuation, not a verified lookup against a ground-truth database on every step
+- A model’s **knowledge cutoff** can contribute to confident mistakes about events after training data ends
+- Hallucinations become impossible if the user’s prompt is polite
+
+*(Select all that apply)*
+
+- Output can read fluent and authoritative yet be fabricated or factually incorrect
+- Training optimises plausible next-token continuation, not a verified lookup against a ground-truth database on every step
+- A model’s **knowledge cutoff** can contribute to confident mistakes about events after training data ends
+- Hallucinations become impossible if the user’s prompt is polite",,,,,,,,Output can read fluent and authoritative yet be fabricated or factually incorrect,"Training optimises plausible next-token continuation, not a verified lookup against a ground-truth database on every step",A model’s **knowledge cutoff** can contribute to confident mistakes about events after training data ends,Hallucinations become impossible if the user’s prompt is polite,"1,2,3",6a03f0e8ed393893be626aa7,1,markdown,**A–C** capture standard definitions and mechanisms taught in LLM safety primers. **D** is false: tone does not remove structural hallucination risk.
+mcmc,markdown,"Which statements align with the widely taught **historical / architectural** narrative for modern LLMs?
+
+*(Select all that apply)*
+
+- **Word2Vec**-style dense vectors let vector arithmetic approximate semantic relations between words
+- Vanilla **RNNs** often struggle to carry information from very early tokens across very long sequences
+- Generative **pre-training** on raw text at scale required a human label for every token in Wikipedia before any next-token loss could be defined
+- **Self-attention** lets each position attend to every other position, easing long-range dependencies compared with strict left-to-right recurrence alone
+
+*(Select all that apply)*
+
+- **Word2Vec**-style dense vectors let vector arithmetic approximate semantic relations between words
+- Vanilla **RNNs** often struggle to carry information from very early tokens across very long sequences
+- Generative **pre-training** on raw text at scale required a human label for every token in Wikipedia before any next-token loss could be defined
+- **Self-attention** lets each position attend to every other position, easing long-range dependencies compared with strict left-to-right recurrence alone",,,,,,,,**Word2Vec**-style dense vectors let vector arithmetic approximate semantic relations between words,Vanilla **RNNs** often struggle to carry information from very early tokens across very long sequences,Generative **pre-training** on raw text at scale required a human label for every token in Wikipedia before any next-token loss could be defined,"**Self-attention** lets each position attend to every other position, easing long-range dependencies compared with strict left-to-right recurrence alone","1,2,4",6a03f0e8ed393893be626aa7,1,markdown,"**A**, **B**, and **D** are textbook-accurate. **C** is false: next-token LM does not use per-token human labels for the main objective."
+subjective,markdown,"## Scenario
+
+You volunteer for your college **Eco-Council**. The council president wants to try an LLM to polish outreach emails, but they are worried about **cost** and about hitting **context limits** on cheaper models. They asked you for a **small sanity-check script** they can run before any campaign goes live.
+
+---
+
+## Your task
+
+Create **one** Python file named `eco_council_llm_sanity.py` that does **all** of the following when run with `python eco_council_llm_sanity.py`:
+
+### Part A — Build a realistic prompt string (no API calls yet)
+
+Inside the file, define **three** Python strings and then concatenate them (with clear separators like newlines) into one variable called `full_prompt`:
+
+1. **`safety_block`** — Between **40 and 70 words**, instructing the model to stay factual, avoid inventing sponsors, and refuse if information is missing.  
+2. **`email_body`** — Between **100 and 140 words**, a draft thank-you email to a fictional sponsor (`GreenLeaf Motors`) for funding a tree-planting drive. Mention date, venue city, and student volunteers generically (you may invent plausible details).  
+3. **`follow_up_instruction`** — **Exactly one sentence** asking the model to suggest a subject line under 60 characters.
+
+Concatenate into **`full_prompt`** (order: safety → email → follow-up).
+
+### Part B — Exact prompt token count with `tiktoken`
+
+- Import `tiktoken`.  
+- Create an encoder with `tiktoken.encoding_for_model(""gpt-4"")`. If your environment raises an error, fall back to `tiktoken.get_encoding(""cl100k_base"")` and print a one-line note that you used the fallback.  
+- Print: `Prompt tokens (tiktoken): <integer>` using `len(encoder.encode(full_prompt))`.
+
+### Part C — Completion budget estimate (rule of thumb)
+
+Assume the model’s answer may be as long as **220 words** of completion text.
+
+Use the common English heuristic **≈ 1 token per 0.75 words** (i.e. estimated completion tokens ≈ words ÷ 0.75). Compute and print:
+
+`Estimated completion tokens (rule of thumb): <value>`  
+
+Include a short **comment** next to your calculation showing the formula you applied.
+
+### Part D — Context window check
+
+Assume a **4096-token** context limit (a realistic budget for many small or legacy chat models). Set `CONTEXT_LIMIT = 4096`.
+
+Let `prompt_tokens` be the integer from Part B. Let `completion_tokens_est` be your estimate from Part C, **rounded up** to the nearest integer for the fit test.
+
+Print **both** of the following on separate lines:
+
+- `Total tokens needed (rounded-up completion): <prompt_tokens + completion_tokens_est>`  
+- `Fits in 4096 window? <True or False>` — `True` only if the sum is **≤ 4096**.
+
+### Part E — Concept recall (printed, not from API)
+
+Print a short paragraph (**80–120 words**, plain text) in your own words that explains **why the same prompt can yield different answers** on repeated API calls, linking the behaviour to **probabilistic next-token** generation. Paraphrase; do not copy text from any single published tutorial verbatim.
+
+### Part F — Optional: temperature and how “creative” the reply feels
+
+**Task**
+
+You will **compare how creative or varied** the model’s wording is when the **same user message** is sent twice at **different temperatures**. The prompt is intentionally a bit loose (**“Describe how is the cloud today??”**) so you can see whether the answers differ in imagination or tone, not only in facts.
+
+**Instructions**
+
+1. **If** `OPENAI_API_KEY` is set in the environment, use the official **`openai`** Python package: `from openai import OpenAI`, then create a client (read the key from the environment; **never** embed a key as a string literal in code you submit).
+2. Make **two** separate API calls to a **chat completions** endpoint. Each call must use **exactly** this `messages` argument (verbatim user text, including punctuation):
+
+   `messages=[{""role"": ""user"", ""content"": ""Describe how is the cloud today??""}]`
+
+3. Use the **same model id** for both calls, for example **`gpt-4o-mini`** (or another small model your key supports, but keep it **identical** across the two calls).
+4. First call: **`temperature=0.2`**. Second call: **`temperature=0.9`**. Print each assistant reply with a clear header, e.g. `--- temperature=0.2 ---` and `--- temperature=0.9 ---`.
+5. For the **default OpenAI** path: if `OPENAI_API_KEY` is **not** set, print exactly:  
+   `Skipping live temperature demo — set OPENAI_API_KEY to enable.`  
+   If you implement **another** provider from the Note and that provider’s API key is **not** set, print a **one-line** skip that names the missing environment variable (do not call the API without a key).
+
+**Note (Part F)**
+
+- **API keys:** Use environment variables (or a local `.env` that you do **not** commit). Do not paste real keys into source or into the LMS.
+- **Other providers:** You may use **Google Gemini**, **OpenRouter**, **xAI Grok**, **Groq**, or another chat LLM instead of OpenAI, as long as you send the **same user string** as above, use a **`messages`-style** chat structure with a **user** role (or the provider’s equivalent), run once at **0.2** and once at **0.9**, and print both replies with the same style of labels.
+- **Document the SDK call:** In a short comment next to your Part F code, name the **exact function or method** you use to obtain the model text (for example `client.chat.completions.create`, `GenerativeModel.generate_content`, or the Groq client method you call) and which **environment variable** holds the API key.
+
+---
+
+## Example output shape (illustrative — your numbers will differ)
+
+Your script’s console output should resemble (values not literal requirements except labels):
+
+```text
+Prompt tokens (tiktoken): 312
+Estimated completion tokens (rule of thumb): 294
+Total tokens needed (rounded-up completion): 606
+Fits in 4096 window? True
+Skipping live temperature demo — set OPENAI_API_KEY to enable.
+<your 80–120 word paragraph here>
+```
+
+If `OPENAI_API_KEY` is set, the skip line is **replaced** by two blocks such as `--- temperature=0.2 ---` then the model text, then `--- temperature=0.9 ---` then the model text (your exact wording will differ).
+
+---
+
+## Submission instructions (**case c** — single file)
+
+- Code **all** parts in **Visual Studio Code** in a **single** file named `eco_council_llm_sanity.py`.  
+- Run the file locally and confirm it prints without errors (`python eco_council_llm_sanity.py`).  
+- **Submit** the complete file in the **code editor / answer box** in the LMS (paste the full source code).
+
+**Dependencies:** You may assume `pip install tiktoken openai` is allowed for the default Part F path. Do **not** commit real API keys; use `OPENAI_API_KEY` from the environment (or the env var required by your chosen alternative API).
+
+---",,,,,,,,,,,,,6a03f0e8ed393893be626aa7,1,markdown,"## Answer explanation (for Assess platform)
+
+**Ideal walkthrough**
+
+1. **Part A** checks that learners can assemble a **multi-section prompt** (policy block + draft content + a precise downstream instruction), mirroring real integration patterns.  
+2. **Part B** validates correct use of **`tiktoken`**: `encode` then `len` for exact **prompt-token** measurement.  
+3. **Part C** applies the given **0.75 words per token** heuristic in the completion-budget direction.  
+4. **Part D** tests the definition that **prompt + completion** must fit one **context window**; `4096` is a concrete threshold typical of smaller commercial models.  
+5. **Part E** probes understanding of **sampling / stochastic decoding** without requiring network access.  
+6. **Part F** is optional; when enabled, it compares **creative variation** on the same playful user prompt at **temperature 0.2** vs **0.9** using a real chat API call (default: OpenAI `chat.completions.create`; other vendors allowed per the note under Part F). Learners should comment which SDK **function/method** they invoked.
+
+**Alternative approaches**
+
+- If `encoding_for_model(""gpt-4"")` fails, document use of `cl100k_base` or another encoding consistent with your target API.
+
+**Reference solution sketch (evaluators only — students may paraphrase structure)**
+
+```python
+import os
+import tiktoken
+from openai import OpenAI
+
+safety_block = """"""...""""""  # 40-70 words
+email_body = """"""...""""""    # 100-140 words
+follow_up_instruction = ""One sentence here.""
+full_prompt = ""\n\n"".join([safety_block, email_body, follow_up_instruction])
+
+try:
+    enc = tiktoken.encoding_for_model(""gpt-4"")
+except Exception:
+    enc = tiktoken.get_encoding(""cl100k_base"")
+    print(""Note: using cl100k_base fallback encoding."")
+
+prompt_tokens = len(enc.encode(full_prompt))
+print(f""Prompt tokens (tiktoken): {prompt_tokens}"")
+
+completion_words = 220
+completion_tokens_est = int((completion_words / 0.75) + 0.999)  # round up
+print(f""Estimated completion tokens (rule of thumb): {completion_tokens_est}"")
+
+CONTEXT_LIMIT = 4096
+total = prompt_tokens + completion_tokens_est
+print(f""Total tokens needed (rounded-up completion): {total}"")
+print(f""Fits in 4096 window? {total <= CONTEXT_LIMIT}"")
+
+print(
+    ""Your paragraph here explaining probabilistic next-token sampling ""
+    ""and why outputs can vary between runs.""
+)
+
+# Part F: e.g. client.chat.completions.create(...) ×2 with temperature 0.2 and 0.9
+CREATIVE_PROMPT = ""Describe how is the cloud today??""
+msgs = [{""role"": ""user"", ""content"": CREATIVE_PROMPT}]
+
+if os.environ.get(""OPENAI_API_KEY""):
+    client = OpenAI()
+    for temp in (0.2, 0.9):
+        r = client.chat.completions.create(
+            model=""gpt-4o-mini"",
+            messages=msgs,
+            temperature=temp,
+        )
+        print(f""--- temperature={temp} ---"")
+        print(r.choices[0].message.content)
+else:
+    print(""Skipping live temperature demo — set OPENAI_API_KEY to enable."")
+```
+
+---"
