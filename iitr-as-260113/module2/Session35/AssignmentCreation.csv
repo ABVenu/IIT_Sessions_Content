@@ -1,0 +1,192 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Neha is building a campus helpdesk chatbot. A student asks, ""What is the temperature in Chennai right now?"" The model's training data ends months ago, so it cannot know today's weather. What capability should Neha add so the assistant can answer with live data?",,,,,,2,,Increase the model's context window so it remembers more training examples,Register a weather API tool that the agent runtime can call and return JSON results to the model,Ask the student to paste the weather website HTML into the chat,Switch to a larger model so it guesses today's temperature from older patterns,,,,6a058d41848e0cc58288b8fd,0,markdown,"Live facts such as current weather require an **external tool** (here, a weather API). The model chooses the tool and arguments; the **application runtime** performs the HTTP call and passes structured results back for a natural-language reply.
+
+- A) Incorrect — a larger context window does not add real-time data beyond the training cutoff.
+- C) Incorrect — manual HTML pasting is not an agentic tool integration pattern.
+- D) Incorrect — guessing from stale patterns is unreliable and not how production agents fetch live data."
+mcsc,markdown,"In a function-calling setup, a user asks, ""Show in-stock mobiles under ₹50,000."" The model outputs a structured choice to call `search_product` with arguments. Who actually runs the Python function against SQLite?",,,,,,2,,The LLM executes the database query inside the model weights,The agent runtime (your Python application) validates arguments and executes the tool,SQLite pushes rows directly into the model's hidden state,The browser frontend opens the `.db` file without backend code,,,,6a058d41848e0cc58288b8fd,0,markdown,"In **function calling**, the model only emits **which tool** to call and **with what arguments**. The **agent runtime** validates input and performs the real work (HTTP, database, etc.).
+
+- A) Incorrect — the model does not execute application code or query databases directly.
+- C) Incorrect — databases are reached through application-layer drivers and ORM code.
+- D) Incorrect — tool execution belongs in the backend application, not the end-user browser opening raw files."
+mcsc,markdown,"A flight-search tool sends `{""source"": ""Delhi"", ""destination"": ""Mumbai"", ""date"": ""2026-06-10""}` to a booking API. The response body uses the same key–value and nested-object style as a Python `dict`. Which format is this?",,,,,,3,,CSV,XML only,JSON,Plain binary protobuf with no text representation,,,,6a058d41848e0cc58288b8fd,0,markdown,"**JSON** is the common text wire format for API requests and responses — key–value pairs, arrays, and nested objects that map cleanly to Python dictionaries.
+
+- A) Incorrect — CSV is tabular and does not natively express nested objects the way shown.
+- B) Incorrect — XML uses tags, not the brace-and-key style described.
+- D) Incorrect — the scenario describes human-readable structured text, not opaque binary-only payloads."
+mcsc,markdown,"An e-commerce platform splits order, inventory, payment, and notification logic into separate services that talk over HTTP. When an AI agent calls many small capabilities (weather, product search, calendar) instead of one monolithic program, which architectural idea does that mirror?",,,,,,1,,Microservices — many focused services (or tools) composed through APIs,Single-tier desktop app with no network boundary,Replacing all APIs with manual SQL strings inside the LLM,Storing every tool response only in browser localStorage with no server,,,,6a058d41848e0cc58288b8fd,0,markdown,"Large platforms use **microservices** — small services communicating via APIs. Agents register multiple **tools** the same way: coordinated capabilities instead of one giant program.
+
+- B) Incorrect — agents integrate over network/API boundaries, not a single offline desktop tier.
+- C) Incorrect — tools are invoked by application code; the LLM does not replace drivers or ORM with raw SQL inside the model.
+- D) Incorrect — tool results flow through the application/agent loop, not only client-side storage."
+mcsc,markdown,"Ravi's `search_product` tool receives `{""category"": 1234, ""max_price"": 50000}` where `category` must be a non-empty string. He unpacks with `ProductSearchInput(**input_data)` inside `try/except ValidationError`. What should happen before any database query runs?",,,,,,2,,"SQLAlchemy coerces `1234` to the string `""1234""` and runs the query",Pydantic rejects the input; the handler returns a structured error payload such as `success: False` with validation details,SQLite raises `OperationalError` because integers cannot appear in WHERE clauses,The LLM automatically rewrites the argument dict to valid types,,,,6a058d41848e0cc58288b8fd,0.5,markdown,"**Pydantic** validates tool arguments at the application boundary. Wrong types (integer for a required string field) raise **ValidationError**, which you catch and return as structured failure — **before** expensive or incorrect external calls.
+
+- A) Incorrect — Pydantic does not silently coerce an integer into a valid non-empty string category in this validation setup.
+- C) Incorrect — the failure is input validation, not an SQLite operational error on the query itself.
+- D) Incorrect — argument correction is the application's validation layer, not automatic model-side rewriting at execution time."
+mcsc,markdown,"A teammate says, ""We already installed SQLAlchemy, so we do not need SQLite or PostgreSQL anymore."" What is the accurate correction?",,,,,,2,,SQLAlchemy is a database server that replaces MySQL,SQLAlchemy is a Python toolkit (Core/ORM) that talks to a database through drivers; it is not the database engine itself,"SQLAlchemy only works with JSON files, not relational engines",SQLAlchemy is the same thing as Pydantic for HTTP response bodies only,,,,6a058d41848e0cc58288b8fd,0.5,markdown,"**SQLAlchemy** provides **Core** and **ORM** layers to connect and query engines such as SQLite, PostgreSQL, or MySQL via **drivers**. It does not replace the database product.
+
+- A) Incorrect — SQLAlchemy is not a standalone database server.
+- C) Incorrect — SQLAlchemy targets relational engines through connection URLs and drivers.
+- D) Incorrect — Pydantic validates structured data; SQLAlchemy handles persistence and querying."
+mcmc,markdown,"An agent registry lists `search_product`, `get_weather`, and `send_email`. A user asks for Bangalore weather. **Which statements correctly describe the function-calling pattern?** *(Select all that apply)*",,,,,,,,The model may answer directly if it already has sufficient knowledge and no live data is required,"If a tool is needed, the model selects a tool name and generates structured arguments such as city and time window",The model opens outbound HTTPS connections to Make My Trip or the weather provider without application code,"The application validates arguments, executes the chosen Python function or API request, and returns results (often JSON-like) to the model",Clear tool descriptions help routing more than opaque names like `f1` and `f2`,,"1, 2, 4, 5",6a058d41848e0cc58288b8fd,0.5,markdown,"- **A — Correct:** Step 2–3 of the tool flow: answer from existing knowledge when no external data is required.
+- **B — Correct:** When external data is needed, the model emits structured tool choice and parameters.
+- **C — Incorrect:** The **runtime** performs real HTTP/database work; the model does not dial external systems directly.
+- **D — Correct:** Validate → execute → feed results back for the final user-facing answer.
+- **E — Correct:** Metadata and descriptions guide correct tool selection."
+mcmc,markdown,"While wiring tools, **which HTTP method and status-code pairings are appropriate for the described situation?** *(Select all that apply)*",,,,,,,,**GET** — fetch current order status for order ID 123 without changing server data,**POST** — create a new support ticket after the user submits a form body,**404** — the requested product ID does not exist at the URL the client called,**201** — the client sent malformed JSON missing a required field,**401** — the API key or auth token is missing or invalid for a protected booking endpoint,,"1, 2, 3, 5",6a058d41848e0cc58288b8fd,0.5,markdown,"- **A — Correct:** **GET** reads resources without mutating state.
+- **B — Correct:** **POST** commonly creates a new resource (ticket).
+- **C — Correct:** **404** means the resource or route was not found.
+- **D — Incorrect:** missing/invalid client payload is typically **400 Bad Request**; **201 Created** signals successful resource creation.
+- **E — Correct:** **401** indicates authentication failure (missing or bad credentials)."
+mcmc,markdown,"In the `agent_tool_call` style demo, `search_product` filters mobiles by `category`, `max_price`, and `in_stock` after Pydantic validation. **Which statements about that stack are correct?** *(Select all that apply)*",,,,,,,,`ProductSearchInput` can default `in_stock` to `True` when the caller omits that field,`select(Product).where(...)` expresses an ORM read query without hand-written SQL strings in application code,"`session.scalars(query).all()` returns a list of `Product` ORM instances, not automatically pretty-printed JSON for the LLM",Calling `insert_data()` on every run without clearing the table can duplicate seed rows in SQLite,Passing `max_price: 0` should pass validation because zero is a valid integer,"`create_engine(""sqlite:///e-commerce.db"")` opens a connection to a file-backed SQLite database in the project context","1, 2, 3, 4, 6",6a058d41848e0cc58288b8fd,1,markdown,"- **A — Correct:** Optional `in_stock` defaults to **True** when omitted.
+- **B — Correct:** ORM `select` + `where` builds the query from mapped attributes.
+- **C — Correct:** Results are **ORM objects**; you shape dicts/JSON for the model if needed.
+- **D — Correct:** Re-seeding without deduplication can insert duplicates — noted in the live build.
+- **E — Incorrect:** `max_price` must be **greater than zero** (`gt=0`); zero fails validation.
+- **F — Correct:** The SQLite URL targets a local `e-commerce.db` file via the engine."
+mcmc,markdown,A product assistant traces one user question end to end. **Which steps belong in the correct order and responsibility split?** *(Select all that apply)*,,,,,,,,The user query enters the agent; the LLM decides whether to answer from memory or request a tool,Structured tool arguments are validated in Python (for example with Pydantic) before external execution,SQLAlchemy ORM runs the database read; rows return to Python for optional reshaping before the model's final reply,The LLM writes directly to SQLite tables to avoid latency from Python,External SaaS tools are still reached through API-style requests whose bodies and responses are commonly JSON,"Production integrations for booking, email, or payments should include authentication such as API keys or OAuth","1, 2, 3, 5, 6",6a058d41848e0cc58288b8fd,1,markdown,"- **A — Correct:** User in → routing decision (direct answer vs tool).
+- **B — Correct:** Application-side validation guards the tool boundary.
+- **C — Correct:** ORM executes the read; Python holds results until the model summarizes.
+- **D — Incorrect:** Persistence is executed by **application code**, not the LLM writing to the DB.
+- **E — Correct:** Third-party tools follow the same API + JSON pattern as internal ones at the boundary.
+- **F — Correct:** Real tools require **auth**; demos may skip it, production must not."
+subjective,markdown,"You are on the backend team at **GadgetMart**, an online electronics store. The AI shopping assistant must call a registered `search_product` tool instead of inventing prices from memory. Implement the tool in a single file, `gadgetmart_search_tool.py`, using **Pydantic** and **SQLAlchemy** (`pip install pydantic sqlalchemy` in your virtual environment).
+
+### Your Task
+
+**Task 1 — Catalog setup**  
+Define the SQLAlchemy `Base` and `Product` ORM (`products`: `id`, `name`, `category`, `price`, `in_stock`). Connect to `sqlite:///gadgetmart.db`, create tables, and add a `SessionLocal` factory. Implement `insert_data()` to seed the six mobiles below **only when the table is empty** (no duplicate rows on re-run):
+
+| name | category | price | in_stock |
+|------|----------|-------|----------|
+| iPhone 15 | mobile | 79900 | True |
+| Samsung Galaxy S24 | mobile | 74999 | True |
+| OnePlus 12R | mobile | 42999 | True |
+| Google Pixel 8 | mobile | 54999 | False |
+| Redmi Note 13 | mobile | 18999 | True |
+| Motorola Edge 40 | mobile | 29999 | True |
+
+**Task 2 — Validated search tool**  
+Define `ProductSearchInput` (`category`: required non-empty `str`; `max_price`: required `int` > 0; `in_stock`: optional `bool`, default `True`). Implement `search_product(input_data: dict)` to validate with `try/except ValidationError`, return `{""success"": False, ""error"": ""Invalid input provided"", ""details"": err.errors()}` on failure **without** querying the database, and on success run `select(Product).where(...)` on `category`, `price <= max_price`, and `in_stock`, returning `{""success"": True, ""products"": [{""name"": p.name, ""price"": p.price}, ...]}`.
+
+**Task 3 — Simulated agent run**  
+Implement `agent_flow()` with one hard-coded call to `search_product` using `category: ""mobile""`, `max_price: 50000`, `in_stock: True`. Print each match as `Name — ₹<price>`; on failure print `Search failed:` plus the `error` string. In `if __name__ == ""__main__"":`, call `insert_data()` then `agent_flow()`.
+
+### Expected Output (fresh empty database)
+
+```
+OnePlus 12R — ₹42999
+Redmi Note 13 — ₹18999
+Motorola Edge 40 — ₹29999
+```
+
+Line order may follow database order; each name and price must appear once. Invalid input such as `{""category"": 1234, ""max_price"": 50000}` must yield `success: False` without a database query.
+
+---
+
+### Submission Instructions
+
+- Code all tasks in VS Code in a single file called `gadgetmart_search_tool.py`
+- Run the code and verify the output matches the expected result
+- Then submit the code in the code editor / answer box in the LMS",,,,,,,,,,,,,,,6a058d41848e0cc58288b8fd,0.5,markdown,"**Ideal Solution:**
+
+```python
+from pydantic import BaseModel, Field, ValidationError
+from sqlalchemy import create_engine, select, func
+from sqlalchemy.orm import declarative_base, Mapped, mapped_column, sessionmaker
+from typing import Optional
+
+Base = declarative_base()
+
+
+class Product(Base):
+    __tablename__ = ""products""
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column()
+    category: Mapped[str] = mapped_column()
+    price: Mapped[int] = mapped_column()
+    in_stock: Mapped[bool] = mapped_column()
+
+
+engine = create_engine(""sqlite:///gadgetmart.db"", echo=False)
+Base.metadata.create_all(engine)
+SessionLocal = sessionmaker(bind=engine)
+
+SAMPLE_PRODUCTS = [
+    {""name"": ""iPhone 15"", ""category"": ""mobile"", ""price"": 79900, ""in_stock"": True},
+    {""name"": ""Samsung Galaxy S24"", ""category"": ""mobile"", ""price"": 74999, ""in_stock"": True},
+    {""name"": ""OnePlus 12R"", ""category"": ""mobile"", ""price"": 42999, ""in_stock"": True},
+    {""name"": ""Google Pixel 8"", ""category"": ""mobile"", ""price"": 54999, ""in_stock"": False},
+    {""name"": ""Redmi Note 13"", ""category"": ""mobile"", ""price"": 18999, ""in_stock"": True},
+    {""name"": ""Motorola Edge 40"", ""category"": ""mobile"", ""price"": 29999, ""in_stock"": True},
+]
+
+
+class ProductSearchInput(BaseModel):
+    category: str = Field(..., min_length=1)
+    max_price: int = Field(..., gt=0)
+    in_stock: Optional[bool] = True
+
+
+def insert_data() -> None:
+    with SessionLocal() as session:
+        if session.scalar(select(func.count()).select_from(Product)) > 0:
+            return
+        session.add_all([Product(**row) for row in SAMPLE_PRODUCTS])
+        session.commit()
+
+
+def search_product(input_data: dict):
+    try:
+        validated = ProductSearchInput(**input_data)
+    except ValidationError as err:
+        return {
+            ""success"": False,
+            ""error"": ""Invalid input provided"",
+            ""details"": err.errors(),
+        }
+
+    with SessionLocal() as session:
+        query = select(Product).where(
+            Product.category == validated.category,
+            Product.price <= validated.max_price,
+            Product.in_stock == validated.in_stock,
+        )
+        products = session.scalars(query).all()
+        return {
+            ""success"": True,
+            ""products"": [{""name"": p.name, ""price"": p.price} for p in products],
+        }
+
+
+def agent_flow() -> None:
+    tool_calls = [
+        {
+            ""tool_name"": ""search_product_tool"",
+            ""arguments"": {
+                ""category"": ""mobile"",
+                ""max_price"": 50000,
+                ""in_stock"": True,
+            },
+        }
+    ]
+
+    for tool_call in tool_calls:
+        result = search_product(tool_call[""arguments""])
+        if result.get(""success""):
+            for item in result[""products""]:
+                print(f""{item['name']} — ₹{item['price']}"")
+        else:
+            print(""Search failed:"", result.get(""error""))
+
+
+if __name__ == ""__main__"":
+    insert_data()
+    agent_flow()
+```
+
+**Walkthrough:** Task 1 maps `Product` and seeds only when the table is empty. Task 2 validates before any read and filters in-stock mobiles at or under the price cap (three matches at ₹50,000). Task 3 hard-codes one tool call and prints customer-friendly lines; production code would fill `tool_calls` from LLM routing.
+
+**Alternative approach:** `session.query(Product).filter(...)` is acceptable on older SQLAlchemy styles if validation, filters, and printed output match the specification."

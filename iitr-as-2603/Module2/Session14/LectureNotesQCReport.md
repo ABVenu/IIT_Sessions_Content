@@ -41,3 +41,35 @@ Multiple real-life analogies are used throughout — cooking/vegetables (data pr
 
 ### Result
 All criteria met at expected threshold. **No further iteration required.**
+
+---
+
+## Iteration 2 — Lecture Notes Released.md (post-session alignment)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+
+### Notes
+
+**Content Coverage (5/5):**
+Released notes match the live coverage report: three in-session sample DataFrames (`df_car`, `df_student`, `df_ecom`), domain fixes before imputation, mean/median/mode imputation with limits of mean fill and regression-style salary imputation as context, duplicate handling, ordinal vs nominal encoding with `LabelEncoder` and `pd.get_dummies` on brand/fuel, min–max scaling with formula and `MinMaxScaler`, `StandardScaler` named as an alternative, train–test split with fit-on-train/transform-on-test, and before/after inspection without a formal modelling benchmark. All seven session images retained.
+
+**Creativity (5/5):**
+Cooking/vegetables, doctor check-up, used-car marketplace, school register, restaurant checkboxes, and exam-paper leakage analogies remain clear for a non-technical audience.
+
+**Structural Adherence (5/5):**
+Title-first layout, short paragraphs, integrated definitions and doubts, complete commented code blocks with “How the code works” lists, Key Takeaways, and a quick-reference table are all present.
+
+**No Logical Mistakes (True):**
+Imputation choices, encoding guidance, scaling scope (numeric features only), and leakage prevention sequence align with what was taught.
+
+**No Presentation Mistakes (True):**
+Heading hierarchy, tables, fenced code, and image links are consistent; removed material was limited to steps not delivered live (for example row filtering by age band, text normalisation with `str.lower`, and a full `StandardScaler` walkthrough).
+
+### Result
+All criteria met at expected threshold for **Lecture Notes Released.md**. **No further iteration required.**

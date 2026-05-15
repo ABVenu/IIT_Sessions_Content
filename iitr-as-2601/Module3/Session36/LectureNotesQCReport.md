@@ -99,3 +99,37 @@ The lecture notes meet all expected QC criteria. No further iterations required.
 | **No Presentation Mistakes** | True | All images retained with correct S3 URLs; code blocks complete; headings consistent |
 
 ### Final Status: APPROVED ✓
+
+---
+
+## QC Iteration 4 — Lecture Notes Released (align with Live Topic Coverage + transcript)
+
+**Date:** 2026-05-15
+
+**Evaluator:** Automated alignment + QC pass
+
+**Source:** `Align_Notes_Against_Covered_LOs_from_existing_LectureNotes.md` — trim non-taught material, add taught extras, retain images.
+
+### Changes vs `Lecture Notes.md`
+
+| Change | Reason |
+|--------|--------|
+| New subsection **Behind the scenes: apps, hidden system messages, and institute context** | Taught in session (institute website/bot + user + system + context; ChatGPT as app vs LLM; RAG deferred) |
+| CoT “Why it improves” — removed uncited 40–50% statistic; added Prompting Guide reference | Statistic not stated in transcript; promptingguide.ai mentioned in class |
+| Key Takeaways — removed specific **LangChain / CrewAI** names | Not referenced in session transcript |
+| Key Takeaways + CoT bullets — softened “up to 50%” style claims | Align wording with what was taught |
+| Quick Reference — removed **One-Shot Prompting** row | Term not taught in this session |
+
+### Criteria Ratings
+
+| Criteria | Rating (1–5) | Notes |
+|----------|--------------|-------|
+| **Content Coverage** | 5 | All rows in `Live Topic Coverage.md` reflected; added institute-context / RAG-preview content from session |
+| **Creativity** | 5 | Same analogies, activities, and examples as source notes; one new subsection matches course voice (Official / Simple / Real pattern) |
+| **Structural Adherence** | 5 | Matches `LectureNotesPrompt4.md`: title, context, headings, activities, Key Takeaways, terminology table; new subsection uses ≤3-sentence paragraphs |
+| **No Logical Mistakes** | True | CoT and forward references aligned with taught content; no incorrect framework claims |
+| **No Presentation Mistakes** | True | All original image URLs preserved; markdown structure intact |
+
+### Final Status: APPROVED ✓
+
+`Lecture Notes Released.md` is ready for student release.

@@ -1,0 +1,169 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A city transport analytics team opens a CSV of daily bus trips. They want a quick first look at the table without loading every row into the notebook output. Which pandas call is the most appropriate first step?,,,,,,2,,`df.describe()`,`df.head()`,`df.drop_duplicates()`,`df.fillna(0)`,,,6a0584a9e330175eb909e917,0,markdown,"`df.head()` shows the first five rows so you can spot obvious formatting issues, missing cells, and wrong types before deeper analysis. `describe()` summarizes numeric columns only and skips a visual row-by-row check. `drop_duplicates()` and `fillna()` change the data; inspection should come first."
+mcsc,markdown,"A clinic spreadsheet lists patient ages. One row shows `-3` years, which cannot be real. The team wants to mark that value as missing so a later imputation step can replace it. Which approach matches that intent?",,,,,,2,,`df['age'] = df['age'].abs()`,"`df['age'] = df['age'].replace(-3, np.nan)`",`df['age'] = df['age'].fillna(df['age'].mean())`,`df = df.drop_duplicates()`,,,6a0584a9e330175eb909e917,0,markdown,"An impossible age should become missing (`NaN`) for imputation, not stay as a valid number. `replace(-3, np.nan)` does that. `abs()` would turn `-3` into `3`, which is still not trustworthy domain data. `fillna(mean)` only fills existing blanks; it does not fix a bad recorded value. `drop_duplicates()` removes repeated rows, not invalid entries."
+mcsc,markdown,"An online store export shows the same order line copied twice with identical values in every column. Before modelling repeat purchase behaviour, what should the team check first?",,,,,,1,,How many rows are exact duplicates using `df.duplicated().sum()`,The column-wise missing-value percentage using `df.isnull().mean() * 100`,Whether numeric columns need min–max scaling,Whether categorical columns need one-hot encoding,,,6a0584a9e330175eb909e917,0,markdown,"Identical repeated rows are a duplicate-row problem. `duplicated().sum()` counts how many rows match an earlier row exactly. Missing-value percentages, scaling, and encoding matter later; they do not tell you whether the same order was stored twice."
+mcsc,markdown,"A used-car listing file has a few negative prices caused by a sign error in the source system. Price must stay non-negative, and the magnitude is still useful. What is the most direct fix?",,,,,,2,,`df['price'] = df['price'].fillna(df['price'].median())`,`df['price'] = df['price'].abs()`,"`df['price'] = df['price'].replace(-1, np.nan)`","`df = pd.get_dummies(df, columns=['price'])`",,,6a0584a9e330175eb909e917,0,markdown,"For a sign error on a price column, taking the absolute value keeps the amount while removing the negative sign. Median fill addresses missing values, not wrong signs. Replacing `-1` with `NaN` only handles that one value and drops usable magnitude information. One-hot encoding is for categorical text columns, not numeric prices."
+mcsc,markdown,"A hiring dataset has a `seniority_band` column with values `Junior`, `Mid`, and `Senior` in a clear career order. The team needs a single numeric feature for a tree-based model. Which encoding choice is the best fit?",,,,,,2,,"One-hot encoding with `pd.get_dummies(..., drop_first=True)`",Label encoding with `LabelEncoder().fit_transform(...)`,Min–max scaling on the original text labels,Replacing every category with the column mean,,,6a0584a9e330175eb909e917,0.5,markdown,"`seniority_band` is ordinal: the categories have a natural order. Label encoding maps ordered categories to integers in one column. One-hot encoding fits nominal categories without order, such as fuel type or brand. Min–max scaling applies to numbers, not raw text labels. Mean replacement is for numeric imputation, not category encoding."
+mcsc,markdown,"After splitting features and labels, a data scientist fits `MinMaxScaler` on the full dataset and then splits into train and test sets. What is the main problem with that workflow?",,,,,,2,,`MinMaxScaler` cannot scale more than two numeric columns at once,"Test-set statistics influenced the scaler fit, which can make evaluation look better than it should",The label column must be scaled before `train_test_split`,`MinMaxScaler` only works after one-hot encoding every column,,,6a0584a9e330175eb909e917,0.5,markdown,Fitting a scaler on data that includes the test portion lets test-set min/max (or mean/std) leak into preprocessing. That is data leakage and can inflate test performance. `MinMaxScaler` can scale many numeric columns. Labels are usually not scaled as features. Scaling is not limited to running only after one-hot encoding.
+mcmc,markdown,"A delivery-time dataset has missing values in `distance_km` (numeric, mild outliers) and `vehicle_type` (text categories). Which imputation choices are reasonable for these columns? (Select **all** that apply)",,,,,,,,Fill missing `distance_km` with the column median,Fill missing `distance_km` with the column mean,Fill missing `vehicle_type` with the most frequent category from `vehicle_type`,Fill missing `vehicle_type` with the median of `distance_km`,Fill missing `distance_km` with `0` for every blank without checking the column distribution,"1, 2, 3",6a0584a9e330175eb909e917,0.5,markdown,"- **A — Correct:** Median imputation is a standard choice for numeric columns, especially when outliers are present.
+- **B — Correct:** Mean imputation is also valid for numeric columns when outliers are not dominating the column.
+- **C — Correct:** Mode (most frequent category) imputation is the usual approach for categorical text columns.
+- **D — Incorrect:** A distance median does not represent a vehicle category; the substitute must come from the same column’s valid values.
+- **E — Incorrect:** Filling every blank with `0` without context can invent unrealistic distances and distort the feature."
+mcmc,markdown,"Before changing a customer-support ticket dataset, which inspection steps help surface common data-quality problems? (Select **all** that apply)",,,,,,,,`df.shape` to see row and column counts,`df.info()` to check data types and non-null counts,`df.isnull().sum()` to count missing values per column,`df.describe()` to summarize numeric columns,Fitting `MinMaxScaler` on the full table before any missing-value handling,"1, 2, 3, 4",6a0584a9e330175eb909e917,0.5,markdown,"- **A — Correct:** Shape gives a quick size check before and after cleaning.
+- **B — Correct:** `info()` reveals dtypes and how many non-null values each column has.
+- **C — Correct:** Per-column null counts show where imputation or row decisions are needed.
+- **D — Correct:** `describe()` highlights numeric ranges that may expose outliers or scale differences.
+- **E — Incorrect:** Fitting a scaler on the full raw table before cleaning and before a proper train/test split risks leakage and skips foundational inspection."
+mcmc,markdown,"A team is preparing a tabular dataset for supervised learning. They will split features and labels, then clean and encode features without leaking test information. Which statements describe a sound preprocessing order? (Select **all** that apply)",,,,,,,,Fix domain-invalid values (such as negative prices) before systematic imputation,Impute missing feature values before removing duplicate rows,Remove duplicate rows before fitting encoders or scalers on the training split,"Learn one-hot column mappings from the training split only, then apply the same mapping to validation/test data",Fit `MinMaxScaler` on the combined training and test feature matrices so both sets share identical min and max values,"1, 3, 4",6a0584a9e330175eb909e917,1,markdown,"- **A — Correct:** Impossible values should be corrected or marked missing before you impute or model.
+- **B — Incorrect:** Dropping duplicate rows first avoids wasting imputation work on rows that will be removed anyway.
+- **C — Correct:** De-duplication is an early hygiene step before learning transformations from the training split.
+- **D — Correct:** Encoders and scalers should be fit on training data only, then applied to other splits with the learned mapping.
+- **E — Incorrect:** Fitting on train plus test leaks test-set information into preprocessing and makes metrics overly optimistic."
+mcmc,markdown,"A car resale dataset includes `brand` (nominal), `fuel` (nominal), `kilometers_driven` (numeric), and `price` (numeric target). The team has already handled missing values and duplicate rows. Which next-step decisions are appropriate? (Select **all** that apply)",,,,,,,,Apply one-hot encoding to `brand` and `fuel` because they are unordered categories,Apply label encoding to `brand` because it creates a single compact numeric column for every tree model,Apply min–max scaling to numeric input features such as `kilometers_driven` when large numeric ranges could dominate learning,Scale the `price` target with `MinMaxScaler` before splitting into train and test,Compare row counts and remaining missing values after cleaning to verify the pipeline’s impact,"1, 3, 5",6a0584a9e330175eb909e917,1,markdown,"- **A — Correct:** Brand and fuel are nominal categories; one-hot encoding avoids inventing a false order between labels.
+- **B — Incorrect:** Label encoding on nominal categories implies ranking (for example, Brand A < Brand B), which is usually misleading.
+- **C — Correct:** Scaling numeric inputs can keep large-magnitude columns from overpowering smaller-scale features during training.
+- **D — Incorrect:** The target label is not treated like an input feature for routine feature scaling in this workflow.
+- **E — Correct:** Before/after checks on rows and missing values confirm whether cleaning steps actually improved data quality."
+subjective,markdown,"## Clean a Messy Used-Bike Listings Table
+
+**Scenario:**
+
+RideMetrics, a used two-wheeler marketplace, exported a small listing table for a pricing pilot. Several rows have sign errors, blanks, repeated listings, and text categories that models cannot use directly. Your job is to load the table, inspect it, apply the cleaning steps below, and print a short before-and-after summary.
+
+---
+
+### Dataset
+
+Run this code once at the top of your solution to create `ride_bikes.csv` in the same folder as your script:
+
+```python
+import pandas as pd
+import numpy as np
+
+data = {
+    ""listing_id"": [""RB101"", ""RB102"", ""RB103"", ""RB104"", ""RB105"", ""RB106"", ""RB102"", ""RB107"", ""RB108"", ""RB109""],
+    ""brand"": [""Yamaha"", ""Honda"", ""Bajaj"", ""TVS"", ""Hero"", ""Yamaha"", ""Honda"", ""Suzuki"", ""Honda"", ""Yamaha""],
+    ""model_year"": [2019, 2018, 2020, 2017, 2021, 2016, 2018, 2019, 2020, 2018],
+    ""kilometers_driven"": [18000, np.nan, 22000, 35000, 9000, 41000, np.nan, np.nan, 15000, 27000],
+    ""fuel"": [""Petrol"", ""Petrol"", ""Petrol"", ""Petrol"", ""Petrol"", ""Diesel"", ""Petrol"", ""Petrol"", ""Petrol"", ""Petrol""],
+    ""asking_price"": [85000, -72000, 65000, 48000, 55000, 39000, -72000, 61000, np.nan, 70000],
+}
+
+pd.DataFrame(data).to_csv(""ride_bikes.csv"", index=False)
+```
+
+Column meanings:
+
+| Column | Description |
+|---|---|
+| `listing_id` | Unique listing reference |
+| `brand` | Manufacturer name (unordered category) |
+| `model_year` | Year of manufacture |
+| `kilometers_driven` | Odometer reading in km |
+| `fuel` | Fuel type (unordered category) |
+| `asking_price` | Listed price in INR (target for later modelling) |
+
+---
+
+### Tasks
+
+Write a single Python file that does the following in order:
+
+1. **Load and inspect**
+   - Read `ride_bikes.csv` into a DataFrame.
+   - Print `shape`, the first five rows, per-column missing-value counts, and `describe()` for numeric columns.
+
+2. **Fix impossible asking prices**
+   - Replace negative `asking_price` values with their absolute values.
+
+3. **Handle missing values**
+   - Fill missing `kilometers_driven` with the column median.
+   - Fill missing `asking_price` with the column mean **after** the sign fix in step 2.
+
+4. **Remove duplicate listings**
+   - Drop duplicate rows and keep the first occurrence.
+   - Print how many duplicate rows were removed.
+
+5. **Encode nominal categories**
+   - One-hot encode `brand` and `fuel` with `pd.get_dummies(..., drop_first=True)`.
+
+6. **Scale numeric inputs**
+   - Apply `MinMaxScaler` to `model_year` and `kilometers_driven` so both fall in the 0–1 range.
+   - Do **not** scale `asking_price` (it is the target, not an input feature).
+
+7. **Summarize the impact**
+   - Print final `shape`, total missing values across the whole table, and `describe()` for `model_year` and `kilometers_driven` after scaling.
+
+**Expected output checks (your numbers should match after the full pipeline):**
+
+- Duplicate rows removed: **1**
+- Final row count: **9**
+- Total missing values after cleaning: **0**
+- Scaled `model_year` and `kilometers_driven` min/max should each be **0.0** and **1.0** (allow tiny floating-point rounding).
+
+---
+
+### Submission Instructions
+
+- Code all points above in a single `.py` file in VS Code.
+- Run the script and confirm the printed summary matches the expected checks.
+- Submit the complete code in the LMS code editor / answer box.",,,,,,,,,,,,,,6a0584a9e330175eb909e917,0.5,markdown,"#### Ideal Solution Walkthrough
+
+The workflow mirrors a practical cleaning pipeline: inspect first, fix domain-invalid values, impute, de-duplicate, encode nominal text, scale numeric inputs, then verify the result with simple before/after metrics.
+
+#### Complete Reference Solution
+
+```python
+import pandas as pd
+import numpy as np
+from sklearn.preprocessing import MinMaxScaler
+
+# --- dataset bootstrap (provided in the question) ---
+data = {
+    ""listing_id"": [""RB101"", ""RB102"", ""RB103"", ""RB104"", ""RB105"", ""RB106"", ""RB102"", ""RB107"", ""RB108"", ""RB109""],
+    ""brand"": [""Yamaha"", ""Honda"", ""Bajaj"", ""TVS"", ""Hero"", ""Yamaha"", ""Honda"", ""Suzuki"", ""Honda"", ""Yamaha""],
+    ""model_year"": [2019, 2018, 2020, 2017, 2021, 2016, 2018, 2019, 2020, 2018],
+    ""kilometers_driven"": [18000, np.nan, 22000, 35000, 9000, 41000, np.nan, np.nan, 15000, 27000],
+    ""fuel"": [""Petrol"", ""Petrol"", ""Petrol"", ""Petrol"", ""Petrol"", ""Diesel"", ""Petrol"", ""Petrol"", ""Petrol"", ""Petrol""],
+    ""asking_price"": [85000, -72000, 65000, 48000, 55000, 39000, -72000, 61000, np.nan, 70000],
+}
+pd.DataFrame(data).to_csv(""ride_bikes.csv"", index=False)
+
+# 1) Load and inspect
+df = pd.read_csv(""ride_bikes.csv"")
+print(""Initial shape:"", df.shape)
+print(df.head())
+print(""Missing per column:\n"", df.isnull().sum())
+print(df.describe())
+
+# 2) Fix impossible asking prices
+df[""asking_price""] = df[""asking_price""].abs()
+
+# 3) Impute missing values
+km_median = df[""kilometers_driven""].median()
+df[""kilometers_driven""] = df[""kilometers_driven""].fillna(km_median)
+price_mean = df[""asking_price""].mean()
+df[""asking_price""] = df[""asking_price""].fillna(price_mean)
+
+# 4) Remove duplicates
+dup_count = df.duplicated().sum()
+df = df.drop_duplicates()
+print(""Duplicate rows removed:"", dup_count)
+
+# 5) One-hot encode nominal categories
+df = pd.get_dummies(df, columns=[""brand"", ""fuel""], drop_first=True)
+
+# 6) Scale numeric input features only
+scaler = MinMaxScaler()
+df[[""model_year"", ""kilometers_driven""]] = scaler.fit_transform(
+    df[[""model_year"", ""kilometers_driven""]]
+)
+
+# 7) Summarize impact
+print(""Final shape:"", df.shape)
+print(""Total missing values:"", df.isnull().sum().sum())
+print(df[[""model_year"", ""kilometers_driven""]].describe())
+```
+
+**Why this order works:** absolute-value repair runs before mean imputation on `asking_price`, so `-72000` becomes `72000` and enters the mean honestly. Median imputation suits `kilometers_driven` as a numeric odometer column. Duplicate removal happens before encoding/scaling so derived columns are not built from repeated rows. One-hot encoding is used because `brand` and `fuel` are nominal. `MinMaxScaler` is applied only to numeric inputs, not the `asking_price` target."

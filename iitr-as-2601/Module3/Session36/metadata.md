@@ -1,4 +1,4 @@
-lecture ID:
+lecture ID: 152467
 
 Course Name: Certification in Agentic Systems and Design
 
