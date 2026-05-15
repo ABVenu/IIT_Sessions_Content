@@ -1,0 +1,143 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A product catalog column `sku` stores codes like `AI-100`, `AI-200`, and `HR-50`. You want every SKU that **starts with** `AI-`. Which `WHERE` clause is correct?",,,,,,2,,`WHERE sku = 'AI-'`,`WHERE sku LIKE 'AI-%'`,`WHERE sku LIKE '%AI-'`,`WHERE sku LIKE 'AI_'`,,,,6a06a52b848e0cc5828a1eb5,0,markdown,"In SQL `LIKE`, `%` matches **any sequence of characters (including empty)** after the literal prefix `AI-`. **Why others are wrong:** A is exact equality. C matches strings that **end** with `AI-`, not necessarily start with `AI-`. D uses `_` which matches **exactly one** character, not any length suffix."
+mcsc,markdown,You need the **newest** rows first using a column `created_at`. Which clause does that?,,,,,,2,,`ORDER BY created_at ASC`,`ORDER BY created_at DESC`,`ORDER BY created_at`,`SORT BY created_at NEWEST`,,,,6a06a52b848e0cc5828a1eb5,0,markdown,`DESC` sorts from largest/latest to smallest/earliest for typical timestamps. **Why others are wrong:** A/C sort oldest/lowest first (ASC default). D is not valid SQL in this form.
+mcsc,markdown,"A table lists 10,000 support threads. You only want the **first 20** rows after sorting. Which clause caps the result size?",,,,,,2,,`OFFSET 20`,`LIMIT 20`,`TOP 20` (standard in all SQL engines),`CAP 20`,,,,6a06a52b848e0cc5828a1eb5,0,markdown,`LIMIT` caps how many rows are returned. **Why others are wrong:** `OFFSET` skips rows; it does not cap size. `TOP` is engine-specific (not universal). `CAP` is not standard SQL.
+mcsc,markdown,"Table `events` has stable numeric `event_id` values. Page size is **4**, and you want **page 3** (1-based), using `ORDER BY event_id ASC`, `LIMIT 4`. What `OFFSET` value completes the pagination pattern?",,,,,,2,,`3`,`8`,`12`,`2`,,,,6a06a52b848e0cc5828a1eb5,0,markdown,1-based page \(p\) with page size \(n\): `OFFSET = (p - 1) * n`. Here \((3 - 1) \times 4 = 8\). **Why others are wrong:** A/D are common off-by-one mistakes; C would correspond to page 4 for size 4.
+mcsc,markdown,"You paginate with `ORDER BY id ASC`, `LIMIT 5`, and `OFFSET`. Which `OFFSET` value returns rows whose **1-based positions** in that ordering are **11 through 15** (inclusive)?",,,,,,2,,`OFFSET 5`,`OFFSET 10`,`OFFSET 11`,`OFFSET 15`,,,,6a06a52b848e0cc5828a1eb5,0.5,markdown,"Positions 11–15 are the **third** page when the page size is 5, and pages start at offset \((page - 1) \times page\_size = (3 - 1) \times 5 = 10\). **Why others are wrong:** A would target positions 6–10; C/D misalign the skip count with the intended 1-based slice."
+mcsc,markdown,You model **learners** and **skills** where each learner may list many skills and each skill tag may apply to many learners. Which design best matches a **many-to-many** relationship?,,,,,,3,,Store a comma-separated `skills` text column on `learners`,Add `learner_id` as a column on `skills` only (one FK total),"Add a `learner_skills` table with `(learner_id, skill_id)` pairs",Duplicate one full row per learner inside `skills` for every match,,,,6a06a52b848e0cc5828a1eb5,0.5,markdown,"Many-to-many is typically modeled with a **junction/bridge** table holding pairs of foreign keys. **Why others are wrong:** A is denormalized string packing. B is not sufficient alone for many-to-many. D is redundant row explosion, not a normalized bridge."
+mcmc,markdown,Which statements about **normalization** (as described for relational design) are **true**?,,,,,,,,It aims to reduce repeating the same fact across many rows,It guarantees every query will run faster than a single wide table,It often means splitting one wide design into smaller tables linked by identifiers,It removes the need for joins when reading reports,,,"1,3",6a06a52b848e0cc5828a1eb5,0.5,markdown,Normalization reduces repeated facts and commonly splits tables linked by IDs. **Why others are wrong:** B is false (not a performance guarantee). D is false (normalized designs often **use joins** when reading).
+mcmc,markdown,"Consider: `SELECT * FROM shipments ORDER BY shipment_id ASC LIMIT 10 OFFSET 20;`  
+Which statements are **true**?",,,,,,,,At most ten rows can appear in the result,The first twenty rows in the chosen ordering are skipped before the limit is applied,"This always returns ""page 2"" if page size is 10 (using 1-based page numbering)",PostgreSQL supports `OFFSET` in this pattern,,,"1,2,4",6a06a52b848e0cc5828a1eb5,0.5,markdown,"`LIMIT 10` caps output; `OFFSET 20` skips 20 ordered rows; PostgreSQL supports `OFFSET` with `LIMIT` as described in the session notes. **Why C is wrong:** With page size 10, `OFFSET 20` corresponds to **page 3**, not page 2."
+mcmc,markdown,You run a **cross join** between `customers` (200 rows) and `promo_codes` (50 rows) with **no** `ON` filter between them. Which statements are **true**?,,,,,,,,The result has at most 250 rows,The result can contain pairs that do not represent a real customer–promo association,The row count is multiplicative in the two table sizes (before any further filtering),"This pattern is usually the safest default for production ""lookup"" screens",,,"2,3",6a06a52b848e0cc5828a1eb5,1,markdown,"Cross join forms a Cartesian product (multiplicative size) and most pairs are not meaningful associations without a constraint. **Why others are wrong:** A is false (200 × 50 = 10,000). D is false (usually not a safe UI default)."
+mcmc,markdown,Which statements about **foreign keys** and **inner joins** are **true**?,,,,,,,,A child row's foreign key column stores an identifier that references a parent row,An `INNER JOIN ... ON parent.id = child.parent_id` keeps rows where that match holds in both tables,An inner join between parent and child always includes parent rows that have **zero** matching child rows,Table aliases (for example `FROM orders o`) are mainly useful to shorten names and resolve ambiguous column references,,,"1,2,4",6a06a52b848e0cc5828a1eb5,1,markdown,FK stores parent identifiers; inner join keeps matched pairs; aliases help readability/ambiguity. **Why C is wrong:** Inner join **drops** parent rows with **no** matching child rows.
+subjective,markdown,"**Theme:** Read-only SQL reporting for a small ""agent memory"" style schema (sorting, pagination, pattern filters, and inner joins).
+
+---
+
+## Scenario
+
+You support an internal tool that stores **device registrations** and **usage events** in two related tables.
+
+- **`devices`**: one row per physical device.
+- **`events`**: many rows per device (each event belongs to exactly one device).
+
+The product team wants a **single SQL file** they can run in PostgreSQL / Supabase SQL editor to answer four reporting questions **without** changing the schema.
+
+---
+
+## Starter schema and seed data (use as-is)
+
+Create a file named `session15_device_reports.sql`. **Keep** the following `CREATE TABLE` + `INSERT` section at the top **unchanged** (you may add comments, but do not rename columns/tables):
+
+```sql
+CREATE TABLE devices (
+  device_id   INTEGER PRIMARY KEY,
+  label       TEXT NOT NULL,
+  owner_email TEXT NOT NULL,
+  city        TEXT NOT NULL
+);
+
+CREATE TABLE events (
+  event_id    INTEGER PRIMARY KEY,
+  device_id   INTEGER NOT NULL REFERENCES devices(device_id),
+  event_type  TEXT NOT NULL,
+  payload     TEXT NOT NULL,
+  created_at  TIMESTAMP NOT NULL
+);
+
+INSERT INTO devices VALUES
+  (1, 'Edge-Node-A', 'a@example.com', 'Bengaluru'),
+  (2, 'Edge-Node-B', 'b@example.com', 'Bengaluru'),
+  (3, 'Gateway-01',  'c@example.com', 'Pune'),
+  (4, 'Gateway-02',  'd@example.com', 'Mumbai');
+
+INSERT INTO events VALUES
+  (101, 1, 'boot',   'ok',  TIMESTAMP '2026-05-01 09:00:00'),
+  (102, 1, 'error',  'e1',  TIMESTAMP '2026-05-02 10:05:00'),
+  (103, 2, 'boot',   'ok',  TIMESTAMP '2026-05-03 08:10:00'),
+  (104, 3, 'sync',   's1',  TIMESTAMP '2026-05-04 11:20:00'),
+  (105, 3, 'error',  'e2',  TIMESTAMP '2026-05-05 12:30:00'),
+  (106, 4, 'boot',   'ok',  TIMESTAMP '2026-05-06 07:40:00'),
+  (107, 1, 'sync',   's2',  TIMESTAMP '2026-05-07 13:50:00'),
+  (108, 2, 'error',  'e3',  TIMESTAMP '2026-05-08 14:55:00'),
+  (109, 4, 'sync',   's3',  TIMESTAMP '2026-05-09 15:10:00'),
+  (110, 3, 'boot',   'ok',  TIMESTAMP '2026-05-10 16:25:00');
+```
+
+---
+
+## What you must implement (four queries)
+
+Write **four separate `SELECT` statements** below the seed data. Each must run independently (you may repeat `ORDER BY` logic as needed).
+
+1) **Newest errors first (cap + sort):**  
+   Return `event_id`, `device_id`, `payload`, `created_at` for rows where `event_type = 'error'`, sorted by **`created_at` descending**, and return **at most 3** rows.
+
+2) **Stable pagination (page 2):**  
+   Return `event_id`, `device_id`, `event_type`, `created_at` for **all** events, ordered by **`event_id` ascending**. Return **page 2** with a page size of **4** (use `LIMIT` and `OFFSET`).
+
+3) **Text pattern filter on devices:**  
+   Return `device_id`, `label`, `owner_email` for devices whose `label` contains the substring **`way`** anywhere in the name (case-sensitive match is fine for this exercise).
+
+4) **Inner join report + filter + sort:**  
+   Return **`devices.label`**, **`events.event_type`**, **`events.created_at`** for events where **`devices.city = 'Bengaluru'`** and **`events.event_type <> 'error'`**, sorted by **`events.created_at` ascending**.
+
+---
+
+## Acceptance checks (self-verify before submission)
+
+- Query (1) never returns more than **3** rows and never returns a non-error `event_type`.
+- Query (2) returns **exactly 4** rows on the provided seed data and they correspond to **rows 5–8** when ordered by `event_id ASC` (verify by inspection).
+- Query (3) returns **only** `Gateway-01` and `Gateway-02` for the provided seed data.
+- Query (4) returns **only** Bengaluru devices and excludes `error` events, sorted oldest → newest.
+
+---
+
+## Submission instructions (**case c** — single file coding)
+
+- Implement everything in **one** file: `session15_device_reports.sql` using **VS Code** (or your usual editor).
+- Run the script end-to-end in **PostgreSQL** or the **Supabase SQL editor** and confirm all four queries execute without errors and match the acceptance checks.
+- Submit the **full file contents** in the LMS code editor / answer box for this question.
+",,,,,,,,,,,,,,,6a06a52b848e0cc5828a1eb5,0.5,markdown,"### Ideal approach
+
+- **(1)** Filter with `WHERE event_type = 'error'`, sort with `ORDER BY created_at DESC`, cap with `LIMIT 3`.
+- **(2)** `ORDER BY event_id ASC` then `LIMIT 4 OFFSET 4` implements page size 4, page 2 (0-based offset of 4).
+- **(3)** `WHERE label LIKE '%way%'` matches `Gateway-01` and `Gateway-02`.
+- **(4)** `FROM events INNER JOIN devices ON events.device_id = devices.device_id` (or equivalent qualified join keys), filter on `devices.city` and `events.event_type`, sort by `events.created_at ASC`.
+
+### Example solution (reference)
+
+```sql
+-- 1)
+SELECT event_id, device_id, payload, created_at
+FROM events
+WHERE event_type = 'error'
+ORDER BY created_at DESC
+LIMIT 3;
+
+-- 2)
+SELECT event_id, device_id, event_type, created_at
+FROM events
+ORDER BY event_id ASC
+LIMIT 4 OFFSET 4;
+
+-- 3)
+SELECT device_id, label, owner_email
+FROM devices
+WHERE label LIKE '%way%';
+
+-- 4)
+SELECT d.label, e.event_type, e.created_at
+FROM events e
+INNER JOIN devices d
+  ON e.device_id = d.device_id
+WHERE d.city = 'Bengaluru'
+  AND e.event_type <> 'error'
+ORDER BY e.created_at ASC;
+```
+
+### Alternatives
+
+- Using table names without aliases is acceptable if columns are qualified to avoid ambiguity.
+- `!=` instead of `<>` is accepted on PostgreSQL for inequality.
+"

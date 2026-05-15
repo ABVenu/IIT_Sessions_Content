@@ -1,0 +1,195 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A banking chatbot always refuses non-banking questions and keeps a formal tone across every chat. According to how LLM-based apps are built, where are the long-lived rules that define that persona and boundary most likely defined?
+
+- Inside each individual user message the customer types
+- In the system prompt (or equivalent persistent instruction sent before or with the conversation)
+- Only in the model's random seed
+- In the customer's browser cache
+
+- Inside each individual user message the customer types
+- In the system prompt (or equivalent persistent instruction sent before or with the conversation)
+- Only in the model's random seed
+- In the customer's browser cache",,,,,,2,,Inside each individual user message the customer types,In the system prompt (or equivalent persistent instruction sent before or with the conversation),Only in the model's random seed,In the customer's browser cache,,6a06a3745e375254e16bde17,0,markdown,"Persistent persona, scope, and rules are associated with the **system** layer (or equivalent app-controlled system instructions), not each user utterance. **A** treats per-turn user text as policy, which it is not. **C** confuses randomness with business rules. **D** is unrelated to model instructions."
+mcsc,markdown,"You ask a model: *“Translate this sentence to French: The train leaves at 6 PM.”* You give no examples and no special format. This is best described as:
+
+- Few-shot prompting
+- Zero-shot prompting
+- Few-shot chain-of-thought prompting
+- Iterative prompting
+
+- Few-shot prompting
+- Zero-shot prompting
+- Few-shot chain-of-thought prompting
+- Iterative prompting",,,,,,2,,Few-shot prompting,Zero-shot prompting,Few-shot chain-of-thought prompting,Iterative prompting,,6a06a3745e375254e16bde17,0,markdown,"No examples were provided—only an instruction—so this is **zero-shot**. **A** and **C** require in-prompt examples. **D** implies multiple rounds of prompts, not a single request."
+mcsc,markdown,"You are briefing an AI assistant before it talks to any user. You write: *“You are Nisha, a calm career coach. Only discuss résumés and interviews. Never promise a job offer.”* Which three ingredients of a strong system prompt are you mainly covering?
+
+- API key, temperature, and top-p
+- Persona, scope, and tone/rules
+- Dataset split, batch size, and learning rate
+- Retrieval index, embedding dimension, and chunk overlap
+
+- API key, temperature, and top-p
+- Persona, scope, and tone/rules
+- Dataset split, batch size, and learning rate
+- Retrieval index, embedding dimension, and chunk overlap",,,,,,2,,"API key, temperature, and top-p","Persona, scope, and tone/rules","Dataset split, batch size, and learning rate","Retrieval index, embedding dimension, and chunk overlap",,6a06a3745e375254e16bde17,0,markdown,"Name/personality maps to **persona**; *“only discuss…”* maps to **scope**; *“never promise…”* maps to **tone/rules** guardrails. **A**, **C**, and **D** are unrelated ML or API mechanics."
+mcsc,markdown,"**Few-shot prompting** is most useful when you need the model to:
+
+- Always run faster with fewer input tokens
+- Match a non-standard format, tone, or pattern you demonstrate with examples in the prompt
+- Replace the need for any system prompt
+- Guarantee factually correct answers without checking
+
+- Always run faster with fewer input tokens
+- Match a non-standard format, tone, or pattern you demonstrate with examples in the prompt
+- Replace the need for any system prompt
+- Guarantee factually correct answers without checking",,,,,,2,,Always run faster with fewer input tokens,"Match a non-standard format, tone, or pattern you demonstrate with examples in the prompt",Replace the need for any system prompt,Guarantee factually correct answers without checking,,6a06a3745e375254e16bde17,0,markdown,Few-shot teaches a **pattern** via in-prompt examples. **A** is false (examples usually add tokens). **C** is false—system prompts still matter. **D** is false—no prompting style removes verification needs.
+mcsc,markdown,"You want the model to solve a multi-step word problem and reduce “jumping to a guess.” You add: *“Let’s think step by step.”* You provide no worked examples. This is best described as:
+
+- Few-shot prompting
+- Zero-shot chain-of-thought prompting
+- Self-correction prompting
+- Retrieval-augmented generation
+
+- Few-shot prompting
+- Zero-shot chain-of-thought prompting
+- Self-correction prompting
+- Retrieval-augmented generation",,,,,,2,,Few-shot prompting,Zero-shot chain-of-thought prompting,Self-correction prompting,Retrieval-augmented generation,,6a06a3745e375254e16bde17,0.5,markdown,"A CoT trigger **without** worked examples is **zero-shot** CoT. **A** needs exemplified reasoning. **C** needs explicit critique/rewrite stages. **D** is document-grounding, not what is described here."
+mcsc,markdown,"A **structured prompt template** in the style taught in this module typically includes which five labeled components?
+
+- Role, Task, Instructions, Constraints, Output Format
+- System, User, Assistant, Tool, Memory
+- Train, Validation, Test, Loss, Optimizer
+- Encoder, Decoder, Attention, LayerNorm, Dropout
+
+- Role, Task, Instructions, Constraints, Output Format
+- System, User, Assistant, Tool, Memory
+- Train, Validation, Test, Loss, Optimizer
+- Encoder, Decoder, Attention, LayerNorm, Dropout",,,,,,1,,"Role, Task, Instructions, Constraints, Output Format","System, User, Assistant, Tool, Memory","Train, Validation, Test, Loss, Optimizer","Encoder, Decoder, Attention, LayerNorm, Dropout",,6a06a3745e375254e16bde17,0.5,markdown,"The five-component template is **Role, Task, Instructions, Constraints, Output Format**. **B**, **C**, and **D** name chat roles, training, or architecture—not the prompt blocks taught here."
+mcmc,markdown,"Which statements about **self-correction prompts** are correct?
+
+*(Select all that apply)*
+
+- They ask the model to critique and improve its own draft using explicit criteria
+- They always require three separate human reviewers before the model answers
+- A strong design often separates **Generate**, **Critique**, and **Rewrite** stages clearly
+- A vague line like “write a perfect answer” is equivalent to a reliable self-correction structure
+
+- They ask the model to critique and improve its own draft using explicit criteria
+- They always require three separate human reviewers before the model answers
+- A strong design often separates **Generate**, **Critique**, and **Rewrite** stages clearly
+- A vague line like “write a perfect answer” is equivalent to a reliable self-correction structure",,,,,,,,They ask the model to critique and improve its own draft using explicit criteria,They always require three separate human reviewers before the model answers,"A strong design often separates **Generate**, **Critique**, and **Rewrite** stages clearly",A vague line like “write a perfect answer” is equivalent to a reliable self-correction structure,"1,3",6a06a3745e375254e16bde17,0.5,markdown,**A** and **C** match the taught definition and staged structure. **B** is false—humans are not required by definition. **D** is false—vague wording does not enforce reliable self-correction.
+mcmc,markdown,"Which practices match **iterative prompting** as described for refining model outputs?
+
+*(Select all that apply)*
+
+- Sending one follow-up that targets the single most important gap you noticed
+- Sending “try again” with no specifics, repeatedly, hoping quality improves
+- Doing multiple rounds where each new prompt builds on the previous response
+- Expecting the first draft to be final without any review
+
+- Sending one follow-up that targets the single most important gap you noticed
+- Sending “try again” with no specifics, repeatedly, hoping quality improves
+- Doing multiple rounds where each new prompt builds on the previous response
+- Expecting the first draft to be final without any review",,,,,,,,Sending one follow-up that targets the single most important gap you noticed,"Sending “try again” with no specifics, repeatedly, hoping quality improves",Doing multiple rounds where each new prompt builds on the previous response,Expecting the first draft to be final without any review,"1,3",6a06a3745e375254e16bde17,0.5,markdown,**A** and **C** describe purposeful multi-round refinement. **B** is the anti-pattern of nonspecific retries. **D** contradicts draft/review/refine.
+mcmc,markdown,"An **agent prompt flow** meant to behave reliably “without you in the loop” should align with which ideas from this module?
+
+*(Select all that apply)*
+
+- Combine role definition, the concrete task, measurable self-check criteria, and a defined output format
+- Rely only on the user’s latest message and ignore persistent instructions
+- Use reflection/feedback criteria so the agent can evaluate its output against a checklist and revise
+- Avoid constraints because they reduce creativity
+
+- Combine role definition, the concrete task, measurable self-check criteria, and a defined output format
+- Rely only on the user’s latest message and ignore persistent instructions
+- Use reflection/feedback criteria so the agent can evaluate its output against a checklist and revise
+- Avoid constraints because they reduce creativity",,,,,,,,"Combine role definition, the concrete task, measurable self-check criteria, and a defined output format",Rely only on the user’s latest message and ignore persistent instructions,Use reflection/feedback criteria so the agent can evaluate its output against a checklist and revise,Avoid constraints because they reduce creativity,"1,3",6a06a3745e375254e16bde17,1,markdown,"**A** and **C** support autonomous, checklist-driven behaviour. **B** contradicts system-prompt design. **D** is wrong—constraints are central guardrails."
+mcmc,markdown,"Pick **all** correct distinctions about LLM prompting and how real chat apps use instructions:
+
+*(Select all that apply)*
+
+- **System prompt** sets persistent background behaviour; **user prompt** is the live message for each turn
+- **Self-correction** improves output within one structured prompt; **iterative prompting** improves output across multiple follow-up turns
+- **Zero-shot** always requires 3–5 examples inside the prompt
+- In production apps, the user-visible text box is often only part of what the application sends to the model
+
+- **System prompt** sets persistent background behaviour; **user prompt** is the live message for each turn
+- **Self-correction** improves output within one structured prompt; **iterative prompting** improves output across multiple follow-up turns
+- **Zero-shot** always requires 3–5 examples inside the prompt
+- In production apps, the user-visible text box is often only part of what the application sends to the model",,,,,,,,**System prompt** sets persistent background behaviour; **user prompt** is the live message for each turn,**Self-correction** improves output within one structured prompt; **iterative prompting** improves output across multiple follow-up turns,**Zero-shot** always requires 3–5 examples inside the prompt,"In production apps, the user-visible text box is often only part of what the application sends to the model","1,2,4",6a06a3745e375254e16bde17,1,markdown,"**A**, **B**, and **D** are definitional in the notes. **C** is false—zero-shot means **no** examples; few-shot uses examples."
+subjective,markdown,"## Scenario
+
+You volunteer for a college cultural fest. The fest desk gets repetitive messages: event timings, venue map doubts, refund policy for cancelled shows, and last-minute performer changes. You want a **single AI assistant** that can answer students consistently, stay on-topic, and avoid making up timings or policies.
+
+**Task:** Design **one complete agent-style system prompt** (as plain text) for this assistant **and** justify your design choices in a short companion write-up.
+
+### What your system prompt must include (all mandatory)
+
+1. **Role:** Name the assistant and give **2–3** personality traits suited for stressed students.
+2. **Scope:** What it **will** handle and what it **must refuse** or escalate (be explicit).
+3. **Workflow (CoT-style):** At least **4 numbered steps** the assistant must follow **before** answering a student query (example steps might include triage, fact priority, tone check—choose what fits your scenario).
+4. **Self-correction / quality gate:** A clear **3-stage** structure (**Generate → Critique → Rewrite**) *or* an equivalent explicit checklist the assistant must run on its own draft (either is acceptable if it is staged and measurable).
+5. **Constraints:** At least **3** guardrails (e.g., no fabricated schedules, no legal promises, how to handle missing official info).
+6. **Output format:** Specify exactly how every final reply should be structured (sections/headings/bullets—your choice, but must be unambiguous).
+
+### What the companion write-up must explain (mandatory)
+
+- Why you split responsibilities the way you did between **scope** vs **constraints**.
+- One paragraph on **when your assistant should stop answering from memory** and what it should do instead (connect this to accuracy risks you learned about with LLMs).
+- **One** external reference you consulted while designing (any credible page: university helpdesk guidelines, event ops blog, prompting reference—cite title + URL).
+
+---
+
+## Submission instructions (Case B — document style)
+
+- Create a **Google Doc** in your Google Drive.
+- Suggested folder path (for your own organisation): **Module3 → Session36** (create if needed).
+- Write clearly: paste the **full system prompt** in a monospace or quoted block, then your write-up with headings. Add **images** only if they genuinely help (e.g., a simple flow sketch or screenshot of an official schedule page you relied on—**no** personal data).
+- When finished, click **Share** and set access to **Anyone with the link can view**.
+- Submit **only the Google Doc link** in the LMS answer field.",,,,,,,,,,,,,6a06a3745e375254e16bde17,0.5,markdown,"## Reference solution (exemplar)
+
+Below is **one** acceptable full submission: a complete system prompt plus a short companion write-up. Learners may differ in wording while still meeting every mandatory bullet in the assignment.
+
+### System prompt (plain text)
+
+You are **Meera**, the official **Cultural Fest Help Desk** assistant for students. Personality: calm, friendly, and concise; you sound like a peer volunteer who has read the official comms—never sarcastic, never panicky.
+
+**Scope — you WILL help with**
+- General questions about **event timings, venues, and maps** *only* when they match information explicitly published on the official fest website, mobile app, or PDF notices linked from those channels.
+- Explaining **refund / cancellation policies** *verbatim or paraphrased* from the official policy text (quote short clauses when needed).
+- Announcing **last-minute performer or schedule changes** *only* if they appear in the latest official notice (timestamped) from fest organisers.
+
+**Scope — you MUST refuse or escalate**
+- Medical, legal, financial, or personal safety emergencies → tell the student to contact campus security / helpline numbers printed on official fest materials (do not invent numbers).
+- Rumours from chats or social screenshots → say you cannot confirm; point them to the official notice channel.
+- Anything asking you to **guess** timings, prices, capacity, or policies not in the official sources.
+
+**Workflow — before every answer, silently follow these steps**
+1. **Classify** the question: timing / venue / policy / performer change / off-topic / unclear.
+2. **Check sources:** list which official artefact you would rely on (e.g., *“Schedule PDF dated …”*). If none exists in the provided context, **do not invent**—go to step 4 with an honest gap message.
+3. **Draft** a reply that obeys scope and constraints below.
+4. **Tone check:** stressed-student friendly, no blame, no over-promising.
+
+**Self-correction (Generate → Critique → Rewrite)**
+- **Generate:** produce a first draft answer in your head.
+- **Critique:** check the draft against this checklist: (a) every timing or policy claim traceable to an official source named in the reply? (b) any sentence that could read as a **guarantee** of refunds, entry, or performer appearance? (c) tone calm and non-authoritative where facts are uncertain?
+- **Rewrite:** if any check fails, remove or soften unsafe claims, add *“according to [official page title] as of [date]”*, or ask **one** focused clarifying question instead of guessing.
+
+**Constraints (guardrails)**
+- Never fabricate schedules, ticket prices, gate times, or refund outcomes.
+- Never promise legal outcomes (“you will definitely get a refund”)—only describe what the published policy says and suggest contacting the ticketing desk for edge cases.
+- If official information is missing or contradictory, say so clearly and tell the student exactly where to look next (official URL pattern or physical help desk), without making up new facts.
+
+**Output format for every final reply**
+1. **TL;DR** — one or two short sentences.
+2. **What we know (official)** — bullets citing *which* official source each fact comes from (page name + date if available).
+3. **If you still need help** — one concrete next step (link, location, or contact path).
+4. **Disclaimer** — one line: you summarise published fest information and may occasionally be incomplete if notices changed after your knowledge cutoff; always verify time-sensitive details on the live official channel.
+
+### Companion write-up
+
+**Scope vs constraints:** *Scope* defines the **topic boundary** (fest logistics vs medical/legal/finance) and which channels count as “official.” *Constraints* are the **non-negotiable safety rules** inside that boundary—blocking hallucinated numbers, banning legal promises, and forcing escalation when sources are missing. Splitting them this way keeps the assistant helpful on-desk topics while making failure modes explicit.
+
+**When to stop answering from memory:** Large language models can sound confident while **confabulating** details. This assistant should stop relying on memory whenever a student needs **precise** times, prices, refund eligibility, or performer order—anything that changes ticket money or travel plans. Instead, it should **quote or paraphrase only from supplied official text**, ask for a screenshot **of the official page** (not DMs), or direct the student to the live schedule URL / physical desk. That limits harm from stale training data and from plausible-but-wrong specifics.
+
+**External reference consulted:** OpenAI, *Prompt engineering* — general guidance on clear instructions and reducing unreliable outputs: https://platform.openai.com/docs/guides/prompt-engineering"

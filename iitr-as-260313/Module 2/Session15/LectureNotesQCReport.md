@@ -96,3 +96,69 @@ All criteria meet the expected threshold. No further iteration required.
 | Structural Adherence | 5 | 5 |
 | No Logical Mistakes | True | True |
 | No Presentation Mistakes | True | True |
+
+---
+
+# Post-session alignment QC — `Lecture Notes Released.md`
+**File:** `Lecture Notes Released.md`
+**Source:** Trimmed from `Lecture Notes.md` using `Live Topic Coverage.md` + `Transcript.md`
+**Date of QC:** 2026-05-15
+**Iteration:** 2
+
+---
+
+## QC Evaluation
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+
+---
+
+## Detailed Notes
+
+### Content Coverage — 5/5
+
+Released notes match **what was taught live**: recap (`SELECT`/`WHERE`/`UPDATE`/`DELETE`), extended **`LIKE`** patterns, **`ORDER BY`** / **`LIMIT`** / **`OFFSET`** (with sandbox caveat), redundancy + **normalization**, relationship types + **junction** idea, **foreign key column** as join bridge, **cross join** vs **inner join** on **`customers`**/**`orders`**, AI mapping section, takeaways, and glossary. Sections **not** demonstrated live (Supabase DDL + table editor, multi-table **`INSERT`**, **`ON DELETE CASCADE`** / related-table CRUD, standalone **referential integrity** lecture block) were **removed** so students are not asked to study material that did not occur in class; a short **practice note** and **Key Takeaways** point steer learners to the course doc / later sessions for those gaps.
+
+### Creativity — 5/5
+
+Analogies retained (Zomato, Flipkart, Aadhaar, hospital, music app, party guest lists, banking borrower/loan tie-in). New **cross join** framing matches the live story (“feel the explosion, then add **`ON`**”). **`LIKE`** examples use familiar “phone contacts” wording.
+
+### Structural Adherence — 5/5
+
+- Starts with `#` title; no session metadata header.
+- Context paragraph + bullet list for outcomes; **Key Takeaways** + terminology table close the doc.
+- New concepts use **Official Definition / In Simple Words / Real-Life Example** where introduced as teaching units.
+- SQL blocks use **`sql`** fences; **every executable line has an end-of-line comment** after revision (including multi-line `SELECT` lists).
+- Each code block is followed by **How the code works** (or equivalent) bullets.
+- **3-sentence rule:** body prose kept to short blocks; long ideas split across bullets.
+
+### No Logical Mistakes — True
+
+- **`INNER JOIN`** requires **`ON`**/`**USING**` in PostgreSQL — explicitly distinguished from the classroom tool that allowed a join-without-**`ON`** Cartesian demo.
+- **`OFFSET`** pagination formula and behaviour described correctly; tooling limitation called out honestly.
+- **`CROSS JOIN`** semantics (**M×N**) stated correctly.
+- **`LIKE`** wildcard meanings (**`%`**, **`_`**) are standard SQL.
+
+### No Presentation Mistakes — True
+
+- Heading hierarchy (`##` / `###`) is consistent.
+- Tables render with aligned pipes; images retained where they still match a surviving section (**referential integrity**-only image intentionally dropped with that removed content).
+- Bold used for first emphasis on key terms; backticks on code tokens.
+
+---
+
+## QC Result: PASSED ✓ (Iteration 2)
+
+| Criterion | Expected | Achieved |
+|---|---|---|
+| Content Coverage | 5 | 5 |
+| Creativity | 5 | 5 |
+| Structural Adherence | 5 | 5 |
+| No Logical Mistakes | True | True |
+| No Presentation Mistakes | True | True |
