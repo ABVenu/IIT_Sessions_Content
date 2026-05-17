@@ -22,3 +22,4 @@ detailed subtopics to be covered:
 - Design and Create Related Tables in Supabase — Build two related tables (e.g., users and orders) with a foreign key constraint; visualize the schema in Supabase's table editor;
 - Query Relational Data with JOINs — Introduce INNER JOIN using a two-table example (users and orders); write a hands-on query that combines both tables to retrieve meaningful results (e.g., which user placed which order); understand what a JOIN does conceptually before writing it — limited to two-table joins only;
 - Perform CRUD on Related Data — Insert, update, and delete records across related tables while maintaining referential integrity; understand cascading behavior with simple examples;
+
