@@ -97,4 +97,70 @@ All detailed subtopics from `metadata.md` are fully addressed:
 
 ---
 
+## QC Evaluation — Iteration 2 (Strict Re-QC)
+
+**Date:** 2026-05-17  
+**Trigger:** Re-run against `LectureNotesPrompt4.md` after student-facing activity edits and full-rule audit.
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 4 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | False |
+
+**Expected result achieved:** No — revision required.
+
+### Issues Identified
+
+1. **Rule 6.1 (single-student activities for Zoom):** Five activities still used pair/group/multi-person wording (`Pair up`, `another pair or group`, stadium “Others ask”, `Compare with a partner`, `In a small group`).
+2. **Rule 5 (code comments):** Three Python blocks did not have a comment on **every** executable line (function bodies, loops, prints, and pseudocode pipeline lines were partly uncommented).
+3. **Rule 7 / presentation:** Heading `Bridge from the Previous Session` exposed internal “previous session” phrasing; section subtitles included instructor timing (`10–15 minute`, `~5 minutes`) not needed in student notes.
+
+### Actions Taken
+
+- Rewrote all affected **Simple Activity** sections as solo notebook/paper exercises.
+- Added per-line comments to all three Python code blocks.
+- Renamed bridge heading to `## Bridge — Embeddings and Semantic Search`; replaced duration subtitles with “short” / “brief”.
+
+---
+
+## QC Evaluation — Iteration 3 (Post-Fix Verification)
+
+**Date:** 2026-05-17  
+**Trigger:** Re-QC after iteration 2 fixes.
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+
+**Expected result achieved:** Yes — all criteria pass.
+
+### Verification Checklist
+
+- All `metadata.md` subtopics covered (conceptual session, bridge, embeddings recall, SQL limits, vector DB intro, similarity retrieval/intuition/measurement, scale, indexing, ANN, end-to-end process, exact vs similarity recap, AI apps, agentic systems, bridge to **next** Chroma lab).
+- No session numbers in student-facing text.
+- Previous/**next** references only (no `Session N`).
+- Eight solo **Simple Activity** blocks; student-facing imperatives (`you` / `your notebook`).
+- Four code blocks with line comments + **How the code works** sections.
+- Official Definition / In Simple Words / Real-Life Example pattern on new concepts.
+- **Key Takeaways** + terminology table present.
+- Connecting sentences between major sections.
+
+### Iteration Summary (All Runs)
+
+| Iteration | Action | Result |
+|---|---|---|
+| 1 | Initial draft + QC | Pass (later superseded by stricter iteration 2 audit) |
+| 2 | Strict re-QC | Fail — activities, code comments, heading/timing |
+| 2 | Fixes applied in `Lecture Notes.md` | — |
+| 3 | Post-fix re-QC | All criteria pass |
+
+---
+
 *End of QC Report*
