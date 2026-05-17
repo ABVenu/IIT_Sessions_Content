@@ -24,6 +24,8 @@ This session is about the **big picture**: how to give AI its own **library** so
 
 **Real-Life Example:** You ask, “What is the late-submission penalty for our March 2026 batch?” If that line lives only in an internal PDF, the model might invent a generic university rule.
 
+![LLM trained on public data hits a knowledge cutoff and cannot see your private PDFs — fluent answers may still be wrong](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-01-llm-without-your-docs.png)
+
 ### Three quick problems
 
 | Problem | In one line |
@@ -46,6 +48,8 @@ This session is about the **big picture**: how to give AI its own **library** so
 **In Simple Words:** **Search first, then speak.** Open-book exam: find the right page, then answer.
 
 **Real-Life Example:** At a **DU photocopy shop**, the keeper **pulls the right folder** (retrieval), you **read the page** (context in prompt), then you **explain** (generation).
+
+![RAG gives the model a searchable external library — search first, then speak: retrieve documents, add context to the prompt, then generate the answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-02-what-is-rag-library.png)
 
 | Library idea | RAG part |
 |---|---|
@@ -75,6 +79,8 @@ Every RAG tool (LangChain, custom Python, enterprise products) follows the same 
 | **4. Augment** | Put chunks + rules into the prompt | **Later session** (RAG app) |
 | **5. Generate** | LLM produces the final answer | You already did this with Ollama |
 
+![The five-step RAG pipeline — ingest, prepare, retrieve, augment, then generate](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-03-five-step-rag-flow.png)
+
 ```mermaid
 flowchart LR
     D[Your documents] --> P[Prepare chunks + embeddings]
@@ -98,6 +104,8 @@ Two jobs work together — do not blame only the LLM when RAG fails.
 **In Simple Words:** Retriever = **finds** the notes. Generator = **writes** the answer. Grounding = **stick to the notes** on the open-book test.
 
 **Real-Life Example:** A **railway display board** shows the platform. A grounded assistant reads the board. An ungrounded one guesses platform 5 because it “sounds right.”
+
+![Retriever finds evidence from the library; generator writes the answer; grounding means sticking to supplied context](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-04-retriever-generator-grounding.png)
 
 ### One prompt rule to remember
 
@@ -151,6 +159,8 @@ What is the late submission rule for the March 2026 cohort?
 
 **What you should see:** **48 hours** and **10% per day** — grounded in the text you supplied.
 
+![Same question without context — the model guesses; with handbook context pasted — the answer matches your document](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-05-without-vs-with-context.png)
+
 | | **No context** | **With context (manual)** |
 |---|---|---|
 | Where the fact comes from | Model guess | **Your document** |
@@ -173,6 +183,8 @@ What is the late submission rule for the March 2026 cohort?
 **Official Definition:** **Fine-tuning** changes model **weights** with training examples. **RAG** keeps weights fixed and adds **fresh text** in the prompt after **search**.
 
 **In Simple Words:** Fine-tuning = **memorize** the book. RAG = **bring the book** to each exam.
+
+![Fine-tuning retrains model weights to memorize; RAG keeps weights fixed and brings fresh documents via search at answer time](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-06-rag-vs-fine-tuning.png)
 
 | Need | Start with |
 |---|---|
@@ -279,6 +291,8 @@ python text_to_embeddings_demo.py
 ## From Embeddings to Full RAG — What Happens Next
 
 Today we stopped **after** creating embeddings. Here is how the course completes the loop — **this is the bridge to close the session**.
+
+![Today text becomes embeddings; next sessions store vectors in a database and search them; later sessions retrieve chunks and feed the LLM for full RAG](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session38/session38-07-embeddings-to-full-rag-bridge.png)
 
 ### Step A — Store embeddings (upcoming: Embeddings & Vector Search)
 
