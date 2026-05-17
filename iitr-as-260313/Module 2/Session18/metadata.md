@@ -31,3 +31,4 @@ detailed subtopics to be covered:
 - Build a Minimal End-to-End Vector Search Application — Single script or notebook: query in → top-k relevant chunks out (capstone of the lab);
 - Apply Basic Metadata Filtering in Queries (optional if time) — Combine similarity search with a simple filter (e.g. category tag) to refine results;
 - Update the Vector Collection (optional if time) — Add new documents and embeddings to an existing collection;
+- Relate Vector Databases to Agentic Systems — Explain how agents use vector databases for long-term memory, contextual retrieval, and knowledge access at scale (conceptual bridge after the lab; do not expand into a full agent architecture lesson);

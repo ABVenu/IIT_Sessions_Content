@@ -4,7 +4,7 @@
 
 In the previous session, you learned how **embeddings** turn text into vectors so that similar meaning sits close together in **vector space**. You traced how text becomes embeddings, why the **same embedding model** must be used for documents and queries, and walked through the **semantic search workflow**: store content → embed documents → embed the query → compare vectors → return the closest matches.
 
-That workflow answers *what* to do with meaning. Today’s question is *where* and *how fast* you do it when the data grows from ten classroom chunks to thousands of company documents or millions of agent memories.
+That workflow answers *what* to do with meaning. Today’s question is *where* and *how fast* you do it when the data grows from ten classroom chunks to thousands of company documents or millions of stored chunks.
 
 **In this session, you will:**
 
@@ -14,10 +14,9 @@ That workflow answers *what* to do with meaning. Today’s question is *where* a
 - Build intuition for **similarity-based retrieval**, **similarity measurement**, and the **similarity search process** end to end
 - Understand why **brute-force** comparison fails at scale and how **vector indexing** and **ANN** search fix that
 - Differentiate **exact match** vs **similarity search** in one short recap
-- Connect vector databases to **RAG**, **semantic search**, **recommendations**, and **agentic systems**
 - Prepare for the **next** session, where you will implement embed → store → query → top-k in code with **Chroma**
 
-This session is **conceptual only** — no Chroma setup or live coding lab today. You will still see small code sketches and classroom activities so the ideas stay concrete.
+This session is **conceptual only** — no Chroma setup or live coding lab today. You will still see small code sketches and solo notebook activities so the ideas stay concrete.
 
 ---
 
@@ -75,7 +74,7 @@ Traditional search asks: “Does this row **contain** this word?” Embedding-ba
 
 - The model turns text → vector.
 - The system compares the query vector to many stored vectors.
-- The **closest** matches are returned as candidates for display, RAG context, or agent memory.
+- The **closest** matches are returned as candidates for display or for a downstream application to use.
 
 ![Embeddings as a meaning map — semantically similar chunks sit close together; retrieval finds the nearest neighbours to the query vector](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module2/session17/session17-04-embeddings-meaning-map.png)
 
@@ -155,7 +154,7 @@ Once embeddings become your retrieval currency, you need a system designed to **
 | **pgvector** | Extension inside PostgreSQL; vectors live next to your existing SQL tables |
 | **Weaviate, Qdrant, Milvus** | Other production-grade options teams use at scale |
 
-You do not need to memorise vendors today. You need the **pattern**: embed → store in vector DB → query by vector → use results in apps or agents.
+You do not need to memorise vendors today. You need the **pattern**: embed → store in vector DB → query by vector → use results in your application.
 
 ### Metadata Alongside Vectors
 
@@ -212,17 +211,16 @@ Product descriptions and reviews are embedded. Your current product is a query v
 
 ### What Happens After Retrieval?
 
-Similarity search **finds**; it does not always **answer**:
-
-- **Direct display** — Show the FAQ text to the user.  
-- **RAG** — Pass top chunks into the LLM prompt as evidence.  
-- **Agent tool** — Agent calls `search_knowledge_base(query)` and reads returned snippets before planning the next step.
+Similarity search **finds**; it does not always **answer** by itself. A common next step is **direct display** — show the FAQ text to the user — or hand the top chunks to another part of your system (for example, an LLM prompt) for a fuller reply.
 
 - **Failure mode:** Returning chunks that are **similar in topic but wrong in policy version** — fix with metadata (e.g. `policy_year = 2025`) and good chunk boundaries.
 
 ### Simple Activity — Human Top-k
 
-Write 20 short sentences on mixed topics in your notebook (or use a list from the live session). Choose one query sentence and read it aloud. In 60 seconds, pick the **top 3** sentences closest in meaning. Write your top 3 and one sentence on why your third pick might be debatable — the same ambiguity appears when real vector search has close tie scores.
+- Write 20 short sentences on mixed topics in your notebook.
+- Choose one query sentence and read it aloud.
+- In 60 seconds, pick the **top 3** sentences closest in meaning.
+- Write your top 3 and one sentence on why your third pick might be debatable — the same ambiguity appears when real vector search has close tie scores.
 
 ---
 
@@ -291,7 +289,7 @@ Brute force means: for **every** query, compare the query vector to **every** st
 
 ### What Systems Need
 
-- **Low latency** — User or agent expects answers in sub-second to a few seconds.  
+- **Low latency** — Users expect answers in sub-second to a few seconds.  
 - **High throughput** — Many concurrent queries during peak traffic.  
 - **Growing data** — New documents and memories arrive daily; indexes must update incrementally.  
 
@@ -377,7 +375,7 @@ Indexing makes search **feasible**. Because perfect exhaustive search is still e
 | **Exact** brute force | Perfect ranking | Slow |
 | **ANN** with index | Usually excellent top-k | Fast |
 
-- Teams tune ANN when latency budgets are tight (chatbots, live agents, high-QPS search).
+- Teams tune ANN when latency budgets are tight (chatbots, high-traffic search bars, high-QPS APIs).
 - For tiny collections, exact search is fine — your **next** session lab may be small enough that brute force and indexed search **feel** similar; the concepts still matter for jobs and scale.
 
 - **Common mistake:** Assuming ANN is “wrong search.” In practice, retrieval quality depends more on **chunking, model choice, and metadata** than on missing rank-47 vs rank-48.
@@ -402,19 +400,19 @@ This is the full **conceptual pipeline** you will implement in the **next** sess
                                       ↓
                          ANN / similarity search → top-k chunks
                                       ↓
-                         App / RAG / Agent uses text + metadata
+                         Application uses returned text + metadata
 ```
 
-![End-to-end similarity search — chunk and embed documents, store in a vector DB, embed each query with the same model, ANN search returns top-k for RAG or agents](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module2/session17/session17-07-end-to-end-pipeline.png)
+![End-to-end similarity search — chunk and embed documents, store in a vector DB, embed each query with the same model, ANN search returns top-k matches for your application](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module2/session17/session17-07-end-to-end-pipeline.png)
 
 ### Step-by-Step (Conceptual)
 
 1. **Ingest** — Collect sources (PDFs, tickets, wiki pages).  
-2. **Chunk** — Split long files into retrieval-sized pieces.  
+2. **Chunk** — Split long files into retrieval-sized pieces (**chunking** = breaking one big document into smaller passages so search returns the right paragraph, not the whole PDF).  
 3. **Embed** — Each chunk → vector via embedding model.  
 4. **Upsert into vector DB** — Save vector + text + metadata; build or refresh index.  
 5. **Query time** — Embed user question → vector DB returns top-k neighbours.  
-6. **Use results** — Display, inject into LLM (RAG), or agent reasoning.  
+6. **Use results** — Display to the user or pass chunks to the next step in your pipeline.  
 
 - **Official Definition:** **Upsert** means insert a new record or update it if the id already exists — common when documents change.
 - **In Simple Words:** “Save or refresh this chunk” without duplicating the same id twice.
@@ -476,98 +474,15 @@ You compared these ideas in depth earlier. Here is a **brief** consolidation —
 | **Data type** | Structured tables, IDs, enums | Unstructured or semi-structured text |
 | **Question style** | “Status = shipped”, “email = x” | “Something **like** this meaning” |
 | **Risk** | Wrong row if key typo | Loosely related chunk if data messy |
-| **In agents** | Tool calls with precise parameters | Memory + document retrieval |
 
-- **Win together:** Agent uses SQL to fetch **order history**, vector search to fetch **policy paragraphs** about refunds, then the LLM combines both in one answer.
+- **Win together:** SQL fetches **order history** by exact keys; vector search fetches **policy paragraphs** about refunds by meaning; your application combines both.
 - **Do not replace SQL** with vectors for money totals, inventory counts, or compliance reports that require exact aggregates.
 
 ### Simple Activity — Traffic Light
 
-Write ten user questions (your own list or from the live session). Classify each as **green** (SQL/exact), **amber** (both), or **red** (semantic/vector). For any label you are unsure about, write one sentence explaining your reasoning.
-
----
-
-## Connect Vector Databases to AI Applications
-
-Vector databases sit in the **storage and retrieval layer** under many AI features you already hear about in the course.
-
-### Semantic Search
-
-- Company wikis, course portals, legal discovery — embed corpus once, query by meaning many times.  
-- The vector DB is the **engine room** behind the search bar.
-
-### RAG — Retrieve Step
-
-- **Retrieve:** Vector DB returns evidence chunks.  
-- **Augment:** Chunks go into the prompt.  
-- **Generate:** LLM writes the answer grounded in those chunks.  
-
-Without fast retrieval, RAG feels slow or is limited to tiny folders only.
-
-### Recommendations
-
-- Embed product descriptions and user behaviour summaries; nearest items → “you may also like.”  
-- Same maths, different UI.
-
-### Conversational Systems
-
-- Long chat logs are not pasted wholesale into every prompt.  
-- Past turns or summaries are embedded and retrieved when **relevant** to the current user message.
-
-| Application | Vector DB role |
-|---|---|
-| Internal FAQ bot | Fast top-k over help articles |
-| RAG assistant | Evidence store for grounded answers |
-| E-commerce search | Meaning-based catalog lookup |
-| Support analytics | Find similar historical tickets |
-
-- **Reason to care:** The LLM is expensive and forgetful; vector DBs give it **fresh, specific context** from **your** data.
-
----
-
-## Relate Vector Databases to Agentic Systems
-
-**Agentic systems** plan, call tools, and maintain state over time. Vector databases become their **long-term memory and knowledge compass**.
-
-### Long-Term Memory
-
-- Agents accumulate notes: past decisions, user preferences, solved bugs.  
-- Storing everything in the prompt is impossible (context limits).  
-- **Embed memories → store in vector DB → retrieve what matches the current goal.**
-
-Example: User now asks about “API key errors.” The agent retrieves earlier troubleshooting notes about **authentication**, even if those notes never used the phrase “API key.”
-
-### Contextual Retrieval for Tools
-
-- Tool: `search_company_policy(query)` internally runs embed + vector query.  
-- Tool: `recall_similar_past_tasks(goal)` pulls prior agent trajectories with similar embeddings.  
-
-The agent **decides when to search**, but the vector DB **executes search at scale**.
-
-### Knowledge Access at Scale
-
-- Multi-agent teams may share one vector collection (policies, code docs, CRM snippets).  
-- Each agent reads the same ground truth instead of hallucinating procedures.
-
-- **Common doubt:** “Is the vector DB the agent’s brain?” No — the **LLM** reasons; the vector DB is **structured recall** from external memory, like indexed notes for an exam.
-
-### Agent + SQL + Vector — Together
-
-```
-User message
-    → Agent planner
-        → SQL tool (exact user/order facts)
-        → Vector tool (semantic docs + memories)
-        → LLM synthesises answer with retrieved context
-```
-
-![Agentic systems combine SQL for exact structured facts and vector search for semantic documents and long-term memory before the LLM synthesises an answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module2/session17/session17-08-agent-sql-vector.png)
-
-- **Failure mode:** Agent retrieves outdated policy vectors — fix with version metadata and refresh jobs when documents change.
-
-### Simple Activity — Design One Agent Tool
-
-In your notebook, write a one-paragraph spec for a tool called `find_similar_support_tickets(description)`. Include: inputs, what gets embedded, what the vector DB returns, and how the agent should use the output.
+- Write ten user questions on topics you care about (course portal, shopping app, travel booking, etc.).
+- Classify each as **green** (SQL/exact), **amber** (both), or **red** (semantic/vector).
+- For any label you are unsure about, write one sentence explaining your reasoning.
 
 ---
 
@@ -578,7 +493,7 @@ Today you built the **mental model**:
 - Embeddings turn language into points on a meaning map.  
 - Relational databases excel at **exact** facts; vector databases excel at **nearest meaning** at scale.  
 - **Indexing** and **ANN** make large-scale search practical.  
-- The end-to-end story is: **chunk → embed → store → query → top-k → use in app, RAG, or agent.**
+- The end-to-end story is: **chunk → embed → store → query → top-k → use in your application.**
 
 In the **next** session, you will **implement** that pipeline in code with **Chroma**: create a collection, embed sample documents, run queries, set **top-k**, and run a minimal end-to-end script. Conceptual clarity today makes the lab feel like assembly, not magic.
 
@@ -595,8 +510,8 @@ In the **next** session, you will **implement** that pipeline in code with **Chr
 - **Embeddings** enable **similarity-based retrieval** — find stored content whose vectors are nearest to the query vector, using the **same embedding model** for both sides.
 - **Traditional SQL** is ideal for **exact keys and structured filters**; it is not designed for fast **nearest-meaning** search over millions of high-dimensional vectors without specialised extensions or a dedicated vector store.
 - A **vector database** **stores**, **indexes**, and **retrieves** embeddings (often with metadata filters), using **vector indexing** and **ANN** to avoid brute-force scans as data grows.
-- The **similarity search process** is: ingest and chunk → embed documents → upsert into the vector DB → embed each query → return **top-k** neighbours → feed results into UI, **RAG**, or **agent tools**.
-- **Exact match** and **semantic search** complement each other; **agentic systems** use vector DBs for **long-term memory**, **knowledge retrieval**, and **tool-backed context** at scale.
+- The **similarity search process** is: ingest and chunk → embed documents → upsert into the vector DB → embed each query → return **top-k** neighbours → use the returned text and metadata downstream.
+- **Exact match** and **semantic search** complement each other — use SQL (or keyword search) for precise facts and vector search for nearest-meaning retrieval.
 
 In the **next** session, you will turn this diagram into runnable **Chroma** code — embed, store, query, and inspect top-k results — completing the path from meaning vectors to a working retrieval pipeline you can extend in real projects.
 
@@ -619,12 +534,10 @@ In the **next** session, you will turn this diagram into runnable **Chroma** cod
 | Metadata filter | Concept | Restrict vector search by tags (topic, year, user id, etc.) |
 | Upsert | Concept | Insert or update a record by id in the collection |
 | Chunking | Concept | Split long documents before embedding for better retrieval |
-| RAG | Pattern | Retrieve chunks via vector search, then generate with an LLM |
 | Chroma | Tool (next session) | Lightweight vector database for learning and prototypes |
 | Pinecone | Tool | Managed cloud vector database service |
 | pgvector | Extension | Vector similarity inside PostgreSQL |
 | HNSW / IVF | Index types | Common ANN index families (names only; configured in tools) |
 | Exact-key lookup | Concept | SQL-style match on ids, keys, and explicit predicates |
-| Agent memory | Pattern | Embed and retrieve past notes by relevance to current goal |
 | `embedding_model.encode()` | API pattern | Converts text to vector (same model for docs and queries) |
 | `vector_db.query()` | API pattern | Accepts query vector + top_k (+ optional filters) |

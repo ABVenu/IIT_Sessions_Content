@@ -29,6 +29,4 @@ detailed subtopics to be covered:
 - Understand Approximate Nearest Neighbor (ANN) Search — Explain how systems balance speed and accuracy by retrieving near-optimal results at scale;
 - Understand the Similarity Search Process — Conceptual end-to-end: query embedding → search indexed collection → return nearest vectors (diagram/story level; implementation is next session);
 - Differentiate Exact Match vs Similarity Search — Brief recap only (~5 mins); when keyword/SQL exact match wins vs semantic vector search — do not repeat the full comparison taught previously;
-- Connect Vector Databases to AI Applications — Relate vector DBs to semantic search, RAG retrieve step, recommendations, and conversational systems as the storage layer behind embeddings;
-- Relate Vector Databases to Agentic Systems — Explain how agents use vector databases for long-term memory, contextual retrieval, and knowledge access at scale;
 - Bridge to Next Session — Next session implements the pipeline in code (Chroma): embed, store, query, top-k, and a minimal end-to-end script;

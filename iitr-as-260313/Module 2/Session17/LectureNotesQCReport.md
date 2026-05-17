@@ -163,4 +163,112 @@ All detailed subtopics from `metadata.md` are fully addressed:
 
 ---
 
+## QC Evaluation — Iteration 4 (Post-Trim Re-QC)
+
+**Date:** 2026-05-17  
+**Trigger:** Re-run against `LectureNotesPrompt4.md` after removal of **Connect Vector Databases to AI Applications** and **Relate Vector Databases to Agentic Systems** subtopics (aligned with updated `metadata.md`).
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 4 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | False |
+
+**Expected result achieved:** No — revision required.
+
+### Issues Identified
+
+1. **Stale presentation:** End-to-end diagram image alt text still referenced “RAG or agents” after those sections were removed from notes.
+2. **Rule 6.1 / student-facing activities:** Two activities referenced “from the live session” (instructor-facing wording).
+3. **3-Sentence Rule:** Human Top-k activity was one block of four sentences; Traffic Light activity mixed three instructions in one paragraph.
+4. **Outdated QC record:** Iteration 3 checklist still listed removed subtopics (AI applications, agentic systems) — metadata and notes no longer include them; coverage table below updated.
+
+### Actions Taken
+
+- Updated image alt for `session17-07-end-to-end-pipeline.png` to match trimmed scope.
+- Rewrote affected activities as solo bullet steps with student-owned question lists.
+- Split long activity text into bullets; changed “classroom activities” → “solo notebook activities.”
+- Lightened “user or agent” / “live agents” phrasing in scalability and ANN sections.
+
+---
+
+## QC Evaluation — Iteration 5 (Post-Fix Verification)
+
+**Date:** 2026-05-17  
+**Trigger:** Re-QC after iteration 4 fixes.
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+
+**Expected result achieved:** Yes — all criteria pass.
+
+### Content Coverage — 5/5 (Current `metadata.md`)
+
+| Metadata subtopic | Coverage in notes |
+|---|---|
+| Conceptual only (no Chroma lab) | Context + bridge to **next** Chroma implementation |
+| Bridge from previous (embeddings, same model, semantic workflow) | `## Bridge — Embeddings and Semantic Search` + readiness check + activity |
+| Recall role of embeddings (short) | `## Recall the Role of Embeddings in AI Systems` |
+| Limitations of traditional DBs | `## Limitations of Traditional Databases for Vector Data` |
+| Introduce vector databases | Definition, three jobs, tool table, metadata |
+| Similarity-based retrieval | Top-k, keyword contrast, trade-offs |
+| Intuition for similarity search | Coaching centre, Amazon, post-retrieval flow + activity |
+| Similarity measurement (~5 mins, no formulas) | Distance vs angle + toy Python |
+| Need for scalable search | Brute-force table + code + stadium activity |
+| Vector indexing | Definition, what index does, connecting sentence to ANN |
+| ANN search | Speed vs accuracy + activity |
+| Similarity search process (end-to-end) | Diagram, six steps, pseudocode pipeline + draw activity |
+| Exact vs similarity (brief recap) | Table + traffic-light activity |
+| Bridge to next session | Chroma prep + key takeaways forward link |
+
+**Removed from scope (by design):** Connect to AI applications; Relate to agentic systems (deferred to Session 18 metadata).
+
+### Creativity — 5/5
+
+- Indian contexts: coaching centre notice board, Ola nearby drivers, PNR vs similar complaints, Pune city proximity, stadium sections.
+- Product analogies: Amazon recommendations, Spotify, Google top-10 results page.
+- Eight solo **Simple Activity** blocks appropriate for a 2hr 15min conceptual Zoom session.
+
+### Structural Adherence — 5/5
+
+- Starts with `# Introduction to Vector Databases`; no audience/duration metadata block.
+- **Context of This Session** + **In this session, you will** present.
+- Previous/**next** references only — no session numbers (verified).
+- Official Definition / In Simple Words / Real-Life Example on introduced concepts.
+- Three Python blocks with per-line comments + **How the code works** sections.
+- **Key Takeaways** (5 bullets) + forward link to **next** Chroma lab.
+- **Important Commands, Libraries, and Terminologies** table at end.
+
+### No Logical Mistakes — True
+
+- SQL vs vector roles, same-model rule, brute-force vs indexing/ANN, cosine vs distance intuition, pgvector positioning, and toy-code disclaimers remain accurate.
+- No claim that vector DB replaces embedding model or SQL for structured aggregates.
+
+### No Presentation Mistakes — True
+
+- No session numbers; no “Ask students to…”; no pair/group activity wording.
+- Activities use student-facing imperatives and notebook steps.
+- Markdown tables and code fences formatted consistently.
+
+### Iteration Summary (All Runs)
+
+| Iteration | Action | Result |
+|---|---|---|
+| 1 | Initial draft + QC | Pass (superseded) |
+| 2 | Strict re-QC | Fail — activities, code comments, headings |
+| 2 | Fixes applied | — |
+| 3 | Post-fix re-QC | Pass (superseded by trim + iteration 4) |
+| 4 | Post-trim re-QC | Fail — stale alt, activity wording, paragraph rule |
+| 4 | Fixes applied in `Lecture Notes.md` | — |
+| 5 | Post-fix verification | **All criteria pass** |
+
+---
+
 *End of QC Report*
