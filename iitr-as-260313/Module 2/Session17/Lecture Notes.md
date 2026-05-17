@@ -21,9 +21,9 @@ This session is **conceptual only** — no Chroma setup or live coding lab today
 
 ---
 
-## Bridge from the Previous Session — Embeddings and Semantic Search
+## Bridge — Embeddings and Semantic Search
 
-Before vector databases, confirm the foundation you already have. This section is a **10–15 minute** recap, not a repeat of the full embedding lesson.
+Before vector databases, confirm the foundation you already have. This section is a **short** recap, not a repeat of the full embedding lesson.
 
 ### What You Already Know
 
@@ -57,7 +57,7 @@ If those three feel clear, you are ready for vector database concepts.
 
 ### Simple Activity — Trace One Query
 
-Pair up. One person plays the **user** (“refund for cancelled workshop”); the other plays the **system** with three sticky notes labelled Chunk A, B, C (different topics). The user reads the question; the system picks which chunk **sounds closest in meaning** without matching exact words. Debrief: that human “nearest meaning” step is what vector search automates with numbers.
+On three sticky notes (or slips of paper), write Chunk A, B, and C with one different topic on each. Read this user question aloud: “refund for cancelled workshop.” Pick the chunk that **sounds closest in meaning** without matching exact words. In your notebook, write one sentence: that human “nearest meaning” step is what vector search automates with numbers.
 
 ---
 
@@ -222,13 +222,13 @@ Similarity search **finds**; it does not always **answer**:
 
 ### Simple Activity — Human Top-k
 
-Give groups 20 index cards with short sentences (mix topics). Read one query aloud. Each group picks **top 3** cards by meaning in 60 seconds. Compare choices across groups. Discuss: why might two groups pick different third cards? (Same issue as tie scores in real vector search.)
+Write 20 short sentences on mixed topics in your notebook (or use a list from the live session). Choose one query sentence and read it aloud. In 60 seconds, pick the **top 3** sentences closest in meaning. Write your top 3 and one sentence on why your third pick might be debatable — the same ambiguity appears when real vector search has close tie scores.
 
 ---
 
 ## Understand Similarity Measurement (Conceptual)
 
-You already met the idea that **closer vectors ≈ more similar meaning**. This section is a **short reinforcement (~5 minutes)** — no heavy formulas.
+You already met the idea that **closer vectors ≈ more similar meaning**. This section is a **short reinforcement** — no heavy formulas.
 
 - **Official Definition:** **Similarity measurement** quantifies how alike two vectors are, commonly via **distance** (smaller = closer) or **cosine similarity** (angle between vectors; focuses on direction of meaning).
 - **In Simple Words:** Distance asks “how far apart are the points?” Cosine asks “are they pointing the **same direction** on the map?”
@@ -252,15 +252,15 @@ vec_refund_policy = [0.9, 0.1, 0.0]   # Mostly about money/refunds
 vec_cancel_course = [0.85, 0.15, 0.0] # Similar direction → similar topic
 vec_hostel_rules    = [0.1, 0.1, 0.9] # Points a different way → different topic
 
-def simple_dot(a, b):
+def simple_dot(a, b):  # Define a tiny helper to score how two vectors align
     # Toy score: larger when numbers line up (NOT production cosine — demo only)
-    return sum(x * y for x, y in zip(a, b))
+    return sum(x * y for x, y in zip(a, b))  # Multiply matching positions and add them up
 
-score_near = simple_dot(vec_refund_policy, vec_cancel_course)
-score_far  = simple_dot(vec_refund_policy, vec_hostel_rules)
+score_near = simple_dot(vec_refund_policy, vec_cancel_course)  # Compare two similar topics
+score_far  = simple_dot(vec_refund_policy, vec_hostel_rules)   # Compare refund vs hostel topic
 
-print("Refund vs cancel (expect higher):", score_near)
-print("Refund vs hostel (expect lower):", score_far)
+print("Refund vs cancel (expect higher):", score_near)  # Show the similar-topic score
+print("Refund vs hostel (expect lower):", score_far)    # Show the different-topic score
 ```
 
 **How the code works:**
@@ -301,28 +301,28 @@ That pressure drives **vector indexing** and **approximate** search — trading 
 
 ```python
 # Pretend we have 5 stored vectors and 1 query vector (each just 2 numbers for clarity)
-stored = {
-    "chunk_A": [1.0, 0.0],
-    "chunk_B": [0.9, 0.1],
-    "chunk_C": [0.0, 1.0],
-    "chunk_D": [0.2, 0.8],
-    "chunk_E": [0.95, 0.05],
+stored = {  # Dictionary of chunk names → toy embedding vectors
+    "chunk_A": [1.0, 0.0],   # Stored vector A
+    "chunk_B": [0.9, 0.1],   # Stored vector B (close to query direction)
+    "chunk_C": [0.0, 1.0],   # Stored vector C (different direction)
+    "chunk_D": [0.2, 0.8],   # Stored vector D
+    "chunk_E": [0.95, 0.05], # Stored vector E (very close to query direction)
 }
-query = [0.92, 0.08]
+query = [0.92, 0.08]  # The user question as a toy query vector
 
-def l2_distance(a, b):
+def l2_distance(a, b):  # Define straight-line distance between two vectors
     # Straight-line distance: smaller means closer in this toy demo
-    return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5
+    return sum((x - y) ** 2 for x, y in zip(a, b)) ** 0.5  # Square differences, sum, square root
 
 # BRUTE FORCE: compare query to EVERY stored vector
-scores = []
-for name, vec in stored.items():
+scores = []  # Empty list to collect (chunk name, distance) pairs
+for name, vec in stored.items():  # Loop over every stored chunk
     dist = l2_distance(query, vec)  # One comparison per chunk
-    scores.append((name, dist))
+    scores.append((name, dist))  # Save this chunk’s distance score
 
-scores.sort(key=lambda item: item[1])  # Sort all results by distance
-top_k = scores[:2]  # Take best 2
-print("Brute-force top-2:", top_k)
+scores.sort(key=lambda item: item[1])  # Sort all results by distance (smallest first)
+top_k = scores[:2]  # Take best 2 nearest chunks
+print("Brute-force top-2:", top_k)  # Print the two closest matches
 
 # In a real vector DB, an INDEX avoids touching every vector — coming next section
 ```
@@ -335,7 +335,7 @@ print("Brute-force top-2:", top_k)
 
 ### Simple Activity — Stadium Sections
 
-Draw a stadium with 8 sections. Hide a “target seat.” Classmates ask yes/no questions using **sections** only (not individual seats). Relate to indexing: good questions **eliminate** large areas quickly — like ANN structures that skip unlikely regions.
+In your notebook, draw a stadium with 8 sections (label them 1–8). Privately pick one section as the hidden “target.” Write three yes/no questions you could ask to narrow down the section — using **sections** only, not individual seats. Below your questions, write one sentence: good questions **eliminate** large areas quickly — the same idea as ANN indexes skipping unlikely regions.
 
 ---
 
@@ -385,7 +385,7 @@ Indexing makes search **feasible**. Because perfect exhaustive search is still e
 
 ### Simple Activity — Good Enough Match
 
-Show a list of 15 cities. Ask students to find the **closest** city to “Pune” by road distance without calculators — they will pick **nearby** cities quickly, maybe not the mathematically exact #1 every time. Discuss when “good enough fast” beats “perfect slow” in product design.
+Using a list of 15 cities, find the city you think is **closest** to Pune by road distance — without calculators. You will likely pick **nearby** cities quickly, even if you are not sure of the mathematically exact #1. In your notebook, write when “good enough fast” beats “perfect slow” in product design.
 
 ---
 
@@ -423,33 +423,33 @@ This is the full **conceptual pipeline** you will implement in the **next** sess
 
 ```python
 # ============ OFFLINE: BUILD THE COLLECTION (runs when docs change) ============
-chunks = [
-    {"id": "faq_1", "text": "How to reset your password", "topic": "account"},
-    {"id": "faq_2", "text": "Track your shipment status", "topic": "shipping"},
+chunks = [  # Sample FAQ chunks before they go into the vector database
+    {"id": "faq_1", "text": "How to reset your password", "topic": "account"},  # First chunk
+    {"id": "faq_2", "text": "Track your shipment status", "topic": "shipping"},  # Second chunk
 ]
 
-for chunk in chunks:
-    vector = embedding_model.encode(chunk["text"])  # Same model always
-    vector_db.upsert(
+for chunk in chunks:  # Process each chunk once when documents are added or updated
+    vector = embedding_model.encode(chunk["text"])  # Same model always — turn text into numbers
+    vector_db.upsert(  # Save or update this chunk in the collection
         id=chunk["id"],           # Unique key for this chunk
         embedding=vector,         # Numbers stored for similarity search
         document=chunk["text"],   # Original text returned to users/LLM
-        metadata={"topic": chunk["topic"]},  # Optional filters later
+        metadata={"topic": chunk["topic"]},  # Optional filters later (e.g. topic = account)
     )
 
 vector_db.build_index()  # Many libraries index automatically or on first query
 
 # ============ ONLINE: EACH USER QUESTION ============
-user_question = "I forgot my login password"
+user_question = "I forgot my login password"  # What the user typed in the app
 query_vector = embedding_model.encode(user_question)  # MUST be same model as above
 
-results = vector_db.query(
+results = vector_db.query(  # Ask the vector DB for nearest neighbours
     embedding=query_vector,  # Search by vector, not raw string
     top_k=2,                 # Return two nearest chunks
     filter={"topic": "account"},  # Optional: only search account FAQs
 )
 
-for hit in results:
+for hit in results:  # Loop through each match the database returned
     print(hit.id, hit.document, hit.score)  # score = similarity or distance per tool
 ```
 
@@ -469,7 +469,7 @@ On one A4 sheet, draw the six steps above for a scenario you care about (college
 
 ## Differentiate Exact Match vs Similarity Search (Brief Recap)
 
-You compared these ideas in depth earlier. Here is a **~5 minute** consolidation — not a full re-teach.
+You compared these ideas in depth earlier. Here is a **brief** consolidation — not a full re-teach.
 
 | When to use | Exact match (SQL / keyword) | Similarity (vector DB) |
 |---|---|---|
@@ -483,7 +483,7 @@ You compared these ideas in depth earlier. Here is a **~5 minute** consolidation
 
 ### Simple Activity — Traffic Light
 
-Read ten user questions aloud. Classify each as **green** (SQL/exact), **amber** (both), or **red** (semantic/vector). Discuss any disagreements — product teams debate these too.
+Write ten user questions (your own list or from the live session). Classify each as **green** (SQL/exact), **amber** (both), or **red** (semantic/vector). For any label you are unsure about, write one sentence explaining your reasoning.
 
 ---
 
@@ -567,7 +567,7 @@ User message
 
 ### Simple Activity — Design One Agent Tool
 
-In groups, write a one-paragraph spec for a tool called `find_similar_support_tickets(description)`. List: inputs, what gets embedded, what the vector DB returns, and how the agent should use the output. Share with class.
+In your notebook, write a one-paragraph spec for a tool called `find_similar_support_tickets(description)`. Include: inputs, what gets embedded, what the vector DB returns, and how the agent should use the output.
 
 ---
 

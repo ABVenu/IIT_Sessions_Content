@@ -16,16 +16,12 @@ topics be covered: Data leakage guard; Class imbalance basics; Synthetic data co
 
 detailed subtopics to be covered:
 
-- Understand Data Leakage — Define data leakage and explain why it leads to misleadingly high model performance; use simple real-life analogies (e.g., using future information in prediction).
-- Identify Common Leakage Scenarios — Demonstrate how leakage occurs in practice, such as preprocessing before splitting data or including target-related features; connect with previous session workflows.
-- Apply Data Leakage Guard Practices — Establish correct workflow: split before preprocessing, isolate test data, and simulate real-world prediction conditions to prevent leakage.
+- Data Leakage: Definition, Scenarios & Guards — Define data leakage and why it creates misleadingly high performance; cover common scenarios (preprocessing before split, target-related features, test-set statistics in transforms) with a brief link to the previous session workflow; establish the guard checklist: split first, fit preprocessing on training data only, isolate test data, and simulate real-world prediction conditions.
 - Introduce Class Imbalance — Explain imbalance using intuitive examples (e.g., fraud detection, rare diseases); show how datasets can be skewed toward one class.
-- Understand the Impact of Imbalance — Demonstrate why models become biased toward majority class and why accuracy becomes unreliable.
+- Understand the Impact of Imbalance — Demonstrate why models become biased toward the majority class and why accuracy becomes unreliable on skewed data.
 - Introduce Precision and Recall (Conceptual Only) — Explain using real-world scenarios without formulas; focus on intuition of false positives and false negatives.
-- Explore Basic Imbalance Handling Techniques — Introduce oversampling and undersampling with simple intuition; explain trade-offs without deep implementation.
-- Introduce Synthetic Data Concepts — Explain the idea of generating “artificial but similar” data points (e.g., SMOTE intuition) to balance datasets; keep it high-level and conceptual.
-- Introduce Cross-Validation — Explain why a single train-test split is not reliable; introduce the concept of multiple splits to evaluate model stability.
-- Understand Cross-Validation in Practice — Show how performance varies across splits and why averaging results gives better confidence.
+- Handling Imbalance: Resampling & Synthetic Data — Introduce oversampling and undersampling with simple intuition and trade-offs; explain synthetic balancing (e.g., SMOTE intuition) as generating artificial but similar minority examples; keep conceptual, no deep implementation.
+- Cross-Validation: Why & How (Conceptual) — Explain why a single train-test split is unreliable; introduce multiple splits, how performance varies across folds, and why averaging results gives better confidence; diagram or verbal walkthrough preferred over a full coding lab.
 - Connect Leakage, Imbalance, and Evaluation — Reinforce how improper handling of these concepts leads to incorrect conclusions about model performance.
 
 
