@@ -1,4 +1,4 @@
-lecture ID:
+lecture ID: 152460
 
 Course Name: Certification in Agentic Systems and Design
 
@@ -7,7 +7,7 @@ Target Audience : Students from any backgorund may not be necessarily form tech 
 
 session duration: 2hr 15 mins
 
-title: Working with APIs and JSON
+title: Working with APIs and JSON	
 
 objective: Understand how applications communicate using APIs and JSON
 
@@ -15,7 +15,6 @@ topics be covered: REST APIs;JSON structures;API responses
 
 
 detailed subtopics to be covered:
-
 - Understand How Software Is Structured — and Why Agents Need to Know This — Introduce the layered architecture (FE, BE, DB) not as a web dev concept, but to help students understand the environment agents operate in and the systems they interact with;
 - Understand the Role of Each Layer — Explain that the frontend is what users see, the backend runs logic and enforces rules, and the database stores data; agents typically interact at the backend layer via APIs;
 - Visualize the Full Request Flow: FE → API → BE → API → DB — Walk through the complete data flow:
@@ -29,3 +28,4 @@ GET → Read, POST → Create, PUT/PATCH → Update, DELETE → Remove;
 - Understand That AI Models Also Respond via APIs — Explain that when you call an AI model (e.g., OpenAI, Gemini), you send a structured API request and receive a structured JSON response — the same pattern as any other API; the model's reply is just another API response;
 - Trace an Agentic API Call End to End — Walk through a real scenario:
 agent sends POST request to OpenAI API with a prompt → API returns JSON response with the model's reply → agent reads the response and decides the next action;
+	

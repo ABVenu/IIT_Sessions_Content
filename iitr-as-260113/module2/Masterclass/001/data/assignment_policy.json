@@ -1,0 +1,34 @@
+{
+  "company": "LearnBridge Academy",
+  "policy_type": "assignment",
+  "policy_title": "Assignment Submission Policy",
+  "version": "2025.1",
+  "effective_from": "2025-01-01",
+  "sections": [
+    {
+      "section_id": "deadlines",
+      "heading": "Submission Deadlines",
+      "content": "All assignments must be submitted through the LearnBridge portal before 11:59 PM IST on the due date shown on the dashboard. The timestamp on the portal is the official record. Submissions by email or chat are not accepted unless the portal was down and a ticket was raised before the deadline."
+    },
+    {
+      "section_id": "late_submission",
+      "heading": "Late Submission Rules",
+      "content": "Assignments submitted within 48 hours after the deadline receive a 20% penalty on the maximum score. Submissions between 48 and 96 hours late receive a 40% penalty. After 96 hours, late submissions are not graded unless the student had pre-approved extension due to documented medical emergency."
+    },
+    {
+      "section_id": "resubmission",
+      "heading": "Resubmission and Improvement",
+      "content": "If a student scores below 40% on an assignment, one resubmission is allowed within 7 days of grade release. The resubmission score is capped at 60% of the original maximum marks. Only coding and project-type assignments are eligible for resubmission; quizzes and proctored tests are not."
+    },
+    {
+      "section_id": "plagiarism",
+      "heading": "Plagiarism and Original Work",
+      "content": "All submitted work must be the student's own. Copying code or text from classmates, public repos, or AI tools without attribution is plagiarism. First offence: zero marks on the assignment and mandatory academic integrity workshop. Second offence: module failure and review by the conduct committee."
+    },
+    {
+      "section_id": "file_format",
+      "heading": "File Format and Naming",
+      "content": "Code assignments must include a README.md, requirements.txt, and the main script named as specified in the brief. Zip files are allowed only when the brief explicitly asks for them. Folder naming must follow module and session labels given in the assignment instructions."
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "company": "RetailPulse Analytics",
+  "description": "Monthly sales targets by region for dashboard comparison",
+  "regions": [
+    {"region": "Central", "monthly_target_sales": 45000},
+    {"region": "East", "monthly_target_sales": 42000},
+    {"region": "South", "monthly_target_sales": 48000},
+    {"region": "West", "monthly_target_sales": 52000}
+  ]
+}

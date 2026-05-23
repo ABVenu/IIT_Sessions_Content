@@ -1,0 +1,66 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A startup's `customers` table has **4** rows and `orders` has **6** rows. You run a **cross join** with **no** matching condition. How many rows appear in the result?,,,,,,2,,10,24,4,6,,,6a100e4f0351ba3aee144367,0,markdown,Cross join = Cartesian product: **4 × 6 = 24** rows (taught with customers × orders demo). **Why others are wrong:** 10 adds sizes; 4 and 6 are single-table counts.
+mcsc,markdown,In a query you write `FROM customers AS c JOIN orders AS o`. What is the main purpose of **`c`** and **`o`** here?,,,,,,2,,They permanently rename the tables in the database schema,"They are short **table aliases** for this query only, so columns can be written as `c.customer_id`",They encrypt customer data before joining,"They are required only for `CROSS JOIN`, not for conditional joins",,,6a100e4f0351ba3aee144367,0,markdown,"**`c`** and **`o`** are **table aliases** for readability and qualified columns (`c.customer_id`), not schema renames. **Why others are wrong:** Permanent rename is wrong (aliases are query-scoped). Encryption and CROSS JOIN-only requirements are unrelated."
+mcsc,markdown,"A user searches a help portal for **""remote work policy""**. The best article title is **""Work from home rules""** and shares almost no words with the query. Which approach is designed for this situation?",,,,,,2,,Keyword-only match on exact words in stored text,Semantic search using embeddings,`CROSS JOIN` without an `ON` condition,Sorting FAQ rows with `ORDER BY` only,,,6a100e4f0351ba3aee144367,0,markdown,Class used **remote work** vs **work from home** to show keyword failure and **semantic** match by meaning. **Why others are wrong:** Keyword-only is exact-word matching. `CROSS JOIN` without `ON` and `ORDER BY` alone do not search FAQ meaning.
+mcsc,markdown,"In class, an **embedding** was described as:",,,,,,2,,A SQL foreign key between two tables,A sequence of numbers (a vector) representing the meaning of text,A chunking strategy that splits PDFs every 500 characters,A synonym dictionary maintained by hand,,,6a100e4f0351ba3aee144367,0,markdown,Live teaching: embedding = **sequence of numbers** representing meaning; vector = that list. **Why others are wrong:** A foreign key is SQL design. Fixed-size chunking is preprocessing. A hand-maintained synonym dictionary is the weak alternative the class argued against.
+mcsc,markdown,"`customers` has `customer_id` **1, 2, 3**. `orders` has two rows linked to customers **1** and **2** only. Customer **3** has no orders. You run:
+
+```sql
+SELECT c.full_name, o.product_name
+FROM orders o
+JOIN customers c ON o.customer_id = c.customer_id;
+```
+
+How many rows should appear (only matching pairs are kept)?",,,,,,2,,3,2,6,0,,,6a100e4f0351ba3aee144367,0.5,markdown,Join on `customer_id` keeps only real pairs—**two** orders → **two** rows; customer **3** is excluded (demo: customer with no orders). **Why others are wrong:** 3 would include a customer without orders. 6 suggests cross join size. 0 means no matches.
+mcsc,markdown,"FAQ **chunks** were embedded with **Model A**. Live user questions are embedded with **Model B** (different API, different vector length). What is the main risk?",,,,,,1,,Similarity between query and stored chunks becomes unreliable because they are not in the same vector space,PostgreSQL automatically converts Model B vectors to Model A,Chunking is no longer required,Keyword search and semantic search become identical,,,6a100e4f0351ba3aee144367,0.5,markdown,"Class stressed **same embedding model** for stored data and user query so comparisons are valid. **Why others are wrong:** PostgreSQL does not auto-convert vectors, chunking is still required, and keyword and semantic search do not become identical."
+mcmc,markdown,Which steps match the **semantic search workflow** described in class for a FAQ bot?,,,,,,,,"Collect and clean source content (help pages, PDFs, etc.)",Split long documents into **chunks** before embedding,Embed the user query with the **same embedding model** used for stored chunks,Retrain a full embedding model from scratch on every single user click,Compare vectors and return the **closest** matches to the query,"1,2,3,5",6a100e4f0351ba3aee144367,0.5,markdown,Matches live workflow: collect/clean → chunk → embed with same model → compare → top matches (Swiggy/Zomato-style FAQ example). **Why D is wrong:** You **call** an embedding API/model; you do not retrain per click.
+mcmc,markdown,Which statements about **chunking strategies** match what was taught?,,,,,,,,Fixed-size chunking (e.g. every N characters) was described as often **poor** because it can break meaning mid-thought,Paragraph-based chunking can suit content where each paragraph is one complete idea,Keeping related sub-points in the **same** chunk helps retrieval quality,Recursive chunking can help nested documents (sections inside sections),,"1,2,3,4",6a100e4f0351ba3aee144367,0.5,markdown,"All four strategies were named; fixed-size was called **useless** in class; paragraph, semantic, and recursive chunking were discussed with nested/legal examples."
+mcmc,markdown,"Which statements about **vectors**, **semantic similarity**, and **cosine similarity** match the session (concept level—no formula required)?",,,,,,,,Similar meanings tend to produce embeddings whose numbers are **closer** when compared,**Cosine similarity** is used to find which stored vector is closest to the query vector,Every developer must hand-code the full cosine formula before semantic search can work,Mixing different embedding models for stored chunks vs live queries makes comparison unreliable,,"1,2,4",6a100e4f0351ba3aee144367,1,markdown,Class: closer numbers ≈ similar meaning; **cosine similarity** finds closest vectors; production uses built-in functions / vector DB. **Why C is wrong:** Instructor said not to worry about full maths now—libraries handle it.
+mcmc,markdown,"A support system must handle: (i) **""What is order_id 7's status?""** and (ii) **""I want my payment back""** when policies use wording like **""refund eligibility.""** Which statements are **true**?",,,,,,,,Question (i) fits **structured SQL** on known columns and exact values,Question (ii) fits **semantic retrieval** over embedded policy chunks,"The system can **retrieve** relevant chunks by similarity, then let an LLM answer using that text (RAG-style flow discussed in class)",Semantic search should **replace** SQL for all inventory and status lookups,,"1,2,3",6a100e4f0351ba3aee144367,1,markdown,"SQL for exact structured facts; semantic search for paraphrased policy intent; class described retrieve-then-answer flow (RAG preview) for password/refund-style Q&A. **Why D is wrong:** Class said production uses **both** SQL and semantic search, not one replacing the other."
+subjective,markdown,"**Theme:** Explain **why** modern AI help systems use embeddings and semantic search instead of plain keyword lookup.
+
+---
+
+## Scenario
+
+You have joined a company as an **Agentic Systems Designer**. The internal **employee help chatbot** you inherited works like this:
+
+- **Structured questions** (user ID, order ID, leave balance) are answered with **plain SQL** on company tables.
+- **Policy and FAQ questions** are answered with **text-only matching**: `SQL LIKE`, keyword search, or Ctrl+F-style lookup on stored FAQ lines.
+- The previous team also proposed a growing **synonym dictionary** (manual word pairs) instead of changing the retrieval design.
+
+Leadership wants the bot to handle **real employee wording** (paraphrases, informal language, different terms for the same request). As the specialist, you must write a short **design rationale** explaining what is wrong with the current FAQ approach and why the system should move toward **embeddings and semantic search** (with **cosine similarity** used inside the comparison step—not coded by you in this task).
+
+**No code required**—this is a written explanation only.
+
+---
+
+## Task (single response)
+
+Write **one structured answer** (about **250–400 words**) that covers **all four** points below. Use **concrete examples** from this company help-bot context (HR policy, IT access, refunds, leave rules, etc.—you may invent realistic lines).
+
+1. **Plain / keyword search limits** — Why can plain search fail when the user's words and the best FAQ line use **different wording** for the **same intent**? Give **one concrete** user question and **one FAQ sentence** that would **not** match on shared keywords.
+
+2. **Why semantic search is needed** — What does semantic search do differently (search by **meaning / intent**, not only shared words)?
+
+3. **Why embeddings are needed** — Why must text be turned into **vectors** (lists of numbers) before the system can compare meaning? (Computers do not ""understand"" English directly.)
+
+4. **Why not only a synonym dictionary** — Why is a hand-built **synonym / keyword mapping table** a weak long-term fix compared to **embedding-based** semantic search? Mention at least **one** problem such as new phrasing, scale, or maintenance.
+
+**Optional (one sentence):** Where does **cosine similarity** fit in—what is its job after embeddings exist? (Concept only; no formula.)
+
+---
+
+## Quality bar
+
+- Write in **complete sentences** (not only bullet fragments).
+- Do **not** copy lecture headings verbatim; explain in your own words.
+- Stay within topics from this session (keyword vs semantic, embeddings, vectors, chunking/RAG only if needed for examples)—**no** vector-database setup, **no** dot-product maths, **no** code.",,,,,,,,,,,,,,6a100e4f0351ba3aee144367,0.5,markdown,"The employee help bot today splits work correctly for **structured** lookups (SQL on IDs and balances) but fails on **policy/FAQ** questions because it relies on **shared keywords**, not **intent**. Plain `LIKE` or keyword search only finds lines that contain the same words the user typed. For example, an employee might ask, *""I forgot my login password,""* while the best FAQ line says, *""Recover account access from Settings > Security.""* A human sees the same goal, but a keyword engine searching for `password` may return nothing useful because the FAQ never uses that word. That is not a data-quality bug—it is a design limit of text-only matching.
+
+**Semantic search** fixes this by retrieving content whose **meaning** is close to the question, even when wording differs. The same idea applies to HR policy: a query about *remote work* should still surface *work-from-home* rules. Instead of requiring exact term overlap, the system compares how similar the **ideas** are.
+
+To do that at machine scale, text must become **embeddings**—fixed-length **vectors** (lists of numbers) produced by an embedding model. Computers cannot directly ""understand"" English sentences; they can compare numeric representations. If two texts are about the same intent, their vectors tend to land **closer** in vector space, which makes ranking possible.
+
+A growing **synonym dictionary** is a weak long-term substitute. Every new phrase, typo, informal wording, or Hindi–English mix would need another manual rule, and maintenance explodes as FAQs grow. Embeddings generalize from learned language patterns rather than enumerating every word pair.
+
+After embeddings exist, **cosine similarity** (handled by a library or vector database) answers a practical question: **which stored FAQ vector is closest to the query vector?** Learners do not need to implement the formula; its job is to pick the best semantic matches before an LLM or template turns retrieved text into a final answer (RAG-style flow from class)."

@@ -43,3 +43,35 @@ Relatable analogies throughout: mock exam with answer key (leakage), classroom a
 
 ### Result
 All criteria met at expected threshold. **No further iteration required.**
+
+---
+
+## Iteration 2 — Lecture Notes Released.md (post-session alignment)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+
+### Notes
+
+**Content Coverage (5/5):**
+Released notes aligned to **Live Topic Coverage.md** and transcript: leakage (split-first, mean imputation, scaling on train only) retained with full split-first code; **target-derived features** and **duplicate-across-splits** scenarios removed (not taught live); **confusion matrix**, precision/recall **formulas**, **F1**, and **classification report** added; **baseline vs SMOTE** demo with `imblearn` added; **5-fold `cross_val_score` lab** removed (deferred in session); **undersampling** deep-dive and quiz-only content excluded; all nine session images retained.
+
+**Creativity (5/5):**
+Mock exam, classroom assistant, spam/fraud, green-paint SMOTE, and mock-paper cross-validation analogies preserved; new material uses the same plain-language style.
+
+**Structural Adherence (5/5):**
+Title-first layout, integrated definitions, commented full code blocks with “How the code works,” student-facing activities, Key Takeaways, and terminology table maintained per LectureNotesPrompt4.
+
+**No Logical Mistakes (True):**
+SMOTE applied on training only; test distribution unchanged; metric formulas and leakage workflow consistent with Session 14 and live teaching.
+
+**No Presentation Mistakes (True):**
+No Mentimeter/quiz content; heading hierarchy and image URLs consistent; released file matches taught scope.
+
+### Result
+All criteria met at expected threshold for **Lecture Notes Released.md**. **No further iteration required.**

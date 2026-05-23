@@ -1,0 +1,147 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"NovaBank is building a model to flag **fraudulent transactions before they settle**. A data engineer adds a column `refund_issued` that is filled in **only after** a disputed transaction is reviewed. At prediction time, that column does not exist yet. What problem does this feature create?",,,,,,2,,Class imbalance — one label appears far more often than the other,Data leakage — training uses information that would not exist at real prediction time,Cross-validation noise — one random split looks too good or too bad,Low recall — the model misses too many real fraud cases,,,6a0c1901da8bd4cf9f7fb1ee,0,markdown,"`refund_issued` is decided **after** the moment the bank must score risk, so it is a forbidden future clue. That is **data leakage**. **A** is about skewed label counts, not forbidden features. **C** is about evaluation strategy, not feature timing. **D** is a metric outcome, not the root cause of using post-outcome data."
+mcsc,markdown,A campus health app team prepares numeric vitals for a dropout-risk model. They want a **leakage-safe** order of operations. Which sequence is correct?,,,,,,2,,Scale all rows → split train/test → train the model,Split train/test → fit the scaler on training rows only → transform test with training statistics → train the model,Train the model → split train/test → scale test with test statistics,Fit the scaler on the test set → fit_transform the training set → train the model,,,6a0c1901da8bd4cf9f7fb1ee,0,markdown,"**Split first**, then **learn** scaling parameters from **training only**, then **`transform` test** without refitting — that keeps test statistics out of preprocessing. **A** leaks because test rows influence the scaler. **C** trains before a proper holdout workflow. **D** fits on test, which is backwards and leaks."
+mcsc,markdown,"SecureLogin monitors **10,000** login attempts: **9,800** are labelled **safe** and **200** are **hacked**. A rookie model predicts **""safe""** for every row. What is its **accuracy**?",,,,,,3,,2%,20%,98%,100%,,,6a0c1901da8bd4cf9f7fb1ee,0,markdown,"The model is correct on all **9,800** safe rows and wrong on all **200** hacked rows: **9,800 ÷ 10,000 = 98%** accuracy. **A** is the minority rate (2%), not accuracy. **B** and **D** do not match the counts."
+mcsc,markdown,"A rare-disease screen reports **99% accuracy**, but doctors complain that most sick patients are still sent home as ""healthy."" Which statement best explains the gap?",,,,,,1,,"Accuracy counts all correct answers equally, so a model can look strong while catching almost none of the rare sick cases",Accuracy always equals recall on imbalanced data,High accuracy proves the model has no false positives,"Imbalance only affects regression models, not classification",,,6a0c1901da8bd4cf9f7fb1ee,0,markdown,"When the healthy class dominates, predicting ""healthy"" often yields **high accuracy** while **recall on the sick class** stays near zero. **B** is false — accuracy and recall measure different things. **C** is false — high accuracy does not rule out false positives. **D** is false — imbalance is a classification issue in this story."
+mcsc,markdown,"A quality team reviews flagged defects on a factory line. Out of **100** items the model marked **defective**, **85** truly were defective (**15** were false alarms). Out of **60** real defects on the line that day, the model found **51**. What are **precision** and **recall** (for the ""defective"" positive class)?",,,,,,1,,Precision = 0.85 ; Recall = 0.85,Precision = 0.85 ; Recall = 0.51,Precision = 0.51 ; Recall = 0.85,Precision = 0.51 ; Recall = 0.51,,,6a0c1901da8bd4cf9f7fb1ee,0.5,markdown,"**Precision** = TP ÷ (TP + FP) = **85 ÷ 100 = 0.85** (when we flag defective, how often we are right). **Recall** = TP ÷ (TP + FN). True positives = **51** caught; false negatives = 60 − 51 = **9**; recall = **51 ÷ 60 = 0.85**. **B–D** swap or miscompute one of the two rates."
+mcsc,markdown,"After fixing a leaky pipeline, test **accuracy drops** from 94% to 78%. The product owner asks whether this is bad news. What is the best reply?",,,,,,2,,Yes — always roll back; lower accuracy always means a worse model,No — the earlier 94% was likely inflated by leakage; 78% is a more honest estimate,"No — accuracy on imbalanced data is always trustworthy, so 78% must be wrong",Yes — you should apply SMOTE to the test set until accuracy rises again,,,6a0c1901da8bd4cf9f7fb1ee,0.5,markdown,"Removing leakage often **lowers** reported scores because the model no longer ""cheats"" with test-set information. That drop can mean the evaluation is finally **honest**. **A** treats every drop as failure. **C** ignores imbalance pitfalls. **D** is wrong — never balance the **test** set to chase a prettier accuracy number."
+mcmc,markdown,Which actions belong on a **data-leakage guard checklist** before you trust a model score? (Select **all** that apply),,,,,,,,Call `train_test_split` immediately after loading data and lock away the test portion,"Fit imputers, encoders, and scalers on **training rows only**, then `transform` the test set",Tune every hyperparameter by whichever setting maximises test accuracy,Keep only features you would truly know **before** the outcome you are predicting,,"1, 2, 4",6a0c1901da8bd4cf9f7fb1ee,0.5,markdown,"**A**, **B**, and **D** match the taught guards: split first, train-only fit, and real-time feature discipline. **C** is leakage-by-peeking — repeatedly optimising on the test set lets test information steer training choices."
+mcmc,markdown,"A fraud analyst reads a **binary** confusion matrix for the ""fraud"" positive class. Which statements are correct? (Select **all** that apply)",,,,,,,,"A **false positive** means the model flagged fraud, but the transaction was legitimate","A **false negative** means the model cleared the transaction, but it was actually fraud",**True negatives** are legitimate transactions correctly labelled as not fraud,"**High recall** means that when the model says ""fraud,"" it is almost always right",,"1, 2, 3",6a0c1901da8bd4cf9f7fb1ee,0.5,markdown,"**A**, **B**, and **C** are standard TP/TN/FP/FN readings. **D** describes **precision** (trust when we flag ""yes""), not recall (how many real fraud cases we **catch**)."
+mcmc,markdown,PayGuard's ML team balances **training** data with **SMOTE** after a proper train–test split. Which practices are **sound**? (Select **all** that apply),,,,,,,,Apply `SMOTE.fit_resample` only on **training** features and labels,Leave the **test set** at the real-world class ratio for evaluation,Compare baseline and SMOTE models using the same held-out test set and a **classification report**,Run SMOTE on the combined train+test table so both sets have 50/50 labels,,"1, 2, 3",6a0c1901da8bd4cf9f7fb1ee,1,markdown,"**A–C** follow honest imbalance handling: balance **train** for learning, keep **test** realistic, and compare fairly on the same test split. **D** leaks and destroys production-like evaluation by altering the test distribution."
+mcmc,markdown,Two candidate models are compared on a **medium-sized** tabular dataset. Which statements about **cross-validation** are fair? (Select **all** that apply),,,,,,,,Repeating train–test evaluation on several folds and **averaging** scores can reduce reliance on one lucky split,"If five fold scores are `[0.76, 0.74, 0.78, 0.75, 0.77]`, performance looks relatively **stable** compared with a single score of `0.95` from one split",Cross-validation replaces the need to ever hold out a final test set in every real project,A wide spread across folds (for example `0.55` to `0.92`) suggests performance may depend heavily on which rows were held out,,"1, 2, 4",6a0c1901da8bd4cf9f7fb1ee,1,markdown,"**A**, **B**, and **D** match the conceptual goals: averaged, stable estimates and reading spread. **C** overstates CV — teams often still keep a **locked** final test set for late validation; CV is not a universal substitute."
+subjective,markdown,"## Spot the Fraud: Baseline vs SMOTE
+
+**Scenario**
+
+A bank's pilot fraud dataset is **heavily imbalanced** — almost every row is ""not fraud."" You will use a small synthetic dataset, **split first**, train a simple model **without** balancing, then train the same model after **SMOTE on training data only**, and compare the results on the **same test set**.
+
+---
+
+### Your task
+
+Write **one** Python file: `fraud_compare.py` with the four parts below.
+
+Use these settings everywhere: `random_state=42`, `test_size=0.2`, `LogisticRegression(max_iter=500)`.
+
+#### Part 1 — Create data and split first
+
+```python
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+
+X, y = make_classification(
+    n_samples=1000,
+    n_features=4,
+    weights=[0.99, 0.01],
+    random_state=42,
+)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+```
+
+Print: `Train size:` and `Test size:` (number of rows).
+
+#### Part 2 — Baseline model (no SMOTE)
+
+Train logistic regression on `X_train`, `y_train`. Predict on `X_test`.
+
+Print:
+
+```text
+--- Baseline ---
+```
+
+then `classification_report(y_test, y_pred)` (from `sklearn.metrics`).
+
+#### Part 3 — Same model after SMOTE on training only
+
+```python
+from imblearn.over_sampling import SMOTE
+
+smote = SMOTE(random_state=42)
+X_train_bal, y_train_bal = smote.fit_resample(X_train, y_train)
+```
+
+Train a **new** logistic regression on `X_train_bal`, `y_train_bal`. Predict on the **original** `X_test`, `y_test` (do **not** SMOTE the test set).
+
+Print:
+
+```text
+--- After SMOTE ---
+```
+
+then `classification_report(y_test, y_pred)`.
+
+#### Part 4 — Two comment lines
+
+After you run the script, add **two** comment lines at the bottom of your file:
+
+```python
+# Recall for class 1 (fraud) — baseline: ___   after SMOTE: ___
+# In one short sentence: why is accuracy alone not enough here?
+```
+
+Fill in the recall values you see in the reports (for class `1`).
+
+---
+
+### What you should notice
+
+- **Baseline** often has **high accuracy** but **low recall** for class `1` (fraud).
+- **After SMOTE**, recall for class `1` on the test set usually **improves**.
+- The **test set** stays imbalanced — you only balance **training** data.
+
+---
+
+### Submission instructions
+
+- Write everything in **one** file: `fraud_compare.py`.
+- Install if needed: `pip install scikit-learn imbalanced-learn`
+- Run the script once and check both reports print.
+- Submit the full code (including your two comment lines) in the LMS **code editor / answer box**.",,,,,,,,,,,,,,6a0c1901da8bd4cf9f7fb1ee,0.5,markdown,"#### Reference Solution
+
+```python
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import classification_report
+from imblearn.over_sampling import SMOTE
+
+X, y = make_classification(
+    n_samples=1000,
+    n_features=4,
+    weights=[0.99, 0.01],
+    random_state=42,
+)
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(""Train size:"", X_train.shape[0])
+print(""Test size:"", X_test.shape[0])
+
+baseline = LogisticRegression(max_iter=500)
+baseline.fit(X_train, y_train)
+y_pred_base = baseline.predict(X_test)
+
+print(""\n--- Baseline ---"")
+print(classification_report(y_test, y_pred_base))
+
+smote = SMOTE(random_state=42)
+X_train_bal, y_train_bal = smote.fit_resample(X_train, y_train)
+
+model_smote = LogisticRegression(max_iter=500)
+model_smote.fit(X_train_bal, y_train_bal)
+y_pred_smote = model_smote.predict(X_test)
+
+print(""\n--- After SMOTE ---"")
+print(classification_report(y_test, y_pred_smote))
+
+# Recall for class 1 (fraud) — baseline: 0.00   after SMOTE: 1.00
+# Accuracy alone is not enough because the model can look accurate by always predicting ""not fraud"" and missing real fraud.
+```
+
+**Key points:** Split before SMOTE; balance **training** only; evaluate on the real imbalanced test set. Baseline often shows high accuracy but near-zero recall for fraud (class 1); SMOTE on training usually improves recall for class 1 while the test distribution stays honest."

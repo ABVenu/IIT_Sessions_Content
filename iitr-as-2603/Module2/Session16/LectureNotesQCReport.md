@@ -41,4 +41,32 @@ Relatable Indian-context examples throughout — cab fare meter, PG rent, sweets
 - Bold used for key terms; lists used for steps and explanations.
 
 ### Result
+All criteria met at expected threshold for pre-session `Lecture Notes.md`. **Superseded by Iteration 2** after live alignment.
+
+---
+
+## Iteration 2 — Lecture Notes Released (post-session alignment)
+
+**Date:** May 21, 2026  
+**Inputs:** `Trasncript.md`, `Live Topic Coverage.md`, `Lecture Notes.md`  
+**Output:** `Lecture Notes Released.md`
+
+### Alignment changes
+
+- Removed untaught **synthetic HR salary (400-row)** workflows and **Google Colab** framing; replaced with **study hours → exam score** notebook demo and **California housing (Kaggle)** case study.
+- Added live extras: **simple vs multiple** linear regression, **coefficient interpretation**, **one-hot encoding** reminder for categorical features, **Pipeline** + **MinMaxScaler**, **mean baseline** on housing (conceptual), **underfitting/overfitting/good fit** with class scores, brief **gradient boosting regressor** comparator and **n_estimators** overfitting demo (conceptual only).
+- Residuals section aligned to **table-based** study-hours check (no live matplotlib residual plot); retained residual-pattern intuition and metric deferral (MAE, RMSE, R², Ridge/Lasso).
+- Retained all four session28 diagram images; no Mentimeter/quiz content.
+
+### Criteria Evaluation
+
+| Criteria | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | 5/5 | All six detailed subtopics plus transcript extras; prior-session context without session numbers; Key Takeaways and reference table updated for Pipeline, housing case study, and released-only topics. |
+| **Creativity** | 5/5 | Indian-context examples (Ola-style fare, Magicbricks framing, sweets shop, coaching centre); student-facing activities; integrated doubts. |
+| **Structural Adherence** | 5/5 | Prompt4 layout: `#` title, context bullets, Official/In Simple Words/Real-Life Example, full code with per-line comments and “How the code works,” Key Takeaways, terminology table. |
+| **No Logical Mistakes** | True | Residual sign, split-first fit, baseline/train-only mean, pipeline leakage reminder, and underfitting vs overfitting stories match Live Topic Coverage and transcript. |
+| **No Presentation Mistakes** | True | Valid markdown, fenced code, working image URLs, professional student-facing tone. |
+
+### Result
 All criteria met at expected threshold. **No further iteration required.**

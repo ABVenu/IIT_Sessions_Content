@@ -1,0 +1,270 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A law college team is prototyping an assistant that reads **unpublished case summaries** stored only on lab laptops. Leadership wants **no student prompts or documents sent to a US cloud API** during this phase. Which setup best matches that goal?,,,,,,2,,Call OpenAI's public chat API from every student notebook,Run inference with **Ollama** on each laptop so weights and prompts stay on the machine,Paste case text into a public web chat with no login,Email case summaries to a shared Gmail account for manual review,,6a1159831ca9da4c01a683b8,0,markdown,"A **local LLM** runs on your machine; Ollama keeps prompts and data on-device during local inference—matching the privacy requirement. **Why others are wrong:** Call OpenAI's API, public web chat, and email all send or expose content outside controlled local inference."
+mcsc,markdown,You have never downloaded a model on your PC. You want the **weights on disk** before you chat in the terminal. Which command should you run **first**?,,,,,,2,,`ollama run qwen2.5:0.5b`,`ollama pull qwen2.5:0.5b`,`ollama rm qwen2.5:0.5b`,`ollama ps`,,6a1159831ca9da4c01a683b8,0,markdown,"`ollama pull` downloads model weights once; `ollama run` loads and chats with an already-pulled model. **Why others are wrong:** `run` before `pull` fails if the model is missing. `rm` deletes a model. `ps` shows what is loaded in memory, not first-time download."
+mcsc,markdown,A student on an **8 GB RAM** laptop runs `ollama pull llama3.1:70b` for a class demo. What is the **most likely** outcome on typical student hardware?,,,,,,2,,Instant replies faster than any cloud API,"The pull or run may fail, freeze, or make the machine unusable because the model needs far more memory than the laptop has","RAM usage stays under 500 MB because ""70b"" is only a label",Ollama automatically shrinks the model to 0.5B without telling the user,,6a1159831ca9da4c01a683b8,0,markdown,70B-class models often need **40+ GB** RAM; 8 GB laptops cannot host them reliably. **Why others are wrong:** Other options misstate memory needs or Ollama behaviour.
+mcsc,markdown,Priya is practising **hundreds** of prompt variations for a personal project. She cares about **zero per-token bills** and keeping drafts on her device. Her friend Arjun needs **Llama 3.3 70B–class** answers in **under a second** on a weak laptop. What pairing is most reasonable?,,,,,,1,,Priya: local Ollama with a small pulled model; Arjun: **Groq** (or similar cloud API) for large-model speed,Both must pull 70B locally to learn properly,Priya must use only paid OpenAI; Arjun must avoid all cloud APIs,Local Ollama always beats cloud on quality and speed for every task,,6a1159831ca9da4c01a683b8,0,markdown,"Local small models avoid per-token cost and keep data on-device; Groq-class cloud APIs deliver large-model speed without local 70B weights. **Why others are wrong:** 70B local on weak laptops is discouraged; other pairings overgeneralise cost, quality, and speed trade-offs."
+mcsc,markdown,"In Google Colab you store your Groq key in **Secrets** as `GROQ_API_KEY` and read it with `os.environ.get(""GROQ_API_KEY"")`. The notebook cell fails with ""API key not found"" even though you pasted a valid key. Which cause is **most likely**?",,,,,,2,,"Groq only works on Windows, not in Colab","The secret **name** does not match what the code expects, or notebook access to that secret was not enabled",You must run `ollama pull` inside Colab before any Groq call,`client.chat.completions.create` is invalid on Groq's API,,6a1159831ca9da4c01a683b8,0.5,markdown,Colab Secrets must match the exact name (`GROQ_API_KEY`) and grant notebook access—common live failure mode. **Why others are wrong:** Groq works from Colab; Ollama pull is unrelated; Groq uses OpenAI-style `chat.completions.create`.
+mcsc,markdown,You already have a working **Groq** script using `client.chat.completions.create(...)` with `system` and `user` messages. You want the **same message list** on **Anthropic**. What change is **required** at the API call layer (keys and model names aside)?,,,,,,1,,Switch to `client.messages.create(...)` instead of `client.chat.completions.create(...)`,Remove all `role` fields because Anthropic does not use roles,Send prompts only as raw HTTP GET requests with no JSON body,Replace `messages` with SQL `JOIN` syntax,,6a1159831ca9da4c01a683b8,0.5,markdown,Anthropic's Python SDK uses `client.messages.create(...)` while Groq/OpenAI use `client.chat.completions.create(...)` for the same message-list idea. **Why others are wrong:** Anthropic still uses role-based messages; GET-only and SQL are not how either SDK works.
+mcmc,markdown,"You are comparing **Qwen 2.5 0.5B** running locally through Ollama vs **Llama 3.3 70B** on Groq for the same homework task. Which statements about **very small local models** are correct?
+
+*(Select all that apply)*",,,,,,,,They can run on many student laptops without tens of gigabytes of RAM,They never hallucinate because smaller models are always factual,"They are useful for learning APIs, privacy-sensitive drafts, and quick prototypes",They often trade away depth of reasoning and niche factual accuracy compared with large cloud models,"1,3,4",6a1159831ca9da4c01a683b8,0.5,markdown,Tiny models fit weak hardware and are great for learning/privacy; they trade accuracy/reasoning vs large models and can hallucinate more. **Why B is wrong:** Small models **can** hallucinate; class warns about confident wrong answers.
+mcmc,markdown,"Your team runs a **fair comparison** between two cloud models on the same hospital-notes prompt. Which practices match what you should hold constant?
+
+*(Select all that apply)*",,,,,,,,Keep the **same** system and user message text for both runs,"Change the system prompt heavily for model B so it ""gets a fair chance""",Change **only** the `model=` (or provider) identifier between runs,Raise temperature randomly between runs so results stay exciting,"1,3",6a1159831ca9da4c01a683b8,0.5,markdown,Fair comparison fixes prompt and system rules; only the model (or provider) changes. **Why B and D are wrong:** Changing system rules confounds the test; random temperature breaks comparability.
+mcmc,markdown,"A product team might ship an open-weight **Qwen** or **DeepSeek** model for geopolitical Q&A. Which statements about **training-data bias** are correct?
+
+*(Select all that apply)*",,,,,,,,"Answers can reflect geography, language, and viewpoints present in pre-training data—not a neutral encyclopedia",Open-source weights automatically remove all cultural or regional framing,The same user prompt can get different **framing** on models trained in different media ecosystems,Teams in regulated industries may choose models audited for their **jurisdiction** rather than assuming neutrality,"1,3,4",6a1159831ca9da4c01a683b8,1,markdown,Bias comes from training corpora; framing differs across ecosystems; enterprises may pick jurisdiction-appropriate models. **Why B is wrong:** Open weights do not remove bias—open access is not neutral answers.
+mcmc,markdown,"You are browsing [ollama.com/library](https://ollama.com/library) before pulling a model for a **text-only** FAQ bot. Which statements are correct?
+
+*(Select all that apply)*",,,,,,,,"**Modality** describes input/output types such as text, vision, audio, or video",Pulling a **vision** model for a text-only FAQ wastes disk and RAM with no benefit,`ollama pull` downloads weights; `ollama run` starts an interactive chat with a pulled model,Embeddings and full RAG pipelines were the main hands-on focus of the introductory local setup segment,"1,2,3",6a1159831ca9da4c01a683b8,1,markdown,"Modality is input/output type; vision pulls are wasteful for text-only; pull vs run is core CLI. Embeddings/RAG were **mentioned**, not the main hands-on local segment. **Why D is wrong:** Overstates embeddings/RAG depth in introductory Ollama setup."
+subjective,markdown,"## Scenario
+
+You will generate a resume in **HTML** using two engines — once with a **small local model** on Ollama (0.5B or 1B) and once with a **large model on Groq** — then open both files in a browser and decide which resume is better.
+
+This mirrors how builders choose engines: **local** for privacy and zero per-token cost on a laptop; **Groq** for speed and quality when a 70B-class model is impractical to run locally.
+
+**Important:** Copy the **starter code** section into `resume_generator.py`. Do **not** rewrite the save-to-file logic — use `save_resume_html()` exactly as given.
+
+---
+
+## What you must do
+
+1. Copy the full **starter code** below into `resume_generator.py`.  
+2. Set `LOCAL_MODEL` to a tag from `ollama list` (0.5B or 1B only). Set `GROQ_MODEL` to a model Groq hosts (e.g. `llama-3.3-70b-versatile`).  
+3. Complete **`ask_llm(mode, prompt_text)`** (instructions in the starter).  
+4. Run: `python resume_generator.py`  
+5. Confirm two files are created (see naming below). **Open both HTML files in a browser** (see [How to open the HTML files](#how-to-open-the-html-files)).  
+6. At the **bottom** of the file, fill in the **two comment lines** (which resume is better — local or Groq, including **styling**).  
+7. **Paste the entire file** into the LMS answer box.
+
+---
+
+## Starter code — copy into `resume_generator.py`
+
+```python
+import os
+from datetime import datetime
+import requests
+
+# --- Set your model names ---
+LOCAL_MODEL = ""qwen2.5:0.5b""   # 0.5B or 1B only; must match `ollama list`
+GROQ_MODEL = ""llama-3.3-70b-versatile""  # check console.groq.com for available models
+
+CANDIDATE = {
+    ""name"": ""Aarav Mehta"",
+    ""email"": ""aarav.mehta@example.com"",
+    ""phone"": ""+91-98765-43210"",
+    ""location"": ""Roorkee, Uttarakhand"",
+    ""education"": ""B.Tech Computer Science, IIT Roorkee (expected 2026), CGPA 8.4"",
+    ""skills"": [""Python"", ""REST APIs"", ""SQL"", ""Git"", ""Basic ML""],
+    ""experience"": ""Summer intern at TechBridge Labs (Jun–Aug 2025): built internal dashboards with FastAPI and PostgreSQL."",
+    ""projects"": ""Hostel Room Booking CLI (Python) — 200+ active users on campus."",
+}
+
+RESUME_PROMPT = f""""""You are a professional resume writer. Create a complete, single-page resume in valid HTML only.
+
+Rules:
+- Return ONLY HTML starting with <!DOCTYPE html> — no markdown fences, no explanation before or after.
+- Do not invent employers, degrees, or facts not listed below.
+
+Layout (required):
+- Use a **two-column** layout for the main body (e.g. CSS flexbox or CSS grid with two columns).
+- **Left column (narrower, ~30–35%):** contact block, Skills, Education.
+- **Right column (wider, ~65–70%):** Experience, Projects.
+- **Full-width header** above the columns: candidate name (large), one-line title or tagline, email / phone / location on one line.
+
+Styling (use a <style> block in <head> — make it look polished):
+- Font: a clean sans-serif stack (e.g. Arial, Helvetica, or system-ui).
+- **Accent color:** one professional color (e.g. #2563eb blue or #0f766e teal) for headings, section titles, and subtle borders.
+- Section headings: uppercase or small-caps, accent color, bottom border or left border.
+- Consistent spacing: padding inside columns, margin between sections, readable line-height (1.4–1.6).
+- Skills: show as a neat list or small pill/tag style — not a plain comma-separated paragraph.
+- Page: max-width ~900px, centered on screen; light background (#f8fafc) with white column areas or a white card look.
+- Print-friendly: avoid horizontal scroll; keep everything on one screen-height page if possible.
+
+Candidate data:
+Name: {CANDIDATE['name']}
+Email: {CANDIDATE['email']}
+Phone: {CANDIDATE['phone']}
+Location: {CANDIDATE['location']}
+Education: {CANDIDATE['education']}
+Skills: {', '.join(CANDIDATE['skills'])}
+Experience: {CANDIDATE['experience']}
+Projects: {CANDIDATE['projects']}
+""""""
+
+
+def save_resume_html(html_text: str, mode: str) -> str:
+    """"""
+    Save model output to an HTML file. USE THIS FUNCTION AS-IS — do not change the logic.
+
+    File name pattern:
+      Local  -> Local_Resume_YYYYMMDD_HHMMSS.html
+      Groq   -> Groq_Resume_YYYYMMDD_HHMMSS.html
+    """"""
+    prefix = ""Local"" if mode == ""local"" else ""Groq""
+    stamp = datetime.now().strftime(""%Y%m%d_%H%M%S"")
+    filename = f""{prefix}_Resume_{stamp}.html""
+
+    with open(filename, ""w"", encoding=""utf-8"") as f:
+        f.write(html_text)
+
+    print(f""Saved {filename}"")
+    return filename
+
+
+def ask_llm(mode: str, prompt_text: str) -> str:
+    """"""
+    TODO (you implement):
+    - mode ""local"":
+        POST http://localhost:11434/api/chat
+        model LOCAL_MODEL, no API key
+        JSON body: model, messages=[{""role"":""user"",""content"": prompt_text}], stream=False
+        timeout=120
+        return response.json()[""message""][""content""]
+
+    - mode ""groq"":
+        Read GROQ_API_KEY from os.environ (if missing, raise ValueError with a clear message)
+        Use the Groq Python SDK: from groq import Groq
+        client = Groq(api_key=...)
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[{""role"": ""user"", ""content"": prompt_text}],
+        )
+        return response.choices[0].message.content
+    """"""
+    # YOUR CODE HERE
+    raise NotImplementedError(""Complete ask_llm before running."")
+
+
+def generate_resume_html(mode: str) -> str:
+    """"""Call the LLM, then save HTML using save_resume_html (do not change this function).""""""
+    html_from_model = ask_llm(mode, RESUME_PROMPT)
+    return save_resume_html(html_from_model, mode)
+
+
+if __name__ == ""__main__"":
+    print(""Generating local resume..."")
+    generate_resume_html(""local"")
+
+    print(""Generating Groq resume..."")
+    try:
+        generate_resume_html(""groq"")
+    except ValueError as e:
+        print(f""Groq skipped: {e}"")
+
+    print(""Open both HTML files in your browser and compare quality."")
+
+# TODO after comparing both files in the browser — replace the lines below (2 lines; mention styling):
+# Local resume quality:
+# Groq resume quality:
+```
+
+---
+
+## File names after a successful run
+
+You should see files like:
+
+- `Local_Resume_20260519_153045.html`  
+- `Groq_Resume_20260519_153102.html`  
+
+---
+
+## How to open the HTML files
+
+After `python resume_generator.py` finishes, open **each** saved file in a browser using **either** method:
+
+**Method 1 — Double-click (easiest)**  
+- Go to the folder where you ran the script (same folder as `resume_generator.py`).  
+- **Double-click** `Local_Resume_....html` — it should open in your default browser (Chrome, Edge, Safari, etc.).  
+- Repeat for `Groq_Resume_....html`.
+
+**Method 2 — Paste the file path in the browser address bar**  
+- Right-click the HTML file → **Copy as path** (Windows) or hold **Option** and copy path (macOS), or note the full path from your terminal/file explorer.  
+- Open Chrome/Firefox/Edge.  
+- Paste the path into the address bar and press Enter.  
+  - Example (macOS): `file:///Users/you/projects/Local_Resume_20260519_153045.html`  
+  - Example (Windows): `file:///C:/Users/you/projects/Local_Resume_20260519_153102.html`  
+
+Compare **local** and **Groq** side by side (two browser tabs are fine).
+
+---
+
+## Quality check (brief)
+
+| Check | What to look for |
+| --- | --- |
+| Valid HTML | Page opens in browser without errors |
+| Two-column layout | Left column has Skills/Education; right has Experience/Projects; full-width name header |
+| Sections | All required sections present with correct content |
+| Facts | No invented jobs or degrees |
+| **Styling** | Which resume looks better visually? (colors, spacing, fonts, skill tags, borders, overall polish) |
+| Overall | Which resume would you show a mentor — local or Groq? |
+
+---
+
+## Submission instructions (**case c**)
+
+- Use the **starter code** above (with `save_resume_html` and `generate_resume_html` unchanged).  
+- Complete only `ask_llm`, model constants, and the **two comment lines** at the bottom.  
+- Run the script; confirm at least the **local** HTML file exists (Groq file if your key is set).  
+- **Paste the full `resume_generator.py`** into the LMS code editor / answer box.
+
+**Setup**
+
+```bash
+pip install requests groq
+ollama pull qwen2.5:0.5b    # or your chosen light model
+export GROQ_API_KEY=""your-key""   # from console.groq.com — for Groq only
+```
+
+In **Google Colab**, add `GROQ_API_KEY` in **Secrets** (same name) and enable access for the notebook instead of `export`.
+
+Do **not** hard-code API keys in the file.
+
+---",,,,,,,,,,,,,6a1159831ca9da4c01a683b8,0.5,markdown,"## Reference solution: `ask_llm`
+
+```python
+def ask_llm(mode: str, prompt_text: str) -> str:
+    if mode == ""local"":
+        url = ""http://localhost:11434/api/chat""
+        payload = {
+            ""model"": LOCAL_MODEL,
+            ""messages"": [{""role"": ""user"", ""content"": prompt_text}],
+            ""stream"": False,
+        }
+        r = requests.post(url, json=payload, timeout=120)
+        r.raise_for_status()
+        return r.json()[""message""][""content""]
+
+    if mode == ""groq"":
+        api_key = os.environ.get(""GROQ_API_KEY"")
+        if not api_key:
+            raise ValueError(
+                ""GROQ_API_KEY is not set. Create a key at console.groq.com and run: ""
+                ""export GROQ_API_KEY='your-key'""
+            )
+        from groq import Groq
+
+        client = Groq(api_key=api_key)
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[{""role"": ""user"", ""content"": prompt_text}],
+        )
+        return response.choices[0].message.content
+
+    raise ValueError('mode must be ""local"" or ""groq""')
+```
+
+**Local mode:** POST to `http://localhost:11434/api/chat` with `LOCAL_MODEL`, `messages`, `stream=False`; parse `message.content` from JSON.
+
+**Groq mode:** Read `GROQ_API_KEY` from environment; use `Groq(api_key=...)` and `client.chat.completions.create` with `GROQ_MODEL`; return `response.choices[0].message.content`.
+
+**Files:** `save_resume_html` unchanged — produces `Local_Resume_*.html` and `Groq_Resume_*.html`.
+
+**Comparison comments (example):**
+- Local resume quality: Valid HTML but simpler styling; layout may be uneven on 0.5B.
+- Groq resume quality: Cleaner two-column CSS, better accent use and skill tags on 70B-class model.
+
+Same `RESUME_PROMPT` must be used for both runs. Do not hard-code API keys."

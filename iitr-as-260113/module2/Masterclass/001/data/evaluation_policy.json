@@ -1,0 +1,34 @@
+{
+  "company": "LearnBridge Academy",
+  "policy_type": "evaluation",
+  "policy_title": "Evaluation and Certification Policy",
+  "version": "2025.1",
+  "effective_from": "2025-01-01",
+  "sections": [
+    {
+      "section_id": "grade_weightage",
+      "heading": "Overall Grade Weightage",
+      "content": "The final module grade is calculated as follows: 40% from assignment average, 30% from the final proctored evaluation, 20% from live session participation and polls, and 10% from the capstone project. All components must be attempted to receive a module grade."
+    },
+    {
+      "section_id": "passing_marks",
+      "heading": "Passing Marks",
+      "content": "Students must score at least 50% in the assignment average and at least 40% in the final proctored evaluation separately. The overall module score must be at least 55% to pass. Failing either the assignment average or the final evaluation requires a re-attempt of that component only."
+    },
+    {
+      "section_id": "certificate",
+      "heading": "Certificate Eligibility",
+      "content": "The LearnBridge completion certificate is issued only when the student passes all modules in the program, maintains 75% attendance in each module, and completes the capstone project with a score of at least 60%. Certificate names match the legal name on the enrollment form."
+    },
+    {
+      "section_id": "proctored_exam",
+      "heading": "Final Proctored Evaluation",
+      "content": "The final evaluation is a 90-minute proctored online exam with webcam and screen sharing enabled. Students get one scheduled attempt and one re-attempt within 14 days if they score below 40%. Use of external notes, second devices, or another person in the room leads to disqualification."
+    },
+    {
+      "section_id": "reevaluation",
+      "heading": "Re-evaluation Request",
+      "content": "Students may request re-evaluation of the final exam within 5 working days of result publication by paying a nominal review fee. Re-evaluation checks only for grading errors, not for re-solving questions. Assignment re-grading is not offered after the resubmission window closes."
+    }
+  ]
+}

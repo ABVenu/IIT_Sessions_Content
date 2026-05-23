@@ -1,0 +1,163 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"QuickRide wants to estimate **trip fare in rupees** from distance and traffic delay before the ride ends. The product team needs a number customers can compare, not a category label. Which ML task family fits this goal?",,,,,,2,,Classification — the output is a named bucket,Regression — the output is a continuous amount on a scale,Clustering — the output is an unlabelled group ID,Reinforcement learning — the output is the next action in a game,,,6a0ebe7b9a83fde7e6e1e64c,0,markdown,"Fare in rupees is a **measurable number**, which is the signature of **regression**. **A** would apply if the app only returned labels like ""cheap / medium / expensive."" **C** is unsupervised grouping without a numeric target. **D** is about sequential decisions, not predicting a fare amount."
+mcsc,markdown,"A HR analytics table has a column `job_level` with values `1 = junior`, `2 = mid`, `3 = senior`. The team wants to predict **monthly salary in INR**. How should they treat `job_level` when building a salary model?",,,,,,2,,Use `job_level` as the **numeric target** because it contains digits,Treat `job_level` as a **category encoded into features**; keep **salary in INR** as the numeric target,Drop salary and predict `job_level` instead because regression needs integer columns,Convert salary to ""junior / mid / senior"" labels so regression can run,,,6a0ebe7b9a83fde7e6e1e64c,0,markdown,"**Regression** needs a **numeric target** (salary). `job_level` is a **label disguised as numbers**, so it belongs in **features** (e.g. one-hot encoding), not as **y**. **A** confuses coded categories with a measurement scale. **C** reverses the business question. **D** turns the problem into classification, not salary prediction."
+mcsc,markdown,"A coaching app fits a simple line: **exam score ≈ 7.5 × study_hours + 40**. In plain language, what does **40** represent?",,,,,,2,,The extra marks added for each additional study hour,The model's starting prediction when study hours are zero — the **intercept**,The average error on the test set,The maximum possible exam score in the dataset,,,6a0ebe7b9a83fde7e6e1e64c,0,markdown,"In **y = mx + c**, the constant **c** is the **intercept** — the baseline before the slope term acts. Here **7.5** is the per-hour **coefficient** (**A**). **C** describes residuals or metrics, not the intercept. **D** is unrelated to the line's constant term."
+mcsc,markdown,"For one student, the model predicted **58** marks but the actual score was **62**. Using **residual = actual − predicted**, what is the residual and what does it mean?",,,,,,1,,Residual = **+4** ; the model **under-predicted**,Residual = **−4** ; the model **under-predicted**,Residual = **+4** ; the model **over-predicted**,Residual = **−4** ; the model **over-predicted**,,,6a0ebe7b9a83fde7e6e1e64c,0,markdown,"**62 − 58 = +4**. A **positive** residual means truth is **above** the line → **under-prediction**. **B** and **D** use the wrong sign. **C** has the right magnitude but the wrong direction label."
+mcsc,markdown,"A property analyst reads a fitted housing model: **median_house_value ≈ 0.8 × median_income + …** (other features held fixed). If **median_income** rises by **1** unit (same scale as training), what is the best business reading of **0.8**?",,,,,,2,,Every district will sell for exactly ₹0.8,"On average, predicted median house value moves by about **0.8 units** when income rises by one unit, holding other features fixed",80% of districts have income above average,The model is wrong because coefficients must always be larger than 1,,,6a0ebe7b9a83fde7e6e1e64c,0.5,markdown,"A **coefficient** is the change in **predicted y** when that feature increases by **one unit**, other inputs unchanged. **A** misreads the weight as a fixed price. **C** confuses coefficient size with percentile stats. **D** is false — coefficients depend on feature scale."
+mcsc,markdown,"A district-level **linear regression** on census-style housing data reports **train score ≈ 61%** and **test score ≈ 58%** (same split, same metric). What is the most reasonable first diagnosis?",,,,,,2,,Severe **overfitting** — test is far below train,Likely **underfitting** — both scores are modest and the train–test gap is small,Data leakage — test score should always equal train score,The model is perfect because 61% exceeds 50%,,,6a0ebe7b9a83fde7e6e1e64c,0.5,markdown,"**Both** scores are **low** and **close**, which matches **underfitting** (too simple a line for a hard pattern), not memorisation. **A** needs a **large** train–test gap (e.g. 95% vs 60%). **C** misstates leakage symptoms. **D** treats a modest score as perfection."
+mcmc,markdown,"A data lead asks which product problems are **regression** (predict a number on a scale). Which items qualify?",,,,,,,,Forecast **next month's electricity bill in rupees** from usage history,Label each email **spam** or **not spam**,Estimate a student's **exact exam score out of 100** from study hours,Decide whether a loan is **approved** or **rejected**,,"1, 3",6a0ebe7b9a83fde7e6e1e64c,0.5,markdown,"**A** and **C** need a **numeric** answer (rupees, marks). **B** and **D** are **classification** — fixed category labels, not a continuous measurement."
+mcmc,markdown,"An engineer trains **linear regression** with **MinMaxScaler** inside a sklearn **Pipeline** on housing features. Which workflow steps follow **leakage-safe** habits?",,,,,,,,`train_test_split` **before** calling `.fit()` on the pipeline,"`.fit(X_train, y_train)` so the scaler learns statistics from **training rows only**","Fit the scaler on the **full dataset**, then split train and test","Evaluate with `.score(X_test, y_test)` on rows that were **not** used in `.fit()`",,"1, 2, 4",6a0ebe7b9a83fde7e6e1e64c,0.5,markdown,"**A**, **B**, and **D** mirror split-first, train-only learning, and honest test evaluation. **C** leaks because test rows influence scaling parameters before the split."
+mcmc,markdown,"A model review board sees these **train vs test** score pairs on the **same hold-out split**. Which interpretations are **fair**?",,,,,,,,"Train **94%**, test **93%** → scores are close; the simple model likely **generalizes reasonably** on that data","Train **95%**, test **60%** → large gap; possible **overfitting** worth investigating","Train **61%**, test **58%** → both low with a small gap; likely **underfitting** rather than memorisation","Train **40%**, test **90%** → proof that testing on unseen data is unnecessary",,"1, 2, 3",6a0ebe7b9a83fde7e6e1e64c,1,markdown,"**A** is a stable train–test story. **B** is the classic **overfitting** gap pattern. **C** matches **underfitting** on harder data. **D** is illogical — test beating train by a huge margin on the same workflow is not a reason to skip holdout evaluation."
+mcmc,markdown,"A team benchmarks **linear regression** against a **mean baseline** on the same **20% test split**. Which practices are **sound**?",,,,,,,,"Compute the baseline mean from **`y_train` only**, then predict that constant for every test row",Compare both models on the **same test rows** with the **same score metric**,Use all of **`y` (train + test)** to compute the mean so the baseline is ""more accurate"","If regression's test score is **much higher** than always guessing the training mean, features likely add signal beyond a lazy average",,"1, 2, 4",6a0ebe7b9a83fde7e6e1e64c,1,markdown,"**A** avoids leaking test labels into the baseline. **B** ensures a fair comparison. **D** is the right reading when the model beats the mean floor. **C** leaks test information into the baseline mean."
+subjective,markdown,"**StudyBoost: From Hours to Marks (and Honest Errors)**
+
+**Scenario**
+
+StudyBoost, a small ed-tech pilot, has past records linking **weekly study hours** to **exam scores out of 100**. You will build a **simple linear regression** model, check whether it beats a **mean baseline**, and surface the **largest mistakes** with a **residual table** — the same habits used when reviewing models before launch.
+
+---
+
+### Your task
+
+Write **one** Python file: `studyboost_regression.py` with the **three** tasks below.
+
+Use these settings everywhere: `random_state=42`, `test_size=0.2`, and `LinearRegression()` with default arguments.
+
+#### Task 1 — Create data and split first
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+
+rng = np.random.default_rng(seed=42)
+hours = rng.uniform(1, 10, size=80)
+scores = 40 + 7.5 * hours + rng.normal(0, 4, size=80)
+
+df = pd.DataFrame({""study_hours"": hours, ""exam_score"": scores})
+
+X = df[[""study_hours""]]
+y = df[""exam_score""]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+```
+
+Print:
+
+```text
+Train rows: <count>
+Test rows: <count>
+```
+
+(replace `<count>` with actual numbers)
+
+#### Task 2 — Fit linear regression (train only)
+
+Train `LinearRegression` on `X_train`, `y_train`. Print:
+
+```text
+Intercept: <value>
+Coefficient (per hour): <value>
+Training score: <value>
+Testing score: <value>
+```
+
+Round printed numbers to **2 decimal places** where applicable.
+
+Predict for **one new student** with **6.0** study hours. Print:
+
+```text
+Predicted score for 6 hours: <value>
+```
+
+#### Task 3 — Baseline, residuals, and reflection
+
+**Mean baseline:** Compute `baseline_value = y_train.mean()`. Build a NumPy array of that value for **every** test row and score it with:
+
+```python
+from sklearn.metrics import r2_score
+baseline_r2 = r2_score(y_test, baseline_preds)
+```
+
+Print:
+
+```text
+Mean baseline R2 on test: <value>
+```
+
+(round to 2 decimals)
+
+**Residual table:** Using **test-set** predictions from your regression model, build a DataFrame with columns `study_hours`, `y_actual`, `y_predicted`, `residual` where `residual = y_actual - y_predicted`. Sort by **absolute residual** descending and print the **top 3 rows**.
+
+**Comments:** Add **two** comment lines at the bottom of your file:
+
+```python
+# Train vs test score gap — what does it suggest about overfitting here? ___
+# One row from your residual table — did the model over- or under-predict? ___
+```
+
+Fill in both blanks in **one short sentence each** based on **your** printed output.
+
+---
+
+### Submission instructions
+
+- Write everything in **one** file: `studyboost_regression.py`.
+- Install if needed: `pip install scikit-learn pandas numpy`
+- Run the script once and verify all sections print.
+- Submit the full code (including your two comment lines) in the LMS **code editor / answer box**.",,,,,,,,,,,,,,6a0ebe7b9a83fde7e6e1e64c,0.5,markdown,"```python
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+rng = np.random.default_rng(seed=42)
+hours = rng.uniform(1, 10, size=80)
+scores = 40 + 7.5 * hours + rng.normal(0, 4, size=80)
+
+df = pd.DataFrame({""study_hours"": hours, ""exam_score"": scores})
+
+X = df[[""study_hours""]]
+y = df[""exam_score""]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+print(f""Train rows: {X_train.shape[0]}"")
+print(f""Test rows: {X_test.shape[0]}"")
+
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+print(f""Intercept: {model.intercept_:.2f}"")
+print(f""Coefficient (per hour): {model.coef_[0]:.2f}"")
+print(f""Training score: {model.score(X_train, y_train):.2f}"")
+print(f""Testing score: {model.score(X_test, y_test):.2f}"")
+
+new_student = pd.DataFrame({""study_hours"": [6.0]})
+print(f""Predicted score for 6 hours: {model.predict(new_student)[0]:.2f}"")
+
+baseline_value = y_train.mean()
+baseline_preds = np.full(shape=len(y_test), fill_value=baseline_value)
+baseline_r2 = r2_score(y_test, baseline_preds)
+print(f""Mean baseline R2 on test: {baseline_r2:.2f}"")
+
+y_test_pred = model.predict(X_test)
+results = pd.DataFrame({
+    ""study_hours"": X_test[""study_hours""].values,
+    ""y_actual"": y_test.values,
+    ""y_predicted"": y_test_pred,
+})
+results[""residual""] = results[""y_actual""] - results[""y_predicted""]
+print(""\nTop 3 residuals (by absolute value):"")
+print(results.sort_values(""residual"", key=lambda s: s.abs(), ascending=False).head(3))
+
+# Train vs test score gap — what does it suggest about overfitting here?
+# Scores are close, so the line generalizes and is not heavily overfitting on this split.
+# One row from your residual table — did the model over- or under-predict?
+# Example: positive residual means the model under-predicted that student.
+```"

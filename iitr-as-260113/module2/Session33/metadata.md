@@ -1,4 +1,4 @@
-lecture ID:
+lecture ID: 152462
 
 Course Name: Certification in Agentic Systems and Design
 
@@ -6,7 +6,7 @@ Target Audience : Students from any backgorund may not be necessarily form tech 
 
 
 session duration: 2hr 15 mins
-
+ 
 title: Tool Integration in AI Agents
 
 objective: Learn how agents use external tools and APIs to perform actions
@@ -15,7 +15,6 @@ topics be covered: function calling;connecting APIs and tools
 
 
 detailed subtopics to be covered:
-
 - Recap How APIs Work — Briefly revisit the previous session: what an API is, the request-response cycle, HTTP methods, status codes, and JSON as the data format; establish this as the foundation for everything in this session;
 - Understand Function Calling in AI Agents — Explain that agents can call external functions/tools when they need to take action; the agent decides what tool to use, the system executes it, and returns the result back to the agent via structured output;
 - See How Agents Use APIs as Tools — Show that every external tool an agent uses (search, calculator, database, email, etc.) is accessed via an API call — the agent sends a request and receives a JSON response, exactly like the previous session;

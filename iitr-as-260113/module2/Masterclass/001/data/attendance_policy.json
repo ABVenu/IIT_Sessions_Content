@@ -1,0 +1,34 @@
+{
+  "company": "LearnBridge Academy",
+  "policy_type": "attendance",
+  "policy_title": "Student Attendance Policy",
+  "version": "2025.1",
+  "effective_from": "2025-01-01",
+  "sections": [
+    {
+      "section_id": "minimum_attendance",
+      "heading": "Minimum Attendance Requirement",
+      "content": "Students must maintain at least 75% attendance in live instructor-led sessions to remain eligible for the final evaluation and certificate. Attendance is calculated per module. If attendance in a module falls below 75%, the student receives a warning email and must attend the next two live sessions without absence to stay on track."
+    },
+    {
+      "section_id": "live_session_definition",
+      "heading": "What Counts as a Live Session",
+      "content": "A live session is a scheduled class on the LearnBridge learning platform where the student joins with video on for at least 70% of the session duration. Watching only a recording does not count as live attendance unless the student had prior written approval for medical or official travel reasons."
+    },
+    {
+      "section_id": "recording_makeup",
+      "heading": "Recording and Makeup Rules",
+      "content": "If a student misses a live session, they may watch the recording within 24 hours and submit a 150-word summary in the portal. One recording summary per month can be counted as partial attendance (50% credit for that session only). More than two recording summaries in a module do not count toward the 75% requirement."
+    },
+    {
+      "section_id": "leave_and_absence",
+      "heading": "Approved Leave",
+      "content": "Students may apply for approved leave up to 3 days per module for medical or family emergencies. Leave requests must be submitted at least 24 hours before the session with supporting documents. Approved leave sessions are marked as excused and do not reduce attendance percentage."
+    },
+    {
+      "section_id": "consequences",
+      "heading": "Consequences of Low Attendance",
+      "content": "Students below 75% attendance at the end of a module cannot register for the final evaluation until they complete one mandatory catch-up live workshop assigned by the program team. Repeated attendance below 65% across two modules may lead to academic probation."
+    }
+  ]
+}

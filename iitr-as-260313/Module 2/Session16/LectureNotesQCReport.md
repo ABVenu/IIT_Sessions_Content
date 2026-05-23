@@ -101,3 +101,94 @@ All detailed subtopics from `metadata.md` are fully addressed:
 ## Sign-off
 
 `Lecture Notes.md` is approved for release against `LectureNotesPrompt4.md` and Session 16 `metadata.md` requirements.
+
+---
+
+# Post-session alignment QC — `Lecture Notes Released.md`
+**File:** `Lecture Notes Released.md`
+**Source:** Trimmed and extended from `Lecture Notes.md` using `Live Topic Coverage.md` + `Transcript.md`
+**Date of QC:** 2026-05-22
+**Iteration:** 2
+
+---
+
+## QC Evaluation
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+
+**Expected result met:** All ratings ≥ 5; no logical or presentation mistakes identified.
+
+---
+
+## Detailed Notes
+
+### Content Coverage — 5/5
+
+Released notes match **what was taught live** per `Live Topic Coverage.md`:
+
+**Included (covered or partially covered):**
+
+- **JOIN spillover:** Cross join on `customers` × `orders`, conditional `JOIN … ON customer_id`, `ORDER BY`, table aliases (`c`, `o`), column alias in `SELECT`, customer 5 absent (no orders); `INNER JOIN` named in glossary as equivalent behaviour.
+- **Bridge:** SQL tables → embeddings pivot (partial Session 14-style recap acknowledged honestly).
+- **Meaning-based search, vectors, embeddings, pipeline, tokenization/chunking link.**
+- **Chunking strategies** (fixed-size, semantic, paragraph-based, recursive/nested) and **collect/clean** steps — live extras added.
+- **Semantic similarity, vector space, cosine similarity** (live went beyond “name only”).
+- **Keyword vs semantic, full workflow, Swiggy/Zomato FAQ, HDFC-style Q&A pattern.**
+- **Applications:** RAG, support bots, episodic vs semantic memory, graph/agentic RAG preview; **recommendations removed** (not covered live).
+- **Vector DB bridge** to next class; all **session16** images retained except **session16-01** and **session16-03** (dropped with removed setup/CRUD content).
+
+**Removed (not covered live):**
+
+- Entire **CRUD on related data** section (`INSERT`/`UPDATE`/`DELETE` across tables, `ON DELETE CASCADE` walkthrough, failed-FK demos).
+- **`users`/`orders` CREATE TABLE** setup block (live used existing `customers`/`orders`).
+
+### Creativity — 5/5
+
+- Indian-context examples retained (Swiggy/Zomato, Aadhaar portal, Indiranagar/Koramangala, government portal).
+- Live stories preserved: John/keyboard join rows, dog/Labrador/German Shepherd numbers, balloon clusters, Ctrl+F keyword analogy, password-reset chunks.
+- **Practice note** steers learners to course doc for deferred SQL without exposing internal “spillover” labels.
+
+### Structural Adherence — 5/5
+
+- Starts with `#` title; no audience/duration metadata.
+- Context + live-coverage bullet list; connecting bridge from SQL → embeddings.
+- Official Definition / In Simple Words / Real-Life Example pattern on major concepts.
+- Full SQL/Python blocks with line comments and **How the code works** sections.
+- Key Takeaways + terminology table; **previous** / **next** wording only (no session numbers).
+- No Mentimeter/quiz protocol content.
+
+### No Logical Mistakes — True
+
+- Cross join **M×N** semantics correct; PostgreSQL `INNER JOIN` vs teaching-tool join-without-`ON` distinction stated.
+- Alias behaviour (temporary rename; schema unchanged without `UPDATE`) matches live teaching.
+- Embedding pipeline, same-model rule, cosine as angle-based similarity, and workflow order are consistent with transcript.
+- Recommendations not claimed as taught.
+
+### No Presentation Mistakes — True
+
+- Consistent `##` / `###` hierarchy; tables and images aligned to surviving sections.
+- British/Indian English tone matches prior released notes in the cohort.
+
+---
+
+## QC Result: PASSED ✓ (Iteration 2 — Released)
+
+| Criterion | Expected | Achieved |
+|---|---|---|
+| Content Coverage | 5 | 5 |
+| Creativity | 5 | 5 |
+| Structural Adherence | 5 | 5 |
+| No Logical Mistakes | True | True |
+| No Presentation Mistakes | True | True |
+
+---
+
+## Sign-off (Released)
+
+`Lecture Notes Released.md` is aligned to live coverage and approved for student release.

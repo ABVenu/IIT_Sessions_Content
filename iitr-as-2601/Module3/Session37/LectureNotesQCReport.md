@@ -44,3 +44,33 @@ The lecture notes meet all expected QC criteria. No further iterations required.
 | Ollama capabilities: chat, generation, embeddings | ✓ § What Is Ollama + § Embeddings |
 | Model types: text, vision, audio, video | ✓ § Model Types Available Through Ollama |
 | One script for local or cloud | ✓ § One Python Script — Session Capstone |
+
+---
+
+## QC Iteration 2 — Lecture Notes Released (Post-Session Alignment)
+
+**Date:** 2026-05-23
+
+**Evaluator:** Post-session alignment against Live Topic Coverage + Transcript
+
+### Criteria Ratings
+
+| Criteria | Rating (1–5) | Notes |
+|---|---|---|
+| **Content Coverage** | 5 | Released notes match what was taught: full Ollama install/CLI/local trade-offs/modalities; Groq+Colab live path; OpenAI/Anthropic pattern parity; cloud same-prompt comparison; training-data bias; Gemini multimodal demo; enterprise on-prem. Removed not-covered items (Ollama API key creation, local vs Ollama Cloud comparison). Partially covered items retained (local Python Ollama, Ollama Cloud concept, embeddings as table mention only). |
+| **Creativity** | 5 | Retained Indian analogies (Swiggy, chai machine, scooter vs truck); added bias spot-check and multimodal thought activities; provider comparison table. |
+| **Structural Adherence** | 5 | Clean `#` title; prior-session bridge; Official Definition / In Simple Words / Real-Life Example pattern; Key Takeaways + terminology table; no session numbers; no Mentimeter/poll content. |
+| **No Logical Mistakes** | True | Groq/OpenAI/Anthropic API shapes accurate; Ollama localhost:11434 correct; on-prem vs cloud trade-offs consistent with transcript; Ollama Cloud marked as concept-only where not demo'd live. |
+| **No Presentation Mistakes** | True | Full code blocks with line comments and “How the code works”; images retained for covered sections (01–05, 07); removed images tied to cut sections (06 local-vs-Ollama-cloud, 08 embeddings, 09 capstone toggle). |
+
+### Changes from Lecture Notes.md → Released
+
+| Action | Section |
+|---|---|
+| **Removed** | Ollama account/API key walkthrough; full Ollama Cloud Python script; local vs Ollama Cloud comparison section + activity; embeddings deep-dive + image; unified capstone script + image; student cloud API key checklist |
+| **Trimmed / reframed** | Intro and takeaways to include Groq; Ollama Cloud as concept-only; embeddings only in capabilities table |
+| **Added** | Ollama GUI vs CLI; enterprise on-prem; training-data bias; Groq+Colab Secrets workflow; OpenAI/Anthropic patterns; cloud model comparison; Gemini Google Photos multimodal; tokens/compute notes in CLI section |
+
+### Final Status: APPROVED ✓
+
+Released notes aligned to session delivery. All QC criteria pass at level 5.

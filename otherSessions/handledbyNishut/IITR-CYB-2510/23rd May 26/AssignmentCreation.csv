@@ -1,0 +1,148 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A backend engineer is onboarding a new team member and explaining the two broad categories of cryptography. The new hire asks: ""In symmetric key cryptography, how many keys are used between two communicating parties?"" Which answer is correct?",,,,,,4,,Two keys — one public key and one private key are generated per communicating party,One key for encryption and a separate key derived from the first for decryption only,Four keys in total — each party holds both an encryption key and a decryption key,One shared secret key used by both parties for encryption and decryption operations,,,6a115d5b928bfb670f60d105,0,markdown,Symmetric cryptography uses **one shared secret key** for both encryption and decryption. **Why others are wrong:** Public/private pairs describe asymmetric crypto; symmetric does not use separate encrypt/decrypt keys or four keys per party.
+mcsc,markdown,A security analyst is reviewing a code audit report that flags a legacy system's password storage mechanism. The report notes that two completely different input values produce the same hash output for the algorithm in use. Which hashing problem does this describe?,,,,,,3,,Avalanche effect causing different outputs from the same input,Rainbow table vulnerability from pre-computed hash lookups,Hash collision producing identical outputs from different inputs,Salt reuse weakness across multiple stored passwords,,,6a115d5b928bfb670f60d105,0,markdown,A **hash collision** is two different inputs producing the same hash — why MD5 is broken for security. **Why others are wrong:** Avalanche is opposite; rainbow tables are lookup attacks; salt reuse is not same-output-from-different-inputs.
+mcsc,markdown,"A junior developer is writing a password-storage module for a new web application. The team lead says: ""Never use plain SHA-256 for passwords — use a purpose-built algorithm instead."" The developer asks why Argon2id is the top recommendation. Which property best explains this?",,,,,,2,,"It is FIPS-compliant, required for US government systems, and auto-salts passwords","It is memory-hard and auto-salts, resisting GPU and ASIC brute-force attacks","It produces a fixed-length output, making it the fastest for high-load systems","It is faster than bcrypt and scrypt, ideal for high-throughput authentication",,,6a115d5b928bfb670f60d105,0,markdown,"**Argon2id** is OWASP's first choice because it is **memory-hard** and **auto-salts**, raising GPU/ASIC attack cost. **Why others are wrong:** Argon2id is not FIPS-compliant; fixed-length is generic; it is deliberately slower than bcrypt."
+mcsc,markdown,A DevOps engineer is reviewing a Python microservice. The error handler currently reads: `except Exception as e: return str(e)`. What will be the concrete security consequence of this pattern in a production environment?,,,,,,2,,The application will log passwords to the internal monitoring system,The full stack trace and internal details will be exposed to the API caller,The exception will be silently swallowed and the user will receive no response,The application will retry the failed operation automatically,,,6a115d5b928bfb670f60d105,0,markdown,"Returning `str(e)` exposes **paths, internals, and stack details** to the API caller. **Why others are wrong:** It does not log passwords to monitoring, swallow errors, or retry automatically."
+mcsc,markdown,"A security engineer at a financial services firm is designing a new user authentication system. The firm must comply with FIPS (Federal Information Processing Standards) requirements mandated by its government contracts. The engineer cannot use Argon2id. Which password-hashing algorithm should be selected, and what iteration count aligns with FIPS standards?",,,,,,3,,"bcrypt with 12 rounds; bcrypt is FIPS-compliant, memory-hard, and auto-salting",SHA-256 with a random 16-byte salt; SHA-256 is purpose-built for password storage,"PBKDF2 at ~600,000 iterations; mandated for FIPS-compliant password hashing",scrypt with high memory cost; scrypt is FIPS-compliant and memory-hard by design,,,6a115d5b928bfb670f60d105,0.5,markdown,"When FIPS is required without Argon2id, use **PBKDF2 at ~600,000 iterations**. **Why others are wrong:** bcrypt and scrypt are not FIPS-compliant; SHA-256 is not a password KDF."
+mcsc,markdown,A penetration tester recovers a database dump containing password hashes. The hashes were stored with SHA-256 but no salting was applied. The tester pastes several hashes into CrackStation. Which outcome best describes what will happen and why?,,,,,,3,,CrackStation will fail because SHA-256 has no known collisions and is not yet broken,CrackStation will crack the passwords via real-time SHA-256 computation and brute force,CrackStation will look up the hashes in its pre-computed table and return plaintexts,CrackStation only succeeds when passwords are shorter than 8 characters in length,,,6a115d5b928bfb670f60d105,0.5,markdown,"CrackStation does a **pre-computed table lookup** on unsalted SHA-256 — instant plaintext, not live brute force. **Why others are wrong:** Collision resistance does not stop rainbow lookups; length is not the gate."
+mcmc,markdown,"A data engineer is evaluating password-hashing algorithms for a new SaaS platform. The team wants algorithms that handle salt generation automatically — removing that responsibility from application developers. Which of the following algorithms automatically generate a salt without requiring the developer to do it manually?
+
+*(Select all that apply)*",,,,,,,,scrypt,Argon2id,PBKDF2,bcrypt,,"2,4",6a115d5b928bfb670f60d105,0.5,markdown,**Argon2id** and **bcrypt** auto-salt. **Why A and C are wrong:** scrypt and PBKDF2 require the developer to supply salt at call time.
+mcmc,markdown,"A senior developer is reviewing a Python authentication module and spots several patterns. Which of the following are correct, secure practices for handling passwords and authentication in production code?
+
+*(Select all that apply)*",,,,,,,,Using MD5 to hash passwords because it is fast and always produces a fixed-length output,Using the `secrets` library to generate cryptographically random tokens for password resets,Hard-coding API keys directly in source code to eliminate the need to manage `.env` files,"Returning ""Invalid credentials"" on login failure rather than exposing the stored hash",,"2,4",6a115d5b928bfb670f60d105,0.5,markdown,Use **`secrets`** for reset tokens and return **generic** login failures. **Why A and C are wrong:** MD5 is broken for security; hard-coded API keys must not live in source.
+mcmc,markdown,"A security architect is reviewing a startup's backend infrastructure after a near-miss data breach. The startup stored user passwords using SHA-256 without salting, committed API keys to their GitHub repository, and returned raw exception objects to API clients. Which of the following independent remediation steps would directly address the vulnerabilities identified?
+
+*(Select all that apply)*",,,,,,,,Replace SHA-256 password hashing with bcrypt via `bcrypt.hashpw` and `bcrypt.gensalt(rounds=12)`,"Add a unique, random 16-byte salt per password before hashing, per OWASP minimum requirements",Switch from AES-256 to SHA-256 for data in transit to reduce ciphertext output size,"Move secrets to a `.env` file excluded from Git, or use HashiCorp Vault or AWS Secrets Manager",Update the error handler to log exceptions internally and return only a generic message,"1,2,4,5",6a115d5b928bfb670f60d105,1,markdown,"**A, B, D, E** fix hashing, salting, secrets in repo, and error leakage. **Why C is wrong:** SHA-256 is not encryption for data in transit — mixing hash and encrypt categories."
+mcmc,markdown,"A platform engineering team is deploying a Python web application with a full CI/CD pipeline on GitHub Actions. They want automated detection of weak cryptographic practices in every pull request. Which of the following statements about Bandit and Semgrep are accurate based on how these tools operate?
+
+*(Select all that apply)*",,,,,,,,"Bandit is Python-specific and can detect hard-coded passwords, MD5 usage, and SHA-1 usage, reporting file name, line number, and severity level",Semgrep is a multi-language SAST tool; scanning the same vulnerable Python file with auto-configured rules can execute hundreds of rules and surface findings that overlap with Bandit on weak-hash issues,Both Bandit and Semgrep flag MD5 and weak hash usage in intentionally vulnerable sample code as high-severity security issues,Running `bandit -r lab/ --severity-level medium` on a file that uses MD5 for password hashing always produces zero findings because MD5 is acceptable for non-authentication use cases,,"1,2,3",6a115d5b928bfb670f60d105,1,markdown,**A–C** match Bandit/Semgrep behaviour on weak hashes. **Why D is wrong:** Bandit reports high-severity MD5 findings on vulnerable sample code — not zero.
+subjective,markdown,"## Problem Statement
+
+A backend engineer is building a user authentication service in Python. The current codebase stores passwords with MD5 (no salting), hard-codes the application secret in the source file, and returns raw exception messages to API callers. Refactor the service by implementing four functions — `store_password`, `verify_login`, `generate_reset_token`, and `handle_error` — using secure coding practices with the `bcrypt` and `secrets` libraries.
+
+---
+
+## Constraints & Requirements
+
+- Use `bcrypt` for password hashing with `bcrypt.gensalt(rounds=12)` and `bcrypt.hashpw`.
+- Use `bcrypt.checkpw` for password verification.
+- Implement `generate_reset_token()` using `secrets.token_urlsafe(32)` and return the token string.
+- The `verify_login` function must return `""Login success""` on a correct password and `""Invalid credentials""` on a wrong password — never expose the stored hash or exception details.
+- The `handle_error` function must log the exception internally using `print` (simulating an internal logger) and return the string `""An error occurred""` to the caller.
+- Use only `bcrypt` and `secrets` from external libraries; `hashlib` is available in stdlib but must not be used for password storage.
+- Do not hard-code any secrets in the source code.
+
+---
+
+## Sample Input & Expected Behavior
+
+```python
+sample_password = ""SecurePass@99""
+wrong_password  = ""WrongPass123""
+
+# Expected behavior:
+# store_password(sample_password)  -> returns a bytes object (the bcrypt hash)
+# verify_login(sample_password, stored_hash) -> ""Login success""
+# verify_login(wrong_password, stored_hash)  -> ""Invalid credentials""
+# handle_error(ValueError(""DB timeout: host=db01""))  -> ""An error occurred""
+#   AND must print the exception internally (not return it)
+# generate_reset_token() -> URL-safe string of sufficient length (32 bytes entropy)
+```
+
+**Expected printed output from `__main__`:**
+
+```
+Login success
+Invalid credentials
+An error occurred
+```
+
+(An internal log line printed to stdout before `""An error occurred""` is acceptable and expected.)
+
+---
+
+## Starter Template
+
+```python
+import bcrypt
+import secrets
+
+def store_password(password: str) -> bytes:
+    pass
+
+def verify_login(password: str, stored_hash: bytes) -> str:
+    pass
+
+def generate_reset_token() -> str:
+    pass
+
+def handle_error(e: Exception) -> str:
+    pass
+
+if __name__ == ""__main__"":
+    sample_password = ""SecurePass@99""
+    wrong_password  = ""WrongPass123""
+
+    stored_hash = store_password(sample_password)
+    print(verify_login(sample_password, stored_hash))
+    print(verify_login(wrong_password, stored_hash))
+    print(handle_error(ValueError(""DB timeout: host=db01"")))
+    reset = generate_reset_token()
+    print(f""Reset token length: {len(reset)}"")
+```
+
+---
+
+## Submission Instructions (Case C)
+
+- Code all requirements in **VS Code** in a **single `.py` file**.
+- Run the code and verify it produces the expected output above.
+- Submit the complete file in the **code editor / answer box** on the LMS.",,,,,,,,,,,,,,6a115d5b928bfb670f60d105,0.5,markdown,"## Reference solution
+
+```python
+import bcrypt
+import secrets
+
+def store_password(password: str) -> bytes:
+    salt = bcrypt.gensalt(rounds=12)
+    hashed = bcrypt.hashpw(password.encode(), salt)
+    return hashed
+
+def verify_login(password: str, stored_hash: bytes) -> str:
+    try:
+        if bcrypt.checkpw(password.encode(), stored_hash):
+            return ""Login success""
+        return ""Invalid credentials""
+    except Exception as e:
+        print(f""[INTERNAL LOG] Exception during login check: {e}"")
+        return ""Invalid credentials""
+
+def generate_reset_token() -> str:
+    return secrets.token_urlsafe(32)
+
+def handle_error(e: Exception) -> str:
+    print(f""[INTERNAL LOG] Exception occurred: {e}"")
+    return ""An error occurred""
+
+if __name__ == ""__main__"":
+    sample_password = ""SecurePass@99""
+    wrong_password  = ""WrongPass123""
+
+    stored_hash = store_password(sample_password)
+    print(verify_login(sample_password, stored_hash))
+    print(verify_login(wrong_password, stored_hash))
+    print(handle_error(ValueError(""DB timeout: host=db01"")))
+    reset = generate_reset_token()
+    print(f""Reset token length: {len(reset)}"")
+```
+
+**`store_password`:** `bcrypt.gensalt(rounds=12)` then `bcrypt.hashpw(password.encode(), salt)` — never MD5/SHA-256 for passwords.
+
+**`verify_login`:** `bcrypt.checkpw` → `""Login success""` or `""Invalid credentials""` only; log internally on unexpected errors.
+
+**`generate_reset_token`:** `secrets.token_urlsafe(32)` for cryptographically secure reset tokens.
+
+**`handle_error`:** `print` full exception internally; return only `""An error occurred""`.
+
+**Alternative:** Argon2id via `argon2-cffi` is OWASP's first choice; production would use `logging` instead of `print`."
