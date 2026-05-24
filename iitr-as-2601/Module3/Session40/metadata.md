@@ -5,21 +5,22 @@ Course Name: Certification in Agentic Systems and Design
 Target Audience : Students from any backgorund may not be necessarily form tech background
 
 
-session duration: 2hr 15 mins
+session duration: 1hr 50mins
 
-title: Building a RAG App: Retrieval and Context Injection
+title: RAG: Chunking & Document Preparation
 
-type: thoery 
 
-objective: Understand how LLMs can use external documents to generate grounded responses
 
-topics be covered: 	RAG Basics – combining LLMs with external knowledge sources; 
-Document Chunking – splitting documents into smaller chunks; 
-Retrieval – fetching relevant chunks using top-k retrieval; 
-Prompt Injection – adding retrieved context into prompts for generation
+objective: Prepare documents for retrieval by chunking and organizing text for vector search.	
 
+topics be covered: 	Document loading; chunk size; overlap; metadata basics; chunk storage
 
 detailed subtopics to be covered:
 
+* Load plain-text or PDF documents into a consistent in-memory or file-based corpus.
+* Apply chunking strategies with justified chunk size and overlap for a sample dataset.
+* Attach lightweight metadata (source id; page) to chunks for traceability.
+* Persist chunked documents into the vector store created in the prior session."
+	
 
  	

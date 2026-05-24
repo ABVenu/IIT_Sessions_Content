@@ -5,13 +5,17 @@ Course Name: Certification in Agentic Systems and Design
 Target Audience : Students from any backgorund may not be necessarily form tech background
 
 
-session duration: 2hr 15 mins
+session duration: 1hr 50mins
 
-title:
+title: Safety & Guardrails for Agents
 
-objective:
+objective: Recognize prompt-injection and unsafe tool use and apply beginner guardrails.
 
-topics be covered:
+topics be covered: Malicious prompt injection; tool safety; guardrails; safe code review habit (lite)	
 
 
 detailed subtopics to be covered:
+* Identify prompt-injection patterns where user text overrides system intent.
+* List unsafe tool scenarios and block them with simple allow-list rules.
+* Apply guardrails: output checks and refusal templates appropriate for demos.
+* Review AI-generated code before merge (folded from removed S33)."
