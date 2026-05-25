@@ -104,3 +104,31 @@ None.
 ### Final Status: APPROVED ✓
 
 All expected QC criteria met (ratings ≥ 5; no logical or presentation mistakes). No note revisions required.
+
+---
+
+## QC Iteration 4
+
+**Date:** 2026-05-25
+
+**Evaluator:** Automated QC (LectureNotesQC.md)
+
+**Scope:** `Lecture Notes Released.md` aligned against post-session live topic coverage and transcript evidence.
+
+### Criteria Ratings
+
+| Criteria | Rating (1-5) | Notes |
+|---|---|---|
+| **Content Coverage** | 5 | All planned covered outcomes are present: LLM limits, RAG as external library, five-step flow, retriever/generator/grounding, manual without-vs-with-context demo, embeddings demo, and bridge to vector DB/full RAG. Covered extras are also represented: context window limits, privacy/cost benefits, chunking/top-K preview, and high-level RAG vs fine-tuning. |
+| **Creativity** | 5 | Uses simple student-facing analogies such as open-book exam, DU photocopy shop, railway display board, GPS pin in meaning land, and filing cabinet for meaning. |
+| **Structural Adherence** | 5 | Starts directly with the lecture title, keeps a professional student-note format, retains all 8 relevant images from the draft, avoids metadata/protocol-only content, includes full code and a quick-reference table. |
+| **No Logical Mistakes** | True | RAG sequence is correct, manual context demo is not falsely presented as a full RAG app, embeddings are correctly described as vectors later stored/searched in a vector database, and the Sentence Transformers demo aligns with the transcript. |
+| **No Presentation Mistakes** | True | No Mentimeter/post-lecture quiz/protocol-only terms found; no linter diagnostics; markdown structure is scannable and consistent. |
+
+### Issues Found
+
+None.
+
+### Final Status: APPROVED
+
+All expected QC criteria are met for the released notes.

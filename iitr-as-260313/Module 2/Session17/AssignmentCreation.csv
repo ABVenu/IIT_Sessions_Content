@@ -1,0 +1,121 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A course support bot stores policy documents as embeddings. A student asks, ""Can I get a refund for a cancelled workshop?""
+
+What should the system do before comparing this question with stored document vectors?",,,,,,1,,Convert the question into an embedding using the same embedding model used for documents.,Convert the question into a SQL table name.,Delete all old document vectors and start again.,Translate the question into every Indian language before searching.,,,6a13d10a7d8c353bbc49fc09,0,markdown,"A is correct because semantic search compares vectors. The user question must be converted into an embedding using the same embedding model as the stored document chunks, otherwise vector closeness is not meaningful.
+
+B is incorrect because SQL table names are unrelated to semantic comparison. C is incorrect because existing document vectors do not need to be deleted for every query. D is incorrect because translation into every language is not required for the vector search workflow described here."
+mcsc,markdown,"A database query asks: ""Find order where `order_id = 5721`.""
+
+Which search style is best suited for this task?",,,,,,1,,Exact-key lookup,Similarity search,ANN search over document chunks,Product recommendation search,,,6a13d10a7d8c353bbc49fc09,0,markdown,"A is correct because the query asks for an exact id match. Relational databases and SQL-style exact lookup are excellent for ids, statuses, dates, and structured fields.
+
+B is incorrect because similarity search is useful when the user asks by meaning, not by exact id. C is incorrect because ANN over document chunks is unnecessary for one exact order id. D is incorrect because this is not a recommendation problem."
+mcsc,markdown,A vector database is used in a FAQ assistant. Which option best describes its main role?,,,,,,1,,"It stores, indexes, and retrieves embeddings by similarity.",It permanently changes the weights of the LLM.,It replaces every relational database in a company.,It writes the final natural-language answer by itself in all cases.,,,6a13d10a7d8c353bbc49fc09,0,markdown,"A is correct because a vector database is designed to store embedding vectors, organise them with indexes, and retrieve nearest vectors for a query.
+
+B is incorrect because changing model weights is fine-tuning, not vector database usage. C is incorrect because SQL databases are still useful for exact structured data. D is incorrect because a vector database retrieves relevant items; another application or LLM may use those results to write the final answer."
+mcsc,markdown,"A shopping app receives the query ""comfortable shoes for daily walking"" and wants to find products with similar meaning, even if product descriptions do not contain the exact same words.
+
+Which approach best matches this need?",,,,,,1,,Semantic similarity search using embeddings,Exact lookup by product id only,Sorting all products alphabetically,"Checking whether the word ""comfortable"" appears in every product title only",,,6a13d10a7d8c353bbc49fc09,0,markdown,"A is correct because embeddings and similarity search can find items close in meaning, even when exact words differ.
+
+B is incorrect because there is no exact product id in the user query. C is incorrect because alphabetical sorting does not capture meaning. D is incorrect because keyword-only search may miss related descriptions that use different wording."
+mcsc,markdown,"A vector search system has 20 lakh stored vectors. For every user question, it compares the query vector with all 20 lakh vectors before sorting the results.
+
+What is the biggest problem with this design?",,,,,,1,,It is brute-force search and can become too slow at scale.,It is ANN search and always returns random results.,It is exact-key lookup and cannot store vectors.,It is metadata filtering and removes all useful results.,,,6a13d10a7d8c353bbc49fc09,0.5,markdown,"A is correct because comparing the query with every stored vector is brute-force nearest-neighbour search. It may be accurate, but it becomes slow as the collection grows.
+
+B is incorrect because ANN search is designed to avoid scanning everything and does not mean random results. C is incorrect because the described process is vector comparison, not exact-key SQL lookup. D is incorrect because metadata filtering is about narrowing results using tags, not scanning every vector."
+mcsc,markdown,"A vector database returns the five nearest policy chunks for a user question instead of returning the entire ranked list of all chunks.
+
+Which concept is being used?",,,,,,1,,Top-k retrieval,Full table deletion,Model fine-tuning,Primary-key indexing only,,,6a13d10a7d8c353bbc49fc09,0.5,markdown,"A is correct because top-k retrieval returns the best `k` matches, such as top 3, top 5, or top 10, instead of returning the full database.
+
+B is incorrect because no data is deleted. C is incorrect because fine-tuning changes model weights, while this is retrieval. D is incorrect because primary-key indexing is for exact id lookup, not nearest-vector retrieval."
+mcmc,markdown,"A support team is designing a vector database for internal help articles. Each article chunk will be stored with its embedding.
+
+Which additional information is useful to store as metadata?",,,,,,,,Source file or URL,Category such as Billing or Account,Policy year or last updated date,Random emojis unrelated to the document,Ticket id or page number when available,"1,2,3,5",6a13d10a7d8c353bbc49fc09,0.5,markdown,"A is correct because source information helps trace where a result came from. B is correct because category metadata can filter results. C is correct because policy year or update date can avoid returning outdated information. E is correct because ticket id or page number can help locate the original context.
+
+D is incorrect because unrelated random emojis do not help filtering, tracing, or retrieval quality."
+mcmc,markdown,A company has both SQL tables and a vector database. Which decisions are appropriate?,,,,,,,,Use SQL to calculate total revenue for March.,"Use vector similarity search to find policy paragraphs related to ""remote work"" when documents say ""work from home.""",Use SQL exact lookup to fetch `user_id = 42`.,Use vector search as a complete replacement for all exact payment reports.,Use both SQL filters and vector similarity when the query needs structured filtering plus meaning search.,"1,2,3,5",6a13d10a7d8c353bbc49fc09,0.5,markdown,"A is correct because revenue totals are structured aggregate queries suited for SQL. B is correct because vector similarity can match related meanings with different words. C is correct because exact id lookup is a SQL strength. E is correct because real systems often combine structured filters with semantic search.
+
+D is incorrect because vector search should not replace SQL for exact financial reports, counts, or compliance facts."
+mcmc,markdown,A vector database uses ANN search for a large collection. Which statements correctly describe ANN?,,,,,,,,ANN returns very good nearest-neighbour results faster than scanning every vector.,ANN may trade a small amount of exact ranking accuracy for much better speed.,ANN guarantees the mathematically perfect top-k in every case.,ANN can use index structures such as graph-style or partitioning-style indexes.,ANN is useful only when the collection has exactly five vectors.,"1,2,4",6a13d10a7d8c353bbc49fc09,1,markdown,"A is correct because ANN is designed to retrieve near-optimal neighbours quickly at scale. B is correct because ANN commonly trades perfect exhaustive accuracy for speed. D is correct because vector systems may use index structures such as HNSW-style graphs or IVF-style partitions.
+
+C is incorrect because exact mathematical top-k is not guaranteed by approximate search. E is incorrect because ANN matters mainly when data grows large; tiny collections can often use exact search."
+mcmc,markdown,"A team is building a conceptual retrieval pipeline for a policy assistant. The planned flow is:
+
+`documents -> chunks -> embeddings -> vector DB with index -> query embedding -> top-k chunks -> application uses returned text`
+
+Which statements are correct?",,,,,,,,The same embedding model should be used for document chunks and user queries.,The vector database should store only numbers and never store original text or metadata.,Vector indexing helps avoid scanning every stored vector for every query.,"K-means and KNN are related to the idea of closeness, but they are not complete vector database products by themselves.",FAISS is an example of a library used for fast vector similarity search.,"1,3,4,5",6a13d10a7d8c353bbc49fc09,1,markdown,"A is correct because document and query vectors must share the same embedding space. C is correct because indexing helps skip unlikely regions and improves search speed. D is correct because K-means and KNN are related algorithmic ideas, not full vector database products. E is correct because FAISS stands for Facebook AI Similarity Search and is used for fast vector search.
+
+B is incorrect because practical vector databases often store vectors along with original text and metadata for filtering, traceability, and downstream use."
+subjective,markdown,"A coaching institute wants to build a support assistant for student questions. The institute has:
+
+- 500 FAQ articles about fees, refunds, login issues, placements, and certificates.
+- A SQL database with student profiles, payments, and order/status records.
+- A future plan to use a vector database for meaning-based retrieval.
+
+Create a clear design plan for how the institute should use **SQL**, **embeddings**, and a **vector database** together.
+
+### Your Answer Must Include
+
+Write your answer in 6 short sections:
+
+1. **Which data should stay in SQL**  
+   Mention at least 3 examples, such as payment totals, student ids, order status, or exact filters.
+
+2. **Which data should go into the vector database**  
+   Mention what should be chunked and embedded from the FAQ articles.
+
+3. **Metadata to store with each vector**  
+   Mention at least 4 useful metadata fields.
+
+4. **Query-time flow**  
+   Explain the steps from user question -> query embedding -> vector search -> top-k chunks -> final application use.
+
+5. **Why brute force is not enough at scale**  
+   Explain why comparing every query with every stored vector becomes slow, and how indexing or ANN helps.
+
+6. **One exact-match example and one similarity-search example**  
+   Give one user question that SQL should handle and one user question that vector similarity search should handle.
+
+### Constraints
+
+- Do not write code.
+- Do not describe a full Chroma implementation.
+- Keep the answer between 350 and 600 words.
+- Use simple language and bullet points wherever helpful.",,,,,,,,,,,,,,6a13d10a7d8c353bbc49fc09,0.5,markdown,"1. **Which data should stay in SQL**
+
+- Student id, email, and profile details should stay in SQL because they need exact lookup.
+- Payment totals and refund transaction status should stay in SQL because these require accurate structured records.
+- Order or ticket status such as `open`, `resolved`, or `shipped` should stay in SQL because these are exact fields.
+
+2. **Which data should go into the vector database**
+
+- FAQ article text about fees, refunds, login issues, placements, and certificates should be split into chunks.
+- Each chunk should be converted into an embedding.
+- These embeddings should be stored in the vector database so student questions can retrieve the nearest matching chunks by meaning.
+
+3. **Metadata to store with each vector**
+
+- FAQ article id
+- Topic or category, such as Fees or Login
+- Source file or URL
+- Last updated date or policy year
+- Page number or section name if available
+
+4. **Query-time flow**
+
+- A student asks a question such as ""Can I pay my course fee in parts?""
+- The system converts the question into an embedding using the same embedding model used for FAQ chunks.
+- The vector database searches the indexed collection.
+- It returns top-k chunks closest in meaning.
+- The application displays those chunks or passes them to an LLM as context for a grounded answer.
+
+5. **Why brute force is not enough at scale**
+
+- Brute force compares the query vector with every stored vector.
+- With a small number of chunks, this may work.
+- With thousands or millions of chunks, this becomes slow because every query does O(n) comparisons.
+- Vector indexing and ANN help the system skip unlikely regions and return good matches faster.
+
+6. **One exact-match example and one similarity-search example**
+
+- SQL example: ""Show payment status for student id 1042.""
+- Similarity-search example: ""Can I pay fees in instalments?"" This may match an FAQ chunk that says ""Students can choose a monthly payment plan,"" even though the exact words differ."
