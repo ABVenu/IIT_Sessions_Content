@@ -1,0 +1,217 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya is starting a LangChain mini-project for a college demo. She already has other Python projects on the same laptop, and each project uses different package versions. What should she do first to keep this new project predictable?",,,,,,2,,Install all packages globally with administrator permissions,Create and activate a separate Python virtual environment for the project,Store the project files directly inside the system Python folder,Copy packages manually from another project folder,,6a155926fa276dd5f895e14a,0,markdown,"**Reasoning:** A virtual environment isolates packages for one project, which prevents version conflicts with other projects on the same system.
+
+**Why others are wrong:** A) Global installs can create conflicts across projects. C) System Python folders should not be used as project folders. D) Manually copying packages is unreliable and not a standard workflow."
+mcsc,markdown,A learner wants to build a LangChain chain that talks to a local Ollama model. Which package provides the LangChain wrapper used to connect to Ollama chat models?,,,,,,1,,`langchain-ollama`,`python-dotenv`,`pandas`,`flask`,,6a155926fa276dd5f895e14a,0,markdown,"**Reasoning:** `langchain-ollama` provides the integration/wrapper needed to call Ollama models through LangChain.
+
+**Why others are wrong:** B) `python-dotenv` is commonly used for environment variables, not the Ollama wrapper shown here. C) `pandas` is for data analysis. D) `flask` is for building web apps, not for binding LangChain to Ollama."
+mcsc,markdown,An app developer keeps a future cloud API key inside a `.env` file and adds `.env` to `.gitignore`. What is the main reason for this practice?,,,,,,2,,It makes the model respond faster,It prevents private credentials from being hardcoded or pushed to GitHub,It automatically downloads all Ollama models,It replaces the need for a virtual environment,,6a155926fa276dd5f895e14a,0,markdown,"**Reasoning:** Environment variables and `.env` files keep sensitive values outside source code; `.gitignore` helps prevent accidental commits of those private files.
+
+**Why others are wrong:** A) Credential storage does not speed up model generation. C) `.env` does not download models. D) Environment variables and virtual environments solve different problems."
+mcsc,markdown,A local Ollama service is running on a learner's laptop. Which base URL is commonly used when creating a `ChatOllama` object for this local setup?,,,,,,2,,`https://api.openai.com/v1`,`http://localhost:11434`,`ftp://localhost/models`,`https://github.com/langchain-ai`,,6a155926fa276dd5f895e14a,0,markdown,"**Reasoning:** Local Ollama commonly serves models at `http://localhost:11434`, which is why this value is used as the local `base_url`.
+
+**Why others are wrong:** A) This is an OpenAI-style endpoint, not local Ollama. C) FTP is not used for the LangChain chat model call. D) GitHub is a code hosting site, not the local model server."
+mcsc,markdown,"A learner creates this prompt:
+
+```python
+prompt = ChatPromptTemplate.from_messages([
+    (""system"", ""You are a beginner-friendly programming instructor.""),
+    (""human"", ""Explain {topic} using an analogy from {analogy_domain}."")
+])
+```
+
+Why is `from_messages()` the correct choice here?",,,,,,1,,Because the prompt contains a list of chat messages with roles,Because it automatically validates model output length,Because it downloads the selected Ollama model,Because it converts the final response into a plain string,,6a155926fa276dd5f895e14a,0.5,markdown,"**Reasoning:** `from_messages()` is designed for chat-style prompts represented as a list of role-message tuples, such as system and human messages.
+
+**Why others are wrong:** B) Output validation is separate code. C) Model downloading is handled by Ollama commands, not this prompt method. D) `StrOutputParser` handles plain-string conversion, not `from_messages()`."
+mcsc,markdown,"A chain is written as:
+
+```python
+chain = prompt | llm | parser
+```
+
+What best describes the data flow in this LCEL chain?",,,,,,2,,"Parser creates the prompt, prompt stores the model, model validates the code","Prompt formats the input, model generates a response, parser converts it into plain text","Model installs packages, parser activates the virtual environment, prompt prints output",Input skips the prompt and goes directly to the parser,,6a155926fa276dd5f895e14a,0.5,markdown,"**Reasoning:** LCEL's pipe operator passes data through the pipeline: the prompt creates messages, the LLM produces a response object, and the parser returns clean text.
+
+**Why others are wrong:** A) The order is reversed and conceptually incorrect. C) Package installation and environment activation are terminal setup tasks. D) The prompt is not skipped in this chain."
+mcmc,markdown,Which statements about `StrOutputParser` are correct?,,,,,,,,It converts a LangChain model response object into a plain string,It is useful when the app needs clean text instead of extra response metadata,It creates and activates a Python virtual environment,It guarantees that the model answer is factually correct,"1, 2",6a155926fa276dd5f895e14a,0.5,markdown,"**Reasoning:** `StrOutputParser` extracts the text from a model response object and returns it as a plain string, which is useful for beginner apps that need clean text.
+
+**Why others are wrong:** C) Virtual environments are created with Python commands, not output parsers. D) A parser changes output format; it does not guarantee factual accuracy."
+mcmc,markdown,A team wants to validate the output of a first LangChain chain before showing it to users. Which checks match simple beginner-level success criteria?,,,,,,,,Confirm that the response is a Python string,Confirm that the response is not empty after removing extra spaces,Confirm that the response stays within a reasonable word limit,Confirm that the laptop's battery percentage is above 80%,"1, 2, 3",6a155926fa276dd5f895e14a,0.5,markdown,"**Reasoning:** Beginner validation can check whether the response is the expected type, contains meaningful content, and does not exceed the chosen length limit.
+
+**Why others are wrong:** D) Battery level is unrelated to whether the generated response satisfies application output criteria."
+mcmc,markdown,A student separates a LangChain project into `build_chain.py` and `validate_chain.py`. Which design choices are technically sound?,,,,,,,,Keep reusable chain construction inside a function such as `build_chain()`,Import the reusable chain builder into the validation file instead of copy-pasting chain code,Hardcode all future cloud API keys inside `build_chain.py` to simplify sharing,Use multiple test cases to see whether validation behaves consistently across different inputs,"1, 2, 4",6a155926fa276dd5f895e14a,1,markdown,"**Reasoning:** Reusable chain construction belongs in a function, validation can import that function, and multiple test cases reveal behaviour across different inputs.
+
+**Why others are wrong:** C) Hardcoding API keys in source files is unsafe and can expose secrets when code is shared."
+mcmc,markdown,"A small local model returns a weak analogy, but the app still prints a response and validation reports that the response is a non-empty string under the word limit. Which conclusions are reasonable?",,,,,,,,The LCEL pipeline may be technically composed correctly even if the generated explanation is not very strong,Model quality can depend on the selected model and available hardware,"Basic validation checks are helpful, but they do not prove that the answer is semantically excellent",`StrOutputParser` always improves the intelligence of the selected model,"1, 2, 3",6a155926fa276dd5f895e14a,1,markdown,"**Reasoning:** A chain can be structurally correct while a small model gives a weak answer. Model quality depends on the selected model and environment, and basic validation only checks simple conditions such as type, emptiness, and length.
+
+**Why others are wrong:** D) `StrOutputParser` converts response format; it does not make the model smarter."
+subjective,markdown,"You are helping a student support team build a tiny local AI helper called **Concept Coach**. The helper should explain programming concepts in simple language using an analogy chosen by the user. The team also wants a basic validation file so weak or unusable responses are noticed before they are shown in a demo.
+
+Create a small LangChain + Ollama project that builds one reusable LCEL chain and validates its output across multiple inputs.
+
+### Functional requirements
+
+1. Create a project folder named `concept_coach_chain`.
+2. Inside the folder, create these files:
+   - `build_chain.py`
+   - `validate_chain.py`
+   - `.gitignore`
+3. In `build_chain.py`, create a function named `build_chain()` that:
+   - Uses `ChatPromptTemplate.from_messages()`.
+   - Has one system message that makes the model act like a beginner-friendly programming instructor.
+   - Has one human message that accepts two placeholders: `{topic}` and `{analogy_domain}`.
+   - Uses `ChatOllama` with:
+     - `model=""qwen:1.8b""`
+     - `base_url=""http://localhost:11434""`
+     - `temperature=1`
+     - `num_predict=100`
+   - Uses `StrOutputParser`.
+   - Returns the chain composed as `prompt | llm | parser`.
+4. In `validate_chain.py`, import `build_chain()` and create a function named `is_response_valid(response: str) -> tuple[bool, list[str]]` that checks:
+   - Response must be a string.
+   - Response must not be empty after trimming spaces.
+   - Response must not be more than 100 words.
+5. Test the chain using at least these three inputs:
+   - Topic: `LangChain Expression Language`; analogy domain: `school assembly line`
+   - Topic: `Prompt Templates`; analogy domain: `wedding invitation cards`
+   - Topic: `Output Parsers`; analogy domain: `food delivery packaging`
+6. For each test case, print:
+   - Input dictionary
+   - Generated response
+   - Validation result
+   - Validation errors, if any
+7. In `.gitignore`, include at least:
+   - `venv/`
+   - `.env`
+   - `__pycache__/`
+
+### Expected run commands
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+pip3 install langchain-core
+pip3 install langchain-ollama
+python3 validate_chain.py
+```
+
+If Ollama and the selected model are available locally, the program should generate responses and display whether each response passed validation.
+
+### Submission instructions
+
+- Create a repo `agentic-systems` if it is not already created.
+- In that repo, create `Module3/Session36/concept_coach_chain`.
+- Code all files mentioned in the question inside the `concept_coach_chain` folder.
+- Add ignorable files like `.env`, generated cache folders, virtual environment folders, and configs to `.gitignore` wherever applicable.
+- Run the code and verify it is working.
+- Add, commit, and push the code to GitHub.
+- Submit the `Module3/Session36/concept_coach_chain` folder link as the submission link.",,,,,,,,,,,,,6a155926fa276dd5f895e14a,0.5,markdown,"The solution should keep chain construction separate from validation. `build_chain.py` should only create and return the LCEL chain. `validate_chain.py` should import the chain builder, run multiple inputs, and check whether the returned output is usable according to basic success criteria.
+
+The prompt should use `ChatPromptTemplate.from_messages()` because the chain has role-based chat messages. `ChatOllama` connects LangChain to the local Ollama server, and `StrOutputParser` converts the model response object into plain text. The validation function does not judge deep factual quality, but it catches basic failures such as wrong type, empty output, and overly long answers.
+
+`build_chain.py`
+
+```python
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_ollama import ChatOllama
+
+
+def build_chain():
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                ""system"",
+                ""You are a beginner-friendly programming instructor. ""
+                ""Explain concepts clearly in simple language. ""
+                ""Use short bullet points and avoid unnecessary introduction."",
+            ),
+            (
+                ""human"",
+                ""Explain {topic} using a simple analogy from {analogy_domain}."",
+            ),
+        ]
+    )
+
+    llm = ChatOllama(
+        model=""qwen:1.8b"",
+        base_url=""http://localhost:11434"",
+        temperature=1,
+        num_predict=100,
+    )
+
+    parser = StrOutputParser()
+    chain = prompt | llm | parser
+
+    return chain
+
+
+if __name__ == ""__main__"":
+    chain = build_chain()
+    response = chain.invoke(
+        {
+            ""topic"": ""LangChain Expression Language"",
+            ""analogy_domain"": ""school assembly line"",
+        }
+    )
+    print(response)
+```
+
+`validate_chain.py`
+
+```python
+from build_chain import build_chain
+
+
+def is_response_valid(response: str) -> tuple[bool, list[str]]:
+    errors = []
+
+    if not isinstance(response, str):
+        errors.append(""Response is not a string."")
+        return False, errors
+
+    if not response.strip():
+        errors.append(""Response is empty."")
+
+    if len(response.split()) > 100:
+        errors.append(""Response is too long: more than 100 words."")
+
+    return len(errors) == 0, errors
+
+
+chain = build_chain()
+
+test_cases = [
+    {
+        ""topic"": ""LangChain Expression Language"",
+        ""analogy_domain"": ""school assembly line"",
+    },
+    {
+        ""topic"": ""Prompt Templates"",
+        ""analogy_domain"": ""wedding invitation cards"",
+    },
+    {
+        ""topic"": ""Output Parsers"",
+        ""analogy_domain"": ""food delivery packaging"",
+    },
+]
+
+for test_case in test_cases:
+    response = chain.invoke(test_case)
+    is_valid, errors = is_response_valid(response)
+
+    print(""Input:"", test_case)
+    print(""Response:"", response)
+    print(""Valid:"", is_valid)
+    print(""Errors:"", errors)
+    print(""-"" * 40)
+```
+
+`.gitignore`
+
+```gitignore
+venv/
+.env
+__pycache__/
+```
+
+Students may use another locally available Ollama model if `qwen:1.8b` is not installed, but they should clearly mention the model name they used. They may also add extra validation checks, such as requiring bullet points, as long as the required three checks are present and correct."

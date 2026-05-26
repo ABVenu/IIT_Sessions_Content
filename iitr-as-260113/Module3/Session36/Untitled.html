@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<title>Markmap</title>
+<style>
+* {
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-family: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+#mindmap {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+}
+.markmap-dark {
+  background: #27272a;
+  color: white;
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/style.css">
+</head>
+<body>
+<svg id="mindmap"></svg>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script><script src="https://cdn.jsdelivr.net/npm/markmap-toolbar@0.18.12/dist/index.js"></script><script>(r => {
+              setTimeout(r);
+            })(function renderToolbar() {
+  const {
+    markmap,
+    mm
+  } = window;
+  const {
+    el
+  } = markmap.Toolbar.create(mm);
+  el.setAttribute('style', 'position:absolute;bottom:20px;right:20px');
+  document.body.append(el);
+})</script><script>((getMarkmap, getOptions, root2, jsonOptions) => {
+              const markmap = getMarkmap();
+              window.mm = markmap.Markmap.create(
+                "svg#mindmap",
+                (getOptions || markmap.deriveOptions)(jsonOptions),
+                root2
+              );
+              if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                document.documentElement.classList.add("markmap-dark");
+              }
+            })(() => window.markmap,null,{"content":"LangChain Environment Setup and First LCEL Chain","children":[{"content":"Previous Module 1","children":[{"content":"Agentic Foundation and Architecture","children":[{"content":"Major tech stacks: Python + FastAPI","children":[],"payload":{"tag":"li","lines":"12,13"}},{"content":"Tech learnt:","children":[{"content":"LLM basics","children":[],"payload":{"tag":"li","lines":"14,15"}},{"content":"Prompting","children":[],"payload":{"tag":"li","lines":"15,16"}},{"content":"APIs","children":[],"payload":{"tag":"li","lines":"16,17"}},{"content":"Framework view","children":[],"payload":{"tag":"li","lines":"17,19"}}],"payload":{"tag":"li","lines":"13,19"}}],"payload":{"tag":"h3","lines":"10,11"}}],"payload":{"tag":"h2","lines":"8,9"}},{"content":"Previous Module 2","children":[{"content":"Agent Components: Memory, Tools and RAG","children":[{"content":"Major tech stacks: APIs + Vector DBs","children":[],"payload":{"tag":"li","lines":"23,24"}},{"content":"Tech learnt:","children":[{"content":"Memory","children":[],"payload":{"tag":"li","lines":"25,26"}},{"content":"Tools","children":[],"payload":{"tag":"li","lines":"26,27"}},{"content":"Embeddings","children":[],"payload":{"tag":"li","lines":"27,28"}},{"content":"RAG","children":[],"payload":{"tag":"li","lines":"28,30"}}],"payload":{"tag":"li","lines":"24,30"}}],"payload":{"tag":"h3","lines":"21,22"}}],"payload":{"tag":"h2","lines":"19,20"}},{"content":"Current Module Until Previous Session","children":[{"content":"Ollama Setup + LangChain Overview","children":[{"content":"Local model access","children":[],"payload":{"tag":"li","lines":"34,35"}},{"content":"Runnables","children":[],"payload":{"tag":"li","lines":"35,36"}},{"content":"LCEL","children":[],"payload":{"tag":"li","lines":"36,37"}},{"content":"Prompt templates","children":[],"payload":{"tag":"li","lines":"37,38"}},{"content":"Output parsers","children":[],"payload":{"tag":"li","lines":"38,40"}}],"payload":{"tag":"h3","lines":"32,33"}}],"payload":{"tag":"h2","lines":"30,31"}},{"content":"Current Session","children":[{"content":"First Working LCEL Chain","children":[{"content":"Set up <code>venv</code>","children":[],"payload":{"tag":"li","lines":"44,45"}},{"content":"Configure <code>.env</code>","children":[],"payload":{"tag":"li","lines":"45,46"}},{"content":"Connect <code>ChatOllama</code>","children":[],"payload":{"tag":"li","lines":"46,47"}},{"content":"Build <code>ChatPromptTemplate</code>","children":[],"payload":{"tag":"li","lines":"47,48"}},{"content":"Parse with <code>StrOutputParser</code>","children":[],"payload":{"tag":"li","lines":"48,49"}},{"content":"Run <code>hello_chain.py</code>","children":[],"payload":{"tag":"li","lines":"49,51"}}],"payload":{"tag":"h3","lines":"42,43"}}],"payload":{"tag":"h2","lines":"40,41"}},{"content":"Course Connection","children":[{"content":"Why This Session Matters","children":[{"content":"Turns theory into hands-on build capability","children":[],"payload":{"tag":"li","lines":"55,56"}},{"content":"Creates the base for:","children":[{"content":"LangChain tools","children":[],"payload":{"tag":"li","lines":"57,58"}},{"content":"Agents","children":[],"payload":{"tag":"li","lines":"58,59"}},{"content":"Memory","children":[],"payload":{"tag":"li","lines":"59,60"}},{"content":"RAG","children":[],"payload":{"tag":"li","lines":"60,61"}},{"content":"Evaluation","children":[],"payload":{"tag":"li","lines":"61,63"}}],"payload":{"tag":"li","lines":"56,63"}}],"payload":{"tag":"h3","lines":"53,54"}}],"payload":{"tag":"h2","lines":"51,52"}},{"content":"Real-Life Connection","children":[{"content":"How AI Teams Use This","children":[{"content":"Start with a clean environment","children":[],"payload":{"tag":"li","lines":"67,68"}},{"content":"Keep secrets outside source code","children":[],"payload":{"tag":"li","lines":"68,69"}},{"content":"Test a small chain before scaling","children":[],"payload":{"tag":"li","lines":"69,70"}},{"content":"Build a reusable base for real AI assistants","children":[],"payload":{"tag":"li","lines":"70,72"}}],"payload":{"tag":"h3","lines":"65,66"}}],"payload":{"tag":"h2","lines":"63,64"}},{"content":"Upcoming Module 4","children":[{"content":"Multi-Agent Collaboration and Deployment","children":[{"content":"Major tech stacks: n8n + CrewAI","children":[],"payload":{"tag":"li","lines":"76,77"}},{"content":"Will use:","children":[{"content":"AutoGen","children":[],"payload":{"tag":"li","lines":"78,79"}},{"content":"HTTP automation","children":[],"payload":{"tag":"li","lines":"79,80"}},{"content":"Deployment","children":[],"payload":{"tag":"li","lines":"80,81"}},{"content":"Monitoring","children":[],"payload":{"tag":"li","lines":"81,83"}}],"payload":{"tag":"li","lines":"77,83"}}],"payload":{"tag":"h3","lines":"74,75"}}],"payload":{"tag":"h2","lines":"72,73"}},{"content":"Upcoming Module 5","children":[{"content":"Capstone Project: Autonomous System Build","children":[{"content":"Major tech stacks: LangChain + Multi-Agent Systems","children":[],"payload":{"tag":"li","lines":"87,88"}},{"content":"Will use:","children":[{"content":"Tools","children":[],"payload":{"tag":"li","lines":"89,90"}},{"content":"Memory","children":[],"payload":{"tag":"li","lines":"90,91"}},{"content":"RAG","children":[],"payload":{"tag":"li","lines":"91,92"}},{"content":"Evaluation","children":[],"payload":{"tag":"li","lines":"92,93"}},{"content":"Deployment thinking","children":[],"payload":{"tag":"li","lines":"93,94"}}],"payload":{"tag":"li","lines":"88,94"}}],"payload":{"tag":"h3","lines":"85,86"}}],"payload":{"tag":"h2","lines":"83,84"}}],"payload":{"tag":"h1","lines":"6,7"}},{"colorFreezeLevel":2,"initialExpandLevel":3})</script>
+</body>
+</html>

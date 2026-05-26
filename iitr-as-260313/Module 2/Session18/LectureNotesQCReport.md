@@ -206,4 +206,39 @@
 
 ---
 
+## QC Evaluation — Iteration 5 (Released Notes Alignment)
+
+**Date:** 2026-05-26  
+**File:** `Lecture Notes Released.md`  
+**Trigger:** Post-session alignment against transcript and live topic coverage.
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+
+**Expected result achieved:** Yes — all criteria pass.
+
+### Alignment Actions
+
+- Retained the covered Chroma hands-on flow: pipeline recall, terminology, setup, upsert, count/peek/get verification, query, distance interpretation, and RAG bridge.
+- Added transcript-aligned extras: Python/pip troubleshooting, 384-dimensional embedding explanation, model-choice note, and SQLite Viewer inspection of Chroma storage files.
+- Replaced the generic weak-result example with the password-query interpretation example covered in class.
+- Excluded session protocol content such as quizzes and non-learning-objective Git workflow details from released student notes.
+- Preserved all relevant original image links.
+
+### Verification Checklist
+
+- [x] `Lecture Notes Released.md` starts directly with the lecture title.
+- [x] No Mentimeter or post-lecture quiz content included.
+- [x] No session-number references in student-facing text.
+- [x] Covered and partly covered topics retained.
+- [x] Relevant extras from the live session added professionally.
+- [x] Markdown structure, code fences, activities, key takeaways, and quick reference table present.
+
+---
+
 *End of QC Report*

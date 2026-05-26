@@ -1,0 +1,207 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A data scientist trains a regression model with many weak input columns. The model performs very well on training data but becomes unstable on new customer data because some coefficients are extremely large. Which technique is designed to reduce this problem by adding a penalty during training?,,,,,,1,,Regularization,Data leakage,Random shuffling only,Manual sorting of rows,,,6a13d0ed465174ccc15ddb09,0,markdown,"A is correct because regularization adds a penalty to discourage very large coefficients, which can reduce overfitting and improve generalization.
+
+B is incorrect because data leakage is a mistake where test or future information enters training. C is incorrect because shuffling alone does not penalize large coefficients. D is incorrect because sorting rows does not control model complexity."
+mcsc,markdown,"In scikit-learn, a learner increases `alpha` while training a Ridge or Lasso regression model. What is the expected effect of a higher `alpha` value?",,,,,,1,,Stronger regularization penalty,Automatic increase in the number of test rows,Removal of the need for train-test split,Conversion of regression into classification,,,6a13d0ed465174ccc15ddb09,0,markdown,"A is correct because `alpha` controls regularization strength in Ridge and Lasso; a higher value applies stronger shrinkage to coefficients.
+
+B is incorrect because `alpha` does not change the dataset split. C is incorrect because models still need honest evaluation on held-out data. D is incorrect because Ridge and Lasso remain regression models."
+mcsc,markdown,"A school score model uses `study_hours`, `sleep_hours`, `attendance`, and a few mildly useful behavior features. The team believes most features matter a little and wants to shrink extreme weights without dropping columns completely. Which model is the better fit?",,,,,,1,,Ridge Regression,Lasso Regression only because it always keeps all features,A mean baseline as the final predictive model,A residual table without fitting a model,,,6a13d0ed465174ccc15ddb09,0,markdown,"A is correct because Ridge uses an L2 penalty that shrinks coefficients while usually keeping all features in the model.
+
+B is incorrect because Lasso can set some coefficients exactly to zero, so it does not always keep all features. C is incorrect because a mean baseline is useful for comparison but not a regularized model. D is incorrect because residuals are used after predictions exist, not as a replacement for model fitting."
+mcsc,markdown,"A regression dataset contains one deliberately useless column called `random_noise`. After training, one model gives this column a coefficient of exactly `0.0`, effectively removing it from the prediction. Which model behavior does this best represent?",,,,,,1,,Lasso feature selection,Ridge keeping every coefficient large,R-squared becoming negative by definition,MAE ignoring all prediction errors,,,6a13d0ed465174ccc15ddb09,0,markdown,"A is correct because Lasso uses an L1 penalty and can shrink irrelevant feature coefficients exactly to zero, which acts like automatic feature selection.
+
+B is incorrect because Ridge shrinks coefficients but rarely sets them exactly to zero. C is incorrect because negative R-squared means worse than the mean baseline, not feature removal. D is incorrect because MAE measures absolute errors and does not ignore them."
+mcsc,markdown,"A learner compares Linear Regression, Ridge, and Lasso on the same student score dataset. Which evaluation practice gives the fairest comparison?",,,,,,1,,"Fit each model on `X_train`, predict on the same `X_test`, and compute metrics against `y_test`.",Fit each model on the full dataset and report only training R-squared.,Give each model a different random test set so every model has a unique challenge.,Choose the model with the largest coefficient for `random_noise`.,,,6a13d0ed465174ccc15ddb09,0.5,markdown,"A is correct because all models should be trained on training rows and evaluated on the same held-out test rows using the same metrics.
+
+B is incorrect because training metrics can hide overfitting. C is incorrect because different test sets make the comparison unfair. D is incorrect because a large coefficient on noise suggests the model may be chasing irrelevant patterns."
+mcsc,markdown,"Two apartment rent models have the same MAE of `2500`, but Model B has RMSE `9000` while Model A has RMSE `3100`. What is the most reasonable interpretation?",,,,,,1,,Model B likely has a few much larger mistakes and needs error analysis.,Model B is automatically better because RMSE is larger.,Both models must have identical error patterns because MAE is the same.,RMSE cannot be used for regression model evaluation.,,,6a13d0ed465174ccc15ddb09,0.5,markdown,"A is correct because RMSE penalizes large errors more strongly than MAE. When RMSE is much larger than MAE, outliers or weak segments should be investigated.
+
+B is incorrect because lower error metrics are usually better. C is incorrect because the same MAE can hide very different error distributions. D is incorrect because RMSE is a standard regression metric."
+mcmc,markdown,A model report shows test R-squared of `0.78` for predicting delivery time. Which statements interpret or use R-squared correctly?,,,,,,,,The model explains a substantial part of the variation in delivery time compared with predicting the mean.,R-squared should be paired with MAE or RMSE because it does not directly show error size in minutes.,R-squared is always enough to approve deployment for every user segment.,A negative R-squared would mean the model is worse than always predicting the mean on that test set.,R-squared and MAE always have the same units.,"1,2,4",6a13d0ed465174ccc15ddb09,0.5,markdown,"A, B, and D are correct. R-squared measures explained variance compared with the mean baseline, but it should be paired with unit-based error metrics such as MAE or RMSE. Negative R-squared indicates worse performance than the mean baseline on that evaluation set.
+
+C is incorrect because deployment also requires checking absolute error size and segment-level failures. E is incorrect because R-squared is unitless, while MAE has the same units as the target."
+mcmc,markdown,A hiring team wants to know whether its salary prediction model performs worse for junior candidates than senior candidates. Which steps are appropriate for error analysis?,,,,,,,,Create residuals using `actual - predicted`.,Create absolute error values to measure error size per row.,Use `pd.cut` or another grouping method to create experience bands.,Use `groupby` to compare average absolute error across the bands.,Delete rows from the weakest group before reporting results so the global score improves.,"1,2,3,4",6a13d0ed465174ccc15ddb09,0.5,markdown,"A, B, C, and D are correct because error analysis starts from row-level prediction errors, then groups rows by a meaningful feature range and compares error statistics by segment.
+
+E is incorrect because removing weak rows to improve the report is misleading. The weak segment should be identified and investigated, not hidden."
+mcmc,markdown,"A product team is building a demand prediction model with 40 features. Some features are known business signals, while many campaign-tracking columns may be irrelevant. Which statements about choosing between Ridge and Lasso are technically correct?",,,,,,,,Lasso is useful when many columns may be irrelevant because it can set some coefficients to zero.,Ridge is useful when most features are expected to contribute at least a little.,A higher `alpha` generally applies stronger shrinkage in both Ridge and Lasso.,Lasso always produces better test metrics than Ridge on every dataset.,The best final choice should be based on held-out test performance and the business cost of errors.,"1,2,3,5",6a13d0ed465174ccc15ddb09,1,markdown,"A, B, C, and E are correct. Lasso can perform feature selection by zeroing some coefficients, Ridge shrinks all coefficients and is suitable when many features matter a little, and `alpha` controls penalty strength. Final model choice should come from honest test evaluation and business needs.
+
+D is incorrect because no regularized model is guaranteed to beat another on every dataset. The data, feature quality, target noise, and chosen metric all matter."
+mcmc,markdown,"A bank wants to present a regression model that estimates loan processing time. The global test metrics look good, but complaints are common for applications from small businesses. Which items should be included before calling the model deployment-ready?",,,,,,,,"MAE or RMSE on held-out test data, reported in business units such as hours or days.",A comparison against the mean baseline or another simple baseline.,"Error analysis grouped by application type, including the small-business segment.","Only the highest training R-squared among Linear, Ridge, and Lasso.",A check for large train-test gaps that may indicate overfitting.,"1,2,3,5",6a13d0ed465174ccc15ddb09,1,markdown,"A, B, C, and E are correct because a responsible regression report should include held-out test metrics in real units, baseline comparison, segment-level error analysis, and overfitting checks.
+
+D is incorrect because training R-squared alone can reward overfitting and does not prove the model works for new cases or for important user segments."
+subjective,markdown,"A teacher wants a simple report that compares three regression models for predicting student exam scores. The teacher also wants to see whether regularized models reduce the effect of a noisy feature and how far the Ridge model's predictions are from actual scores.
+
+Create a Python file named `simple_regression_comparison.py` that uses a small given dataset, compares Linear Regression, Ridge, and Lasso, and prints a short error analysis.
+
+### Functional Requirements
+
+1. Import:
+   - `numpy as np`
+   - `pandas as pd`
+   - `LinearRegression`, `Ridge`, and `Lasso` from `sklearn.linear_model`
+   - `train_test_split` from `sklearn.model_selection`
+   - `mean_absolute_error`, `mean_squared_error`, and `r2_score` from `sklearn.metrics`
+2. Create a DataFrame using the exact data given below:
+
+```python
+data = pd.DataFrame({
+    ""study_hours"": [2, 3, 4, 5, 6, 7, 8, 9, 3, 5, 7, 9],
+    ""sleep_hours"": [6, 6, 7, 7, 8, 8, 7, 8, 5, 6, 7, 9],
+    ""attendance"": [62, 68, 72, 75, 80, 84, 88, 92, 65, 78, 86, 95],
+    ""distractions"": [5, 4, 4, 3, 2, 2, 1, 1, 5, 3, 2, 1],
+    ""random_noise"": [9, 2, 7, 1, 8, 3, 6, 4, 5, 10, 1, 7],
+    ""exam_score"": [58, 63, 68, 73, 80, 84, 91, 96, 60, 75, 86, 98],
+})
+```
+
+3. Use these feature columns:
+   - `study_hours`
+   - `sleep_hours`
+   - `attendance`
+   - `distractions`
+   - `random_noise`
+4. Use `exam_score` as the target column.
+5. Split the data using:
+   - `test_size=0.2`
+   - `random_state=42`
+6. Train these three models:
+   - `LinearRegression()`
+   - `Ridge(alpha=1)`
+   - `Lasso(alpha=0.1)`
+7. For each model, print:
+   - MAE
+   - RMSE
+   - R-squared
+8. Print a coefficient comparison table for the `random_noise` feature only.
+9. Use Ridge predictions to create a small error analysis table with:
+   - `actual`
+   - `predicted`
+   - `error` as `actual - predicted`
+   - `abs_error`
+10. Print two short observations:
+    - Which model has the lowest RMSE?
+    - Did Ridge or Lasso reduce the `random_noise` coefficient compared with Linear Regression?
+
+### Expected Run Commands
+
+```bash
+pip install numpy pandas scikit-learn
+python simple_regression_comparison.py
+```
+
+If your system uses `pip3` and `python3`, use those commands instead.
+
+### Expected Behaviour
+
+- The script should run without requiring any external dataset.
+- All three models must be evaluated on the same test rows.
+- The output should show MAE, RMSE, and R-squared for each model.
+- The output should show how the `random_noise` coefficient changes across Linear Regression, Ridge, and Lasso.
+- The Ridge error analysis table should show actual score, predicted score, error, and absolute error for test rows.
+
+### Constraints
+
+- Write the solution in one Python file only.
+- Do not fit any model on the test data.
+- Do not hard-code MAE, RMSE, R-squared, prediction, or error values.
+- Keep the output readable with clear headings.
+
+### Submission Instructions
+
+- Code all the points mentioned above in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the code in the code editor or answer box in the LMS.",,,,,,,,,,,,,,6a13d0ed465174ccc15ddb09,0,markdown,"A strong solution first creates the given DataFrame and separates features from the target. It uses one train-test split for all three models so the comparison is fair. MAE, RMSE, and R-squared are calculated on test predictions only.
+
+The coefficient comparison focuses only on `random_noise`, which keeps the task simple while still showing the effect of regularization. The Ridge error analysis table helps learners see prediction errors row by row.
+
+```python
+import numpy as np
+import pandas as pd
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+from sklearn.model_selection import train_test_split
+
+
+def evaluate_model(name, model):
+    model.fit(X_train, y_train)
+    predictions = model.predict(X_test)
+
+    mae = mean_absolute_error(y_test, predictions)
+    rmse = np.sqrt(mean_squared_error(y_test, predictions))
+    r2 = r2_score(y_test, predictions)
+
+    print(f""\n{name}"")
+    print(f""MAE       : {mae:.2f}"")
+    print(f""RMSE      : {rmse:.2f}"")
+    print(f""R-squared : {r2:.3f}"")
+
+    return {
+        ""name"": name,
+        ""model"": model,
+        ""predictions"": predictions,
+        ""rmse"": rmse,
+    }
+
+
+data = pd.DataFrame({
+    ""study_hours"": [2, 3, 4, 5, 6, 7, 8, 9, 3, 5, 7, 9],
+    ""sleep_hours"": [6, 6, 7, 7, 8, 8, 7, 8, 5, 6, 7, 9],
+    ""attendance"": [62, 68, 72, 75, 80, 84, 88, 92, 65, 78, 86, 95],
+    ""distractions"": [5, 4, 4, 3, 2, 2, 1, 1, 5, 3, 2, 1],
+    ""random_noise"": [9, 2, 7, 1, 8, 3, 6, 4, 5, 10, 1, 7],
+    ""exam_score"": [58, 63, 68, 73, 80, 84, 91, 96, 60, 75, 86, 98],
+})
+
+feature_names = [""study_hours"", ""sleep_hours"", ""attendance"", ""distractions"", ""random_noise""]
+X = data[feature_names]
+y = data[""exam_score""]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X,
+    y,
+    test_size=0.2,
+    random_state=42,
+)
+
+models = {
+    ""Linear Regression"": LinearRegression(),
+    ""Ridge (alpha=1)"": Ridge(alpha=1),
+    ""Lasso (alpha=0.1)"": Lasso(alpha=0.1),
+}
+
+results = []
+for name, model in models.items():
+    results.append(evaluate_model(name, model))
+
+noise_coefficients = []
+noise_index = feature_names.index(""random_noise"")
+
+for result in results:
+    noise_coefficients.append({
+        ""model"": result[""name""],
+        ""random_noise_coefficient"": result[""model""].coef_[noise_index],
+    })
+
+coefficient_table = pd.DataFrame(noise_coefficients)
+print(""\nRandom Noise Coefficient Comparison"")
+print(coefficient_table.round(3).to_string(index=False))
+
+best_result = min(results, key=lambda item: item[""rmse""])
+ridge_result = next(item for item in results if item[""name""] == ""Ridge (alpha=1)"")
+
+error_analysis = pd.DataFrame({
+    ""actual"": y_test.to_numpy(),
+    ""predicted"": ridge_result[""predictions""],
+})
+error_analysis[""error""] = error_analysis[""actual""] - error_analysis[""predicted""]
+error_analysis[""abs_error""] = np.abs(error_analysis[""error""])
+
+print(""\nRidge Error Analysis"")
+print(error_analysis.round(2).to_string(index=False))
+
+print(""\nFinal Interpretation"")
+print(f""Lowest RMSE model: {best_result['name']}"")
+print(""Compare the random_noise coefficient values to see how regularization changed the noisy feature."")
+```
+
+Learners may use separate variables instead of dictionaries for the three models. The solution is acceptable if all three models use the same train-test split, metrics are calculated from test predictions, and the Ridge error analysis table is printed."

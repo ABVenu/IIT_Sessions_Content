@@ -43,3 +43,23 @@ Relatable examples retained from source material (intern/manager, restaurant men
 **Reuse decision:** iitr-as-2601 Session29 `LectureNotes.md` is directly reusable on topic alignment; this batch version is adapted for Session16 continuity and reduced depth per lighter-session requirement.
 
 **Expected result:** All criteria met — no revision required.
+
+---
+
+## Iteration 2 — Released Notes Alignment QC
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+
+### Notes
+
+**Coverage alignment:** Live Topic Coverage marks all planned topics as covered: Ridge/Lasso regularization, model comparison, MAE/RMSE/R², error analysis, and practical metric choice. The session also covered train/test recap, coefficients/residuals, alpha tuning, Lasso feature selection, and sklearn implementation; these are already present in the notes.
+
+**Release decision:** No curtailment required. Error analysis was covered at a lighter depth, but it was introduced and discussed through residuals and metric interpretation, so the existing section remains valid under the "partly covered or introduced" rule.
+
+**Expected result:** `Lecture Notes Released.md` created as an unchanged release copy of `Lecture Notes.md`.
