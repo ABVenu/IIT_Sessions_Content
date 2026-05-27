@@ -6,12 +6,17 @@
 
 ## Q1. Build a GadgetMart Product Search Tool
 
-You are on the backend team at **GadgetMart**, an online electronics store. The AI shopping assistant must call a registered `search_product` tool instead of inventing prices from memory. Implement the tool in a single file, `gadgetmart_search_tool.py`, using **Pydantic** and **SQLAlchemy** (`pip install pydantic sqlalchemy` in your virtual environment).
+You are on the backend team at **GadgetMart**, an online electronics store. The AI shopping assistant must call a registered `search_product` tool instead of inventing prices from memory.
+
+Write a Python program (`gadgetmart_search_tool.py`) using **Pydantic** and **SQLAlchemy** (`pip install pydantic sqlalchemy` in your virtual environment) that completes all of the following steps.
 
 ### Your Task
 
-**Task 1 — Catalog setup**  
-Define the SQLAlchemy `Base` and `Product` ORM (`products`: `id`, `name`, `category`, `price`, `in_stock`). Connect to `sqlite:///gadgetmart.db`, create tables, and add a `SessionLocal` factory. Implement `insert_data()` to seed the six mobiles below **only when the table is empty** (no duplicate rows on re-run):
+**Step 1 — Catalog setup**
+
+- Define the SQLAlchemy `Base` and `Product` ORM model for a `products` table with columns: `id`, `name`, `category`, `price`, `in_stock`.
+- Connect to `sqlite:///gadgetmart.db`, create the tables, and add a `SessionLocal` factory.
+- Implement `insert_data()` to seed the six mobiles below **only when the table is empty** (no duplicate rows on re-run):
 
 | name | category | price | in_stock |
 |------|----------|-------|----------|
@@ -22,11 +27,33 @@ Define the SQLAlchemy `Base` and `Product` ORM (`products`: `id`, `name`, `categ
 | Redmi Note 13 | mobile | 18999 | True |
 | Motorola Edge 40 | mobile | 29999 | True |
 
-**Task 2 — Validated search tool**  
-Define `ProductSearchInput` (`category`: required non-empty `str`; `max_price`: required `int` > 0; `in_stock`: optional `bool`, default `True`). Implement `search_product(input_data: dict)` to validate with `try/except ValidationError`, return `{"success": False, "error": "Invalid input provided", "details": err.errors()}` on failure **without** querying the database, and on success run `select(Product).where(...)` on `category`, `price <= max_price`, and `in_stock`, returning `{"success": True, "products": [{"name": p.name, "price": p.price}, ...]}`.
+**Step 2 — Validated search tool**
 
-**Task 3 — Simulated agent run**  
-Implement `agent_flow()` with one hard-coded call to `search_product` using `category: "mobile"`, `max_price: 50000`, `in_stock: True`. Print each match as `Name — ₹<price>`; on failure print `Search failed:` plus the `error` string. In `if __name__ == "__main__":`, call `insert_data()` then `agent_flow()`.
+Define `ProductSearchInput` with these fields:
+
+- `category`: required non-empty `str`
+- `max_price`: required `int` greater than 0
+- `in_stock`: optional `bool`, default `True`
+
+Implement `search_product(input_data: dict)` with this behavior:
+
+- Validate input using `ProductSearchInput(**input_data)` inside `try/except ValidationError`.
+- On validation failure, return `{"success": False, "error": "Invalid input provided", "details": err.errors()}` **without** querying the database.
+- On success, run `select(Product).where(...)` filtering by:
+  - `category` matches the validated value
+  - `price <= max_price`
+  - `in_stock` matches the validated value
+- Return `{"success": True, "products": [{"name": p.name, "price": p.price}, ...]}`.
+
+**Step 3 — Simulated agent run**
+
+- Implement `agent_flow()` with one hard-coded call to `search_product` using:
+  - `category: "mobile"`
+  - `max_price: 50000`
+  - `in_stock: True`
+- Print each matching product as `Name — ₹<price>`.
+- On failure, print `Search failed:` followed by the `error` string.
+- In `if __name__ == "__main__":`, call `insert_data()` then `agent_flow()`.
 
 ### Expected Output (fresh empty database)
 
@@ -36,13 +63,16 @@ Redmi Note 13 — ₹18999
 Motorola Edge 40 — ₹29999
 ```
 
-Line order may follow database order; each name and price must appear once. Invalid input such as `{"category": 1234, "max_price": 50000}` must yield `success: False` without a database query.
+**Notes:**
+
+- Line order may follow database order; each name and price must appear once.
+- Invalid input such as `{"category": 1234, "max_price": 50000}` must yield `success: False` without a database query.
 
 ---
 
 ### Submission Instructions
 
-- Code all tasks in VS Code in a single file called `gadgetmart_search_tool.py`
+- Code all steps in VS Code in a single file called `gadgetmart_search_tool.py`
 - Run the code and verify the output matches the expected result
 - Then submit the code in the code editor / answer box in the LMS
 
@@ -148,6 +178,10 @@ if __name__ == "__main__":
     agent_flow()
 ```
 
-**Walkthrough:** Task 1 maps `Product` and seeds only when the table is empty. Task 2 validates before any read and filters in-stock mobiles at or under the price cap (three matches at ₹50,000). Task 3 hard-codes one tool call and prints customer-friendly lines; production code would fill `tool_calls` from LLM routing.
+**Step-by-step walkthrough:**
+
+1. **Step 1:** Map the `Product` ORM model and seed the catalog only when the table is empty.
+2. **Step 2:** Validate tool arguments with Pydantic before any database read, then filter in-stock mobiles at or under the price cap (three matches at ₹50,000).
+3. **Step 3:** Hard-code one tool call in `agent_flow()` and print customer-friendly lines; production code would fill `tool_calls` from LLM routing.
 
 **Alternative approach:** `session.query(Product).filter(...)` is acceptable on older SQLAlchemy styles if validation, filters, and printed output match the specification.

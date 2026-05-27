@@ -1,0 +1,6 @@
+| topic/sub topic | status - (covered/not covered) | remarks |
+|---|---|---|
+| Explain embeddings as semantic coordinates for text and interpret similarity scores | covered | Defined embeddings as numeric representations of semantic meaning; discussed interpreting similarity scores via similarity/distance between query embeddings and chunk embeddings (including threshold-style intuition and "higher similarity = closer"). |
+| Create embeddings for sample sentences or document chunks using a standard library | covered | Demonstrated embedding creation for sample/document chunks (including chunk embeddings vs query embeddings); mentioned using an embedding model via sentence transformer and embedding dimensions/vector size; converted chunks into vectors. |
+| Store vectors in one vector database (Chroma or FAISS) with minimal configuration | covered | Walked through storing vectors in ChromaDB: creating a Chroma "collection/table", adding chunk documents plus ids/metadata, and storing corresponding embedding vectors; FAISS was not explicitly mentioned. |
+| Run a top-k semantic search query and inspect retrieved chunks for relevance | covered | Ran semantic retrieval by converting a user query into a query embedding and retrieving top results (top-k such as top-3/top-5); explained ranking using similarity scores and inspecting the retrieved chunks. |

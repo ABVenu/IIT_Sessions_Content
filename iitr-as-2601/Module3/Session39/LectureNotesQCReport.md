@@ -74,3 +74,18 @@
 | `Today's lab`, `If time remains`, class-time aside | Replaced with “this lab”, “optional extension”, neutral FAQ description |
 
 **Line count:** ~422 lines. **Outcome:** Ready for release review; no further revision required unless content scope changes.
+
+---
+
+## Iteration 5
+**Trigger:** Release alignment vs live session topic coverage: remove non-explicit material from `Lecture Notes Released.md` (notably `FAISS`/`pgvector` mentions and `PNR` example).
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Metadata subtopics remain complete; only tool-alternative mentions were removed. |
+| **Creativity** | **5 / 5** | Kept the same learning flow and examples; swapped `PNR` to an `id`-based exact-key analogy. |
+| **Structural Adherence** | **5 / 5** | Structure, code/lab sequence, and images preserved in the release file. |
+| **No Logical Mistakes** | **True** | Similarity/distance interpretation and same-model workflow remain consistent. |
+| **No Presentation Mistakes** | **True** | No protocol artifacts included; release notes stay student-facing. |
+
+:**Expected result:** all criteria **≥ 5** and logical/presentation checks **True** — **QC passed**.
