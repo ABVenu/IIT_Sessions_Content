@@ -1,5 +1,3 @@
-# Mental map — Session folder metadata
-
 ```mermaid
 %%{init: {'flowchart': {'nodeSpacing': 45, 'rankSpacing': 55, 'padding': 20}}}%%
 flowchart TB
