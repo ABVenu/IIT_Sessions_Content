@@ -17,24 +17,11 @@ type of session: implementation
 topics be covered: retriever;generator;knowledge sources
 
 
-exsiting detailed subtopics to be covered (2.5 hours):
+detailed subtopics to be covered:
 
-🎯 What Should Be Done in This Session - Important 
+- This session: hands-on implementation — build a minimal working RAG loop for the e-commerce customer support assistant; reuse the Session 18 Chroma vector search setup as the retriever layer (top-k tuning and metadata filtering deferred to Session 22)
+- Frame Customer Support as a RAG Problem — Learners articulate the assistant's purpose, users, and knowledge boundaries — and identify which policy documents (returns, shipping, warranty, refund) constitute the knowledge base;
+- Demonstrate Semantic Retrieval of Relevant Policy Content — Learners show that a customer query retrieves the most relevant policy excerpt from the knowledge base — and can judge whether retrieval matched the question's intent;
+- Produce Answers Grounded in Retrieved Evidence — Learners generate responses that reflect retrieved policy text rather than the model's general knowledge — and can explain how context shapes the output;
+- Validate a Minimal RAG Pipeline Against an LLM-Only Baseline — Learners run the full retrieve → generate loop on representative queries and justify why grounded answers are more accurate than standalone LLM responses, connecting back to Session 19;
 
-In this session, students should move beyond the introductory theory of RAG and begin working with a minimal functional RAG architecture. Using the e-commerce support use case, learners should understand how the main components of a RAG system interact in practice: the knowledge source (company policy documents), the retriever (fetches relevant information), and the generator (LLM that creates final responses). By the end of the session, students should observe how retrieval improves response quality compared with a standalone language model.
-
-🔹 Detailed Subtopics / Learning Objectives
-* Define the E-Commerce RAG Use Case — Establish the goal of building a customer support assistant using company policy documents;
-* Identify Knowledge Sources for the System — Work with a small set of policy documents such as returns, shipping, warranty, and refund policies;
-* Set Up a Minimal RAG Environment — Configure required libraries and reuse the previously built vector search system;
-* Implement the Retriever Component — Retrieve relevant policy content based on customer queries;
-* Inspect Retrieved Policy Content — Analyze whether retrieved results match the intent of the query;
-* Implement the Generator Component — Use an LLM to generate responses based on retrieved policy content;
-* Inject Retrieved Context into Prompts — Structure prompts so policy content is included as grounding context;
-* Build a Minimal End-to-End RAG Flow — Execute: query → retrieve policy content → generate response;
-* Compare Responses With vs Without Retrieval — Observe how grounded responses differ from standalone LLM outputs;
-* Experiment with Retrieval Depth (Top-K) — Analyze how the number of retrieved items affects response quality;
-* Trace Component Interaction in the Workflow — Understand how retriever and generator work together during execution;
-
-
-		

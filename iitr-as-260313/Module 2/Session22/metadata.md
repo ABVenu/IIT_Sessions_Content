@@ -16,25 +16,11 @@ type of session: theory/implementation/mixture of theory + implementation / You 
 topics be covered: hallucination reduction;retrieval tuning
 
 
-existing detailed subtopics to be covered (2.5 hours session):
+detailed subtopics to be covered:
 
-🎯 What Should Be Done in This Session
+- This session: analyze and improve the Session 21 e-commerce RAG assistant — test with realistic customer queries, diagnose failures, apply targeted fixes, and establish an iterative evaluation mindset
+- Diagnose Failure Modes in RAG Outputs — Learners classify failures as retrieval problems (wrong or missing chunks), generation problems (answer does not match evidence), or hallucinations (answer not supported by retrieved text);
+- Evaluate Retrieval and Generation as Separate Stages — Learners test the assistant with realistic customer queries and independently judge (a) whether the right policy was retrieved and (b) whether the final answer faithfully reflects it;
+- Apply Targeted Improvements Based on Diagnosis — Learners improve system quality through at least two levers — e.g. top-k adjustment, chunk refinement, metadata filtering by policy type, or stricter grounding prompts — and observe the effect on sample queries;
+- Adopt an Iterative Evaluation Mindset for Production RAG — Learners explain why building RAG is only the first step: ongoing testing, user feedback, and refinement are required for reliable production systems — and outline a simple repeat cycle (test → diagnose → improve → re-test);
 
-In this session, students should analyze the previously built e-commerce RAG assistant and improve its quality systematically. They should test the system with realistic customer queries, identify weak retrieval or inaccurate answers, and apply improvements through better chunking, retrieval tuning, prompt refinement, and grounding strategies. By the end of the session, learners should understand that building a RAG system is only the first step—continuous evaluation and optimization are essential in production AI systems.
-
-🔹 Detailed Subtopics / Learning Objectives
-* Identify Failure Cases in the E-Commerce Assistant — Detect incorrect, incomplete, or irrelevant answers;
-* Evaluate Retrieval Quality — Check whether the correct policy sections are being retrieved;
-* Evaluate Response Accuracy — Assess whether answers correctly reflect company policies;
-* Detect Hallucinations in Responses — Identify responses unsupported by retrieved policy content;
-* Improve Grounding in Responses — Ensure answers rely only on retrieved business information;
-* Tune Retrieval Parameters — Adjust top-k results and filtering for better relevance;
-* Refine Chunking Strategy Based on Results — Modify chunk size and overlap to improve retrieval performance;
-* Improve Prompt Design for Policy-Based Answers — Guide the model to use only provided context;
-* Apply Metadata Filtering for Better Precision — Filter results by policy type such as returns or shipping;
-* Balance Precision vs Recall in Retrieval — Optimize between narrower and broader retrieval strategies;
-* Incorporate User Feedback for Improvement — Use feedback loops to refine system quality;
-* Establish Continuous Evaluation Practices — Monitor outputs and iteratively improve performance over time;
-
-
-		

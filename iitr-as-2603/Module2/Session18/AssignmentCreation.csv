@@ -1,0 +1,147 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A weather app team wants to forecast tomorrow's maximum temperature in degrees Celsius for each city. A hiring platform wants to label each job application as **Selected** or **Rejected**. Which pairing correctly matches each task to the problem type?,,,,,,1,,Temperature forecast → Regression; Application label → Classification,Temperature forecast → Classification; Application label → Regression,Both tasks are regression because both use numeric inputs,Both tasks are classification because both produce a single final answer,,,6a19537ae3ba1381c058a6da,0,markdown,"A is correct because temperature is a continuous number (regression), while Selected/Rejected is a category choice (classification).
+
+B reverses the two problem types. C is incorrect because numeric inputs alone do not define the problem type; the output shape does. D is incorrect because only the application task is classification."
+mcsc,markdown,A health app estimates the chance that a user has a certain condition before showing a yes/no alert. The model must output a value that always lies strictly between 0 and 1. Which function is used in Logistic Regression to convert a raw weighted score into that probability?,,,,,,1,,Sigmoid,Mean squared error,Train-test split,StandardScaler,,,6a19537ae3ba1381c058a6da,0,markdown,"A is correct because the sigmoid maps any real number into the interval (0, 1), which is valid for probability.
+
+B is incorrect because mean squared error is a loss metric for regression, not a probability mapping. C is incorrect because train-test split is an evaluation practice, not a squashing function. D is incorrect because StandardScaler rescales features; it does not produce class probabilities."
+mcsc,markdown,"An exam-coaching platform trains Logistic Regression to predict **Pass (1)** or **Fail (0)**. For one student, `predict_proba` returns `[0.27, 0.73]`. What do these two numbers represent?",,,,,,1,,P(Fail) = 0.27 and P(Pass) = 0.73; they sum to 1.0 for that row,P(Pass) = 0.27 and the model is 73% accurate on the full test set,The student failed 27 times and passed 73 times in the training data,The raw regression score is 0.27 and the threshold is 0.73,,,6a19537ae3ba1381c058a6da,0,markdown,"A is correct because `predict_proba` returns class probabilities for each label, and for binary problems the two columns sum to 1.0.
+
+B incorrectly swaps the meaning of the columns and confuses row probability with dataset accuracy. C is incorrect because these are model outputs, not historical counts. D is incorrect because the values are probabilities, not a raw score paired with a threshold."
+mcsc,markdown,"A bank uses Logistic Regression with scikit-learn defaults to flag loan defaults. Without changing any settings, which probability rule does `model.predict(X_test)` apply to assign class **1** (default)?",,,,,,1,,Predict class 1 when P(class 1) ≥ 0.5,Predict class 1 only when P(class 1) = 1.0,Predict class 1 when P(class 1) ≥ 0.9,Predict class 1 when the raw linear score is exactly 0,,,6a19537ae3ba1381c058a6da,0,markdown,"A is correct because scikit-learn's default decision threshold for `predict()` is 0.5 on the positive-class probability.
+
+B is incorrect because probabilities are rarely exactly 1.0 before thresholding. C describes a custom high threshold, not the default. D is incorrect because `predict()` uses probability after sigmoid, not the raw score alone."
+mcsc,markdown,A tutor reviews model output for two students. Student **M** has P(Pass) = 0.48. Student **N** has P(Pass) = 0.91. The team uses threshold **0.5** for final labels. What labels does the model assign?,,,,,,1,,"M → Fail, N → Pass","M → Pass, N → Pass","M → Fail, N → Fail","M → Pass, N → Fail",,,6a19537ae3ba1381c058a6da,0.5,markdown,"A is correct because 0.48 < 0.5 gives Fail for M, and 0.91 ≥ 0.5 gives Pass for N.
+
+B is wrong because M's probability is below the threshold. C is wrong because N's probability is above the threshold. D reverses both decisions."
+mcsc,markdown,"A disease-screening model is evaluated on 1,000 patients. **900** are healthy and **100** are sick. The model predicts **No disease** for every patient and reports **90% accuracy**. Why is accuracy alone misleading here?",,,,,,1,,"The confusion matrix would show TP = 0, so no sick patients were correctly detected",Accuracy is undefined for binary classification,Logistic Regression cannot use accuracy on medical data,A 90% score proves the model is better than random guessing in every segment,,,6a19537ae3ba1381c058a6da,0.5,markdown,"A is correct because always predicting the majority class can yield high accuracy while missing every positive case (TP = 0), which the confusion matrix reveals.
+
+B is incorrect because accuracy is defined for classification. C is incorrect because accuracy can be computed for any binary classifier. D is incorrect because high overall accuracy can still hide complete failure on the minority class."
+mcmc,markdown,A fraud team lowers the decision threshold from **0.5** to **0.3** on an existing Logistic Regression model (weights unchanged). Which outcomes are generally expected?,,,,,,,,More rows are predicted as fraud (positive class),False negatives usually decrease,False positives usually increase,The model must be retrained from scratch for every threshold change,True negatives always become zero,"1, 2, 3",6a19537ae3ba1381c058a6da,0.5,markdown,"A, B, and C are correct. A lower threshold flags more positives, which catches more real fraud (fewer FN) but also raises false alarms (more FP).
+
+D is incorrect because thresholding is applied after `predict_proba`; retraining is not required. E is incorrect because TN does not always become zero; it usually decreases but not necessarily to zero."
+mcmc,markdown,A credit-risk analyst reads a binary confusion matrix for **default (1)** vs **paid on time (0)**. Which statements correctly describe the error cells?,,,,,,,,"**False positive:** predicted default, customer actually paid on time","**False negative:** predicted no default, customer actually defaulted","**True positive:** predicted default, customer actually defaulted","**False negative:** predicted default, customer actually paid on time","**True negative:** predicted no default, customer actually paid on time","1, 2, 3, 5",6a19537ae3ba1381c058a6da,0.5,markdown,"A, B, C, and E are correct definitions of FP, FN, TP, and TN for a default-detection setting.
+
+D is incorrect because it describes a false positive (predicted positive, actual negative), not a false negative."
+mcmc,markdown,A data scientist builds a tumour **benign vs malignant** classifier using `load_breast_cancer()` with several numeric features on different scales. Which practices align with a sound sklearn workflow?,,,,,,,,Use a `Pipeline` with `StandardScaler` before `LogisticRegression`,"Fit the pipeline on training rows only, then evaluate on held-out test rows",Fit `StandardScaler` on the full dataset including test rows to improve scaling,"Read `confusion_matrix(y_test, y_pred)` to inspect TP, TN, FP, and FN",Report only test accuracy and ignore the confusion matrix when classes are imbalanced,"1, 2, 4",6a19537ae3ba1381c058a6da,1,markdown,"A, B, and D are correct. Scaling inside a pipeline on train data avoids leakage, and the confusion matrix shows error types that accuracy alone can hide.
+
+C is incorrect because fitting the scaler on test data leaks information. E is incorrect because high accuracy can mask dangerous false negatives in medical or imbalanced settings."
+mcmc,markdown,"An EdTech platform uses Logistic Regression for course completion. Product rules are:
+
+- Auto-enroll in advanced track if P(complete) > 0.85
+- Human mentor call if 0.45 ≤ P(complete) ≤ 0.85
+- Send remedial plan if P(complete) < 0.45
+
+Which implementation choices support this design?",,,,,,,,"Use `predict_proba(X)[:, 1]` to read P(complete) per learner","Use `predict()` alone, because it returns probabilities for each band",Apply custom threshold rules in code after probabilities are computed,Retrain separate models for each band (0.45 and 0.85) before routing learners,Use the same trained model and change only post-processing rules when business cut-offs change,"1, 3, 5",6a19537ae3ba1381c058a6da,1,markdown,"A, C, and E are correct. Probabilities from `predict_proba` enable multiple business bands; routing logic can be updated without retraining when only cut-offs change.
+
+B is incorrect because `predict()` returns class labels, not graded probability bands. D is unnecessary for threshold bands on one trained model."
+subjective,markdown,"An exam-coaching app wants a short script that predicts whether a student **passed (1)** or **failed (0)** using only **study hours**, shows the model's confidence scores, and prints a simple accuracy and confusion-matrix report on held-out students.
+
+---
+
+## Task
+
+Create a Python file named `student_pass_classifier.py` that trains Logistic Regression on the fixed dataset below and prints a small evaluation report.
+
+### Functional Requirements
+
+1. Import:
+   - `pandas as pd`
+   - `LogisticRegression` from `sklearn.linear_model`
+   - `train_test_split` from `sklearn.model_selection`
+   - `accuracy_score` and `confusion_matrix` from `sklearn.metrics`
+2. Build a DataFrame using exactly this data:
+
+```python
+data = pd.DataFrame({
+    ""study_hours"": [2, 3, 4, 5, 6, 7, 8, 9, 3, 5, 7, 9, 4, 6, 8, 10],
+    ""passed"": [0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+})
+```
+
+3. Use `study_hours` as the only feature (`X` must be 2D, for example `data[[""study_hours""]]`).
+4. Use `passed` as the target.
+5. Split with `test_size=0.25` and `random_state=42`.
+6. Train `LogisticRegression(max_iter=1000)` on training data only.
+7. On the test set, print a table for **all test rows** with:
+   - `study_hours`
+   - `pred` (0 or 1 from `model.predict`)
+   - `prob_pass` (probability of class 1 from `model.predict_proba`, rounded to 2 decimals)
+8. Print test **accuracy** as a percentage with one decimal place using `accuracy_score`.
+9. Print the **confusion matrix** and labelled counts:
+   - `TN`, `FP`, `FN`, `TP` using sklearn layout `[[TN, FP], [FN, TP]]`
+10. Print one short observation line starting with `Observation:` stating whether most test students were predicted as pass (`1`) or fail (`0`).
+
+### Expected Run Commands
+
+```bash
+pip install pandas scikit-learn
+python student_pass_classifier.py
+```
+
+If your system uses `pip3` and `python3`, use those commands instead.
+
+### Expected Behaviour
+
+- The script runs without any external CSV file.
+- The model is fit only on training rows.
+- The table shows both hard labels (`pred`) and soft scores (`prob_pass`) for every test row.
+- Accuracy and the confusion matrix are computed from test predictions only.
+
+### Constraints
+
+- Write everything in one `.py` file.
+- Do not hard-code accuracy, probabilities, or confusion-matrix counts.
+- Do not fit on test rows before evaluation.
+- Keep printed output readable with short headings.
+
+---
+
+## Submission Instructions
+
+- Code all the points mentioned above in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the code in the code editor or answer box in the LMS.",,,,,,,,,,,,,,6a19537ae3ba1381c058a6da,0,markdown,"```python
+import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.model_selection import train_test_split
+
+data = pd.DataFrame({
+    ""study_hours"": [2, 3, 4, 5, 6, 7, 8, 9, 3, 5, 7, 9, 4, 6, 8, 10],
+    ""passed"": [0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1],
+})
+
+X = data[[""study_hours""]]
+y = data[""passed""]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.25, random_state=42
+)
+
+model = LogisticRegression(max_iter=1000)
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+prob_pass = model.predict_proba(X_test)[:, 1]
+
+print(""Test set predictions"")
+print(f""{'study_hours':>12} {'pred':>6} {'prob_pass':>10}"")
+for i in range(len(X_test)):
+    hours = X_test.iloc[i, 0]
+    print(f""{hours:>12.0f} {int(y_pred[i]):>6} {prob_pass[i]:>10.2f}"")
+
+acc = accuracy_score(y_test, y_pred)
+print(f""\nTest accuracy: {round(acc * 100, 1)}%"")
+
+cm = confusion_matrix(y_test, y_pred)
+tn, fp, fn, tp = cm[0][0], cm[0][1], cm[1][0], cm[1][1]
+
+print(""\nConfusion matrix [[TN, FP], [FN, TP]]:"")
+print(cm)
+print(f""TN={tn}  FP={fp}  FN={fn}  TP={tp}"")
+
+majority_label = 1 if (y_pred == 1).sum() >= (y_pred == 0).sum() else 0
+label_word = ""pass"" if majority_label == 1 else ""fail""
+print(f""\nObservation: Most test students were predicted as {label_word} ({majority_label})."")
+```"

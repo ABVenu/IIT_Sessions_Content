@@ -11,31 +11,16 @@ title: Building a RAG Pipeline
 
 objective: Understand the practical steps to construct a RAG workflow
 
-type of session: theory/implementation/mixture of theory + implementation / You take the call
+type of session: implementation
 
 topics be covered: document loaders;chunking
 
 
-existing detailed subtopics to be covered (2 hr 30 mins):
+detailed subtopics to be covered:
 
-🎯 What Should Be Done in This Session
+- This session: hands-on implementation — scale the Session 20 minimal RAG to real policy files (PDF/txt) for the same e-commerce company; policy update workflows and deep chunk-tuning loops deferred to Session 22
+- Explain Why Raw Documents Must Be Prepared Before Retrieval — Learners articulate why full policy files cannot be searched effectively as-is — and what ingestion (loading and preparing text) enables in a RAG pipeline;
+- Apply Chunking With Awareness of Retrieval Impact — Learners split policy documents into searchable units and explain how chunk boundaries and size affect which information surfaces for a given query;
+- Build a Searchable Index Across Multiple Policy Sources — Learners transform chunked policies into a retrievable knowledge index (embedded vectors with meaningful metadata) and verify retrieval across different policy types;
+- Operate a Multi-Document RAG Assistant End-to-End — Learners demonstrate the complete assistant answering questions that span returns, shipping, warranty, and refund policies — using the same e-commerce scenario from Sessions 19–20;
 
-In this session, students should convert the minimal architecture into a complete production-style RAG pipeline. The focus should shift from a few sample policy snippets to multiple real documents such as PDFs, text files, or web-based company policies. Learners should implement document ingestion, chunking, embedding generation, vector storage, retrieval, and final answer generation. By the end of the session, students should have built a working multi-document RAG assistant for the same e-commerce company scenario.
-
-🔹 Detailed Subtopics / Learning Objectives
-* Expand the E-Commerce Knowledge Base — Work with multiple policy documents and larger content sets;
-* Ingest Documents Using Document Loaders — Load policy documents from files such as PDFs, text files, or webpages;
-* Process and Organize Document Data — Clean and structure raw content for pipeline usage;
-* Apply Chunking to Policy Documents — Split large documents into smaller meaningful chunks;
-* Configure Chunk Size and Overlap — Implement chunking strategies for improved retrieval quality;
-* Compare Chunking Outcomes — Analyze how chunk design impacts search relevance;
-* Generate Embeddings for Policy Chunks — Convert chunks into vector representations;
-* Store Policy Data in a Vector Database — Insert chunk embeddings with metadata such as policy type;
-* Build the Retrieval Layer for User Queries — Retrieve relevant chunks from the indexed knowledge base;
-* Construct Prompt Templates for Responses — Combine retrieved chunks with structured prompts for generation;
-* Build an End-to-End Multi-Document RAG System — Implement a working assistant across multiple company policies;
-* Handle Updates to Policy Documents — Add or modify policies and refresh the knowledge base accordingly;
-
-
-
-		

@@ -1,0 +1,205 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A food-delivery startup ships a chatbot that must tell customers the **live** location of their order using data from the company's tracking API. The team uses only a plain LLM with no tools connected. What is the **most likely** problem in production?,,,,,,2,,The model will always refuse to answer politely,The model may **guess** order status instead of reading real tracking data,The API automatically runs inside the model weights during inference,"Tool calling is only for image generation, not text chatbots",,6a1952f379d6d395c86e7f3c,0,markdown,"**Reasoning:** An LLM without tools only has training knowledge and text generation. It cannot reliably read a live order-tracking API, so it may hallucinate status instead of using real data.
+
+**Why others are wrong:** A) The model may still answer confidently but incorrectly. C) External APIs are not inside model weights. D) Tool calling is central to text agents that need live data."
+mcsc,markdown,"In a LangChain support app, a Python function `get_order_status(order_id: str)` is registered so the model can request it. Which decorator is used to expose that function as a LangChain tool?",,,,,,2,,`@chain`,`@tool`,`@parser`,`@bind`,,6a1952f379d6d395c86e7f3c,0,markdown,"**Reasoning:** The `@tool` decorator from `langchain.tools` registers a Python function as a LangChain tool with metadata (name, description, schema) exposed to the model.
+
+**Why others are wrong:** A) `@chain` is not the standard tool registration decorator taught here. C) Parsers format output; they do not register callable tools. D) `bind_tools` is a model method, not a function decorator."
+mcsc,markdown,"During the tool-calling loop, the model emits a structured `tool_calls` entry with a name and arguments. **Who actually runs** the Python function or API behind that tool?",,,,,,3,,The LLM runtime inside the GPU,LangChain automatically without your code,**Your application code** (for example `tool.invoke(args)` in a handler you wrote),The end user's browser only,,6a1952f379d6d395c86e7f3c,0,markdown,"**Reasoning:** The model only **requests** tools via structured `tool_calls`. Your application must invoke the tool and pass results back—typically with `tool.invoke(args)` inside your handler.
+
+**Why others are wrong:** A) The LLM does not run your database code internally. B) Execution still requires explicit application logic you control. D) The browser is not the standard execution layer for backend tools in this pattern."
+mcsc,markdown,"After your app runs a tool, you append a message so the model can write a friendly final reply. Which message type carries the tool's output and links back to the model's request using `tool_call_id`?",,,,,,2,,`HumanMessage`,`ToolMessage`,`SystemMessage` only,`StrOutputParser`,,6a1952f379d6d395c86e7f3c,0,markdown,"**Reasoning:** `ToolMessage` carries one tool's output back into chat history and is linked to the originating request through `tool_call_id`.
+
+**Why others are wrong:** A) `HumanMessage` represents user input, not tool results. C) System messages set behavior; they are not the tool result channel. D) `StrOutputParser` converts model output format; it is not a chat message type for tool results."
+mcsc,markdown,A developer calls `model_with_tools = model.bind_tools(tools)` before invoking the chat model. What does `bind_tools` accomplish?,,,,,,1,,It attaches tool definitions to the model so replies **may include** structured `tool_calls`,It downloads all Ollama models into the project folder,It replaces the need for a system prompt,It executes every tool automatically on every user message,,6a1952f379d6d395c86e7f3c,0.5,markdown,"**Reasoning:** `bind_tools(tools)` attaches the list of tool definitions to the chat model so its responses may include structured `tool_calls` the app can execute.
+
+**Why others are wrong:** B) Model downloading is unrelated to `bind_tools`. C) System prompts remain important for correct tool use. D) Tools are not auto-executed on every message—the app runs them when `tool_calls` appear."
+mcsc,markdown,A customer-support agent already received JSON from `get_order_status` via a tool. The developer invokes the model **one more time** with that result in the message history. Why is this second model call useful?,,,,,,2,,To re-run the same tool in an infinite loop,"To turn raw tool output into a **consistent, user-friendly** natural-language answer",Because `ToolMessage` cannot be stored in conversation history,Because tools always return empty strings,,6a1952f379d6d395c86e7f3c,0.5,markdown,"**Reasoning:** Tools return data in shapes like JSON strings. A follow-up model turn turns that into one polite, consistent reply for the UI instead of dumping raw payloads on users.
+
+**Why others are wrong:** A) The goal is not an infinite re-run of the same tool. C) `ToolMessage` is designed to be appended to history. D) Well-designed tools return structured content, not empty strings by default."
+mcmc,markdown,"A team adds Pydantic `args_schema` to `@tool` for `lookup_policy`, with `topic: Literal[""refund"", ""shipping"", ""warranty""]`. Which statements are correct?",,,,,,,,Invalid `topic` values can fail validation **before** the tool's business logic runs,`Field(description=...)` helps document arguments for both developers and the model's schema,`Literal[...]` restricts a field to a fixed set of allowed string values,Pydantic replaces the need for your app to call `tool.invoke` — the model runs Python directly,"1, 2, 3",6a1952f379d6d395c86e7f3c,0.5,markdown,"**Reasoning:** Pydantic validates inputs early, `Field` descriptions document the schema for humans and the model, and `Literal` enforces allowed enum-like string choices such as policy topics.
+
+**Why others are wrong:** D) The application still executes tools; Pydantic validates arguments—it does not run Python on the model's behalf."
+mcmc,markdown,"In `execute_tool_call_safely`, the class pattern wraps `selected_tool.invoke(tool_args)` in `try/except` and returns `ToolMessage` on failure. Which practices match **safe tool execution**?",,,,,,,,Catch exceptions and return structured error content in a `ToolMessage` instead of crashing the app,"Build a `tools_by_name` dictionary so each `tool_call[""name""]` maps to the right tool object","If the model requests an unknown tool name, return an error payload (for example `error_type: unknown_tool`)",Let uncaught exceptions bubble up and terminate the whole web server on every bad argument,"1, 2, 3",6a1952f379d6d395c86e7f3c,0.5,markdown,"**Reasoning:** Safe execution catches failures, maps tool names to callables, and returns recoverable error signals (including unknown tools) as `ToolMessage` content.
+
+**Why others are wrong:** D) Uncaught exceptions would crash the agent flow instead of letting the model explain the error to the user."
+mcmc,markdown,"In testing, the model answers ""Your order ORD1001 shipped yesterday"" **without** calling `get_order_status`, even though live order data exists only in your database. Which fixes align with good tool-calling design?",,,,,,,,"Clarify in the **system prompt** that live order/policy/refund data must come from tools, not guesses",Improve each tool's **name** and **docstring** so the model can choose the right capability,Print or log `tool_calls` each step to compare expected vs actual tool use,Remove `bind_tools` so the model is forced to invent data faster,"1, 2, 3",6a1952f379d6d395c86e7f3c,1,markdown,"**Reasoning:** Wrong tool selection is reduced with clear system instructions, precise tool names/descriptions, and step-by-step tracing of `tool_calls`.
+
+**Why others are wrong:** D) Removing `bind_tools` removes structured tool access and encourages more guessing, not less."
+mcmc,markdown,"Consider a manual agent loop like `run_customer_support_agent(user_query, max_steps=5)` that calls `model_with_tools.invoke(messages)` repeatedly. Which statements about this loop are correct?",,,,,,,,Each turn's `AIMessage` should be **appended** to `messages` before deciding the next step,"If `tool_calls` is empty, the model's `content` can be treated as the **final** answer to return",`max_steps` is a safety cap so the agent cannot loop forever on complex queries,The LLM itself executes `get_order_status` inside the model weights without your Python code,"1, 2, 3",6a1952f379d6d395c86e7f3c,1,markdown,"**Reasoning:** The manual loop appends each `AIMessage`, exits when there are no `tool_calls`, and uses `max_steps` as a bounded safety limit for multi-tool conversations.
+
+**Why others are wrong:** D) Tool execution remains application-side; the LLM only plans and requests tools."
+subjective,markdown,"**Campus Crate** sells IIT club merchandise. You already have mock order data in memory. Your job is to finish a small script so a chat model can **request** an order lookup via a LangChain tool, your code **runs** the tool, and the model returns a short friendly answer.
+
+You do **not** need to build refund tickets, policy lookup, or a large agent framework—only **one tool** and a **short two-step loop** (model → tool → model).
+
+---
+
+## Task
+
+Create a single file named `campus_crate_orders.py`. Start from the skeleton below, fill every `# TODO` section, and make the file runnable.
+
+### Mock data (already given — do not change keys)
+
+```python
+ORDERS_DB = {
+    ""CC2001"": {
+        ""order_id"": ""CC2001"",
+        ""item"": ""Hoodie — Batch 2026"",
+        ""status"": ""shipped"",
+        ""eta_days"": 3,
+    },
+}
+```
+
+### What you must implement
+
+1. **`OrderStatusInput`** — Pydantic model with one field: `order_id: str` and a short `Field(description=...)`.
+
+2. **`get_order_status`** — function decorated with `@tool(args_schema=OrderStatusInput)` that:
+   - Normalizes `order_id` with `.strip().upper()`
+   - Returns `json.dumps({""ok"": True, ""order"": order})` if found
+   - Returns `json.dumps({""ok"": False, ""message"": ""Order not found""})` if missing
+   - Has a one-line docstring saying to use it when the user asks about order status or delivery
+
+3. **Model setup** — `load_dotenv()`, `init_chat_model` with `temperature=0`, and `model_with_tools = model.bind_tools([get_order_status])`.
+
+4. **`run_order_help(user_query: str) -> str`** — a **simple** loop (at most **3** model turns):
+   - Start `messages` with one system line (""use the order tool when the user asks about an order"") and the user query
+   - Call `model_with_tools.invoke(messages)` and append the reply
+   - If there are **no** `tool_calls`, return the reply text
+   - Otherwise, for each tool call: run `get_order_status.invoke(tool_call[""args""])`, append a `ToolMessage` with that result and the same `tool_call_id`
+   - Call the model **once more** and return its text (no need for a `max_steps` loop or `unknown_tool` handling)
+
+5. **`if __name__ == ""__main__""`** — print the final answer for these **two** queries (with a line of `=` between them):
+   - `""Where is my order CC2001?""`
+   - `""What is Python?""` (should answer without calling the tool)
+
+### Starter skeleton (copy and complete)
+
+```python
+import json
+import os
+
+from dotenv import load_dotenv
+from langchain.chat_models import init_chat_model
+from langchain.messages import ToolMessage
+from langchain.tools import tool
+from pydantic import BaseModel, Field
+
+load_dotenv()
+
+ORDERS_DB = {
+    ""CC2001"": {
+        ""order_id"": ""CC2001"",
+        ""item"": ""Hoodie — Batch 2026"",
+        ""status"": ""shipped"",
+        ""eta_days"": 3,
+    },
+}
+
+
+# TODO 1: Define OrderStatusInput (Pydantic)
+
+
+# TODO 2: Define get_order_status with @tool
+
+
+# TODO 3: Create model and model_with_tools = model.bind_tools(...)
+
+
+def run_order_help(user_query: str) -> str:
+  # TODO 4: Build messages, invoke, handle tool_calls or return early,
+  #         then second invoke after ToolMessage(s)
+  pass
+
+
+if __name__ == ""__main__"":
+    # TODO 5: Run the two test queries and print answers
+    pass
+```
+
+---
+
+## Submission instructions (Case C — single file)
+
+- Complete all `# TODO` sections in **one** file: `campus_crate_orders.py`.
+- Use a virtual environment; install `langchain`, `langchain-openai`, `pydantic`, `python-dotenv`.
+- Put `OPENAI_API_KEY` in `.env` (do not submit the key).
+- Run the file and check that the first query uses the tool and the second does not.
+- Submit the full `.py` source in the LMS code editor / answer box.",,,,,,,,,,,,,6a1952f379d6d395c86e7f3c,0.5,markdown,"Learners practice the smallest useful tool-calling path: register one function with `@tool` and Pydantic, bind it with `bind_tools`, read `tool_calls` from the first `AIMessage`, run `tool.invoke(args)`, send back `ToolMessage`, and invoke the model again for a natural-language answer.
+
+The second query checks that when `tool_calls` is empty, the function returns immediately without forcing a tool run.
+
+```python
+import json
+import os
+
+from dotenv import load_dotenv
+from langchain.chat_models import init_chat_model
+from langchain.messages import ToolMessage
+from langchain.tools import tool
+from pydantic import BaseModel, Field
+
+load_dotenv()
+
+ORDERS_DB = {
+    ""CC2001"": {
+        ""order_id"": ""CC2001"",
+        ""item"": ""Hoodie — Batch 2026"",
+        ""status"": ""shipped"",
+        ""eta_days"": 3,
+    },
+}
+
+
+class OrderStatusInput(BaseModel):
+    order_id: str = Field(description=""Campus Crate order ID, e.g. CC2001."")
+
+
+@tool(args_schema=OrderStatusInput)
+def get_order_status(order_id: str) -> str:
+    """"""Look up order status and delivery ETA when the user asks about an order.""""""
+    normalized_id = order_id.strip().upper()
+    order = ORDERS_DB.get(normalized_id)
+    if not order:
+        return json.dumps({""ok"": False, ""message"": ""Order not found""})
+    return json.dumps({""ok"": True, ""order"": order})
+
+
+model = init_chat_model(os.getenv(""CHAT_MODEL"", ""gpt-4o-mini""), temperature=0)
+model_with_tools = model.bind_tools([get_order_status])
+
+
+def run_order_help(user_query: str) -> str:
+    messages = [
+        {
+            ""role"": ""system"",
+            ""content"": ""You are a Campus Crate helper. Use get_order_status when the user asks about an order."",
+        },
+        {""role"": ""user"", ""content"": user_query},
+    ]
+
+    ai_message = model_with_tools.invoke(messages)
+    messages.append(ai_message)
+
+    tool_calls = getattr(ai_message, ""tool_calls"", None) or []
+    if not tool_calls:
+        return ai_message.content
+
+    for tool_call in tool_calls:
+        result = get_order_status.invoke(tool_call[""args""])
+        messages.append(
+            ToolMessage(content=str(result), tool_call_id=tool_call[""id""])
+        )
+
+    final_message = model_with_tools.invoke(messages)
+    return final_message.content
+
+
+if __name__ == ""__main__"":
+    for query in [""Where is my order CC2001?"", ""What is Python?""]:
+        print(""\n"" + ""="" * 50)
+        print(""Query:"", query)
+        print(""Answer:"", run_order_help(query))
+```"

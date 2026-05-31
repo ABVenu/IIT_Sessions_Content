@@ -14,23 +14,11 @@ objective: Understand how retrieval augmented generation improves LLM responses
 topics be covered: limitations of LLM knowledge;grounding responses
 
 
-existing detailed subtopics to be covered (2.5 hours):
+detailed subtopics to be covered:
 
-- Revisit How LLMs Generate Responses — Explain at a high level how LLMs rely on pretrained knowledge to generate outputs;
-- Identify Limitations of LLM Knowledge — Explain issues such as static knowledge, lack of domain-specific context, and inability to access external or real-time data;
-- Understand the Problem of Hallucination — Define hallucination as incorrect or fabricated responses due to missing or insufficient knowledge;
-- Recognize the Need for Grounded AI Systems — Establish why AI systems must rely on external, verifiable information for accurate responses;
-- Introduce Retrieval-Augmented Generation (RAG) — Define RAG as an approach that combines information retrieval with response generation;
-- Understand the Concept of Grounding in RAG — Explain how external data is used to support and justify model-generated responses;
-- Understand the High-Level Flow of RAG — Describe the sequence:
-query → retrieve relevant information → provide context → generate response;
-- Differentiate LLM-Only vs RAG-Based Responses — Compare responses generated purely from model knowledge versus those enhanced with retrieved context;
-- Connect RAG to Vector Search Systems — Explain how vector search systems are used to retrieve relevant information for RAG;
-- Explore Real-World Use Cases of RAG —
-enterprise knowledge assistants
-document-based question answering
-domain-specific chat systems;
-- Understand the Role of RAG in Agentic Systems — Explain how agents use retrieval to access knowledge and improve decision-making;
-- Recognize the Importance of Retrieval for Response Quality — Establish that better retrieval leads to more accurate and reliable outputs;
+- This session: theory only — no coding; use the e-commerce customer support scenario (returns, shipping, warranty, refund policies) as the running example previewed across Sessions 20–22
+- Recognize When LLM Knowledge Is Insufficient — Learners explain why pretrained models struggle with organization-specific, current, or verifiable information — and how that leads to unreliable or hallucinated answers on policy questions;
+- Explain RAG as a Grounding Strategy — Learners define retrieval-augmented generation and describe how retrieved documents constrain and support the LLM's answer, including the high-level flow: query → retrieve → context → generate;
+- Contrast Ungrounded and Grounded Response Quality — Using the e-commerce customer support scenario, learners evaluate side-by-side answers to representative policy questions (e.g. return window, shipping timeline) and articulate why policy-backed responses are more trustworthy;
+- Relate the RAG Retrieve Step to Vector Search — Learners connect RAG's retrieve step to Session 18 embedding search, recognize common application patterns (support bots, document Q&A), and state the implementation goal for Session 20;
 
-		
