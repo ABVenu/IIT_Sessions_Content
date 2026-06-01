@@ -4,14 +4,14 @@
 
 In the previous session, you built **Logistic Regression**, read **probabilities** and **class labels**, and used a **confusion matrix** to see TP, TN, FP, and FN. You also saw why **accuracy alone** can mislead when classes are imbalanced (e.g. a model that always predicts Pass).
 
-This session adds **two tree-based classifiers** and a practical **evaluation toolkit** so you can compare models fairly and pick the right cut-off for real problems.
+This session adds **two tree-based classifiers** and a practical **evaluation toolkit** so you can compare models fairly on real problems.
 
 **In this session, you will:**
 
 - Learn **Decision Trees** as rule-based models (if-else paths)
 - Learn **Random Forest** as many trees voting together
 - Go beyond accuracy with **precision** and **recall**
-- Use **F1**, **ROC-AUC**, and **threshold tuning** at a working level — enough to compare models, not deep theory
+- Use **F1** and **ROC-AUC** to compare how well models separate Pass from Fail
 
 ---
 
@@ -76,53 +76,50 @@ A single tree can change a lot if you shuffle training data. **Random Forest** f
 **Setup:** 400 students, features `study_hours`, `sleep_hours`, `distractions`; target `pass_fail` (1 = Pass if exam score ≥ 70). Seed = 7, 80/20 train–test split.
 
 ```python
-import numpy as np
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+import numpy as np  # arrays and random data
+from sklearn.tree import DecisionTreeClassifier  # single decision tree model
+from sklearn.ensemble import RandomForestClassifier  # many trees voting together
+from sklearn.model_selection import train_test_split  # split data into train and test
+from sklearn.metrics import accuracy_score  # percent of correct predictions
 
-rng = np.random.default_rng(seed=7)
-n = 400
-study_hours  = rng.uniform(1, 10, size=n)
-sleep_hours  = rng.uniform(4, 9, size=n)
-distractions = rng.uniform(0, 5, size=n)
+rng = np.random.default_rng(seed=7)  # fixed seed so results repeat
+n = 400  # number of student rows
+study_hours  = rng.uniform(1, 10, size=n)  # feature 1: hours studied per day
+sleep_hours  = rng.uniform(4, 9, size=n)  # feature 2: sleep hours per night
+distractions = rng.uniform(0, 5, size=n)  # feature 3: distraction level
 
-scores = (
+scores = (  # fake exam score from features plus small noise
     40 + 6.5 * study_hours + 1.2 * sleep_hours
     - 2.0 * distractions + rng.normal(0, 7, size=n)
 )
-y = (scores >= 70).astype(int)
-X = np.column_stack([study_hours, sleep_hours, distractions])
-feature_names = ["study_hours", "sleep_hours", "distractions"]
+y = (scores >= 70).astype(int)  # 1 = Pass, 0 = Fail
+X = np.column_stack([study_hours, sleep_hours, distractions])  # feature matrix
+feature_names = ["study_hours", "sleep_hours", "distractions"]  # labels for printing
 
-X_train, X_test, y_train, y_test = train_test_split(
+X_train, X_test, y_train, y_test = train_test_split(  # 80% train, 20% test
     X, y, test_size=0.2, random_state=7
 )
 
-# Decision Tree — max_depth stops overfitting
-tree = DecisionTreeClassifier(max_depth=4, random_state=42)
-tree.fit(X_train, y_train)
-y_pred_tree = tree.predict(X_test)
-y_prob_tree = tree.predict_proba(X_test)[:, 1]
+tree = DecisionTreeClassifier(max_depth=4, random_state=42)  # tree with depth cap
+tree.fit(X_train, y_train)  # learn rules from training rows only
+y_pred_tree = tree.predict(X_test)  # hard labels Pass/Fail on test set
+y_prob_tree = tree.predict_proba(X_test)[:, 1]  # P(Pass) for each test row
 
-# Random Forest — 100 trees, same depth limit per tree
-rf = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)
-rf.fit(X_train, y_train)
-y_pred_rf = rf.predict(X_test)
-y_prob_rf = rf.predict_proba(X_test)[:, 1]
+rf = RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42)  # 100 trees
+rf.fit(X_train, y_train)  # fit forest on same training split
+y_pred_rf = rf.predict(X_test)  # majority-vote labels on test set
+y_prob_rf = rf.predict_proba(X_test)[:, 1]  # P(Pass) from forest for ROC later
 
-# Feature importance (which inputs drove splits)
-print("Decision Tree — feature importances:")
+print("Decision Tree — feature importances:")  # which features the tree used most
 for name, imp in zip(feature_names, tree.feature_importances_):
-    print(f"  {name}: {round(imp, 3)}")
+    print(f"  {name}: {round(imp, 3)}")  # print one feature per line
 
-print("\nRandom Forest — feature importances:")
+print("\nRandom Forest — feature importances:")  # averaged importance across trees
 for name, imp in zip(feature_names, rf.feature_importances_):
     print(f"  {name}: {round(imp, 3)}")
 
-acc_tree = accuracy_score(y_test, y_pred_tree)
-acc_rf   = accuracy_score(y_test, y_pred_rf)
+acc_tree = accuracy_score(y_test, y_pred_tree)  # tree accuracy on held-out test
+acc_rf   = accuracy_score(y_test, y_pred_rf)  # forest accuracy on same test set
 print(f"\nAccuracy — Tree: {round(acc_tree*100, 1)}%  |  RF: {round(acc_rf*100, 1)}%")
 ```
 
@@ -131,7 +128,7 @@ print(f"\nAccuracy — Tree: {round(acc_tree*100, 1)}%  |  RF: {round(acc_rf*100
 - **`max_depth=4`** — caps tree depth so rules stay general, not memorised noise.
 - **`tree.fit` / `rf.fit`** — learn rules from **train** only; never tune on test.
 - **`feature_importances_`** — higher value = feature used more in useful splits (RF averages across trees).
-- **`predict_proba(X_test)[:, 1]`** — **P(Pass)** per student; needed later for ROC-AUC and custom thresholds.
+- **`predict_proba(X_test)[:, 1]`** — **P(Pass)** per student; needed for ROC-AUC.
 - **`n_estimators=100`** — number of trees in the forest; more trees → stabler votes, slower training.
 
 **What to notice:** `study_hours` should rank highest (it drives the score formula). Random Forest accuracy is often equal or slightly better than a single tree on the same split.
@@ -157,31 +154,31 @@ You now have **Logistic Regression** (from the previous session), a **Decision T
 **The trade-off (one line):** A **lower** probability threshold → more Pass predictions → **higher recall**, **lower precision**. A **higher** threshold does the opposite. You cannot maximise both at once; the business picks the balance.
 
 ```python
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import (
+from sklearn.linear_model import LogisticRegression  # baseline model from previous topic
+from sklearn.metrics import (  # metric functions for evaluation
     precision_score, recall_score, f1_score,
     confusion_matrix, accuracy_score, classification_report
 )
 
-lr = LogisticRegression()
-lr.fit(X_train, y_train)
-y_pred_lr = lr.predict(X_test)
+lr = LogisticRegression()  # create logistic regression model
+lr.fit(X_train, y_train)  # train on same split as trees (uses X_train, y_train above)
+y_pred_lr = lr.predict(X_test)  # Pass/Fail labels on test set
 
-def show_metrics(name, y_true, y_pred):
-    cm = confusion_matrix(y_true, y_pred)
-    tn, fp, fn, tp = cm.ravel()
-    print(f"\n{name}")
-    print(f"  TN={tn} FP={fp} FN={fn} TP={tp}")
-    print(f"  Accuracy  : {round(accuracy_score(y_true, y_pred)*100, 1)}%")
-    print(f"  Precision : {round(precision_score(y_true, y_pred, zero_division=0), 3)}")
-    print(f"  Recall    : {round(recall_score(y_true, y_pred, zero_division=0), 3)}")
-    print(f"  F1        : {round(f1_score(y_true, y_pred, zero_division=0), 3)}")
+def show_metrics(name, y_true, y_pred):  # helper to print one model's results
+    cm = confusion_matrix(y_true, y_pred)  # 2x2 table of actual vs predicted
+    tn, fp, fn, tp = cm.ravel()  # flatten to TN, FP, FN, TP counts
+    print(f"\n{name}")  # model name as heading
+    print(f"  TN={tn} FP={fp} FN={fn} TP={tp}")  # show all four counts
+    print(f"  Accuracy  : {round(accuracy_score(y_true, y_pred)*100, 1)}%")  # overall correct %
+    print(f"  Precision : {round(precision_score(y_true, y_pred, zero_division=0), 3)}")  # TP/(TP+FP)
+    print(f"  Recall    : {round(recall_score(y_true, y_pred, zero_division=0), 3)}")  # TP/(TP+FN)
+    print(f"  F1        : {round(f1_score(y_true, y_pred, zero_division=0), 3)}")  # balance of P and R
 
-show_metrics("Logistic Regression", y_test, y_pred_lr)
-show_metrics("Decision Tree", y_test, y_pred_tree)
-show_metrics("Random Forest", y_test, y_pred_rf)
+show_metrics("Logistic Regression", y_test, y_pred_lr)  # metrics for LR
+show_metrics("Decision Tree", y_test, y_pred_tree)  # metrics for tree (from earlier code)
+show_metrics("Random Forest", y_test, y_pred_rf)  # metrics for forest
 
-print("\nClassification report — Random Forest:")
+print("\nClassification report — Random Forest:")  # sklearn summary table per class
 print(classification_report(y_test, y_pred_rf, target_names=["Fail", "Pass"]))
 ```
 
@@ -202,7 +199,7 @@ print(classification_report(y_test, y_pred_rf, target_names=["Fail", "Pass"]))
 
 ---
 
-## F1 Score — A Single Balance Number (Light Touch)
+## F1 Score — A Single Balance Number
 
 **F1 Score:**
 
@@ -210,13 +207,11 @@ print(classification_report(y_test, y_pred_rf, target_names=["Fail", "Pass"]))
 - **In Simple Words:** One score that punishes you if **either** precision or recall is very low.
 - **Real-Life Example:** 100% precision but 10% recall is not a good model — F1 stays low; simple average would look misleadingly okay.
 
-Use F1 when you want **one number** and both false alarms and misses matter. It does **not** replace reading the confusion matrix — it summarises at the default **0.5** threshold only.
-
-The `f1_score` line in the code above is enough for practice; no extra block needed here.
+Use F1 when you want **one number** and both false alarms and misses matter. It does **not** replace reading the confusion matrix — it summarises precision and recall at the default **0.5** cut-off used by `predict`.
 
 ---
 
-## ROC-AUC — Ranking Quality Without Picking a Threshold (Light Touch)
+## ROC-AUC — Ranking Quality Without Picking a Threshold
 
 Precision, recall, and F1 use **one threshold** (usually 0.5). **ROC-AUC** asks a different question: *Does the model rank Pass students above Fail students?*
 
@@ -239,26 +234,26 @@ Precision, recall, and F1 use **one threshold** (usually 0.5). **ROC-AUC** asks 
 ![ROC Curve: TPR vs FPR at All Thresholds](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/session31/roc_auc_curve.png)
 
 ```python
-from sklearn.metrics import roc_auc_score, roc_curve
-import matplotlib.pyplot as plt
+from sklearn.metrics import roc_auc_score, roc_curve  # AUC number and curve points
+import matplotlib.pyplot as plt  # library to draw the ROC plot
 
-y_prob_lr = lr.predict_proba(X_test)[:, 1]
+y_prob_lr = lr.predict_proba(X_test)[:, 1]  # P(Pass) from logistic regression
 
-print("AUC (uses probabilities, not 0/1 labels):")
-print(f"  Logistic Regression : {round(roc_auc_score(y_test, y_prob_lr), 3)}")
-print(f"  Decision Tree       : {round(roc_auc_score(y_test, y_prob_tree), 3)}")
-print(f"  Random Forest       : {round(roc_auc_score(y_test, y_prob_rf), 3)}")
+print("AUC (uses probabilities, not 0/1 labels):")  # remind: pass probabilities in
+print(f"  Logistic Regression : {round(roc_auc_score(y_test, y_prob_lr), 3)}")  # LR AUC
+print(f"  Decision Tree       : {round(roc_auc_score(y_test, y_prob_tree), 3)}")  # tree AUC
+print(f"  Random Forest       : {round(roc_auc_score(y_test, y_prob_rf), 3)}")  # forest AUC
 
-fpr, tpr, _ = roc_curve(y_test, y_prob_rf)
-plt.figure(figsize=(7, 5))
-plt.plot(fpr, tpr, label=f"Random Forest (AUC={round(roc_auc_score(y_test, y_prob_rf), 3)})")
-plt.plot([0, 1], [0, 1], "--", color="gray", label="Random (0.5)")
-plt.xlabel("False Positive Rate")
-plt.ylabel("True Positive Rate (Recall)")
-plt.title("ROC — Random Forest")
-plt.legend()
-plt.tight_layout()
-plt.show()
+fpr, tpr, _ = roc_curve(y_test, y_prob_rf)  # FPR and TPR at many thresholds for RF
+plt.figure(figsize=(7, 5))  # new plot window size
+plt.plot(fpr, tpr, label=f"Random Forest (AUC={round(roc_auc_score(y_test, y_prob_rf), 3)})")  # ROC line
+plt.plot([0, 1], [0, 1], "--", color="gray", label="Random (0.5)")  # diagonal = random guess
+plt.xlabel("False Positive Rate")  # x-axis label
+plt.ylabel("True Positive Rate (Recall)")  # y-axis label (TPR is recall)
+plt.title("ROC — Random Forest")  # chart title
+plt.legend()  # show legend with model name and AUC
+plt.tight_layout()  # reduce clipped labels
+plt.show()  # display the figure
 ```
 
 **How the code works:**
@@ -267,49 +262,7 @@ plt.show()
 - **`roc_curve`** — returns FPR/TPR points for plotting; underscore `_` ignores threshold array if you only plot.
 - **Diagonal dashed line** — random classifier baseline (AUC 0.5).
 
-For this course: **report AUC when comparing models**; use precision/recall when you care about mistakes at a **chosen** threshold.
-
----
-
-## Threshold Tuning — Adjust the Dial (Light Touch)
-
-Default cut-off is **P(Pass) ≥ 0.5**. Real teams often move it: stricter for fewer false passes, looser to catch more real passes.
-
-**Threshold tuning:**
-
-- **Official Definition:** Choosing a probability cut-off to meet a precision/recall goal or maximise F1.
-- **In Simple Words:** Same model, same probabilities — different threshold → different TP/FP/FN counts.
-- **Real-Life Example:** Fraud team: "We must catch at least 90% of fraud" → find the threshold where recall ≥ 0.9, even if precision drops.
-
-![Precision-Recall Trade-off Curve at Different Thresholds](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/session31/precision_recall_tradeoff.png)
-
-```python
-from sklearn.metrics import precision_recall_curve
-
-precisions, recalls, thresholds = precision_recall_curve(y_test, y_prob_rf)
-f1_list = 2 * precisions[:-1] * recalls[:-1] / (precisions[:-1] + recalls[:-1] + 1e-9)
-best_i = f1_list.argmax()
-best_t = thresholds[best_i]
-
-print(f"Threshold that maximises F1 on this test set: {round(best_t, 3)}")
-print(f"  At 0.5 default — F1: {round(f1_score(y_test, (y_prob_rf >= 0.5).astype(int), zero_division=0), 3)}")
-print(f"  At best_t      — F1: {round(f1_score(y_test, (y_prob_rf >= best_t).astype(int), zero_division=0), 3)}")
-```
-
-**How the code works:**
-
-- **`precision_recall_curve`** — metrics at many thresholds; `[:-1]` aligns F1 with threshold array length.
-- **`(y_prob_rf >= best_t).astype(int)`** — manual labels without retraining.
-- **Best F1 threshold** is a **starting point** — final threshold should follow business rules (cost of FP vs FN), not only math on one test split.
-
-### Quick Activity — Threshold Choice
-
-P(Pass) = 0.55. Actual label = Fail.
-
-1. Predicted Pass or Fail at threshold **0.5**?  
-2. Same at threshold **0.6**?
-
-**Answers:** 1 → **Pass** (0.55 ≥ 0.5). 2 → **Fail** (0.55 < 0.6).
+**Report AUC when comparing models.** Use precision and recall when you care about mistakes at the cut-off your team actually uses (often 0.5 by default).
 
 ---
 
@@ -318,8 +271,8 @@ P(Pass) = 0.55. Actual label = Fail.
 - **Decision Trees** learn readable if-else rules; **`max_depth`** controls overfitting.
 - **Random Forest** combines many trees by **vote** — usually more stable than one tree.
 - **Precision** = trust when the model says Pass; **Recall** = how many real passes you catch — they trade off when you move the threshold.
-- **F1** is a quick balanced summary; **ROC-AUC** judges ranking across all thresholds — use both lightly alongside the confusion matrix.
-- **Threshold tuning** changes labels without retraining — pick cut-offs from business cost, then check metrics on held-out test data.
+- **F1** balances precision and recall in one number; **ROC-AUC** judges how well the model ranks Pass above Fail before you fix a cut-off.
+- Always read the **confusion matrix** alongside any single metric — numbers hide who was misclassified.
 
 Next you will build on these models and metrics when comparing and selecting classifiers for real pipelines.
 
@@ -339,12 +292,9 @@ Next you will build on these models and metrics when comparing and selecting cla
 | **Recall** | TP / (TP + FN) | Coverage of actual positives |
 | **F1 Score** | Harmonic mean of P and R | One balanced number at one threshold |
 | **ROC-AUC** | Area under ROC curve | Threshold-free ranking quality |
-| **Threshold tuning** | Change P(Pass) cut-off | Aligns model to FP vs FN costs |
 | **`DecisionTreeClassifier`** | Single tree | `sklearn.tree` |
 | **`RandomForestClassifier`** | Ensemble of trees | `sklearn.ensemble` |
 | **`precision_score` / `recall_score` / `f1_score`** | Metric functions | `sklearn.metrics` on labels |
-| **`roc_auc_score(y_true, y_prob)`** | AUC from probabilities | Compare models before fixing threshold |
-| **`precision_recall_curve`** | P, R at many thresholds | Find candidate cut-offs |
-| **`(y_prob >= t).astype(int)`** | Apply custom threshold | No retrain needed |
+| **`roc_auc_score(y_true, y_prob)`** | AUC from probabilities | Compare models using ranking quality |
 
 ---
