@@ -14,11 +14,11 @@ objective: Understand how models can discover patterns in data without labeled o
 type of session: theory/implementation/mixture of theory + implementation / You take the call
 
 topics be covered:
-* Unsupervised Basics – learning patterns without labeled targets; 
+Unsupervised Basics – learning patterns without labeled targets; 
 K-Means Clustering – grouping similar data points for segmentation; 
 K-Means Workflow – assigning points to clusters and cluster centers; 
 PCA – reducing many features into fewer components; 
-PCA Visualization – projecting high dimensional data into 2D for visualizatiUon"
+PCA Visualization – projecting high dimensional data into 2D for visualizatiUon
 
 detailed subtopics to be covered:
 
