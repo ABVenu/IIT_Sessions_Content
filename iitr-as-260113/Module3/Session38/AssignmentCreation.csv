@@ -1,0 +1,140 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,You are building a tool-calling chatbot. Which component is responsible for running the agent loop calling tools and returning the final response?,,,,,,2,,`ChatPromptTemplate`,`AgentExecutor`,`MessagesPlaceholder`,`@tool`,,6a1e91b1e9a1b20f4b9da26d,0,markdown,"`AgentExecutor` is the runtime layer that executes the agent invokes tools and manages the loop until a final answer is produced."
+mcsc,markdown,What is the main purpose of setting `max_iterations` in an agent executor?,,,,,,2,,To increase model creativity,To limit repeated agent action loops,To force tool usage in every query,To hide intermediate steps,,6a1e91b1e9a1b20f4b9da26d,0,markdown,"`max_iterations` puts an upper bound on action loops preventing runaway retries or infinite loops."
+mcsc,markdown,What does `return_intermediate_steps=True` help you do?,,,,,,3,,Encrypt tool outputs,Disable tool calls,Inspect which tools were called and what they returned,Improve internet speed for API calls,,6a1e91b1e9a1b20f4b9da26d,0,markdown,"This setting returns action-observation traces so you can debug tool selection and behavior."
+mcsc,markdown,"In a tool-calling setup what is the role of a function decorated with `@tool`?",,,,,,1,,It becomes available for the agent to call as an external action,It automatically retries failed API requests 10 times,It replaces the LLM for all responses,It stores chat history in a database,,6a1e91b1e9a1b20f4b9da26d,0,markdown,"The decorator exposes a Python function as a callable tool that the agent can choose during reasoning."
+mcsc,markdown,Your agent occasionally returns malformed structured outputs from the model and crashes during parsing. Which executor configuration directly improves resilience in this case?,,,,,,3,,`verbose=True`,`return_intermediate_steps=True`,`handle_parsing_errors=True`,`max_iterations=1`,,6a1e91b1e9a1b20f4b9da26d,0.5,markdown,"`handle_parsing_errors=True` allows safer recovery from parse issues instead of immediate hard failure."
+mcsc,markdown,"A user asks: ""Tell me order status ETA and refund for ORD102."" Which behavior best indicates a correctly functioning tool-calling agent?",,,,,,3,,It always responds without tools to save cost,It calls exactly one random tool and fabricates the rest,It calls relevant tools aggregates observations then returns one final user-friendly response,It asks the user to provide source code before answering,,6a1e91b1e9a1b20f4b9da26d,0.5,markdown,"A proper agent decides required tools executes them uses tool outputs and synthesizes a final response."
+mcmc,markdown,Which settings directly contribute to safer and debuggable runtime behavior in a production-style tool-calling workflow?,,,,,,,,`max_iterations`,`handle_parsing_errors`,`return_intermediate_steps`,`temperature=1.5`,"1, 2, 3",6a1e91b1e9a1b20f4b9da26d,0.5,markdown,"`max_iterations` prevents runaway loops `handle_parsing_errors` improves fault tolerance and `return_intermediate_steps` enables traceability."
+mcmc,markdown,You are validating an agent with a test pack. Which checks should be included to assess decision-path quality not just final text quality?,,,,,,,,Compare expected tools vs actual tools used in intermediate steps,Ensure at least one test where no tool should be called,Ignore tool inputs because outputs are enough,Include a case with missing or invalid order ID,"1, 2, 4",6a1e91b1e9a1b20f4b9da26d,0.5,markdown,"Decision-path validation should check tool routing no-tool behavior and invalid-input handling."
+mcmc,markdown,You notice an agent repeatedly retries tool calls with no progress and eventually times out. Which interventions are valid and aligned with robust design?,,,,,,,,Lower or cap `max_iterations`,Add fallback messaging for repeated failures,Remove all tool descriptions to reduce prompt length,Use intermediate-step logs to identify failure stage,"1, 2, 4",6a1e91b1e9a1b20f4b9da26d,1,markdown,"Runaway behavior is addressed by iteration limits robust fallbacks and observability for root-cause analysis."
+mcmc,markdown,For multi-step agent behavior which statements about the scratchpad (`MessagesPlaceholder`) are correct?,,,,,,,,It helps preserve current-run reasoning and tool traces across steps,It is useful for tool chaining in a single invocation,It permanently stores all user history across sessions by default,Without it multi-step context handling can degrade,"1, 2, 4",6a1e91b1e9a1b20f4b9da26d,1,markdown,"Scratchpad is temporary working memory for the current run and supports coherent multi-step action flow."
+subjective,markdown,"You are building a mini support assistant for an online store. Implement a Python program that uses a tool-calling agent runtime to handle user support queries for order operations.
+
+### Problem Statement
+Create an assistant that can:
+1. Fetch order status for an order ID.
+2. Estimate delivery timeline for an order ID.
+3. Provide refund-related response based on order status.
+
+The program must:
+- Define an in-memory `orders_db` with at least 3 orders covering `shipped` `cancelled` and `delivered`.
+- Create 3 tools using `@tool`:
+  - `get_order_status(order_id: str) -> str`
+  - `estimate_delivery_timeline(order_id: str) -> str`
+  - `calculate_refund_amount(order_id: str) -> str`
+- Build an agent using `create_tool_calling_agent`.
+- Execute it using `AgentExecutor` with:
+  - `max_iterations=3`
+  - `handle_parsing_errors=True`
+  - `return_intermediate_steps=True`
+- Run at least 4 test queries:
+  1. Single-tool query
+  2. Multi-tool query
+  3. No-tool query
+  4. Invalid order ID query
+- Print:
+  - Final output
+  - Intermediate steps (tool selected tool input tool observation)",,,,,,,,,,,,,6a1e91b1e9a1b20f4b9da26d,0.5,markdown,"```python
+from langchain_openai import ChatOpenAI
+from langchain_core.tools import tool
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.agents import AgentExecutor, create_tool_calling_agent
+
+orders_db = {
+    ""ORD101"": {""status"": ""shipped"", ""city"": ""Delhi"", ""amount"": 2500, ""delivery_days"": 2},
+    ""ORD102"": {""status"": ""cancelled"", ""city"": ""Bangalore"", ""amount"": 1800, ""delivery_days"": 0},
+    ""ORD103"": {""status"": ""delivered"", ""city"": ""Mumbai"", ""amount"": 3200, ""delivery_days"": 0},
+}
+
+@tool
+def get_order_status(order_id: str) -> str:
+    """"Get the current status for a given order ID.""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""No order found for order ID {order_id}.""
+    return (
+        f""Order {order_id} is {order['status']} in {order['city']}. ""
+        f""Order amount is {order['amount']}.""
+    )
+
+@tool
+def estimate_delivery_timeline(order_id: str) -> str:
+    """"Estimate delivery timeline for a given order ID.""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""No order found for order ID {order_id}.""
+    status = order[""status""]
+    if status == ""shipped"":
+        return f""Order {order_id} is shipped and expected in {order['delivery_days']} days.""
+    if status == ""delivered"":
+        return f""Order {order_id} has already been delivered.""
+    if status == ""cancelled"":
+        return f""Order {order_id} is cancelled so no delivery timeline exists.""
+    return f""Delivery timeline for order {order_id} is currently unavailable.""
+
+@tool
+def calculate_refund_amount(order_id: str) -> str:
+    """"Return refund-related response for a given order ID.""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""No order found for order ID {order_id}.""
+    status = order[""status""]
+    if status == ""cancelled"":
+        return f""Refund amount for order {order_id} is {order['amount']}.""
+    if status == ""delivered"":
+        return (
+            f""Order {order_id} is delivered. Refund eligibility depends on return policy ""
+            f""and product category.""
+        )
+    if status == ""shipped"":
+        return (
+            f""Order {order_id} is shipped. Refund cannot be finalized until cancellation ""
+            f""or return is initiated.""
+        )
+    return f""Refund details for order {order_id} are currently unavailable.""
+
+def print_trace(result: dict) -> None:
+    print(""Final Output:"")
+    print(result[""output""])
+    print(""\nIntermediate Steps:"")
+    for idx, (action, observation) in enumerate(result[""intermediate_steps""], start=1):
+        print(f""\nStep {idx}"")
+        print(""Tool Selected:"", action.tool)
+        print(""Tool Input:"", action.tool_input)
+        print(""Tool Observation:"", observation)
+
+def main() -> None:
+    tools = [get_order_status, estimate_delivery_timeline, calculate_refund_amount]
+    llm = ChatOpenAI(model=""gpt-4o-mini"", temperature=0)
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (""system"", ""You are an e-commerce support assistant. Use tools whenever required to provide accurate responses.""),
+            (""human"", ""{input}""),
+            MessagesPlaceholder(variable_name=""agent_scratchpad""),
+        ]
+    )
+    agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
+    agent_executor = AgentExecutor(
+        agent=agent,
+        tools=tools,
+        verbose=True,
+        max_iterations=3,
+        handle_parsing_errors=True,
+        return_intermediate_steps=True,
+    )
+
+    test_cases = [
+        {""name"": ""Single-tool query"", ""query"": ""What is the status of order ORD101?""},
+        {""name"": ""Multi-tool query"", ""query"": ""For ORD102 check status delivery timeline and refund details.""},
+        {""name"": ""No-tool query"", ""query"": ""Can you suggest a good weekend movie?""},
+        {""name"": ""Invalid order ID query"", ""query"": ""Get status and refund info for order ORD999.""},
+    ]
+
+    for case in test_cases:
+        result = agent_executor.invoke({""input"": case[""query""]})
+        print_trace(result)
+
+if __name__ == ""__main__"":
+    main()
+```"

@@ -1,0 +1,100 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"In a Decision Tree, which part stores the final class prediction (Pass/Fail)?",,,,,,2,,Root node,Leaf node,Branch,Depth,,6a1e91414d7ef3dee5fd9686,0,markdown,"Leaf nodes are terminal nodes where the model outputs the final class label."
+mcsc,markdown,"Why is `max_depth` used in a Decision Tree?",,,,,,2,,To increase the number of features automatically,To limit tree complexity and reduce overfitting,To convert the tree into logistic regression,To remove the need for train-test split,,6a1e91414d7ef3dee5fd9686,0,markdown,"Limiting depth prevents the tree from becoming too specific to training data."
+mcsc,markdown,"What is the main idea behind Random Forest for classification?",,,,,,2,,One very deep tree predicts all labels,Multiple trees vote and majority vote decides the class,Data is sorted and nearest point is chosen,It predicts only probabilities not labels,,6a1e91414d7ef3dee5fd9686,0,markdown,"Random Forest combines predictions from many trees and uses majority voting."
+mcsc,markdown,"Precision is defined as:",,,,,,2,,TP / (TP + FN),TP / (TP + FP),TN / (TN + FP),(TP + TN) / Total,,6a1e91414d7ef3dee5fd9686,0,markdown,"Precision measures correctness among predicted positives."
+mcsc,markdown,"A model predicts 50 students as Pass. Out of these, 35 actually pass. What is precision?",,,,,,3,,0.35,0.50,0.70,0.85,,6a1e91414d7ef3dee5fd9686,0.5,markdown,"Precision = TP / (TP + FP) = 35 / 50 = 0.70."
+mcsc,markdown,"Which metric is most suitable when you want threshold-independent ranking quality of classifiers?",,,,,,4,,Accuracy,Recall,F1 Score,ROC-AUC,,6a1e91414d7ef3dee5fd9686,0.5,markdown,"ROC-AUC evaluates ranking quality across all thresholds, not a single cut-off."
+mcmc,markdown,"Which statements about Random Forest are correct?",,,,,,,,It uses bootstrap samples of training data for different trees.,Every tree is trained on exactly the same feature subset at each split.,Majority voting is used for final class prediction.,It usually provides more stable performance than a single tree.,"1, 3, 4",6a1e91414d7ef3dee5fd9686,0.5,markdown,"Random Forest uses bagging and voting; random feature subsets vary by split, so option 2 is incorrect."
+mcmc,markdown,"For a binary classifier, which statements are correct?",,,,,,,,Recall = TP / (TP + FN),Precision increases when FP increases while TP is fixed,F1 score combines precision and recall,Confusion matrix helps inspect TP TN FP FN,"1, 3, 4",6a1e91414d7ef3dee5fd9686,0.5,markdown,"Increasing FP lowers precision, so option 2 is incorrect."
+mcmc,markdown,"A model gives probability outputs for Pass. Which actions are valid for ROC analysis?",,,,,,,,"Use `roc_auc_score(y_true, y_prob)` with probabilities",Use hard labels from `predict()` as the best mandatory input for ROC-AUC,Generate TPR/FPR pairs over multiple thresholds,Compare classifier ranking ability before fixing a decision threshold,"1, 3, 4",6a1e91414d7ef3dee5fd9686,1,markdown,"ROC-AUC is designed for probability scores and threshold sweeps. Hard labels lose ranking information."
+mcmc,markdown,"You are comparing two classifiers on an imbalanced dataset where Pass is rare. Which conclusions are valid?",,,,,,,,High accuracy alone can still hide poor minority-class detection,Precision and recall are both useful to evaluate positive-class behavior,AUC near 0.5 suggests no meaningful class separation,F1 can be high even if either precision or recall is extremely low,"1, 2, 3",6a1e91414d7ef3dee5fd9686,1,markdown,"F1 drops when either precision or recall is very low; therefore option 4 is incorrect."
+subjective,markdown,"A student support team wants to identify students likely to **Pass** so they can plan mentorship outreach for students likely to **Fail**.
+
+Build and evaluate three classifiers - **Logistic Regression**, **Decision Tree**, and **Random Forest** - on a synthetic student dataset, then recommend one model using metric evidence.
+
+Requirements:
+1. Generate a dataset of at least 400 rows with `study_hours`, `sleep_hours`, `distractions`, and `pass_fail` (0/1).
+2. Split data into train and test (80/20) with a fixed random seed.
+3. Train LogisticRegression, DecisionTreeClassifier (controlled depth), and RandomForestClassifier (at least 100 trees).
+4. For each model, report TN, FP, FN, TP, accuracy, precision, recall, F1, and ROC-AUC (use predicted probabilities).
+5. Print a recommendation paragraph that picks one model, justifies it with at least two metrics, and mentions one trade-off.",,,,,,,,,,,,,6a1e91414d7ef3dee5fd9686,0.5,markdown,"```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+
+rng = np.random.default_rng(seed=7)
+n = 500
+
+study_hours = rng.uniform(1, 10, size=n)
+sleep_hours = rng.uniform(4, 9, size=n)
+distractions = rng.uniform(0, 5, size=n)
+
+scores = (
+    40
+    + 6.5 * study_hours
+    + 1.2 * sleep_hours
+    - 2.0 * distractions
+    + rng.normal(0, 7, size=n)
+)
+
+pass_fail = (scores >= 70).astype(int)
+
+X = np.column_stack([study_hours, sleep_hours, distractions])
+y = pass_fail
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=7
+)
+
+models = {
+    ""Logistic Regression"": LogisticRegression(max_iter=1000),
+    ""Decision Tree"": DecisionTreeClassifier(max_depth=4, random_state=42),
+    ""Random Forest"": RandomForestClassifier(n_estimators=100, max_depth=4, random_state=42),
+}
+
+def evaluate_model(name, model, X_test, y_test):
+    y_pred = model.predict(X_test)
+    y_prob = model.predict_proba(X_test)[:, 1]
+
+    tn, fp, fn, tp = confusion_matrix(y_test, y_pred).ravel()
+    metrics = {
+        ""TN"": tn,
+        ""FP"": fp,
+        ""FN"": fn,
+        ""TP"": tp,
+        ""Accuracy"": accuracy_score(y_test, y_pred),
+        ""Precision"": precision_score(y_test, y_pred, zero_division=0),
+        ""Recall"": recall_score(y_test, y_pred, zero_division=0),
+        ""F1"": f1_score(y_test, y_pred, zero_division=0),
+        ""ROC-AUC"": roc_auc_score(y_test, y_prob),
+    }
+
+    print(f""\n{name}"")
+    print(f""Confusion Matrix -> TN={tn} FP={fp} FN={fn} TP={tp}"")
+    print(f""Accuracy : {metrics['Accuracy']:.3f}"")
+    print(f""Precision: {metrics['Precision']:.3f}"")
+    print(f""Recall   : {metrics['Recall']:.3f}"")
+    print(f""F1 Score : {metrics['F1']:.3f}"")
+    print(f""ROC-AUC  : {metrics['ROC-AUC']:.3f}"")
+    return metrics
+
+all_results = {}
+for model_name, model in models.items():
+    model.fit(X_train, y_train)
+    all_results[model_name] = evaluate_model(model_name, model, X_test, y_test)
+
+best_model_name = max(all_results, key=lambda k: all_results[k][""ROC-AUC""])
+best_metrics = all_results[best_model_name]
+
+print(""\nRecommendation:"")
+print(
+    f""{best_model_name} is recommended because it gives strong ranking quality ""
+    f""(ROC-AUC={best_metrics['ROC-AUC']:.3f}) and balanced positive-class performance ""
+    f""(F1={best_metrics['F1']:.3f}). Compared to a single Decision Tree, it is usually more stable ""
+    ""on new data due to ensemble voting, though interpretability is lower than one shallow tree.""
+)
+```"
