@@ -38,12 +38,129 @@ Build and evaluate three classifiers - **Logistic Regression**, **Decision Tree*
 - Submit the complete code in the LMS code editor/answer box.
 
 ### Answer Explanation (Reference Approach)
-- Ideal workflow:
-  1. Create reproducible synthetic data using NumPy with a fixed seed.
-  2. Use `train_test_split` to avoid evaluation on training data.
-  3. Fit the three models on the same split for fair comparison.
-  4. Use `predict()` for confusion matrix, precision, recall, and F1.
-  5. Use `predict_proba()[:, 1]` for ROC-AUC.
-  6. Compare metrics and provide model recommendation with reasoning.
-- Alternative approaches are acceptable if they satisfy all constraints and use correct metric logic.
+
+#### Step-by-step solution walkthrough
+1. Use NumPy with a fixed seed to generate reproducible synthetic student features.
+2. Create a target label `pass_fail` using a score formula and threshold (>= 70 as Pass).
+3. Split into train and test sets using an 80/20 split.
+4. Train `LogisticRegression`, `DecisionTreeClassifier`, and `RandomForestClassifier` on the same training set.
+5. Compute confusion matrix, accuracy, precision, recall, F1, and ROC-AUC for each model.
+6. Compare models and choose one model using metric evidence plus one practical trade-off.
+
+#### Complete exact code (single-file reference solution)
+```python
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import (
+    confusion_matrix,
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+)
+
+# -----------------------------
+# 1) Reproducible synthetic data
+# -----------------------------
+rng = np.random.default_rng(seed=7)
+n = 500  # at least 400 rows
+
+study_hours = rng.uniform(1, 10, size=n)
+sleep_hours = rng.uniform(4, 9, size=n)
+distractions = rng.uniform(0, 5, size=n)
+
+# Score formula to create realistic signal + noise
+scores = (
+    40
+    + 6.5 * study_hours
+    + 1.2 * sleep_hours
+    - 2.0 * distractions
+    + rng.normal(0, 7, size=n)
+)
+
+pass_fail = (scores >= 70).astype(int)  # 1 = Pass, 0 = Fail
+
+X = np.column_stack([study_hours, sleep_hours, distractions])
+y = pass_fail
+
+# ----------------------------------
+# 2) Train-test split (80/20, fixed)
+# ----------------------------------
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=7
+)
+
+# ---------------------------
+# 3) Model initialization
+# ---------------------------
+models = {
+    "Logistic Regression": LogisticRegression(max_iter=1000),
+    "Decision Tree": DecisionTreeClassifier(max_depth=4, random_state=42),
+    "Random Forest": RandomForestClassifier(
+        n_estimators=100, max_depth=4, random_state=42
+    ),
+}
+
+
+def evaluate_model(name, model, X_test, y_test):
+    y_pred = model.predict(X_test)
+    y_prob = model.predict_proba(X_test)[:, 1]
+
+    cm = confusion_matrix(y_test, y_pred)
+    tn, fp, fn, tp = cm.ravel()
+
+    metrics = {
+        "TN": tn,
+        "FP": fp,
+        "FN": fn,
+        "TP": tp,
+        "Accuracy": accuracy_score(y_test, y_pred),
+        "Precision": precision_score(y_test, y_pred, zero_division=0),
+        "Recall": recall_score(y_test, y_pred, zero_division=0),
+        "F1": f1_score(y_test, y_pred, zero_division=0),
+        "ROC-AUC": roc_auc_score(y_test, y_prob),
+    }
+
+    print(f"\n{name}")
+    print(f"Confusion Matrix -> TN={metrics['TN']} FP={metrics['FP']} FN={metrics['FN']} TP={metrics['TP']}")
+    print(f"Accuracy : {metrics['Accuracy']:.3f}")
+    print(f"Precision: {metrics['Precision']:.3f}")
+    print(f"Recall   : {metrics['Recall']:.3f}")
+    print(f"F1 Score : {metrics['F1']:.3f}")
+    print(f"ROC-AUC  : {metrics['ROC-AUC']:.3f}")
+
+    return metrics
+
+
+# ---------------------------
+# 4) Train + evaluate models
+# ---------------------------
+all_results = {}
+for model_name, model in models.items():
+    model.fit(X_train, y_train)
+    all_results[model_name] = evaluate_model(model_name, model, X_test, y_test)
+
+# ----------------------------------------------
+# 5) Final recommendation paragraph (example)
+# ----------------------------------------------
+best_model_name = max(all_results, key=lambda k: all_results[k]["ROC-AUC"])
+best_metrics = all_results[best_model_name]
+
+print("\nRecommendation:")
+print(
+    f"{best_model_name} is recommended because it gives strong ranking quality "
+    f"(ROC-AUC={best_metrics['ROC-AUC']:.3f}) and balanced positive-class performance "
+    f"(F1={best_metrics['F1']:.3f}). "
+    "Compared to a single Decision Tree, it is usually more stable on new data due to ensemble voting, "
+    "though interpretability is lower than one shallow tree."
+)
+```
+
+#### Notes for evaluation
+- Any solution with equivalent logic, correct metric computation, and a valid evidence-based recommendation can be accepted.
+- Hyperparameters can vary, but all required metrics and justification must be present.
 

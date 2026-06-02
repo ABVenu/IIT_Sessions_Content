@@ -1,0 +1,55 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A support chatbot answers ""Most stores allow 30-day returns,"" without checking company policy. Which core risk is this?",,,,,,2,,Better retrieval precision,Hallucination,Index normalization,Chunk overlap,,6a1e91732890609d1e81be65,0,markdown,This is hallucination: fluent but unsupported information not grounded in trusted policy evidence.
+mcsc,markdown,Which statement best defines **grounding** in a policy chatbot?,,,,,,3,,Let the LLM answer from pretraining knowledge only,Add style instructions so answers look polite,Support answers using retrieved verifiable policy text,Increase model temperature for creative responses,,6a1e91732890609d1e81be65,0,markdown,Grounding ties the response to external evidence (policy chunks) improving factual reliability.
+mcsc,markdown,In a RAG flow what should happen immediately **before** generation?,,,,,,2,,Delete low-frequency vocabulary,Build prompt context with retrieved chunks,Re-train the LLM,Increase top-k until 100,,6a1e91732890609d1e81be65,0,markdown,The retrieved evidence is inserted into prompt context and then the LLM generates the final reply.
+mcsc,markdown,"A student says: ""If the bot sounds confident, it is probably correct."" What is the best correction?",,,,,,2,,Confidence is the same as correctness,Correctness must be verified against policy evidence,Confidence improves if top-k is always 1,Correctness depends only on empathy lines,,6a1e91732890609d1e81be65,0,markdown,Tone and confidence are not proof. Correctness must be validated using trusted policy documents.
+mcsc,markdown,"An e-commerce assistant returns answer text that cites ""next-day standard delivery,"" but the policy says standard delivery is 3-5 business days. Which component likely failed first?",,,,,,2,,Prompt token counting,Retrieval or evidence selection quality,Markdown rendering,API key rotation,,6a1e91732890609d1e81be65,0.5,markdown,If irrelevant or wrong chunks were retrieved generation can still sound polished but produce incorrect policy statements.
+mcsc,markdown,Which statement is most accurate about vector search in RAG?,,,,,,3,,Vector search replaces generation completely,Vector search is optional and unrelated to retrieval,Vector search is commonly the retriever mechanism for top-k relevant chunks,Vector search only works for exact keyword matches,,6a1e91732890609d1e81be65,0.5,markdown,In RAG vector search is a common way to implement retrieval by semantic similarity.
+mcmc,markdown,You are auditing a policy bot answer. Which checks directly improve trustworthiness? (Select all that apply),,,,,,,,Verify each factual claim against retrieved policy lines,Prefer answers with more adjectives and empathy,Check whether conditions (e.g. opened/unopened) are preserved,Confirm that numeric values match official documents,"1, 3, 4",6a1e91732890609d1e81be65,0.5,markdown,Trustworthiness depends on factual alignment and condition correctness not stylistic polish.
+mcmc,markdown,Which are valid goals of grounding in document-backed assistants? (Select all that apply),,,,,,,,Make answers organization-specific,Make answers current with latest policy updates,Remove the need for any retrieval system,Make answers verifiable by source text,"1, 2, 4",6a1e91732890609d1e81be65,0.5,markdown,Grounding targets specificity freshness and verifiability while retrieval remains essential.
+mcmc,markdown,You are designing a RAG system for policy support. Which failure modes can still happen even when RAG is used? (Select all that apply),,,,,,,,Wrong chunk retrieved for the question,No relevant chunk found in top-k,LLM ignores provided evidence and adds unsupported details,Hallucination becomes impossible by design,"1, 2, 3",6a1e91732890609d1e81be65,1,markdown,RAG reduces hallucination risk but does not eliminate it because both retrieval and generation can fail.
+mcmc,markdown,Which actions belong to an ingestion/index-refresh lifecycle that keeps RAG answers reliable over time? (Select all that apply),,,,,,,,Collect source policy documents from trusted channels,Clean/normalize text before chunking and embedding,Schedule periodic refresh runs for changed policies,Freeze index forever to preserve reproducibility in production,"1, 2, 3",6a1e91732890609d1e81be65,1,markdown,Reliable retrieval requires continuous ingestion hygiene and refresh. Freezing forever leads to stale answers.
+subjective,markdown,"You are the AI quality analyst for ShopKart support. Create a compact **Grounded Response Design Note** for one customer-support use case by comparing ungrounded vs grounded behavior and proposing a safe answer strategy.
+
+### Scenario
+Use this customer query:
+
+**""I returned a COD order last week. When will my refund come, and where will it be credited?""**
+
+### What your submission must contain
+1. A 2-3 line ungrounded answer that sounds fluent but has at least one policy mistake.
+2. A corrected grounded answer that is strictly evidence-backed and user-friendly.
+3. A short ""Evidence Mapping"" section with:
+   - Retrieved policy points used
+   - Which sentence in grounded answer maps to which policy point
+4. A ""Risk if Ungrounded"" section with at least 3 business/customer risks.
+5. A mini checklist titled ""Before Sending Reply"" with at least 5 validation checks.",,,,,,,,,,,,,6a1e91732890609d1e81be65,0.5,markdown,"### 1) Example Ungrounded Answer (Intentionally flawed)
+""Thanks for your patience. COD refunds are usually processed within 24-48 hours and are often credited back to the original payment route or wallet. You should see the money very soon.""
+
+Why this is wrong:
+- Mentions **24-48 hours**, which is not aligned with policy.
+- Uses vague wording (""usually"", ""often"").
+- Introduces ""wallet"" credit path without policy support.
+
+### 2) Correct Grounded Answer (Policy-backed)
+""Thanks for reaching out. For ShopKart returns, refunds are credited within **5-7 business days** after the returned item passes **warehouse verification**. Since this was a **COD order**, the refund is credited only to your **original UPI ID or bank account**.""
+
+### 3) Evidence Mapping
+| Policy point retrieved | Grounded answer sentence mapped |
+|---|---|
+| Refunds are credited within **5-7 business days** after warehouse verification. | ""Refunds are credited within 5-7 business days after the returned item passes warehouse verification."" |
+| COD orders are refunded to original **UPI/bank account only**. | ""Since this was a COD order, the refund is credited only to your original UPI ID or bank account."" |
+
+### 4) Risk if Ungrounded
+- **Customer expectation mismatch:** customer expects money in 24-48 hours and loses trust when it does not arrive.
+- **Support escalation load:** incorrect timelines increase repeat follow-ups and complaint tickets.
+- **Compliance/policy risk:** agent communication diverges from official policy language.
+- **Operational confusion:** wrong destination guidance (e.g. wallet) causes avoidable disputes.
+
+### 5) Before Sending Reply (Validation Checklist)
+- Is the refund timeline exactly policy-aligned (**5-7 business days**)?
+- Is the warehouse verification dependency explicitly mentioned?
+- Is COD refund destination correctly limited to **UPI/bank account**?
+- Are all claims traceable to retrieved policy lines?
+- Did we avoid unsupported words like ""usually"", ""likely"", or invented channels?
+- Is the final message clear concise and user-friendly without adding extra assumptions?"
