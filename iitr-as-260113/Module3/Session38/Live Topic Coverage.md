@@ -1,0 +1,7 @@
+| topic/sub topic | status - (covered/not covered) | remarks |
+| --- | --- | --- |
+| Integrate custom tools into a managed agent executor with explicit iteration limits and parsing-error handling. | covered | Demonstrated creating multiple tools, wiring them into `create_tool_calling_agent` + `AgentExecutor`, and explicitly used `max_iterations` and `handle_parsing_errors=True`. |
+| Configure transparent step-level observability for tool selection arguments and intermediate observations. | covered | Covered `verbose=True`, `return_intermediate_steps=True`, and iterated over intermediate steps to print tool name, tool input args, and tool observations/output. |
+| Validate agent behavior across single-tool multi-tool and no-tool query classes using the cohort test pack. | covered | Instructor introduced and drafted a cohort/test-pack structure with scenarios for single-tool, multi-tool, no-tool, and missing-order-ID cases, and explained how to compare expected vs actual tool calls. |
+| Relate observed traces to expected control flow for each query class without altering instructor-provided scenarios. | covered | Walked through execution traces step-by-step for different query types, explained why each tool was selected, and linked intermediate traces to expected flow and fallback behavior. |
+| Extra concepts taught (beyond listed subtopics) | covered | Additional focus on agent scratchpad (`MessagesPlaceholder`), retry/fallback reasoning, production readiness framing, and short troubleshooting discussion on GitHub Pages 404/domain configuration. |

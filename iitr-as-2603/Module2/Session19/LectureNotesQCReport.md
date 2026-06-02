@@ -46,6 +46,32 @@ Student-facing quick activities: decision-path trace, metric-choice scenario tab
 
 ---
 
+## Iteration 3 — 2026-06-02 (release alignment against delivered coverage)
+
+**Scope:** Validate delivered topics against `Live Topic Coverage.md`, remove non-session protocol artifacts, and publish `Lecture Notes Released.md`.
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference in student-facing text | True |
+
+**Checks performed:**
+- Cross-checked transcript and coverage report for delivered concepts: Decision Trees, Random Forest, precision/recall/F1, ROC-AUC, overfitting/max-depth, and feature importance.
+- Confirmed Threshold Tuning was not explicitly delivered as a workflow; released notes avoid a dedicated threshold-tuning teaching section.
+- Confirmed no Mentimeter/post-lecture quiz protocol content exists in released notes.
+- Preserved all relevant instructional images and code examples.
+
+**Action taken:** Created `Lecture Notes Released.md` in the session folder from validated `Lecture Notes.md` content (no additional trimming required).
+
+**Expected result:** All criteria met — release-ready.
+
+---
+
 ## Iteration 2 — 2026-06-01 (post threshold-tuning removal + full QC per LectureNotesQC.md)
 
 **Scope:** Re-QC after editorial update (Threshold Tuning section removed; internal “Light Touch” language removed).
