@@ -83,3 +83,24 @@
 | Iteration | Action |
 |---|---|
 | 1 | Initial notes created; QC passed after removing one "Session 18" reference and adding confidence vs correctness subsection |
+| 2 | Aligned release notes with live coverage: created `Lecture Notes Released.md`, retained all covered sections, and added extra taught concept on ingestion/index refresh lifecycle (scrape-clean-chunk-embed-store-schedule) |
+
+---
+
+## QC Evaluation — Iteration 2 (Release Alignment)
+
+**File:** `Lecture Notes Released.md`  
+**Date of QC:** 2026-06-02  
+**Scope:** Alignment against transcript + live topic coverage
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata/internal instruction leakage** | True |
+
+**Expected result achieved:** All required ratings are 5/5 with no logical or presentation issues.
