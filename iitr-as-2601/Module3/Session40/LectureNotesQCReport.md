@@ -53,3 +53,42 @@
 | Persist chunked documents into vector store from prior session | Set Up the Vector Store Lab; Persist Chunked Documents in Chroma; Verify Storage; Run Semantic Search |
 
 **Line count:** ~647 lines.
+
+---
+
+## Iteration 3 — Post-session alignment (`Lecture Notes Released.md`)
+
+**Trigger:** Align released notes to `Live Topic Coverage.md` and Session 40 transcript (2026-06-03).  
+**File reviewed:** `Lecture Notes Released.md`  
+**Inputs:** Transcript, Live Topic Coverage, metadata subtopics, original `Lecture Notes.md`.
+
+### Alignment changes
+
+| Action | Detail |
+|---|---|
+| **Removed** | Compare-chunk-count activity (300/500/800 runs) — not delivered live |
+| **Removed** | Long manual `pypdf` / `load_corpus_from_folder` walkthrough — class used in-memory corpus + LangChain folder load |
+| **Added** | Document upload vs true RAG / in-memory RAG contrast |
+| **Added** | Ground rule **512 / 16** for large PDFs (Tesla demo) alongside **500 / 75** policy lab |
+| **Added** | LangChain Tesla demo (`PyPDFDirectoryLoader`, splitter, `Chroma.from_documents`, 351 chunks) |
+| **Added** | Semantic chunking (advanced), vector DB similarity indexes (HNSW/IVF), optional metadata filters |
+| **Retained** | All 7 S3 diagram images; manual `policy_chunks` lab code and activities |
+
+### QC Criteria
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics plus live extras: RAG prepare recap, ChatGPT upload contrast, 512/16 large-PDF rule, semantic chunking intro, LangChain Tesla path, similarity indexes. Manual Chroma lab + verify/query retained. |
+| **Creativity** | **5 / 5** | Original analogies preserved; new chat-upload vs indexed-RAG contrast; Tesla SEC filing anchors large-PDF tuning. |
+| **Structural Adherence** | **5 / 5** | Clean title; context bullets; Official/Simple/Real-life pattern; full code blocks; student activities (metadata check, trace Rank 1); Key Takeaways + terminology table. |
+| **No Logical Mistakes** | **True** | Overlap < chunk_size rule; metadata not embedded; same-model rule; LangChain vs manual paths distinguished; Tesla demo notes metadata omission intentionally. |
+| **No Presentation Mistakes** | **True** | No session numbers or duration; no Mentimeter; no internal instructor notes; activities student-facing. |
+| **No Previous Session Number References** | **True** | Uses “previous lab/work” only. |
+| **No Metadata/internal reference in student text** | **True** | No “keep it lite”, pacing, or grader rubrics. |
+
+### Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes: **True** — **Met**
+
+**Line count:** ~518 lines. **Outcome:** QC passed on iteration 3. Released file ready for students.

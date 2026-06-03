@@ -1,0 +1,135 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A legal-tech team embeds an entire **80-page** policy PDF as **one vector** in Chroma. Users ask narrow questions such as *""What is the refund window?""* but search keeps returning unrelated sections about shipping and warranties.
+
+What is the **most likely** root cause?",,,,,,1,,"The whole document was embedded as one vector, so meanings get averaged across many topics",Chroma cannot store PDF file names,"The embedding model only works on Python code, not English text",Top-k search was disabled by using `n_results=1`,,6a1fe3cf6ee4fc72e7c67876,0,markdown,"A is correct because one vector for a long multi-topic document blurs distinct ideas; chunking splits content so each row holds roughly one idea.
+
+B is incorrect because file naming is handled via metadata. C is incorrect because sentence-transformer models encode English policy text. D is incorrect because `n_results=1` still returns the nearest vector."
+mcsc,markdown,"A support-bot engineer uses **fixed-size chunking with overlap**. A return rule is split across two windows: *""...within 30 days of""* ends chunk 4 and *""delivery. Items must...""* starts chunk 5.
+
+Why is **overlap** added between neighbouring chunks?",,,,,,1,,To repeat a shared margin so a sentence split at a boundary can still appear whole in at least one chunk,To encrypt metadata before upsert,To double the embedding model size automatically,To replace the need for a vector database,,6a1fe3cf6ee4fc72e7c67876,0,markdown,"A is correct because overlap copies text across chunk boundaries. B, C, and D are incorrect."
+mcsc,markdown,"In the manual `policy_chunks` lab, each row stores `text`, `metadata` (for example `source_id`, `page`), and an embedding vector.
+
+Which part is **actually encoded** into the embedding vector?",,,,,,1,,Only the chunk `text`,Only the `source_id` string,The `text` plus all metadata fields combined,Only the `page` number,,6a1fe3cf6ee4fc72e7c67876,0,markdown,"A is correct because embeddings are built from chunk body text only. B, C, and D are incorrect."
+mcsc,markdown,"A corpus loader ingests a plain `.txt` policy file named `returns_policy.txt` (no PDF pages).
+
+What **`page`** value should be stored on each record from that file?",,,,,,1,,0,1,The number of chunks created,Leave `page` empty / null,,6a1fe3cf6ee4fc72e7c67876,0,markdown,"A is correct because plain-text files use page index `0`. B, C, and D are incorrect."
+mcsc,markdown,"A developer chunks ShopEasy policies with `chunk_size = 500` and `overlap = 75` using a sliding character window (step = `chunk_size - overlap`).
+
+After finishing chunk 0 starting at index 0, where does chunk 1 **start** in the parent text?",,,,,,1,,Character index 425,Character index 500,Character index 75,Character index 575,,6a1fe3cf6ee4fc72e7c67876,0.5,markdown,"A is correct because the window advances by `500 - 75 = 425`. B, C, and D are incorrect."
+mcsc,markdown,"A product manager compares **chat-style document upload** (whole file treated as one large user message) with a **chunked RAG pipeline** (split → embed → store in Chroma → retrieve top chunks per question).
+
+Which statement is **most accurate**?",,,,,,1,,Chunked RAG indexes prepared segments once and retrieves only relevant pieces per query; whole-file upload can hit token limits and mix many topics in one prompt,Whole-file upload always uses Chroma with `policy_chunks` automatically,Chunked RAG never needs an embedding model,Whole-file upload always gives better traceability than `source_id` metadata on chunks,,6a1fe3cf6ee4fc72e7c67876,0.5,markdown,"A is correct. B, C, and D are incorrect."
+mcmc,markdown,"A team builds traceable policy chunks before upserting to Chroma.
+
+Which statements about **metadata** are correct?",,,,,,,,`source_id` usually holds the file name so answers can cite which document matched,`page` helps locate which PDF page a chunk came from; use `0` for plain `.txt` files,Metadata vectors are averaged with text vectors inside `model.encode` in this lab,`chunk_index` records the order of chunks created from the same parent page,"1, 2, 4",6a1fe3cf6ee4fc72e7c67876,0.5,markdown,"A, B, and D are correct. C is incorrect because only chunk text is embedded. Optional metadata filters were not required for this answer set."
+mcmc,markdown,"After upserting chunked policies into `policy_chunks` with `embedding_function=None`, a learner wants to **verify storage** before running semantic queries.
+
+Which checks are sensible?",,,,,,,,`collection.count()` to confirm how many chunk rows were stored,"`collection.peek()` to sample ids, text, and metadata quickly",`collection.get(ids=[one_known_id])` to spot-check one exact row,"Keep `ids`, `documents`, `metadatas`, and `embeddings` lists index-aligned during `upsert`","1, 2, 3, 4",6a1fe3cf6ee4fc72e7c67876,0.5,markdown,"A, B, C, and D are correct verification steps. Manually editing files inside `./chroma_store` is incorrect; fix data in code and upsert again."
+mcmc,markdown,"An engineer chunks a large annual report with `chunk_size = 512` and `chunk_overlap = 16` (~15% overlap).
+
+Which statements are correct?",,,,,,,,The window should advance by **496** characters between chunk starts (`512 - 16`),`overlap` must stay **smaller than** `chunk_size` or the splitter may never move forward,Setting `overlap >= chunk_size` is invalid for a sliding window,"This pair follows the same fixed-size + overlap strategy used on shorter policy text, with larger size for long documents","1, 2, 3, 4",6a1fe3cf6ee4fc72e7c67876,1,markdown,"A, B, C, and D are correct. Semantic chunking is advanced and not the primary core lab strategy."
+mcmc,markdown,"A ShopEasy retriever returns a **long wall of text** at Rank 1 for a short question about free shipping, and the text mixes return rules and shipping rules in one chunk.
+
+Which tuning actions are **reasonable first steps**?",,,,,,,,**Lower** `chunk_size` so each chunk holds fewer mixed ideas,**Raise** `overlap` if an important sentence was cut across a boundary,Switch the **query** embedding to a different model while keeping old document embeddings,Tune chunking and metadata quality before blaming the vector database tool alone,"1, 2, 4",6a1fe3cf6ee4fc72e7c67876,1,markdown,"A, B, and D are correct. C is incorrect because mixing encoders breaks distance meaning. Setting `overlap >= chunk_size` is invalid."
+subjective,markdown,"ShopEasy wants a small demo: split two short policies into chunks, store them in Chroma with file labels, and answer **one** customer question using semantic search.
+
+Create a single Python file named `policy_chunk_demo.py`.
+
+**Step 1** — Use the provided `sample_corpus` and chunking helpers (`chunk_text`, `create_chunks_from_corpus`) with `chunk_size=500` and `overlap=75`. Print total chunks and one example `id` with `metadata`.
+
+**Step 2** — Store chunks in Chroma collection `policy_chunks` (`embedding_function=None`) using `SentenceTransformer(""all-MiniLM-L6-v2"")`. Print `collection.count()`.
+
+**Step 3** — Run semantic search for: *How many days do I have to return a product?* with `n_results=2`. Print Rank 1 `id`, `document`, and `metadata` (`source_id`).
+
+**Expected:** Rank 1 `source_id` should be `returns_policy.txt`.",,,,,,,,,,,,,6a1fe3cf6ee4fc72e7c67876,0.5,markdown,"Paste the given corpus and chunking functions, build chunks with metadata, encode text only, upsert into `policy_chunks`, then query with the same model. Rank 1 should cite `returns_policy.txt`.
+
+```python
+import chromadb
+from sentence_transformers import SentenceTransformer
+
+sample_corpus = [
+    {
+        ""text"": (
+            ""ShopEasy Return Policy. Customers may return unused products within 30 days of delivery. ""
+            ""Items must be in original packaging. To start a return, open Orders and tap Request Return.""
+        ),
+        ""metadata"": {""source_id"": ""returns_policy.txt"", ""page"": 0},
+    },
+    {
+        ""text"": (
+            ""ShopEasy Shipping Policy. Standard delivery takes 3 to 5 business days. ""
+            ""Orders above 499 rupees qualify for free shipping.""
+        ),
+        ""metadata"": {""source_id"": ""shipping_policy.txt"", ""page"": 0},
+    },
+]
+
+
+def chunk_text(text, chunk_size=500, overlap=75):
+    if chunk_size <= overlap:
+        raise ValueError(""chunk_size must be larger than overlap"")
+    chunks = []
+    start = 0
+    while start < len(text):
+        piece = text[start : start + chunk_size].strip()
+        if piece:
+            chunks.append(piece)
+        start += chunk_size - overlap
+    return chunks
+
+
+def create_chunks_from_corpus(corpus, chunk_size=500, overlap=75):
+    all_chunks = []
+    for record in corpus:
+        source_id = record[""metadata""][""source_id""]
+        page = record[""metadata""][""page""]
+        for chunk_index, chunk_body in enumerate(chunk_text(record[""text""], chunk_size, overlap)):
+            all_chunks.append({
+                ""id"": f""{source_id}__p{page}__c{chunk_index}"",
+                ""text"": chunk_body,
+                ""metadata"": {
+                    ""source_id"": source_id,
+                    ""page"": page,
+                    ""chunk_index"": chunk_index,
+                },
+            })
+    return all_chunks
+
+
+chunks = create_chunks_from_corpus(sample_corpus)
+print(""Total chunks:"", len(chunks))
+print(""Example id:"", chunks[0][""id""])
+print(""Example metadata:"", chunks[0][""metadata""])
+
+client = chromadb.PersistentClient(path=""./chroma_store"")
+collection = client.get_or_create_collection(
+    name=""policy_chunks"",
+    embedding_function=None,
+)
+
+model = SentenceTransformer(""all-MiniLM-L6-v2"")
+
+ids = [c[""id""] for c in chunks]
+documents = [c[""text""] for c in chunks]
+metadatas = [c[""metadata""] for c in chunks]
+
+embeddings = model.encode(documents, convert_to_numpy=True).tolist()
+
+collection.upsert(
+    ids=ids,
+    documents=documents,
+    metadatas=metadatas,
+    embeddings=embeddings,
+)
+
+print(""Rows stored:"", collection.count())
+
+user_query = ""How many days do I have to return a product?""
+query_embedding = model.encode([user_query], convert_to_numpy=True).tolist()
+results = collection.query(query_embeddings=query_embedding, n_results=2)
+
+print(""\nQuery:"", user_query)
+print(""Rank 1 ID:"", results[""ids""][0][0])
+print(""Rank 1 Document:"", results[""documents""][0][0])
+print(""Rank 1 Metadata:"", results[""metadatas""][0][0])
+```"
