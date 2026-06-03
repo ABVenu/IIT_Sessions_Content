@@ -43,3 +43,30 @@ Quick activities: supervised vs unsupervised tagging, nearest-centroid distance,
 - Prose uses “previous session” only.
 
 **Expected result:** All criteria met — no further iteration required.
+
+---
+
+## Iteration 2 (PCA plain-language pass)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+
+### Notes
+
+**Change:** Removed student-facing **variance**, **explained variance ratio**, **PC1/PC2**, cumulative variance plot, and related terminology-table rows. PCA is taught with **summary directions** only; code plots use plain axis labels.
+
+**Content Coverage (5/5):** PCA definition, scaling, 2D plot, interpretation activity, and PCA+K-Means pipeline remain complete without added jargon.
+
+**Structural Adherence (5/5):** Official / In Simple Words / Real-Life Example retained for PCA; Key Takeaways and terminology table updated.
+
+**No Logical Mistakes (True):** Labels still used only for visualization; scale-before-PCA unchanged.
+
+**No Presentation Mistakes (True):** No meta “light touch” language; beginner-friendly wording throughout PCA section.
+
+**Expected result:** All criteria met.

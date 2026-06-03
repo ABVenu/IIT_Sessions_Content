@@ -150,23 +150,23 @@ plt.show()
 
 ## PCA: Fewer Features, Most of the Information
 
-When data has **many columns** (e.g. 30 tumour measurements), you cannot plot or reason in full dimension. **PCA** compresses features into **principal components** that keep as much **variance** (spread / information) as possible.
+When data has **many columns** (e.g. 30 tumour measurements), you cannot plot or reason in all dimensions at once. **PCA** compresses many original features into **a few summary directions** so you can see structure in 2D.
 
 **PCA (Principal Component Analysis):**
 
-- **Official Definition:** **Dimensionality reduction** that builds new axes (**principal components**) as directions of maximum variance in standardized data.
-- **In Simple Words:** Replace 30 correlated measurements with 2–3 “summary directions” that still separate patients visually.
-- **Real-Life Example:** A detailed photo compressed to a smaller file — looks almost the same, easier to share. PCA compresses **feature space**, not pixels.
+- **Official Definition:** A method to **reduce the number of feature columns** by building new **summary directions** from standardized data that keep the main patterns in the rows.
+- **In Simple Words:** Replace 30 correlated measurements with 2–3 combined “summary lines” that still separate patients when you plot them.
+- **Real-Life Example:** A detailed photo saved as a smaller file — it looks almost the same but is easier to share. PCA compresses **feature columns**, not pixels.
 
-**Variance (one line):** PCA keeps directions where points **spread the most** — more spread = more information. **PC1** captures the most, **PC2** the next (perpendicular to PC1), and so on.
+- The **first summary direction** catches the biggest spread in the data; the **second** catches the next biggest pattern, at a right angle to the first.
+- Before you trust a 2D plot, look at the scatter: do groups still form clear clouds? Heavy overlap often means the 2D view dropped too much detail.
+- Summary directions are **mixtures** of original columns — you usually cannot say “this axis = age only.”
+- PCA works best when relationships are roughly straight; very curved patterns may need other tools later.
+- Always **scale** first (same rule as K-Means).
 
-**Explained variance ratio:** Share of total variance each PC holds. If PC1 + PC2 sum to ~92%, a 2D plot is reasonable; if only ~40%, a 2D plot loses too much — check before plotting.
+![PCA turns many original features into a few summary directions so you can plot in 2D](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session32/lecture-notes-images/session32-pca-highd-to-2d.png)
 
-![PCA projects high-dimensional data onto new axes (PC1, PC2, …) that capture the most variance, enabling 2D plots](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/Module2/Session32/lecture-notes-images/session32-pca-highd-to-2d.png)
-
-**PCA math (light touch only):** Scale data → study how features covary → pick top variance directions (eigenvectors/eigenvalues in sklearn under the hood). You do **not** need to compute these by hand — use `PCA()` and read **`explained_variance_ratio_`**.
-
-**Cautions (short):** PCs are **mixtures** of original features (hard to say “PC1 = age”). PCA is **linear**; very curved data may need other methods. Always check variance captured; PCA is not the same as picking interpretable columns.
+- You do **not** need to do the math by hand — `PCA()` in sklearn builds the summary directions for you.
 
 ---
 
@@ -175,53 +175,41 @@ When data has **many columns** (e.g. 30 tumour measurements), you cannot plot or
 Breast cancer dataset (built into sklearn): **569 rows**, **30 features**, labels only for **coloring** the plot (supervised labels used for visualization, not for fitting PCA).
 
 ```python
-import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_breast_cancer
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
+# Load the dataset: many feature columns per patient
 data = load_breast_cancer()
 X = data.data
-y = data.target
+y = data.target  # labels used only for plot colors, not for fitting PCA
 print(f"Original shape: {X.shape}")
 
+# Scale every feature column to mean 0 and std 1
 X_scaled = StandardScaler().fit_transform(X)
 
-pca_full = PCA()
-pca_full.fit(X_scaled)
-cum_var = np.cumsum(pca_full.explained_variance_ratio_)
-
-plt.figure(figsize=(8, 4))
-plt.plot(range(1, 31), cum_var, marker="o")
-plt.axhline(0.90, color="r", linestyle="--", label="90%")
-plt.xlabel("Number of components")
-plt.ylabel("Cumulative explained variance")
-plt.legend()
-plt.tight_layout()
-plt.show()
-
+# Keep 2 summary directions so we can plot in 2D
 pca_2d = PCA(n_components=2)
 X_pca = pca_2d.fit_transform(X_scaled)
-print(f"PC1: {pca_2d.explained_variance_ratio_[0]:.2%}")
-print(f"PC2: {pca_2d.explained_variance_ratio_[1]:.2%}")
-print(f"Total: {sum(pca_2d.explained_variance_ratio_):.2%}")
 
+# Scatter plot: color by true class to see if groups separate
 plt.figure(figsize=(7, 5))
 plt.scatter(X_pca[y == 0, 0], X_pca[y == 0, 1], c="red", alpha=0.6, label="Malignant")
 plt.scatter(X_pca[y == 1, 0], X_pca[y == 1, 1], c="blue", alpha=0.6, label="Benign")
-plt.xlabel("PC1")
-plt.ylabel("PC2")
+plt.xlabel("Summary direction 1")
+plt.ylabel("Summary direction 2")
 plt.legend()
-plt.title("30 features → 2D PCA")
+plt.title("30 features → 2D summary plot")
 plt.tight_layout()
 plt.show()
 ```
 
 **How the code works:**
 
-- **`PCA().fit`** on scaled data — learns all components; **`cumsum(explained_variance_ratio_)`** — how many PCs reach 90%+ variance.
-- **`PCA(n_components=2).fit_transform`** — new 2-column matrix for plotting.
+- **`load_breast_cancer()`** — 569 rows and 30 feature columns; too many to plot directly.
+- **`StandardScaler`** — fair scaling before PCA (same idea as before K-Means).
+- **`PCA(n_components=2).fit_transform`** — returns a new table with 2 summary columns for plotting.
 - **Colors use `y`** only to see if malignant/benign **separate** in 2D — PCA itself did not use labels.
 
 ### Quick Activity — Read the PCA Plot
@@ -259,9 +247,9 @@ labels = KMeans(n_clusters=4, init="k-means++", random_state=42).fit_predict(X_p
 
 plt.figure(figsize=(7, 5))
 plt.scatter(X_pca[:, 0], X_pca[:, 1], c=labels, cmap="tab10", s=50, alpha=0.8)
-plt.xlabel("PC1")
-plt.ylabel("PC2")
-plt.title("K-Means on PCA-2D (5D data)")
+plt.xlabel("Summary direction 1")
+plt.ylabel("Summary direction 2")
+plt.title("K-Means on 2D summary plot (5D data)")
 plt.colorbar(label="Cluster")
 plt.tight_layout()
 plt.show()
@@ -279,7 +267,7 @@ plt.show()
 
 - **Unsupervised learning** finds structure **without labels** — segmentation, anomalies, exploration when tagging is costly.
 - **K-Means** alternates **assign to nearest centroid** and **recompute mean** until stable; choose **K** with the **elbow** on **inertia (WCSS)**; always **scale** first.
-- **PCA** builds summary axes that preserve **variance**; check **explained variance** before trusting a 2D plot.
+- **PCA** turns many columns into **summary directions** for plotting and faster work; check whether groups still separate in 2D before you trust the picture.
 - **PCA + K-Means + 2D plot** is a common workflow: compress, cluster, visualize.
 - Next you will connect these ideas to broader ML workflows (pipelines, feature work, and more model families).
 
@@ -296,16 +284,13 @@ plt.show()
 | **WCSS / inertia** | Sum of squared distances to centroids | Elbow plot y-axis |
 | **Elbow method** | Pick K at curve bend | Practical K selection |
 | **Convergence** | Centroids/labels stop changing | K-Means stopping condition |
-| **PCA** | Principal Component Analysis | Reduce dimensions |
-| **Principal component** | New variance-maximizing axis | PC1, PC2, … |
-| **Explained variance ratio** | Fraction of variance per PC | Judge how much 2D keeps |
-| **Dimensionality reduction** | Fewer columns, kept signal | Speed + visualization |
+| **PCA** | Principal Component Analysis | Reduce many columns to a few summary directions |
+| **Summary direction** | Combined axis built from original features | Used for 2D plots and clustering |
 | **`KMeans(n_clusters=K)`** | Clustering model | `sklearn.cluster` |
 | **`kmeans.labels_` / `cluster_centers_`** | Assignments and centers | After `fit` |
 | **`kmeans.inertia_`** | WCSS | Elbow method |
-| **`PCA(n_components=n)`** | Keep n PCs | `sklearn.decomposition` |
-| **`fit_transform`** | Fit PCA and return reduced X | One-step projection |
-| **`explained_variance_ratio_`** | Per-PC variance share | Read before 2D plots |
+| **`PCA(n_components=n)`** | Keep n summary directions | `sklearn.decomposition` |
+| **`fit_transform`** | Fit PCA and return reduced table | One-step compression for plotting |
 | **`StandardScaler`** | Mean 0, std 1 | Required before K-Means & PCA |
 | **`make_blobs`** | Synthetic clustered data | Teaching / demos |
 
