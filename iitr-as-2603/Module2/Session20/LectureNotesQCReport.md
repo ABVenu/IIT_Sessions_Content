@@ -70,3 +70,41 @@ Quick activities: supervised vs unsupervised tagging, nearest-centroid distance,
 **No Presentation Mistakes (True):** No meta “light touch” language; beginner-friendly wording throughout PCA section.
 
 **Expected result:** All criteria met.
+
+---
+
+## Iteration 3 — Lecture Notes Released (post-session alignment)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference in student notes | True |
+
+### Alignment changes (vs instructor `Lecture Notes.md`)
+
+| Action | Detail |
+|---|---|
+| Removed / replaced | `make_blobs` demos not used in live session → customer **time/money** K-Means example and **10-feature** simulated PCA data matching class flow |
+| Removed emphasis | `k-means++`, `n_init=10` not taught in session — simplified `KMeans` calls |
+| Removed | “Document topic grouping” as a headline use (not taught); kept segmentation, recommendations, anomalies |
+| Added | **`fit(X)` only**, no train/test for unsupervised; **domain knowledge + elbow** for K; **cluster interpretation**; **recommendation systems** (Netflix/Spotify); high-dimensional **784-pixel** intuition; **PCA → K-Means** pipeline on `df_pca`-style data |
+| Retained | All five metadata topics; all four lecture-note images; breast cancer PCA demo (shown at end of session for 2D separation check) |
+
+### QC notes
+
+**Content Coverage (5/5):** Matches `Live Topic Coverage.md` — all planned topics plus taught extras (elbow/WCSS, recommendations, anomaly mention, interpretation, PCA+K-Means pipeline).
+
+**Creativity (5/5):** Quick activities retained; business segmentation and recommendation examples align with transcript.
+
+**Structural Adherence (5/5):** Professional student notes; full code with line comments and “How the code works”; Key Takeaways and terminology table.
+
+**No Logical Mistakes (True):** Supervised vs unsupervised, inertia/elbow, scale-before-distance, PCA labels-for-plot-only stated correctly.
+
+**No Presentation Mistakes (True):** No Mentimeter/quiz; no session numbers; no “lite” meta language.
+
+**Expected result:** All criteria met.

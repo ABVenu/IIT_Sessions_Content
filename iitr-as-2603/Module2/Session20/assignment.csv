@@ -1,0 +1,124 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"QuickMart has purchase data for 8,000 shoppers (features only, no segment labels). The marketing team wants natural buyer groups for targeted offers. Which learning type fits this task?",,,,,,2,,Supervised classification,Unsupervised clustering,Reinforcement learning,Semi-supervised regression,,6a213577d6fbd4747acc3650,0,markdown,Grouping unlabeled data by similarity is unsupervised clustering (e.g. K-Means). Supervised methods need a known target column (A). Reinforcement (C) and regression (D) do not match this segmentation goal.
+mcsc,markdown,"In K-Means, what does a **centroid** represent?",,,,,,2,,The row with the highest feature value in the dataset,The mean position of all points assigned to that cluster,The label column used during training,The distance between two different clusters,,6a213577d6fbd4747acc3650,0,markdown,"A centroid is the average of points in its cluster and is updated each iteration. It is not necessarily an actual data row (A), not a label (C), and not inter-cluster distance (D)."
+mcsc,markdown,"Before running K-Means on features like `time_spent` (minutes) and `money_spent` (rupees), why is **StandardScaler** recommended?",,,,,,2,,It adds a target column automatically,It puts features on comparable scales so distance is fair,It guarantees the elbow always occurs at K = 3,It removes the need to choose K,,6a213577d6fbd4747acc3650,0,markdown,"Features on different units can dominate Euclidean distance without scaling. Scaling does not create labels (A), fix K (C), or remove the K choice (D)."
+mcsc,markdown,Which scenario is a valid **unsupervised** use case?,,,,,,2,,Predict loan default using past default labels,Group similar songs for playlist recommendations without genre labels,Train a model to predict exam Pass/Fail from study hours,Maximize click reward in an ad-bidding game,,6a213577d6fbd4747acc3650,0,markdown,Recommendation-style grouping without item labels is unsupervised. A and C need labeled targets (supervised). D describes reinforcement learning.
+mcsc,markdown,"A delivery app plots drivers at point **P (2, 3)**. Centroids are **A (1, 1)** and **B (5, 5)** (Euclidean distance). Which centroid is **P** assigned to in the assign step?",,,,,,1,,A,B,Both equally,Neither until the next epoch only,,6a213577d6fbd4747acc3650,0.5,markdown,Distance to A: √[(2−1)² + (3−1)²] = √5 ≈ 2.24. Distance to B: √[(2−5)² + (3−5)²] = √18 ≈ 4.24. P is closer to A.
+mcsc,markdown,"In sklearn, `kmeans.inertia_` after fitting is best described as:",,,,,,2,,The number of features in the dataset,Within-cluster sum of squared distances (WCSS) for that clustering,The accuracy compared to hidden labels,The learning rate used during optimization,,6a213577d6fbd4747acc3650,0.5,markdown,"Inertia is WCSS — total squared distance of points to their assigned centroids. It is not feature count (A), supervised accuracy (C), or a learning rate (D)."
+mcmc,markdown,Which statements about the **K-Means** loop are correct?,,,,,,,,Each point is assigned to the nearest centroid.,Centroids are updated to the mean of points in their cluster.,The algorithm requires a labeled target column `y` during `fit`.,Steps assign and update repeat until convergence.,"1, 2, 4",6a213577d6fbd4747acc3650,0.5,markdown,"K-Means uses only features: `fit(X)` without `y`, so C is wrong. A, B, and D describe the standard assign–update loop."
+mcmc,markdown,A data scientist clusters credit-card customers with **no fraud labels**. Which statements are correct?,,,,,,,,`KMeans.fit(X)` uses features only.,Train/test split in the supervised sense is not the primary evaluation pattern here.,Precision/recall against a hidden `y` is mandatory to run clustering.,Anomaly detection can be related to finding unusual points in unlabeled data.,"1, 2, 4",6a213577d6fbd4747acc3650,0.5,markdown,Clustering does not need labels (C is false). A and B match unsupervised practice; D aligns with anomaly use cases mentioned for unlabeled data.
+mcmc,markdown,QuickMart runs an **elbow plot** of WCSS vs K (K = 1 to 10). Which conclusions are valid?,,,,,,,,WCSS generally decreases as K increases.,Setting K equal to the number of rows gives WCSS = 0 but is not useful.,The elbow suggests where adding more clusters gives diminishing improvement.,A flat WCSS curve from K = 1 to K = 10 always means K = 1 is optimal.,"1, 2, 3",6a213577d6fbd4747acc3650,1,markdown,More clusters reduce WCSS (A). One cluster per point gives zero WCSS but no meaningful segments (B). The elbow is the practical bend (C). A flat drop is unrealistic; D is wrong.
+mcmc,markdown,A team has **10 customer metrics** per row and wants a **2D scatter** plus **K-Means** on compressed data. Which steps are appropriate?,,,,,,,,Apply `StandardScaler` before PCA.,Fit PCA with `n_components=2` on scaled data.,Pass the original 10 raw columns directly to PCA without scaling when units differ widely.,"Run `KMeans` on the 2D PCA output, then visualize clusters in that plane.","1, 2, 4",6a213577d6fbd4747acc3650,1,markdown,Scale → PCA(2) → K-Means on reduced data is the taught pipeline. Skipping scaling when features have different scales (C) can distort PCA and distances.
+subjective,markdown,"**QuickMart** is an online store with **no pre-defined shopper segments**. You receive behavioral data for **300 customers** and **8 numeric features** (e.g. pages viewed, cart adds, session length, spend indicators). Your job is to compress the data for visualization, find a sensible number of segments, cluster in 2D, and summarize what each group looks like.
+
+### Requirements
+
+1. **Create reproducible data** in code (`random_state=42`):
+   - At least **300 rows** and **8 numeric feature columns** (you may use `numpy` / `pandas`; column names are your choice).
+   - **No target/label column** for clustering.
+
+2. **Preprocessing & reduction:**
+   - Scale all features with `StandardScaler`.
+   - Apply `PCA(n_components=2)` and store the result in a DataFrame with **two columns** for the 2D summary directions (column names are your choice).
+
+3. **Choose K (elbow):**
+   - For **K = 1 to 8**, fit `KMeans` on the **2D PCA data** and record **inertia** (WCSS).
+   - Print a small table or list: `K` vs `inertia`.
+   - Pick one **final K** (2–6) and print **one sentence** justifying your choice from the elbow pattern.
+
+4. **Final clustering:**
+   - Fit `KMeans` with your chosen **K** on the PCA data.
+   - Print **cluster id** and **count of customers** per cluster.
+
+5. **Visualization:**
+   - One **scatter plot**: first summary direction vs second summary direction, points colored by cluster id, with axis labels and a title.
+
+6. **Business interpretation (text output):**
+   - For each cluster, print the **mean of the original 8 features** (use the rows belonging to that cluster from your original table, not scaled PCA space).
+   - End with **2–3 lines** naming each segment in plain language (e.g. ""budget browsers,"" ""high-engagement buyers"") based on those means.
+
+### Submission Instruction
+
+- Code all the points mentioned in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,6a213577d6fbd4747acc3650,0.5,markdown,"```python
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.cluster import KMeans
+
+# 1) Reproducible 300 x 8 customer features (no labels)
+np.random.seed(42)
+n_rows = 300
+n_features = 8
+feature_names = [f""metric_{i+1}"" for i in range(n_features)]
+X_raw = np.random.randn(n_rows, n_features) * 2 + np.linspace(0, 3, n_features)
+df_raw = pd.DataFrame(X_raw, columns=feature_names)
+
+# 2) Scale -> PCA (2 components)
+X_scaled = StandardScaler().fit_transform(df_raw.values)
+X_reduced = PCA(n_components=2).fit_transform(X_scaled)
+df_reduced = pd.DataFrame(
+    X_reduced,
+    columns=[""summary_direction_1"", ""summary_direction_2""],
+)
+
+# 3) Elbow: K = 1..8 on 2D reduced data
+print(""K vs inertia (WCSS):"")
+inertia_by_k = []
+for k in range(1, 9):
+    km = KMeans(n_clusters=k, random_state=42, n_init=10)
+    km.fit(df_reduced.values)
+    inertia_by_k.append((k, km.inertia_))
+    print(f""  K={k}: inertia={km.inertia_:.2f}"")
+
+chosen_k = 3
+print(
+    f""\nChosen K={chosen_k}: largest drop in inertia happens early; ""
+    ""gains flatten after K=3 on this run.""
+)
+
+# 4) Final K-Means
+kmeans_final = KMeans(n_clusters=chosen_k, random_state=42, n_init=10)
+labels = kmeans_final.fit_predict(df_reduced.values)
+df_raw[""cluster""] = labels
+
+print(""\nCustomers per cluster:"")
+print(df_raw[""cluster""].value_counts().sort_index())
+
+# 5) Scatter plot
+plt.figure(figsize=(7, 5))
+plt.scatter(
+    df_reduced[""summary_direction_1""],
+    df_reduced[""summary_direction_2""],
+    c=labels,
+    cmap=""tab10"",
+    s=45,
+    alpha=0.85,
+)
+plt.xlabel(""Summary direction 1"")
+plt.ylabel(""Summary direction 2"")
+plt.title(f""QuickMart segments (K={chosen_k}) — 2D summary plot"")
+plt.tight_layout()
+plt.show()
+
+# 6) Business interpretation: mean of original features per cluster
+print(""\nMean of original features by cluster:"")
+cluster_means = df_raw.groupby(""cluster"")[feature_names].mean()
+print(cluster_means.round(2))
+
+print(""\nSegment summary (example wording — align to your means):"")
+for cid in sorted(df_raw[""cluster""].unique()):
+    row = cluster_means.loc[cid]
+    top = row.idxmax()
+    print(
+        f""  Cluster {cid}: relatively higher '{top}' and peers; ""
+        ""name this segment from your printed means.""
+    )
+print(
+    ""Overall: PCA+K-Means gives marketing-ready groups when original-feature ""
+    ""means are interpreted, not only the 2D summary axes.""
+)
+```"
