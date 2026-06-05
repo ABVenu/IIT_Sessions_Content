@@ -1,0 +1,369 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A ShopKart support bot is allowed to answer only from official returns, shipping, warranty, and refund policy text. A customer asks about a product recall that is not in those documents. What should the assistant do within its **knowledge boundary**?",,,,,,2,,Guess the recall timeline from general e-commerce knowledge,Refuse or escalate because the topic is outside allowed policy sources,Search the internet and summarize the latest news article,Answer confidently using the warranty policy alone,,,6a224b15f9e6ea3913303e37,0,markdown,"B is correct because a knowledge boundary limits the bot to trusted policy documents. Topics outside that boundary should be refused or escalated.
+
+A is incorrect because general knowledge breaks the knowledge boundary. C is incorrect because external web search is outside the allowed sources. D is incorrect because warranty text does not cover an unrelated recall question."
+mcsc,markdown,"A team built Chroma top-k search that prints the best-matching policy chunks, but no LLM writes a customer reply yet. Which statement is most accurate?",,,,,,2,,They already have a complete RAG assistant,They have retrieval only; generation is still missing for full RAG,They have generation only; retrieval is still missing,They have ingestion only; retrieval and generation are both finished,,,6a224b15f9e6ea3913303e37,0,markdown,"B is correct because vector search returns chunks, but RAG also needs a generator that produces an answer conditioned on retrieved evidence.
+
+A is incorrect because search alone is not a complete RAG loop. C is incorrect because retrieval is already working. D is incorrect because retrieval is present, not only ingestion."
+mcsc,markdown,"In a minimal ShopKart RAG pipeline, which component is mainly responsible for converting policy chunks into vectors and storing them in Chroma during the offline step?",,,,,,1,,Ingestion,Generator,Prompt tokenizer,Browser cache,,,6a224b15f9e6ea3913303e37,0,markdown,"A is correct because ingestion prepares trusted text, embeds it, and loads the vectors into the searchable store.
+
+B is incorrect because the generator writes natural-language answers after retrieval. C is incorrect because a tokenizer is not the named ingestion component in this pipeline. D is incorrect because browser cache is unrelated to policy indexing."
+mcsc,markdown,A learner stores the Groq API key inside a `.env` file and loads it with `load_dotenv()` before creating the Groq client. What is the main security benefit of this pattern?,,,,,,2,,It makes the API key visible in Git history for easier sharing,It keeps the secret out of the Python source file and out of version control when `.env` is ignored,It removes the need for any API key during generation,It forces Chroma to encrypt all stored embeddings automatically,,,6a224b15f9e6ea3913303e37,0,markdown,"B is correct because `.env` keeps secrets local and separate from code, especially when `.env` is listed in `.gitignore`.
+
+A is incorrect because committing secrets to Git is unsafe. C is incorrect because Groq generation still needs a valid API key. D is incorrect because `.env` does not change Chroma encryption behaviour."
+mcsc,markdown,"A ShopKart script creates a collection like this:
+
+```python
+collection = client.get_or_create_collection(
+    name=""shopkart_policy_kb"",
+    embedding_function=None,
+)
+```
+
+Later, the learner calls `collection.query(...)` for a customer question. What must happen before the query call in this setup?",,,,,,1,,The customer question must be converted into a query embedding using the same embedding model used for policy indexing,Chroma will automatically embed the raw text even when `embedding_function=None`,The learner must delete all metadata before every query,The learner must retrain the Groq Llama model locally,,,6a224b15f9e6ea3913303e37,0.5,markdown,"A is correct because `embedding_function=None` means Chroma expects manually supplied embeddings, and the same model must be used for documents and queries.
+
+B is incorrect because automatic embedding happens only when an embedding function is configured. C is incorrect because metadata does not need to be deleted before querying. D is incorrect because the Groq model is hosted remotely and is not retrained in this lab."
+mcsc,markdown,A developer accidentally calls the Groq generator before running `collection.query(...)`. Why does this break grounding for ShopKart support?,,,,,,2,,Groq cannot generate text without a system prompt,"The model answers without retrieved policy evidence, so the reply is not grounded in ShopKart rules",Chroma deletes the collection when generation happens first,BGE embeddings become 768-dimensional when generation runs first,,,6a224b15f9e6ea3913303e37,0.5,markdown,"B is correct because RAG requires retrieve-first, generate-second. Without retrieved excerpts, the model falls back to general knowledge instead of policy evidence.
+
+A is incorrect because Groq can still generate text, but it will not be evidence-backed. C is incorrect because call order does not delete the collection. D is incorrect because embedding dimensionality does not change based on call order."
+mcmc,markdown,A quality analyst is checking whether semantic retrieval matched a customer's intent. Which inspection steps are appropriate right after `retrieve_policy_chunks(...)` runs?,,,,,,,,"Check whether Rank 1 `metadata[""category""]` matches the expected policy area",Read Rank 1 `text` and confirm it is relevant to the question,Ignore distances completely because they are never useful,"Compare the customer wording with the retrieved excerpt meaning, not just exact keywords",Assume Rank 1 is always business-correct without reading the text,"1,2,4",6a224b15f9e6ea3913303e37,0.5,markdown,"A is correct because category tags help confirm the policy area surfaced first. B is correct because the retrieved text must be read before trusting the answer. D is correct because semantic retrieval is about intent, not exact keyword overlap.
+
+C is incorrect because distance values are useful for inspection even if they may vary slightly across runs. E is incorrect because Rank 1 means closest vector, not guaranteed business correctness in every edge case."
+mcmc,markdown,A grounded ShopKart prompt includes retrieved policy excerpts and strict answer rules. Which prompt rules directly reduce unsupported guessing?,,,,,,,,Answer using ONLY the policy excerpts below.,"If excerpts do not contain enough information, say you do not have enough information in the provided policy excerpts.",Invent friendly timelines when the excerpts are incomplete.,"Do not invent numbers, timelines, or eligibility rules not present in the excerpts.",Ignore the excerpts if the customer sounds upset.,"1,2,4",6a224b15f9e6ea3913303e37,0.5,markdown,"A is correct because it restricts the model to supplied evidence. B is correct because it encourages an honest insufficient-information response instead of guessing. D is correct because it blocks fabricated policy numbers and eligibility rules.
+
+C is incorrect because inventing timelines is exactly the behaviour grounding tries to prevent. E is incorrect because customer tone must not override evidence rules."
+mcmc,markdown,"A learner builds ShopKart RAG with `SentenceTransformer(""BAAI/bge-small-en-v1.5"")`, stores four policy embeddings in Chroma, and later queries with the same model. Which statements are technically correct?",,,,,,,,The stored policy chunks and user queries should be embedded with the same model.,This BGE small model produces 384-dimensional embeddings in this lab setup.,Mixing embeddings from a different model in the same collection can make distances unreliable.,Distance values must match exactly on every laptop for the same sentence.,The retriever should use `model.encode(...)` for both indexing and querying.,"1,2,3,5",6a224b15f9e6ea3913303e37,1,markdown,"A is correct because vector distances are meaningful only in the same embedding space. B is correct because the BGE small model used here creates 384-dimensional vectors. C is correct because mixed model outputs make similarity scores unreliable. E is correct because manual embedding is required when `embedding_function=None`.
+
+D is incorrect because embedding models are predictive; distances can vary slightly across runs or machines even for the same sentence."
+mcmc,markdown,"A ShopKart RAG answer sounds polite but cites a 30-day return window, while the stored returns policy says 7 calendar days for unopened items. Which failure explanations are plausible in a minimal RAG pipeline?",,,,,,,,Retrieval surfaced the wrong policy chunk first,"Retrieval was correct, but the generator ignored or altered the excerpt",The indexed policy text itself was outdated or wrong in `POLICY_RECORDS`,Hallucination becomes impossible once any retrieval step exists,The evidence audit should compare every number in the final answer with retrieved excerpt text,"1,2,3,5",6a224b15f9e6ea3913303e37,1,markdown,"A is correct because wrong Rank 1 retrieval can send bad evidence to the generator. B is correct because generation can still drift even when retrieval looks fine. C is correct because garbage-in produces confidently wrong grounded answers. E is correct because number-level evidence auditing is a core validation step.
+
+D is incorrect because RAG reduces hallucination risk but does not make it impossible by design."
+subjective,markdown,"ShopKart's support lead wants a small proof-of-concept assistant that answers customer questions **only** from official policy text. Your script must index four policy chunks in Chroma, retrieve the most relevant excerpts for each question, and generate grounded replies through Groq.
+
+The support lead will review three specific customer tickets during the demo. Your program must show what was retrieved **before** each final answer so the team can judge retrieval intent.
+
+Create a Python file named `shopkart_support_rag.py` that implements a minimal RAG workflow for ShopKart customer support.
+
+### Functional Requirements
+
+1. Import:
+   - `chromadb`
+   - `SentenceTransformer` from `sentence_transformers`
+   - `Groq` from `groq`
+   - `load_dotenv` from `dotenv`
+   - `List`, `Dict`, `Any` from `typing`
+2. Call `load_dotenv()` before creating the Groq client.
+3. Store exactly four ShopKart policy records with these areas:
+   - returns
+   - shipping
+   - warranty
+   - refunds
+4. Use this embedding model for both indexing and querying:
+   - `BAAI/bge-small-en-v1.5`
+5. Create a persistent Chroma client at:
+   - `./chroma_store`
+6. Create or open a collection named:
+   - `shopkart_policy_kb`
+   - with `embedding_function=None`
+7. Implement these functions:
+   - `create_embedding_model()`
+   - `setup_chroma_collection()`
+   - `index_policy_records(collection, model)`
+   - `retrieve_policy_chunks(collection, model, user_query, top_k=2)`
+   - `build_grounded_prompt(user_query, retrieved_chunks)`
+   - `generate_grounded_answer(client, user_query, retrieved_chunks)`
+   - `print_retrieved_chunks(user_query, retrieved_chunks)`
+   - `answer_with_rag(client, collection, model, user_query, top_k=2)`
+8. The grounded prompt must include rules that:
+   - tell the model to answer using only the provided policy excerpts
+   - forbid inventing numbers or eligibility rules not in the excerpts
+   - ask for an honest insufficient-information reply when excerpts are not enough
+9. Use this Groq generation model:
+   - `llama-3.1-8b-instant`
+10. In `main()`:
+    - create the Groq client
+    - load the embedding model
+    - connect to Chroma
+    - index the four policy records
+    - run the full RAG loop on these three customer questions:
+      - `""I opened the Bluetooth speaker and don't like the sound. Can I return it within two weeks?""`
+      - `""How fast is express delivery to a metro city?""`
+      - `""I returned a defective COD order last week. When will the refund reach my UPI?""`
+11. For each question, print:
+    - the question
+    - Rank 1 and Rank 2 retrieved chunks with `category`, `distance`, and `text`
+    - the final grounded answer
+12. Add short comments explaining:
+    - why the same embedding model is used for indexing and querying
+    - why retrieval must happen before generation
+
+### Expected Run Commands
+
+```bash
+pip install chromadb
+pip install -U sentence-transformers
+pip install groq
+pip install python-dotenv
+python shopkart_support_rag.py
+```
+
+Create a `.env` file in the same folder with:
+
+```bash
+GROQ_API_KEY=your-key-here
+```
+
+If your system uses `pip3` and `python3`, use those commands instead.
+
+### Expected Behaviour
+
+- The script should print that 4 policy records were indexed.
+- For the opened-speaker return question, retrieval should surface **returns** near the top and the grounded answer should reflect that opened items are generally not eligible unless defective.
+- For the express metro delivery question, retrieval should surface **shipping** near the top.
+- For the COD refund question, retrieval should surface **refunds** and/or **returns** near the top, and the grounded answer should mention the **5–7 business day** refund window and COD refund path where supported by retrieved text.
+- Every final answer should be preceded by printed retrieval output.
+
+### Constraints
+
+- Write the solution in one Python file only.
+- Do not paste the API key inside the Python file.
+- Do not use an automatic Chroma embedding function.
+- Do not manually edit files inside `./chroma_store`.
+- Do not add metadata filtering; use basic top-k similarity search only.
+- Keep the code readable and beginner-friendly.
+
+### Submission Instructions
+
+- Code all the points mentioned above in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the code in the code editor or answer box in the LMS.",,,,,,,,,,,,,,6a224b15f9e6ea3913303e37,0.5,markdown,"A strong solution separates the RAG pipeline into clear stages. First, it defines four trusted ShopKart policy records and indexes them with `BAAI/bge-small-en-v1.5`, storing ids, documents, metadata, and embeddings through `collection.upsert(...)`. Because `embedding_function=None`, the script must call `model.encode(...)` manually for both policy text and user queries.
+
+Next, `retrieve_policy_chunks(...)` embeds each customer question with the same model and runs `collection.query(...)` with `n_results=2`. The helper `print_retrieved_chunks(...)` makes retrieval visible so a human can inspect category, distance, and excerpt text before reading the final answer.
+
+Then `build_grounded_prompt(...)` stitches the retrieved excerpts into a context block with strict evidence-only rules. `generate_grounded_answer(...)` sends that prompt to Groq using `llama-3.1-8b-instant`. Finally, `answer_with_rag(...)` enforces the correct order: retrieve first, print inspection output, then generate.
+
+```python
+from typing import List, Dict, Any
+import chromadb
+from sentence_transformers import SentenceTransformer
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+POLICY_RECORDS = [
+    {
+        ""id"": ""shopkart_returns_1"",
+        ""text"": (
+            ""Unopened items may be returned within 7 calendar days of delivery. ""
+            ""Opened or used items are not eligible unless defective.""
+        ),
+        ""metadata"": {""category"": ""returns"", ""source"": ""returns_policy""},
+    },
+    {
+        ""id"": ""shopkart_shipping_1"",
+        ""text"": (
+            ""Standard delivery takes 3 to 5 business days after dispatch. ""
+            ""Express delivery (paid) arrives in 1 to 2 business days in metro cities only.""
+        ),
+        ""metadata"": {""category"": ""shipping"", ""source"": ""shipping_policy""},
+    },
+    {
+        ""id"": ""shopkart_warranty_1"",
+        ""text"": (
+            ""Electronics carry a 12-month manufacturer warranty from the date of delivery. ""
+            ""Warranty does not cover physical damage or liquid exposure.""
+        ),
+        ""metadata"": {""category"": ""warranty"", ""source"": ""warranty_policy""},
+    },
+    {
+        ""id"": ""shopkart_refunds_1"",
+        ""text"": (
+            ""Refunds are credited within 5 to 7 business days after the returned item ""
+            ""passes warehouse verification. Cash-on-delivery orders are refunded to the ""
+            ""original UPI or bank account only.""
+        ),
+        ""metadata"": {""category"": ""refunds"", ""source"": ""refunds_policy""},
+    },
+]
+
+EMBEDDING_MODEL_NAME = ""BAAI/bge-small-en-v1.5""
+GENERATION_MODEL_NAME = ""llama-3.1-8b-instant""
+
+
+def create_embedding_model() -> SentenceTransformer:
+    return SentenceTransformer(EMBEDDING_MODEL_NAME)
+
+
+def setup_chroma_collection():
+    client = chromadb.PersistentClient(path=""./chroma_store"")
+    collection = client.get_or_create_collection(
+        name=""shopkart_policy_kb"",
+        embedding_function=None,
+    )
+    return collection
+
+
+def index_policy_records(collection, model: SentenceTransformer) -> None:
+    ids = [row[""id""] for row in POLICY_RECORDS]
+    documents = [row[""text""] for row in POLICY_RECORDS]
+    metadatas = [row[""metadata""] for row in POLICY_RECORDS]
+    embeddings = model.encode(documents, convert_to_numpy=True).tolist()
+
+    collection.upsert(
+        ids=ids,
+        documents=documents,
+        metadatas=metadatas,
+        embeddings=embeddings,
+    )
+
+    print(f""Indexed {collection.count()} ShopKart policy records."")
+
+
+def retrieve_policy_chunks(
+    collection,
+    model: SentenceTransformer,
+    user_query: str,
+    top_k: int = 2,
+) -> List[Dict[str, Any]]:
+    query_embedding = model.encode([user_query], convert_to_numpy=True).tolist()
+
+    results = collection.query(
+        query_embeddings=query_embedding,
+        n_results=top_k,
+        include=[""documents"", ""metadatas"", ""distances""],
+    )
+
+    retrieved = []
+    for doc, meta, dist in zip(
+        results[""documents""][0],
+        results[""metadatas""][0],
+        results[""distances""][0],
+    ):
+        retrieved.append(
+            {
+                ""text"": doc,
+                ""metadata"": meta,
+                ""distance"": dist,
+            }
+        )
+
+    return retrieved
+
+
+def build_grounded_prompt(user_query: str, retrieved_chunks: List[Dict[str, Any]]) -> str:
+    context_block = """"
+    for index, chunk in enumerate(retrieved_chunks, start=1):
+        source_name = chunk[""metadata""].get(""source"", ""unknown"")
+        context_block += f""\nExcerpt {index} (source: {source_name}):\n{chunk['text']}\n""
+
+    prompt = f""""""You are ShopKart customer support.
+Answer the customer's question using ONLY the policy excerpts below.
+Rules:
+1. Do not invent numbers, timelines, or eligibility rules not present in the excerpts.
+2. If the excerpts do not contain enough information, say:
+   ""I do not have enough information in the provided policy excerpts.""
+3. Keep the answer short, polite, and clear.
+4. Mention important conditions when they appear in the excerpts.
+
+Policy excerpts:
+{context_block}
+
+Customer question:
+{user_query}
+
+Final answer:""""""
+
+    return prompt
+
+
+def generate_grounded_answer(
+    client: Groq,
+    user_query: str,
+    retrieved_chunks: List[Dict[str, Any]],
+) -> str:
+    prompt = build_grounded_prompt(user_query, retrieved_chunks)
+
+    response = client.chat.completions.create(
+        model=GENERATION_MODEL_NAME,
+        messages=[
+            {
+                ""role"": ""system"",
+                ""content"": ""You are a precise ShopKart support assistant. Follow the policy excerpts exactly."",
+            },
+            {""role"": ""user"", ""content"": prompt},
+        ],
+    )
+
+    return response.choices[0].message.content.strip()
+
+
+def print_retrieved_chunks(user_query: str, retrieved_chunks: List[Dict[str, Any]]) -> None:
+    print(""\n"" + ""="" * 72)
+    print(f""Customer question: {user_query}"")
+    print(""="" * 72)
+
+    for rank, chunk in enumerate(retrieved_chunks, start=1):
+        print(f""\nRank {rank}"")
+        print(f""  Source   : {chunk['metadata'].get('source')}"")
+        print(f""  Category : {chunk['metadata'].get('category')}"")
+        print(f""  Distance : {chunk['distance']:.4f}"")
+        print(f""  Text     : {chunk['text']}"")
+
+
+def answer_with_rag(
+    client: Groq,
+    collection,
+    model: SentenceTransformer,
+    user_query: str,
+    top_k: int = 2,
+) -> str:
+    retrieved_chunks = retrieve_policy_chunks(
+        collection=collection,
+        model=model,
+        user_query=user_query,
+        top_k=top_k,
+    )
+
+    print_retrieved_chunks(user_query, retrieved_chunks)
+
+    return generate_grounded_answer(
+        client=client,
+        user_query=user_query,
+        retrieved_chunks=retrieved_chunks,
+    )
+
+
+def main():
+    client = Groq()
+    model = create_embedding_model()
+    collection = setup_chroma_collection()
+
+    index_policy_records(collection, model)
+
+    demo_queries = [
+        ""I opened the Bluetooth speaker and don't like the sound. Can I return it within two weeks?"",
+        ""How fast is express delivery to a metro city?"",
+        ""I returned a defective COD order last week. When will the refund reach my UPI?"",
+    ]
+
+    for user_query in demo_queries:
+        print(""\n\n"" + ""#"" * 72)
+        print(""QUESTION:"", user_query)
+        print(""\n--- RAG (retrieve + generate) ---"")
+
+        grounded_answer = answer_with_rag(
+            client=client,
+            collection=collection,
+            model=model,
+            user_query=user_query,
+            top_k=2,
+        )
+
+        print(""\nFinal grounded answer:"")
+        print(grounded_answer)
+
+
+if __name__ == ""__main__"":
+    main()
+```"
