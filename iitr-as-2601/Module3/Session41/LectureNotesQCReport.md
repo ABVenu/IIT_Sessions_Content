@@ -96,3 +96,36 @@
 | **No Previous Session Number References** | **True** | Verified — none in notes. |
 
 **Outcome:** QC passed.
+
+---
+
+## Iteration 5 — Align to Live Session Coverage (`Lecture Notes Released.md`)
+
+**Trigger:** Post-session alignment per `Align_Notes_Against_Covered_LOs_from_existing_LectureNotes.md` using `Transcript.md` and `Live Topic Coverage.md`.
+
+**Changes from pre-session `Lecture Notes.md`:**
+
+| Area | Pre-session notes | Released notes (aligned) |
+|---|---|---|
+| Primary corpus | ShopEasy `policy_chunks` | **Tesla annual report** / `Tesla_db` (LangChain) |
+| Retrieval API | Raw Chroma `collection.query` | **LangChain retriever** (`similarity`, k=5 demo) |
+| Prompt pattern | `=== CONTEXT START/END ===` single user message | **System + user messages** with `#context` / `#question` |
+| Generator | Ollama + Groq dual backend | **Groq only** (`temperature=0`) — as taught live |
+| Extra topics | Not present | **ChatGPT upload**, **enterprise RAG**, **code-repo RAG**, **Gradio** UI, **grounding illusions** |
+| Removed | — | Ollama paths, ShopEasy-centric end-to-end script, without-RAG code block, Mentimeter/quiz protocol |
+
+**Images retained:** 7 of 8 (skipped `session41-05-ollama-vs-groq` — Ollama not covered live). Alt text updated for Tesla / delimiter alignment.
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics + all nine extra covered items from Live Topic Coverage: top-k LangChain retriever on Tesla index; `#context`/`#question` assembly; Groq grounded generation + informal audit + temperature=0; end-to-end script + Gradio; RAG recap; ChatGPT vs enterprise; code-repo extension. |
+| **Creativity** | **5 / 5** | Railway clerk, court brief, marks calculator, science-fair Gradio POC, Copilot-style code RAG; grounding illusion concept. |
+| **Structural Adherence** | **5 / 5** | `#` title; context + **What you will learn**; Official/Simple/Real-life on new terms; full code with **How the code works**; student activities; Key Takeaways; terminology table. |
+| **No Logical Mistakes** | **True** | Tesla index + `all-MiniLM-L6-v2` aligned with prior prepare lab; same-model rule; temperature=0 for factual RAG; manual grounding (not automated inline citations) matches live demo. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; student-facing activities; no quiz/Mentimeter protocol. |
+| **No Previous Session Number References** | **True** | Uses **previous**, **earlier**, **later** only. |
+| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
+
+**Outcome:** QC passed. `Lecture Notes Released.md` ready for student release.
+
+**Line count:** ~573 lines.
