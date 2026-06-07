@@ -14,8 +14,7 @@ objective: Implement short-term memory and safe control flow for a simple agent 
 topics be covered: Agent definition; short-term vs long-term memory; loop termination; basic error handling
 
 detailed subtopics to be covered:
-* Define an AI agent as a system that perceives; reasons; and acts using tools and memory
-* Persist and reload conversation history across turns in a script or notebook.
+* Distinguish short-term memory from long-term memory; 
+* persist and reload conversation history across turns in a script or notebook.
 * Implement loop termination conditions that prevent runaway agent iterations.
-* Handle predictable API or tool errors with user-visible messages."
-		
+* Handle predictable API or tool errors with user-visible messages.
