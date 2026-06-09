@@ -1,0 +1,263 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A startup builds a customer-support chatbot using only a general-purpose LLM API. Customers ask: *""What is your company's 7-day electronics return rule?""* The bot often gives vague or incorrect answers.
+
+What is the **most likely** reason?",,,,,,1,,The LLM was never trained on this company's internal policy documents,The LLM cannot process English text,The API key automatically deletes company policies after 24 hours,"Return policies can only be stored in SQL tables, never in an LLM workflow",,6a27ca1d50a75cfa370796a9,0,markdown,"Company-specific policies are usually **not** in public training data. Without retrieval from your own documents, the model guesses or generalises.
+
+- B: LLMs handle English well; the issue is missing private knowledge.
+- C: API keys do not erase domain knowledge.
+- D: Policies can be served via RAG + vector DB; SQL is not the only path."
+mcsc,markdown,"In a LangChain ingest script, `Chroma` is created with `persist_directory=""chroma_db""`.
+
+What does **persist** mean in this setup?",,,,,,1,,Vectors are saved locally on disk so later scripts can reload them without re-embedding everything,The LLM permanently memorises all policies inside its weights,Markdown files are automatically deleted after embedding,The retriever skips similarity search on the next run,,6a27ca1d50a75cfa370796a9,0,markdown,"`persist_directory` tells Chroma to store embeddings on disk (for example `chroma_db/`) so the RAG app can reload the same collection across runs.
+
+- B: Persist is vector-store storage, not model fine-tuning.
+- C: Source `.md` files remain unless you delete them.
+- D: Similarity search still runs when you query the reloaded store."
+mcsc,markdown,"A developer configures:
+
+```python
+DirectoryLoader(""documents"", glob=""**/*.md"", loader_cls=TextLoader)
+```
+
+What files will this loader read from the `documents` folder?",,,,,,1,,Only Markdown (`.md`) files,Only PDF files,Every file type including images and videos,Only Python source files,,6a27ca1d50a75cfa370796a9,0,markdown,"The glob `**/*.md` filters to Markdown files. `TextLoader` reads them as plain text with the encoding you pass in `loader_kwargs`.
+
+- B/C/D: Those types need different globs or loader classes (for example `PyPDFLoader` for PDFs)."
+mcsc,markdown,"A policy sentence is split across two chunks: chunk 1 ends with *""...within 7 days of""* and chunk 2 starts with *""delivery for electronics.""*
+
+Why is **`chunk_overlap`** used between neighbouring chunks?",,,,,,1,,To repeat a shared margin so important text split at a boundary can still appear complete in at least one chunk,To encrypt embeddings before storing them in Chroma,To replace the need for a document loader,To increase the LLM context window size automatically,,6a27ca1d50a75cfa370796a9,0,markdown,"Overlap copies characters from the end of one chunk into the start of the next, reducing lost context at hard cuts.
+
+- B: Overlap is a text-splitting idea, not encryption.
+- C: You still need loaders to read files.
+- D: Overlap does not change the model's token limit."
+mcsc,markdown,"An engineer edits `return_policy.md` on disk (changes **7 days** to **14 days**) but only re-runs `langchain_rag_app.py`. The bot still answers **7 days**.
+
+What is the **best** fix?",,,,,,1,,Re-run the ingest script so chunks are re-embedded and stored in Chroma again,Restart the laptop only,Change the LLM temperature from 0 to 1,Rename the Markdown file to `.txt` without re-ingesting,,6a27ca1d50a75cfa370796a9,0.5,markdown,"The RAG app reads **stored vectors**, not live file edits. After policy text changes, you must re-ingest (often after cleaning old `chroma_db` data).
+
+- B: Restart does not rebuild vectors.
+- C: Temperature affects randomness, not stale index content.
+- D: Renaming without re-ingest leaves old vectors unchanged."
+mcsc,markdown,"In an LCEL RAG chain:
+
+```python
+{
+    ""context"": retriever | format_docs,
+    ""question"": RunnablePassthrough(),
+}
+```
+
+What does **`RunnablePassthrough()`** do for the `question` field?",,,,,,1,,Forwards the user's input question unchanged into the prompt while retrieval runs separately for `context`,Embeds the question into Chroma during offline ingest,Deletes the user question before it reaches the LLM,Automatically fine-tunes the LLM on every query,,6a27ca1d50a75cfa370796a9,0.5,markdown,"`RunnablePassthrough` passes the invoke input as-is to the `{question}` slot in the prompt template while the retriever supplies `{context}`.
+
+- B: Ingest embeds **documents**, not live user queries in this pattern.
+- C: The question is required in the prompt.
+- D: No fine-tuning happens at inference time."
+mcmc,markdown,Which steps belong to the **offline ingest / prepare** path (done once until documents change)?,,,,,,,,Load files with `DirectoryLoader`,Split documents with `RecursiveCharacterTextSplitter`,Invoke the retriever on a live customer question,Embed chunks and store them with `vector_store.add_documents`,"1, 2, 4",6a27ca1d50a75cfa370796a9,0.5,markdown,"Offline prepare = load → split → embed → persist. Retriever invoke happens at **query time**, not during ingest.
+
+- C: Retriever runs when a user asks a question in the online RAG app."
+mcmc,markdown,"A retriever is built as:
+
+```python
+vector_store.as_retriever(
+    search_type=""similarity"",
+    search_kwargs={""k"": 3},
+)
+```
+
+Which statements are **correct**?",,,,,,,,"`search_type=""similarity""` ranks chunks by embedding similarity to the query",`k: 3` asks for up to three top matches per search,The retriever removes the need for any vector database,`as_retriever()` wraps the existing Chroma vector store for LangChain chains,"1, 2, 4",6a27ca1d50a75cfa370796a9,0.5,markdown,"Similarity search returns the nearest chunk vectors; `k` caps how many are returned. The retriever sits **on top of** Chroma, not instead of it.
+
+- C: The vector store still holds embeddings; the retriever is a search interface."
+mcmc,markdown,"A support prompt includes:
+
+- *Use only the retrieved context*
+- *If the answer is not present, say: I don't know based on the provided documents*
+- *Mention the source file name wherever possible*
+
+Which outcomes match this **guardrail** design?",,,,,,,,A question about electronics returns cites `return_policy.md` when the rule is in retrieved chunks,"A question about ""baby items"" (not in the corpus) gets an honest refusal instead of a invented policy",The bot answers general world-news questions using outside knowledge even when unrelated to policies,The bot invents a 30-day baby-item return rule when no chunk mentions baby items,"1, 2",6a27ca1d50a75cfa370796a9,1,markdown,"Guardrails encourage **grounded, cited** answers when context exists and **safe refusal** when it does not.
+
+- C: Outside-knowledge answers violate ""use only retrieved context.""
+- D: Inventing rules is hallucination—the prompt explicitly blocks this."
+mcmc,markdown,"A team debugs poor retrieval quality in a LangChain + Chroma RAG app.
+
+Which issues can **realistically** cause wrong or stale answers?",,,,,,,,Ingest used `text-embedding-3-small` but the query path uses `text-embedding-3-large`,Policy Markdown was updated on disk but Chroma was never re-ingested,"`chunk_overlap` is set equal to `chunk_size`, so the splitter never advances",`StrOutputParser` is written as `StrOutputParser` with parentheses in the LCEL chain,"1, 2, 3",6a27ca1d50a75cfa370796a9,1,markdown,"Embedding model mismatch breaks similarity geometry. Stale Chroma data ignores file edits. `overlap >= chunk_size` is an invalid splitter configuration.
+
+- D: `StrOutputParser()` **with** parentheses is the correct LCEL usage; omitting `()` causes errors, not semantic retrieval drift."
+subjective,markdown,"A college hostel office wants a small **policy Q&A assistant**. They gave you two short rules (below). Build a **LangChain RAG mini-pipeline** that ingests these rules into **Chroma** and answers user questions with an **LCEL chain** and guardrail prompt.
+
+### Policy text to use
+
+Create a `documents/` folder with exactly these two files:
+
+**`documents/quiet_hours.md`**
+```markdown
+# Quiet Hours Policy
+
+Quiet hours are from 10:00 PM to 6:00 AM on all weekdays.
+During quiet hours, loud music, group calls, and hallway gatherings are not allowed.
+Violations may lead to a written warning.
+```
+
+**`documents/guest_policy.md`**
+```markdown
+# Guest Policy
+
+Day guests are allowed only between 9:00 AM and 8:00 PM.
+Overnight guests require prior warden approval at least 24 hours in advance.
+Maximum two guests per room at any time.
+```
+
+### Problem Statement
+
+In your repository (see Submission Instruction), implement:
+
+1. **`ingest.py`**
+   - Load both `.md` files using `DirectoryLoader` + `TextLoader` with `glob=""**/*.md""` and UTF-8 encoding.
+   - Split with `RecursiveCharacterTextSplitter` (`chunk_size=400`, `chunk_overlap=60`, `add_start_index=True`).
+   - Embed with `OpenAIEmbeddings(model=""text-embedding-3-small"")`.
+   - Persist to Chroma collection `hostel_policy_docs` under `chroma_db/` (delete old `chroma_db` with `shutil.rmtree` if it already exists before re-ingest).
+
+2. **`rag_app.py`**
+   - Reload the same Chroma collection and embedding model (no re-ingest in this file).
+   - Build a retriever (`similarity`, `k=2`).
+   - Build an LCEL RAG chain:
+     - `context` = `retriever | format_docs` (join `page_content` with blank lines)
+     - `question` = `RunnablePassthrough()`
+     - prompt → `ChatOpenAI(model=""gpt-4o-mini"", temperature=0)` → `StrOutputParser()`
+   - Prompt guardrails (include in your template):
+     - Use only retrieved context
+     - If missing, say: `I don't know based on the provided documents.`
+     - Mention source file name when possible
+   - In `main()`, run **both** queries and print labelled output:
+     - **Q1:** `What are the quiet hours on weekdays?`
+     - **Q2:** `What is the scholarship amount for hostel residents?`
+
+### Expected Outcome
+
+- **Q1:** Grounded answer mentioning quiet hours (10 PM–6 AM) and ideally citing `quiet_hours.md`.
+- **Q2:** Honest refusal (scholarship is not in either policy file) — no invented amount.
+- Running `python3 ingest.py` then `python3 rag_app.py` should succeed with `OPENAI_API_KEY` set.
+
+### Submission Instruction
+
+- create a repo `agentic-systems` (if done use the same) — clone it (ignore if already done)
+- in that create folder called as `Module3` (ignore if already done)
+- in that create folder called as `Session40`
+- code all the things mentioned in the question — with all the files and folders structure (`documents/`, `ingest.py`, `rag_app.py`, generated `chroma_db/` is optional to push)
+- do add all the ignorable files like datasets, `.env`, configs — json files etc
+- then add — commit and push the code into Github and submit the root folder or folder of this assignment link as submission link (do not paste/submit the entire repo link — which is invalid)",,,,,,,,,,,,,6a27ca1d50a75cfa370796a9,0.5,markdown,"### Reference — `ingest.py`
+
+```python
+import shutil
+from pathlib import Path
+
+from langchain_chroma import Chroma
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+DATA_DIR = Path(""documents"")
+CHROMA_DIR = Path(""chroma_db"")
+COLLECTION_NAME = ""hostel_policy_docs""
+EMBEDDING_MODEL = ""text-embedding-3-small""
+
+if CHROMA_DIR.exists():
+    shutil.rmtree(CHROMA_DIR)
+
+loader = DirectoryLoader(
+    str(DATA_DIR),
+    glob=""**/*.md"",
+    loader_cls=TextLoader,
+    loader_kwargs={""encoding"": ""utf-8""},
+)
+documents = loader.load()
+
+splitter = RecursiveCharacterTextSplitter(
+    chunk_size=400,
+    chunk_overlap=60,
+    add_start_index=True,
+)
+chunks = splitter.split_documents(documents)
+
+embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
+
+vector_store = Chroma(
+    collection_name=COLLECTION_NAME,
+    embedding_function=embeddings,
+    persist_directory=str(CHROMA_DIR),
+)
+vector_store.add_documents(chunks)
+print(f""Stored {len(chunks)} chunks in {COLLECTION_NAME}"")
+```
+
+### Reference — `rag_app.py`
+
+```python
+from pathlib import Path
+
+from langchain_chroma import Chroma
+from langchain_core.output_parsers import StrOutputParser
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.runnables import RunnablePassthrough
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+
+CHROMA_DIR = Path(""chroma_db"")
+COLLECTION_NAME = ""hostel_policy_docs""
+EMBEDDING_MODEL = ""text-embedding-3-small""
+
+embeddings = OpenAIEmbeddings(model=EMBEDDING_MODEL)
+vector_store = Chroma(
+    collection_name=COLLECTION_NAME,
+    embedding_function=embeddings,
+    persist_directory=str(CHROMA_DIR),
+)
+
+retriever = vector_store.as_retriever(
+    search_type=""similarity"",
+    search_kwargs={""k"": 2},
+)
+
+
+def format_docs(docs):
+    return ""\n\n"".join(doc.page_content for doc in docs)
+
+
+prompt = ChatPromptTemplate.from_template(
+    """"""You are a hostel policy assistant.
+Use only the retrieved context to answer.
+If the answer is not present in the context, say: I don't know based on the provided documents.
+Do not use outside knowledge.
+Mention the source file name wherever possible.
+
+Context:
+{context}
+
+Question:
+{question}
+""""""
+)
+
+llm = ChatOpenAI(model=""gpt-4o-mini"", temperature=0)
+
+rag_chain = (
+    {
+        ""context"": retriever | format_docs,
+        ""question"": RunnablePassthrough(),
+    }
+    | prompt
+    | llm
+    | StrOutputParser()
+)
+
+
+def main():
+    q1 = ""What are the quiet hours on weekdays?""
+    q2 = ""What is the scholarship amount for hostel residents?""
+
+    print(""Q1:"", q1)
+    print(""A1:"", rag_chain.invoke(q1))
+    print()
+    print(""Q2:"", q2)
+    print(""A2:"", rag_chain.invoke(q2))
+
+
+if __name__ == ""__main__"":
+    main()
+```"

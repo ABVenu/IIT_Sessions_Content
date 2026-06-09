@@ -116,3 +116,71 @@ Grep confirmed no “Session N” in prose. Image URLs contain batch paths only 
 No target audience, duration, or internal instruction language in student-facing content.
 
 **Expected result:** All criteria met — notes ready for release.
+
+---
+
+## Iteration 4 (Align Notes Against Covered LOs — Release pass)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference | True |
+
+### Alignment actions (vs `Live Topic Coverage.md` + transcript)
+
+**Removed (not covered in session):**
+- Walk-forward validation section and terminology row — not taught.
+- Detailed baseline models table (naive forecast, seasonal naive, rolling mean forecast) — not taught; replaced with practice note to build a baseline LR/GB model on shared data.
+
+**Retained (all metadata LOs covered):**
+- Trend vs Seasonality, Time-aware splits, Rolling windows, Evaluation for time series — all four core topics kept with images.
+
+**Added (extra content taught in session):**
+- `shuffle=False` in `train_test_split` with full code block.
+- 30-day / 200-day moving-average stock-market context in rolling windows.
+- **Building a Time Series Forecast Model** — lag + rolling → dropna → chronological split → LR vs GB with R².
+- **R²** recap in evaluation; MAPE linked to LR (9.67%) vs GB comparison from demo.
+- **Case Study: Air Passengers (1949–1960)** — trend/seasonality, month dummies, time index, LR scores.
+- **Practice: Apply on Financial Time Series** — Bitcoin one-minute CSV assignment.
+
+**Output:** `Lecture Notes Released.md` created in Session21 folder.
+
+**Expected result:** All criteria met — released notes aligned to session delivery.
+
+---
+
+## Iteration 5 (Align Notes Against Covered LOs — re-verification pass)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference | True |
+
+### Alignment verification (vs `Live Topic Coverage.md` + `Transcript.md`)
+
+**Confirmed removed (not taught):**
+- Walk-forward validation — absent from released notes.
+- Naive / seasonal-naive baseline table — absent; practice section points to LR/GB baseline on shared data instead.
+
+**Confirmed retained (all four metadata LOs + extras):**
+- Trend vs Seasonality, Time-aware splits (`shuffle=False`), Rolling windows, Evaluation (R², MAE, RMSE, MAPE).
+- Extras: introduction to time series, lag features, rolling mean as ML feature, hands-on LR vs GB modeling, Air Passengers case study, data leakage, Bitcoin practice assignment.
+- All four diagram images retained.
+
+**Minor addition this pass:**
+- Window-size guidance expanded with in-class **1 vs 40** rolling-average demo (small window = noisy; 40-day window reveals trend).
+
+**Not included (session protocol, not lecture content):**
+- Post-lecture quiz / Mentimeter — correctly excluded.
+
+**Expected result:** All criteria met — `Lecture Notes Released.md` aligned to session delivery.

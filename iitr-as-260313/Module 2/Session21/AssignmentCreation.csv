@@ -1,0 +1,236 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,ShopKart's engineering team replaces four hardcoded policy strings with files inside a `policy_documents/` folder. What is the main responsibility of a **document loader** in this pipeline?,,,,,,2,,Write grounded customer replies without reading any file,"Read external policy files and return text for cleaning, chunking, and indexing",Retrain the BGE embedding model on every customer question,Permanently delete the Chroma collection after each chat,,,6a27cbfc3bfa06082c5c33e6,0,markdown,"B is correct because a document loader is the file-reading step that brings TXT or PDF policy content into Python for downstream preparation.
+
+A is incorrect because reply generation happens later in the RAG loop. C is incorrect because BGE is loaded once and reused, not retrained per question. D is incorrect because Chroma persistence is intentional, not deleted after each chat."
+mcsc,markdown,"A developer runs `build_knowledge_base()` once on Monday morning. Through the week, hundreds of customer questions use only `retrieve_policy_chunks(...)` and `generate_grounded_answer(...)`. Why is ingestion described as an **offline** step?",,,,,,2,,It works only when the laptop has no internet connection,"File loading, chunking, and embedding are done before live queries—not repeated for every customer message",Groq cannot run while Chroma files exist on disk,PDF files can be opened only in airplane mode,,,6a27cbfc3bfa06082c5c33e6,0,markdown,"B is correct because ingestion (load → clean → chunk → embed → store) is a one-time preparation phase; the online loop handles individual questions.
+
+A is incorrect because offline here means pipeline phase, not network status. C is incorrect because Groq and Chroma are used together in the online loop. D is incorrect because PDF reading is unrelated to airplane mode."
+mcsc,markdown,The warranty team shares `warranty_policy.pdf` as a text-based PDF (not a scanned image). Which approach matches the lab pattern for extracting readable text page by page?,,,,,,1,,`pypdf` `PdfReader` with `page.extract_text()`,Groq chat API summarising only the file name,Chroma automatically parsing PDF bytes with no Python loader,Skipping extraction and storing the raw PDF binary as one Chroma document,,,6a27cbfc3bfa06082c5c33e6,0,markdown,"A is correct because `pypdf` reads PDF pages and returns extractable text for cleaning and chunking.
+
+B is incorrect because the filename alone is not policy content. C is incorrect because Chroma stores prepared text and vectors, not automatic PDF parsing in this lab. D is incorrect because binary PDF data is not searchable text for embedding."
+mcsc,markdown,"After chunking, each stored excerpt carries metadata. A file named `returns_policy.txt` is loaded from `policy_documents/`. What **category** label should `infer_policy_category(...)` assign?",,,,,,3,,shipping,refunds,returns,general,,,6a27cbfc3bfa06082c5c33e6,0,markdown,"C is correct because the helper checks the lowercase file name for keywords like `return` and maps it to the returns policy area.
+
+A is incorrect because `shipping` would match a shipping file name. B is incorrect because `refund` maps to refunds, not returns. D is incorrect because the file name matches a known policy pattern."
+mcsc,markdown,"A developer configures `DEFAULT_CHUNK_SIZE = 100` and `DEFAULT_CHUNK_OVERLAP = 20`. The first chunk covers words at indices 0–99. After that chunk is stored, where does the **second** chunk start in the word list?",,,,,,2,,Index 0 again,Index 80,Index 100 with no shared words,Index 120,,,6a27cbfc3bfa06082c5c33e6,0.5,markdown,"B is correct because the overlap stride moves the start forward by `chunk_size - overlap` → `100 - 20 = 80`, so the next chunk shares 20 words with the previous one.
+
+A is incorrect because chunks progress forward, not restart from zero. C is incorrect because overlap deliberately shares tail words. D is incorrect because 120 would skip words without the intended overlap window."
+mcsc,markdown,"A customer asks about warranty repair, but Rank 1 retrieval shows `category: shipping`. The grounded answer sounds polite yet cites delivery timelines. Debugging guidance says to suspect **ingestion or chunking** before blaming the generator. Why?",,,,,,2,,Groq cannot read category metadata inside the grounded prompt,"Wrong policy area at Rank 1 usually means loaders, chunk boundaries, or indexing sent poor evidence—not that the LLM refused to read",Chroma deletes all chunks when category metadata is wrong,`top_k` must always be 1 for warranty questions,,,6a27cbfc3bfa06082c5c33e6,0.5,markdown,"B is correct because retrieval quality depends on how files were loaded, split, and indexed; a mismatched Rank 1 category is usually a retrieval-side issue.
+
+A is incorrect because the prompt includes category labels from metadata. C is incorrect because Chroma does not delete data due to category mismatch. D is incorrect because top_k is a retrieval count, not a per-topic setting."
+mcmc,markdown,Which steps occur inside `build_knowledge_base(...)` in the correct logical order for the ShopKart file-based pipeline?,,,,,,,,`load_all_policy_documents(...)` reads `.txt` and `.pdf` files from `policy_documents/`,`create_chunks_from_documents(...)` splits loaded text into searchable units with metadata,`generate_grounded_answer(...)` writes the final customer reply before any file is read,`index_policy_chunks(...)` encodes chunks with BGE and upserts them into Chroma,`retrieve_policy_chunks(...)` runs before any policy file is loaded,"1,2,4",6a27cbfc3bfa06082c5c33e6,0.5,markdown,"A is correct because loading is the first ingestion step. B is correct because chunking happens on loaded documents before indexing. D is correct because embedding and upsert are the final offline storage step.
+
+C is incorrect because generation belongs to the online question-answering loop, not `build_knowledge_base`. E is incorrect because retrieval happens after the knowledge base exists."
+mcmc,markdown,A quality analyst reviews terminal output right after `retrieve_policy_chunks(...)` runs for a ShopKart ticket. Which inspection steps are appropriate?,,,,,,,,"Check whether Rank 1 `metadata[""category""]` matches the expected policy area",Read Rank 1 chunk `text` and confirm it relates to the customer's question,Ignore `distance` values completely because they are never useful,"Compare the customer's intent with the excerpt meaning, not only exact keyword overlap",Assume Rank 1 is always business-correct without reading the excerpt text,"1,2,4",6a27cbfc3bfa06082c5c33e6,0.5,markdown,"A is correct because category tags show which policy file area surfaced first. B is correct because the excerpt body must be read before trusting the answer. D is correct because semantic retrieval matches meaning, not just identical words.
+
+C is incorrect because distance helps compare relative match strength across ranks. E is incorrect because Rank 1 is the nearest vector, not a guarantee of business correctness in every edge case."
+mcmc,markdown,"A learner loads four ShopKart TXT policies, chunks them, and indexes with `SentenceTransformer(""BAAI/bge-small-en-v1.5"")` into `shopkart_policy_kb_v2` using `embedding_function=None`. Which statements are technically correct?",,,,,,,,Total chunk count after ingestion should be greater than four because each file produces multiple chunks,The same embedding model must encode policy chunks at index time and customer queries at search time,`collection.query(...)` needs manually supplied `query_embeddings` in this setup,Storing each entire policy file as one Chroma row without chunking always gives the best retrieval precision for long policies,Metadata fields like `source` and `category` help trace which policy file supplied each excerpt,"1,2,3,5",6a27cbfc3bfa06082c5c33e6,1,markdown,"A is correct because multi-paragraph files are split into many chunks. B is correct because distances are meaningful only in the same embedding space. C is correct because `embedding_function=None` means manual `model.encode(...)` for queries. E is correct because metadata supports auditing retrieval provenance.
+
+D is incorrect because long whole-file rows are too coarse for precise retrieval—the lab chunks for better search granularity."
+mcmc,markdown,"A ShopKart file-based assistant tells a customer they have **30 days** to return an unopened phone, but `returns_policy.txt` in `policy_documents/` says **7 calendar days**. Which failure explanations are plausible?",,,,,,,,The TXT file in `policy_documents/` was outdated or edited incorrectly before indexing,"A chunk boundary split eligibility wording across chunks, so retrieval missed the correct rule","Retrieval surfaced weak evidence, but the generator faithfully followed those excerpts—still producing a wrong business answer",Running retrieval once makes hallucination impossible in all cases,Renaming the folder to `policy_files/` without updating `POLICY_FOLDER` can lead to no files loaded or an empty knowledge base,"1,2,3,5",6a27cbfc3bfa06082c5c33e6,1,markdown,"A is correct because indexed text is the source of truth—stale files produce wrong answers. B is correct because bad splits can hide the right rule from top-k results. C is correct because generation can be faithful to bad evidence. E is correct because the loader path must match the actual folder name.
+
+D is incorrect because RAG reduces guessing risk but does not make hallucination impossible."
+subjective,markdown,"ShopKart wants a support script that reads policy rules from **text files** (not hardcoded strings), chunks them, stores them in Chroma, and answers customer questions with grounded Groq replies.
+
+Print retrieved chunks **before** each final answer so you can check whether retrieval matched the question.
+
+Create this folder layout on your laptop:
+
+```text
+shopkart_rag_lab/
+├── policy_documents/
+├── .env                  # GROQ_API_KEY=your-key-here
+└── rag_pipeline.py
+```
+
+Inside `policy_documents/`, add these four files:
+
+**`returns_policy.txt`**
+```text
+ShopKart Returns Policy. Unopened items in original packaging may be returned within 7 calendar days of delivery.
+Opened or used items are not eligible unless defective or damaged on arrival.
+```
+
+**`shipping_policy.txt`**
+```text
+ShopKart Shipping Policy. Standard delivery takes 3 to 5 business days after dispatch.
+Express delivery arrives in 1 to 2 business days in metro cities only.
+Orders placed after 6 PM dispatch on the next business day.
+```
+
+**`warranty_policy.txt`**
+```text
+ShopKart Warranty Policy. Electronics carry a 12-month manufacturer warranty from delivery date for manufacturing defects under normal use.
+Warranty does not cover physical damage, liquid exposure, or misuse.
+```
+
+**`refunds_policy.txt`**
+```text
+ShopKart Refund Policy. Refunds are credited within 5 to 7 business days after the returned item passes warehouse verification.
+Cash-on-delivery orders are refunded to the original UPI or bank account only.
+```
+
+Install packages and run:
+
+```bash
+pip install chromadb sentence-transformers groq python-dotenv
+python rag_pipeline.py
+```
+
+Use `pip3` / `python3` if needed.
+
+Write **`rag_pipeline.py`** that does the following:
+
+1. **Load** all `.txt` files from `./policy_documents`.
+2. **Clean** text (collapse extra spaces/newlines) and **chunk** each file into ~100-word overlapping pieces.
+3. **Index** chunks in Chroma:
+   - model: `BAAI/bge-small-en-v1.5`
+   - path: `./chroma_store`
+   - collection: `shopkart_policy_kb_v2`
+   - `embedding_function=None` (you call `model.encode(...)` yourself)
+4. Store simple metadata per chunk: at least **`source`** (file name) and **`category`** (`returns`, `shipping`, `warranty`, or `refunds`).
+5. For each customer question below:
+   - retrieve **top 2** chunks
+   - print rank, category, distance, and chunk text
+   - generate a grounded answer with Groq (`llama-3.1-8b-instant`)
+   - use a prompt that says **answer only from excerpts** and **do not invent policy numbers**
+
+**Customer questions to run in `main()`**
+
+1. `""I bought earbuds yesterday. The box is still sealed. How many days do I have to return them?""`
+2. `""My laptop charger stopped working after 8 months of normal use. Is repair covered under warranty?""`
+
+**Expected output**
+
+- Four policy files loaded; total chunk count **greater than 4**.
+- Question 1: Rank 1 should be **returns**; answer should mention **7 days** for unopened items.
+- Question 2: Rank 1 should be **warranty**; answer should mention **12-month** coverage for manufacturing defects.
+- Retrieval output printed before every final answer.
+
+**Rules**
+
+- Put `GROQ_API_KEY` in `.env`, not inside the Python file.
+- Do not use Chroma's automatic embedding function.
+- Do not edit files inside `./chroma_store` by hand.
+
+**Submission Instructions**
+
+- Code everything in a single **`rag_pipeline.py`** file in VS Code.
+- Create `policy_documents/` and `.env` locally so the script runs.
+- Run the code and verify it works.
+- Submit **`rag_pipeline.py`** in the code editor or answer box in the LMS.",,,,,,,,,,,,,,6a27cbfc3bfa06082c5c33e6,0.5,markdown,"1. **Offline ingestion:** Scan `policy_documents/`, read each TXT file, clean text, split into word chunks (100 words, 20 overlap), embed with BGE, and `upsert` into `shopkart_policy_kb_v2`.
+2. **Online loop:** For each question, embed the query with the **same** BGE model, run `collection.query(..., n_results=2)`, print ranks, then send retrieved excerpts to Groq with strict grounding rules.
+3. **Earbuds question:** Returns chunks should rank first; the answer should cite the **7 calendar day** window for unopened items.
+4. **Charger question:** Warranty chunks should rank first; the answer should reference **12-month** manufacturing-defect coverage.
+
+```python
+import os
+import re
+from typing import List, Dict, Any
+import chromadb
+from sentence_transformers import SentenceTransformer
+from groq import Groq
+from dotenv import load_dotenv
+
+load_dotenv()
+
+EMBEDDING_MODEL = ""BAAI/bge-small-en-v1.5""
+GENERATION_MODEL = ""llama-3.1-8b-instant""
+POLICY_FOLDER = ""./policy_documents""
+CHUNK_SIZE, OVERLAP = 100, 20
+
+
+def clean_text(text: str) -> str:
+    return re.sub(r""\s+"", "" "", text.replace(""\n"", "" "")).strip()
+
+
+def infer_category(filename: str) -> str:
+    name = filename.lower()
+    if ""return"" in name:
+        return ""returns""
+    if ""shipping"" in name:
+        return ""shipping""
+    if ""warranty"" in name:
+        return ""warranty""
+    if ""refund"" in name:
+        return ""refunds""
+    return ""general""
+
+
+def load_policies(folder: str) -> List[Dict[str, Any]]:
+    docs = []
+    for fname in sorted(os.listdir(folder)):
+        if not fname.endswith("".txt""):
+            continue
+        with open(os.path.join(folder, fname), encoding=""utf-8"") as f:
+            text = clean_text(f.read())
+        docs.append({""text"": text, ""metadata"": {""source"": fname, ""category"": infer_category(fname)}})
+    return docs
+
+
+def chunk_words(text: str) -> List[str]:
+    words = text.split()
+    chunks, start = [], 0
+    while start < len(words):
+        end = start + CHUNK_SIZE
+        chunks.append("" "".join(words[start:end]))
+        if end >= len(words):
+            break
+        start += CHUNK_SIZE - OVERLAP
+    return chunks
+
+
+def build_index(collection, model, folder: str) -> None:
+    rows = []
+    for i, doc in enumerate(load_policies(folder)):
+        for j, piece in enumerate(chunk_words(doc[""text""])):
+            meta = dict(doc[""metadata""])
+            meta[""chunk_index""] = j
+            rows.append({
+                ""id"": f""{meta['category']}_{i}_{j}"",
+                ""text"": piece,
+                ""metadata"": meta,
+            })
+    embeddings = model.encode([r[""text""] for r in rows], convert_to_numpy=True).tolist()
+    collection.upsert(
+        ids=[r[""id""] for r in rows],
+        documents=[r[""text""] for r in rows],
+        metadatas=[r[""metadata""] for r in rows],
+        embeddings=embeddings,
+    )
+
+
+def answer_question(client, collection, model, question: str) -> None:
+    q_emb = model.encode([question], convert_to_numpy=True).tolist()
+    hits = collection.query(query_embeddings=q_emb, n_results=2, include=[""documents"", ""metadatas"", ""distances""])
+    retrieved = [
+        {""text"": d, ""metadata"": m, ""distance"": dist}
+        for d, m, dist in zip(hits[""documents""][0], hits[""metadatas""][0], hits[""distances""][0])
+    ]
+    for rank, ch in enumerate(retrieved, 1):
+        print(f""Rank {rank} | {ch['metadata']['category']} | {ch['distance']:.4f} | {ch['text'][:80]}..."")
+    context = ""\n"".join(ch[""text""] for ch in retrieved)
+    prompt = f""Answer ONLY from:\n{context}\n\nQuestion: {question}\nAnswer:""
+    reply = client.chat.completions.create(
+        model=GENERATION_MODEL,
+        messages=[{""role"": ""user"", ""content"": prompt}],
+    ).choices[0].message.content
+    print(""Answer:"", reply)
+
+
+def main():
+    model = SentenceTransformer(EMBEDDING_MODEL)
+    client = chromadb.PersistentClient(path=""./chroma_store"")
+    collection = client.get_or_create_collection(""shopkart_policy_kb_v2"", embedding_function=None)
+    build_index(collection, model, POLICY_FOLDER)
+    groq_client = Groq()
+    for q in [
+        ""I bought earbuds yesterday. The box is still sealed. How many days do I have to return them?"",
+        ""My laptop charger stopped working after 8 months of normal use. Is repair covered under warranty?"",
+    ]:
+        print(""\n"" + ""="" * 60 + f""\n{q}\n"" + ""="" * 60)
+        answer_question(groq_client, collection, model, q)
+
+
+if __name__ == ""__main__"":
+    main()
+```"

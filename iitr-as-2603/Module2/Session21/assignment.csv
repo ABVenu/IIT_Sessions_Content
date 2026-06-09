@@ -1,0 +1,133 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A campus canteen records **meal counts for 90 consecutive days** and wants to forecast next week's demand. Why must the rows stay in **date order**?,,,,,,2,,Because sklearn requires rows to be sorted alphabetically by column name,Because each day depends on the time sequence; shuffling destroys the forecasting story,Because PCA only works on chronologically sorted tables,Because K-Means assigns clusters by calendar month,,6a27caa8315e7982d2f0f3d3,0,markdown,"Time series rows are order-dependent — yesterday influences today. Shuffling breaks the timeline and makes forecasting meaningless. sklearn does not require alphabetical order (A). PCA and K-Means are unrelated to why canteen daily counts need date order (C, D)."
+mcsc,markdown,"Over the last **10 years**, India's total smartphone users grew steadily even though some months dipped. Which pattern best describes that **long-term growth**?",,,,,,2,,Seasonality,Trend,Data leakage,Lag feature,,6a27caa8315e7982d2f0f3d3,0,markdown,"Trend is the long-term direction over months or years. Seasonality (A) is a repeating cycle at fixed intervals (e.g. summer spikes every year). Leakage (C) is a train/test mistake. Lag feature (D) is engineered input, not a pattern type."
+mcsc,markdown,"An ice-cream delivery app sees orders **jump every summer and drop every winter**, repeating each year on a fixed calendar rhythm. Which pattern is this?",,,,,,2,,Trend,Seasonality,Random noise only,Future leakage,,6a27caa8315e7982d2f0f3d3,0,markdown,"Repeating peaks and dips at fixed yearly intervals is seasonality. A decade-long rise in total users would be trend (A). Noise alone (C) does not explain a predictable yearly rhythm. Leakage (D) is about train/test contamination, not sales cycles."
+mcsc,markdown,A data team is about to shuffle rows before modeling. For which dataset is **random shuffling most dangerous**?,,,,,,2,,Customer segments from K-Means on purchase history (no date column),Daily stock closing prices for the last 2 years,Tumour measurements after PCA with no time column,Student exam marks from different colleges with no date column,,6a27caa8315e7982d2f0f3d3,0,markdown,"Daily stock prices are time series — shuffling causes future leakage. Options A, C, and D are tabular data where row order does not carry time meaning; random splits are acceptable there."
+mcsc,markdown,"Daily sales for three consecutive days are **₹200**, **₹220**, and **₹215**. What is the **3-day rolling mean** for the **third day** (including that day and the two before it)?",,,,,,2,,₹205,₹211.67,₹220,₹635,,6a27caa8315e7982d2f0f3d3,0.5,markdown,"Rolling mean for day 3 = (200 + 220 + 215) / 3 = 635 / 3 ≈ **211.67**. ₹205 (A) is a wrong average. ₹220 (C) is only day 2's value. ₹635 (D) is the sum, not the mean."
+mcsc,markdown,"Priya has an **ordered** daily sales DataFrame. She runs:
+
+```python
+train_test_split(X, y, test_size=0.2, shuffle=False)
+```
+
+What does the **test set** contain?",,,,,,2,,A random 20% of rows picked from anywhere in the timeline,The **last 20%** of rows in time order,The **first 20%** of rows in time order,Only rows where sales increased compared to the previous day,,6a27caa8315e7982d2f0f3d3,0.5,markdown,"With `shuffle=False`, sklearn keeps row order; `test_size=0.2` takes the final 20% as test — the future holdout. Random 20% (A) needs default `shuffle=True`. First 20% (C) would be train, not test. Sales increases (D) are not how the split works."
+mcmc,markdown,Which statements about **lag features** built with `.shift()` on a daily `sales` column are correct?,,,,,,,,`lag_1 = sales.shift(1)` puts **yesterday's** sales on today's row.,The **first row** will typically show **NaN** for `lag_1`.,Creating lag features removes the need for any train/test split.,`sales.shift(7)` can help the model see **what happened one week ago**.,"1, 2, 4",6a27caa8315e7982d2f0f3d3,0.5,markdown,"`.shift(1)` pulls the previous row's value down (A). Row 1 has no prior day, so NaN is expected (B). Lags are features only — you still need a chronological split (C is false). Weekly seasonality hints come from shift(7) (D)."
+mcmc,markdown,A team forecasts **monthly electricity use** for a city. Which practices help avoid **future leakage**?,,,,,,,,Sort the data by date before splitting.,Pass `shuffle=False` in `train_test_split`.,Train on future months and test on past months.,Compute MAPE only on the **chronological holdout** test period.,"1, 2, 4",6a27caa8315e7982d2f0f3d3,0.5,markdown,"Past → future split with no shuffle prevents the model from seeing tomorrow during training (A, B). Evaluating on the honest future holdout (D) matches real deployment. Training on future and testing on past (C) is backwards and leaky."
+mcmc,markdown,A retail analyst compares two forecast models on the **same chronological test split**. Which statements are **valid**?,,,,,,,,"**MAPE** expresses error as a percentage of actual values, which helps compare forecasts across products with different scales.",**MAPE** is reliable when many test **actual values are exactly zero**.,A model with **higher test R²** on that split will **often** show **lower MAPE** than a weaker model.,**MAE** and **RMSE** from regression evaluation also apply to time-series forecasting tasks.,"1, 3, 4",6a27caa8315e7982d2f0f3d3,1,markdown,"MAPE is scale-free in percentage terms (A). MAPE divides by actual — it breaks when actual ≈ 0 (B is false). Better fit (higher R²) usually means smaller errors and lower MAPE (C). Forecasting is regression on numeric targets, so MAE/RMSE apply (D)."
+mcmc,markdown,An analyst builds a **daily sales forecast** using lag and rolling features. Which steps belong in a **sound pipeline**?,,,,,,,,"Create `lag_1` and `rolling_mean_7`, then `dropna()` before fitting a model.","Randomly shuffle all rows, then use the first 80% as train and last 20% as test without `shuffle=False`.",Fit **LinearRegression** and **GradientBoostingRegressor** on the **same chronological train split** and compare test **R²** (and/or MAPE).,"Use `train_test_split(..., shuffle=True)` on dated sales data because it balances the classes.","1, 3",6a27caa8315e7982d2f0f3d3,1,markdown,"Engineer features, drop early NaN rows, then model (A). Compare LR and GB on the same honest split (C). Shuffling dated sales (B, D) causes future leakage — there are no ""classes"" to balance in regression (D)."
+subjective,markdown,"**GreenGrid** supplies power to a mid-size city. The operations team has **150 consecutive days** of daily electricity consumption (MWh) and wants a **baseline forecast** for the near future. You do not have a pre-built model — you must engineer time-based features, split data correctly, train two regressors, and report which one forecasts more accurately on unseen future days.
+
+### Requirements
+
+1. **Create reproducible data in code** (`random_state=42`):
+   - Build a DataFrame with **150 daily rows**: a `date` column (consecutive days starting `2024-01-01`) and a numeric `consumption_mwh` column.
+   - You may generate `consumption_mwh` with `numpy` (e.g. base level + mild trend + small noise). Column names must match the task (`date`, `consumption_mwh`).
+
+2. **Feature engineering:**
+   - Set `date` as the index (or keep it as a column but ensure rows stay sorted by time).
+   - Add **`lag_1`** (previous day's consumption), **`lag_7`** (same weekday last week), and **`rolling_mean_7`** (7-day rolling average of `consumption_mwh`).
+   - **Drop rows with NaN** after creating these features.
+
+3. **Train/test split (time-aware):**
+   - Let **X** = `[lag_1, lag_7, rolling_mean_7]` and **y** = `consumption_mwh`.
+   - Split **80% train / 20% test** with `shuffle=False` and `test_size=0.2`.
+
+4. **Train and compare two models** on the **same train split**:
+   - `LinearRegression`
+   - `GradientBoostingRegressor(n_estimators=100, random_state=42)`
+   - For each model, print **train R²** and **test R²** (use `model.score`).
+
+5. **MAPE on the test set:**
+   - Write a small function or inline code to compute **MAPE** on test predictions:
+     `mean(|actual - predicted| / actual) × 100`
+   - Print **test MAPE** for both models (2 decimal places is fine).
+
+6. **Decision line (text output):**
+   - Print **one sentence** naming which model has the **lower test MAPE** and whether its **test R²** is also higher.
+
+### Expected Output (minimum)
+
+```
+LR train R²: ...
+LR test R²: ...
+GB train R²: ...
+GB test R²: ...
+LR test MAPE: ...%
+GB test MAPE: ...%
+Winner: ... (one sentence)
+```
+
+### Submission Instruction
+
+- Code all the points mentioned in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,6a27caa8315e7982d2f0f3d3,0.5,markdown,"```python
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.ensemble import GradientBoostingRegressor
+
+# 1) Reproducible 150-day electricity series
+np.random.seed(42)
+n_days = 150
+dates = pd.date_range(start=""2024-01-01"", periods=n_days, freq=""D"")
+trend = np.linspace(0, 15, n_days)
+noise = np.random.normal(0, 2.5, n_days)
+consumption = 120 + trend + noise
+
+df = pd.DataFrame({""date"": dates, ""consumption_mwh"": consumption})
+df = df.set_index(""date"")
+
+# 2) Lag + rolling features
+df[""lag_1""] = df[""consumption_mwh""].shift(1)
+df[""lag_7""] = df[""consumption_mwh""].shift(7)
+df[""rolling_mean_7""] = df[""consumption_mwh""].rolling(window=7).mean()
+df = df.dropna()
+
+feature_cols = [""lag_1"", ""lag_7"", ""rolling_mean_7""]
+X = df[feature_cols]
+y = df[""consumption_mwh""]
+
+# 3) Chronological split
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, shuffle=False
+)
+
+# 4) Train LR and GB; print R²
+lr = LinearRegression()
+lr.fit(X_train, y_train)
+print(f""LR train R²: {lr.score(X_train, y_train):.4f}"")
+print(f""LR test R²: {lr.score(X_test, y_test):.4f}"")
+
+gb = GradientBoostingRegressor(n_estimators=100, random_state=42)
+gb.fit(X_train, y_train)
+print(f""GB train R²: {gb.score(X_train, y_train):.4f}"")
+print(f""GB test R²: {gb.score(X_test, y_test):.4f}"")
+
+
+def mape(actual, predicted):
+    actual = np.array(actual)
+    predicted = np.array(predicted)
+    return np.mean(np.abs((actual - predicted) / actual)) * 100
+
+
+# 5) Test MAPE
+lr_mape = mape(y_test, lr.predict(X_test))
+gb_mape = mape(y_test, gb.predict(X_test))
+print(f""LR test MAPE: {lr_mape:.2f}%"")
+print(f""GB test MAPE: {gb_mape:.2f}%"")
+
+# 6) Winner sentence
+lr_r2_test = lr.score(X_test, y_test)
+gb_r2_test = gb.score(X_test, y_test)
+if gb_mape < lr_mape:
+    winner = ""Gradient Boosting""
+    better_r2 = gb_r2_test > lr_r2_test
+else:
+    winner = ""Linear Regression""
+    better_r2 = lr_r2_test > gb_r2_test
+
+r2_note = ""also has higher test R²"" if better_r2 else ""does not have higher test R²""
+print(f""Winner: {winner} has lower test MAPE and {r2_note} on this run."")
+```"

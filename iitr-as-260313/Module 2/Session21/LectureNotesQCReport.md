@@ -226,3 +226,49 @@
 - ShopKart continuity with minimal-lab vs file-pipeline comparison tables
 - Indian-context analogies: receptionist notices, train timetable, hostel rules pinned before opening
 - Terminal verification table replaces standalone activities without losing hands-on rigor
+
+---
+
+## QC Evaluation — Iteration 6 (Post-Session Alignment → `Lecture Notes Released.md`)
+
+**Source:** Live Topic Coverage report + session transcript cross-check  
+**Output file:** `Lecture Notes Released.md`
+
+| Criterion | Rating / Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata/Internal References in Student Notes** | True |
+
+**Expected result achieved:** All ratings ≥ 5; all boolean checks pass.
+
+### Alignment actions (released vs instructor `Lecture Notes.md`)
+
+| Action | Reason |
+|---|---|
+| **Added** three-class progression arc (vector search → minimal RAG → full file pipeline) | Extra concept taught in live session |
+| **Added** GitHub clone path, `policy_documents` naming, `code.py` vs `rag_pipeline.py` note | Significant live setup time on clone + folder config |
+| **Added** recursive / paragraph chunking as future alternatives | Mentioned live; not implemented today |
+| **Clarified** 100-word fixed walkthrough vs overlap in code | Overlap introduced conceptually; basic fixed chunking demonstrated live |
+| **Expanded** top-k, distance scores, and all ranks sent to Groq | Core live demo behaviour |
+| **Added** `pip3` / `python3` troubleshooting lines | Live install troubleshooting |
+| **Retained** all 9 session images | Per alignment prompt |
+| **Removed** nothing — all metadata LOs marked covered in Live Topic Coverage | No uncut sections required |
+
+### Live coverage verification
+
+| Topic / subtopic | Status in released notes |
+|---|---|
+| Scale minimal RAG to real PDF/TXT policy files | Yes |
+| Why raw documents must be prepared (ingestion rationale) | Yes |
+| Chunking with retrieval impact awareness | Yes — size, overlap, Rank 1 inspection, alternatives noted |
+| Searchable index across multiple policy sources | Yes — BGE + Chroma + metadata |
+| Multi-document RAG end-to-end (returns/shipping/warranty/refunds) | Yes — four demo queries |
+| PyPDF, dependencies recap, BGE/Chroma setup | Yes |
+| Git clone + `.env` Groq key | Yes — Option A in Project Setup |
+| Policy update / deep chunk-tuning deferred | Yes — “later session” only |
+| Mentimeter / post-lecture quiz | Excluded — not in student notes |
