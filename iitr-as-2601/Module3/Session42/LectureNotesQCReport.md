@@ -156,3 +156,35 @@
 | Loop termination | Loop Termination; `run_chat_turn` | Covered |
 | Handle API/tool errors with user-visible messages | Basic Error Handling; `safe_rag_answer` | Covered |
 | Agent definition (metadata topic) | — | Intentionally omitted |
+
+---
+
+## Iteration 7 — Align to Live Session Coverage (`Lecture Notes Released.md`)
+
+**Trigger:** Post-session alignment per `Align_Notes_Against_Covered_LOs_from_existing_LectureNotes.md` using `Transcript.md` and `Live Topic Coverage.md`.
+
+**Changes from pre-session `Lecture Notes.md`:**
+
+| Area | Pre-session notes | Released notes (aligned) |
+|---|---|---|
+| Long-term memory | Database, user profile | Added **vector store** + **ChatGPT Memories** real-life example (taught live) |
+| Conversation history | `system` optional; empty list start | **`system` first** in full RAG integration; code example starts with system message |
+| Error handling table | Empty index, blank input | **Rate limit / token exhaustion**, **bad input format** (taught live); Groq downtime / rate limits in try/except notes |
+| Extra topics | Not present | **Managing Token Limits — Summarization**; **Gradio Multi-Turn Demo** with memory |
+| Loop termination | Generic max steps | Clarified **five-turn hard stop** and **`exit` skips RAG** (live demo) |
+| Removed | — | **Empty index** error row (not covered live) |
+| Images | 8 S3 images | **All 8 retained** unchanged |
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics + five extra covered items from Live Topic Coverage: RAG single vs multi-turn recap; system/user/assistant history; token summarization; full memory RAG walkthrough; Gradio multi-turn demo. Agent definition metadata topic remains intentionally omitted — preview only in live session. |
+| **Creativity** | **5 / 5** | Waiter notepad vs loyalty card; ChatGPT Memories; analyst email thread; ATM PIN stop rule; UPI vs traceback; science-fair Gradio POC. |
+| **Structural Adherence** | **5 / 5** | `#` title; context + **What you will learn**; Official/Simple/Real-life on new terms; snippets + **How the code works**; student activities; Key Takeaways; terminology table; 8 images retained. |
+| **No Logical Mistakes** | **True** | `./Tesla_db`, `rag_answer(user_query, retriever)`, $96.77B, system→user→assistant order, JSON persist/reload, `MAX_STEPS`/`STOP_WORDS`, friendly errors. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; student-facing activities; no quiz/Mentimeter protocol. |
+| **No Previous Session Number References** | **True** | Grep verified — none in released notes. |
+| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
+
+**Outcome:** QC passed. `Lecture Notes Released.md` ready for student release.
+
+**Line count:** ~455 lines. **Images:** 8 (session42-01 … session42-08 on S3).

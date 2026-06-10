@@ -1,0 +1,159 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"An analyst asks a Tesla report bot: *""What is the annual revenue in 2022?""* and gets a correct answer. She then types only *""And in 2023?""* — no year repeated, no *""revenue""* repeated. The bot treats it as a brand-new question and asks her to repeat herself.
+
+What is the **most likely** missing piece?",,,,,,1,,**Short-term memory** — prior user and assistant turns are not kept in conversation history,A long-term vector database that stores analyst preferences across months,Setting Groq `temperature` above 1.0 for creative follow-ups,Re-chunking the Tesla PDF after every message,,6a290d47f6189bd6b252541b,0,markdown,"A is correct because multi-turn follow-ups need the running chat history so *""And in 2023?""* still carries revenue context from turn 1.
+
+B is incorrect because long-term memory is for cross-session facts, not the immediate follow-up problem. C is incorrect because temperature affects generation style, not whether earlier turns are remembered. D is incorrect because chunking is a prepare-step concern, not per-turn chat memory."
+mcsc,markdown,Which pair best matches **short-term** vs **long-term** memory in a report-assistant product?,,,,,,1,,Short-term: running chat history for this session; Long-term: facts stored across sessions (for example in a database or vector store),Short-term: Chroma vector index; Long-term: Groq API key file,Short-term: PDF chunk overlap size; Long-term: retriever value of k,Short-term: system message only; Long-term: user messages only,,6a290d47f6189bd6b252541b,0,markdown,"A is correct because short-term is the current session's message list; long-term persists knowledge across sessions.
+
+B is incorrect because Chroma stores document chunks, not chat turns as the primary short-term pattern. C is incorrect because chunk overlap and k are retrieval tuning, not memory types. D is incorrect because both roles participate in history; neither maps to the short vs long distinction."
+mcsc,markdown,"A developer keeps conversation history only in a Python list inside a Jupyter notebook. They close the notebook without saving to disk. The next day they open a fresh kernel and type `print(history)`.
+
+What happens?",,,,,,1,,The list is gone — in-memory variables do not survive a closed runtime unless history was **persisted** to a file,Python automatically reloads all lists from RAM across kernel restarts,The Chroma `./Tesla_db` folder stores chat turns by default,Groq's free tier permanently stores every chat thread for replay,,6a290d47f6189bd6b252541b,0,markdown,"A is correct because lists live in RAM for the current runtime; persist means writing to durable storage such as JSON.
+
+B is incorrect because kernel restarts clear in-memory state. C is incorrect because the vector index holds document chunks, not the analyst chat transcript. D is incorrect because API providers do not replace your application's local history file."
+mcsc,markdown,"A multi-turn RAG notebook builds `history` as a list of `{""role"": ..., ""content"": ...}` dicts.
+
+Which growth pattern is **correct**?",,,,,,1,,"Start with a **system** message, then append **user** then **assistant** for each completed turn",Append **assistant** before **user** every turn because the bot speaks first,Store only the latest **user** message and discard older turns to save tokens,Put all turns in one string with no role field,,6a290d47f6189bd6b252541b,0,markdown,"A is correct because the lab pattern uses system rules once, then user-assistant pairs in order for each turn.
+
+B is incorrect because user speaks first in each exchange. C is incorrect because dropping older turns breaks follow-ups like *""And in 2023?""* D is incorrect because LLM APIs expect structured role/content messages."
+mcsc,markdown,"After turn 1, `tesla_chat_history.json` correctly holds the 2022 revenue exchange. Before turn 2, a teammate deletes the call to `load_history()` and passes only the new string *""And in 2023?""* into the RAG helper.
+
+What is the **most likely** failure?",,,,,,1,,Turn 2 loses context that the topic is **revenue** and the prior year was **2022**,`json.load` raises an error because 2023 is invalid JSON syntax,`MAX_STEPS` fires immediately because the file has only one turn,Chroma removes vectors when `load_history()` is skipped,,6a290d47f6189bd6b252541b,0.5,markdown,"A is correct because without reloading or passing history, the model sees an isolated short question with no thread context.
+
+B is incorrect because the year 2023 in a message string is unrelated to JSON parsing. C is incorrect because max steps limits loop iterations, not missing reload. D is incorrect because skipping load does not mutate the vector index."
+mcsc,markdown,"A production chat loop uses `while True` with no `MAX_STEPS` and no stop-word check. Analysts can ask questions indefinitely and history grows every turn.
+
+What is the **primary** risk?",,,,,,1,,"Runaway iterations, rising API cost, and no safe exit when the user wants to stop",JSON files cannot store more than five messages by specification,Groq automatically terminates every chat after exactly three turns,LangChain retrievers force k=0 after ten queries,,6a290d47f6189bd6b252541b,0.5,markdown,"A is correct because loop termination (max steps and stop words) prevents infinite chat and unbounded cost.
+
+B is incorrect because JSON has no five-message limit. C is incorrect because providers do not enforce a three-turn cap in your loop. D is incorrect because k is a retrieval setting, not a chat-loop guard."
+mcmc,markdown,"A team implements `save_history`, `load_history`, and `append_turn` for a Tesla analyst bot.
+
+Which statements are **correct**?",,,,,,,,`json.dump` writes the history list to a text file such as `tesla_chat_history.json`,`load_history` can return an empty list on first run when the file does not exist yet,`append_turn` should append **user** then **assistant** and save after each pair,Saving only at the very end of a demo risks losing all turns if the kernel crashes mid-session,"1, 2, 3, 4",6a290d47f6189bd6b252541b,0.5,markdown,"All four statements match the persist/reload pattern from the lab.
+
+Writing history to JSON for this lab is not the same as enterprise long-term memory in a vector database — that incorrect claim was omitted from the options."
+mcmc,markdown,"A `run_chat_turn` function uses a bounded `while` loop with `MAX_STEPS = 5` and `STOP_WORDS = {""quit"", ""exit"", ""stop""}`.
+
+Which behaviours are **valid** stop mechanisms?",,,,,,,,User types `exit` → return a farewell message and skip further RAG lookups,`step` reaches `MAX_STEPS` without a reply → return a polite step-limit message,"After one successful `rag_answer`, `break` because the task is done in the beginner lab",Remove the `while` check and trust the LLM to say it is finished with no step limit,"1, 2, 3",6a290d47f6189bd6b252541b,0.5,markdown,"User stop words, max steps, and task-done break are valid stop mechanisms.
+
+Trusting the LLM with no step limit or using `while True` forever are incorrect because unbounded loops are unsafe for cost and runtime."
+mcmc,markdown,"An engineer wraps `client.chat.completions.create` in `try/except` inside `run_chat_turn`. Groq returns a rate-limit error mid-demo.
+
+Which responses follow **user-visible error handling** best practices?",,,,,,,,Do not let an uncaught traceback crash the analyst-facing flow,"Return or print a short, friendly message (for example search unavailable, try again)","Catch failures at the API call site, not only in a distant outer notebook cell","When using a `safe_rag_answer` pattern, reject blank input before any API call","1, 2, 3, 4",6a290d47f6189bd6b252541b,1,markdown,"Catch at call site, friendly text, no raw tracebacks to users, and guarding blank input are correct practices.
+
+Returning `str(exception)` directly to the analyst erodes trust in demos."
+mcmc,markdown,"A team adds multi-turn memory to an existing grounded Q&A helper on a Tesla index.
+
+Which design choices are **sound**?",,,,,,,,`build_question_with_memory` joins prior roles and the new message before calling `rag_answer`,Call `load_history()` before turn 2 so the JSON file carries the turn 1 exchange,"When token limits are hit in very long chats, **summarization** can compress older turns",**Gradio** can wrap `run_chat_turn` for a quick POC chat UI but is not a production front-end replacement,"1, 2, 3, 4",6a290d47f6189bd6b252541b,1,markdown,"Full history for RAG, JSON reload, summarization as a production guardrail, and Gradio for demos only are sound choices.
+
+Passing only the latest user bubble does not replace conversation history for follow-ups like *""And in 2023?""* even when retriever k is high."
+subjective,markdown,"**EcoDrive Motors** analysts use a simple earnings Q&A bot. You do **not** need a real database or API key.
+
+Build a tiny **memory layer** in one file: `ecodrive_memory_chat.py`
+
+**Part A — Save and load JSON**
+- Set `HISTORY_FILE = ""ecodrive_chat_history.json""`
+- Implement `save_history(history)` with `json.dump(history, f, indent=2)`
+- Implement `load_history()` — return `[]` if the file is missing
+- Implement `append_turn(history, user_text, bot_text)` — append user then assistant, call `save_history`, return `history`
+
+**Part B — One chat turn with memory**
+Implement `chat_once(user_message, history)`:
+- Build `full_question` by joining each `role: content` line from `history`, then `user: <user_message>`
+- Call the provided `mock_rag_answer(full_question)` inside `try/except`
+- On error, set `bot_reply = ""Search is unavailable right now. Please try again in a minute.""`
+- Call `append_turn` and return `bot_reply`
+
+**Part C — Two-turn demo in `main()`**
+1. Delete the JSON file if it exists
+2. Turn 1: `""What was EcoDrive revenue in 2022?""` — print reply
+3. Reload history from file
+4. Turn 2: `""And in 2023?""` — print reply (must mention **14.1 billion**)
+
+**Provided stub (copy exactly):**
+```python
+def mock_rag_answer(full_question):
+    text = full_question.lower()
+    if ""2022"" in text and ""revenue"" in text:
+        return ""EcoDrive revenue in 2022 was 12.4 billion dollars.""
+    if ""2023"" in text and (""revenue"" in text or ""2022"" in text):
+        return ""EcoDrive revenue in 2023 was 14.1 billion dollars.""
+    return ""I need more context about which metric and year you mean.""
+```
+
+**Expected output example:**
+```
+Turn 1: EcoDrive revenue in 2022 was 12.4 billion dollars.
+Turn 2: EcoDrive revenue in 2023 was 14.1 billion dollars.
+```",,,,,,,,,,,,,6a290d47f6189bd6b252541b,0.5,markdown,"Implement JSON save/load, `append_turn`, and `chat_once` that joins prior turns before calling the stub. Reload history before turn 2 so the follow-up works.
+
+```python
+import json
+import os
+
+HISTORY_FILE = ""ecodrive_chat_history.json""
+
+
+def mock_rag_answer(full_question):
+    text = full_question.lower()
+    if ""2022"" in text and ""revenue"" in text:
+        return ""EcoDrive revenue in 2022 was 12.4 billion dollars.""
+    if ""2023"" in text and (""revenue"" in text or ""2022"" in text):
+        return ""EcoDrive revenue in 2023 was 14.1 billion dollars.""
+    return ""I need more context about which metric and year you mean.""
+
+
+def save_history(history):
+    with open(HISTORY_FILE, ""w"") as f:
+        json.dump(history, f, indent=2)
+
+
+def load_history():
+    try:
+        with open(HISTORY_FILE, ""r"") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return []
+
+
+def append_turn(history, user_text, bot_text):
+    history.append({""role"": ""user"", ""content"": user_text})
+    history.append({""role"": ""assistant"", ""content"": bot_text})
+    save_history(history)
+    return history
+
+
+def chat_once(user_message, history):
+    lines = []
+    for msg in history:
+        lines.append(f""{msg['role']}: {msg['content']}"")
+    lines.append(f""user: {user_message}"")
+    full_question = ""\n"".join(lines)
+
+    try:
+        bot_reply = mock_rag_answer(full_question)
+    except Exception:
+        bot_reply = ""Search is unavailable right now. Please try again in a minute.""
+
+    append_turn(history, user_message, bot_reply)
+    return bot_reply
+
+
+def main():
+    if os.path.exists(HISTORY_FILE):
+        os.remove(HISTORY_FILE)
+
+    history = load_history()
+
+    reply1 = chat_once(""What was EcoDrive revenue in 2022?"", history)
+    print(""Turn 1:"", reply1)
+
+    history = load_history()
+
+    reply2 = chat_once(""And in 2023?"", history)
+    print(""Turn 2:"", reply2)
+
+
+if __name__ == ""__main__"":
+    main()
+```"
