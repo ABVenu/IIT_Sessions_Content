@@ -1,0 +1,141 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A hospital data team trains **three tumour classifiers** and wants one table showing each model's **Accuracy, Precision, Recall, and F1** on the same test set. What is this table called?",,,,,,2,,Confusion matrix,Metric comparison table,Hyperparameter grid,Pipeline manifest,,,6a2a6697103c434af8ed485c,0,markdown,"A metric comparison table places multiple models and their scores side by side for fair evaluation. A confusion matrix (A) is per-model error breakdown, not a multi-model summary. A hyperparameter grid (C) lists tuning values. A pipeline manifest (D) is not a standard ML term for model scoring."
+mcsc,markdown,"A bank's loan-default model reports **78% accuracy**, but the **F1 score for the ""default"" class is 0%** — it never flags actual defaulters. What is the best next step for the risk team?",,,,,,2,,Deploy immediately because 78% accuracy is strong,"Prioritise **F1, Precision, and Recall** alongside accuracy before choosing a model",Switch to regression because accuracy failed,Remove the test set so accuracy improves,,,6a2a6697103c434af8ed485c,0,markdown,"High accuracy can hide failure on the minority class that matters most. F1, precision, and recall reveal class-level performance. Deploying on accuracy alone (A) is risky. The problem is still classification (C is wrong). Removing the test set (D) is invalid evaluation."
+mcsc,markdown,A fraud-detection model shows **99% train accuracy** and **72% test accuracy** on the same split. What is most likely happening?,,,,,,2,,Underfitting — the model is too simple,Overfitting — the model memorised training noise,Data leakage — test rows were copied into train,Perfect generalisation — deploy with confidence,,,6a2a6697103c434af8ed485c,0,markdown,A large train–test gap with very high train score is a classic overfitting signal. Underfitting (A) shows low scores on both train and test. Leakage (C) is possible but the pattern described matches overfitting. 72% test with 99% train is not perfect generalisation (D).
+mcsc,markdown,"An ML engineer trains a model once on historical data, saves it to disk, and loads it weeks later for instant predictions without retraining. What concept does this describe?",,,,,,2,,Hyperparameter tuning,Model persistence,Cross-validation,Feature engineering,,,6a2a6697103c434af8ed485c,0,markdown,"Model persistence means saving a trained model (or pipeline) for later reuse — ""train once, load anytime."" Hyperparameter tuning (A) searches settings during training. Cross-validation (C) evaluates during training. Feature engineering (D) builds inputs, not save/load."
+mcsc,markdown,"A developer trains a `Pipeline` with `StandardScaler` + `RandomForestClassifier`, but saves **only** the forest model with `joblib.dump(rf_model, ...)`. At inference, they call `rf_model.predict(raw_features)` without scaling. What is the most likely outcome?",,,,,,2,,Predictions stay correct because Random Forest ignores feature scale,Predictions may be **wrong** because features are not scaled with the **same fitted scaler** used in training,`joblib` automatically reloads the missing scaler from disk,sklearn retrains the scaler inside `.predict()`,,,6a2a6697103c434af8ed485c,0.5,markdown,"If training used scaled features, inference must apply the same transformation. Saving only the model drops that step. Trees are less scale-sensitive than logistic regression, but a pipeline trained on scaled data still expects scaled input — and the real issue is inconsistent preprocessing. joblib (C) and sklearn (D) do not auto-fix missing preprocessing."
+mcsc,markdown,"You tune a `Pipeline` whose final step is named `""model""`. Which `param_grid` key correctly searches **`n_estimators`** inside that step?",,,,,,2,,`n_estimators`,`model__n_estimators`,`pipeline__n_estimators`,`estimator__n_estimators`,,,6a2a6697103c434af8ed485c,0.5,markdown,GridSearchCV uses `stepname__parameter` for pipeline steps — here `model__n_estimators`. Bare `n_estimators` (A) does not target the nested step. `pipeline__` (C) and `estimator__` (D) are not valid step names in this setup.
+mcmc,markdown,Three models compete on the **same patient dataset**. Which practices make the comparison **fair**?,,,,,,,,Use the **same train/test split** for every model.,"Fit preprocessing (e.g. scaler) on **train only**, then transform test.",Report each model on a **different random test split** to get variety.,Place all models and metrics in **one side-by-side table**.,,"1, 2, 4",6a2a6697103c434af8ed485c,0.5,markdown,"Fair comparison needs identical splits (A), identical preprocessing rules (B), and one readable table (D). Different test splits per model (C) make scores incomparable."
+mcmc,markdown,A decision tree shows **100% train accuracy** and **94% test accuracy**; a logistic model shows **97% train** and **97% test**. Which statements are **valid**?,,,,,,,,The tree's **train–test gap** is a possible overfitting warning.,The logistic model's **small gap** suggests more stable generalisation here.,**100% train accuracy** always means the best model to deploy.,"You should compare **train and test together**, not train score alone.",,"1, 2, 4",6a2a6697103c434af8ed485c,0.5,markdown,Large gap + perfect train fits overfitting risk (A). Similar train/test scores suggest stability (B). Perfect train alone (C) can mean memorisation — not automatic best choice. Always read both splits (D).
+mcmc,markdown,A **fintech startup** predicts **loan default (yes/no)** on **800 labelled rows**. Regulators require a **written reason** for every rejection. Which checklist decisions are **sound**?,,,,,,,,Treat it as **binary classification** and start with **Logistic Regression** or a **shallow tree**.,Jump straight to the largest **Random Forest** with no baseline table.,"Build a **metric table** and weigh **F1**, not accuracy alone.",Favour **interpretable** models because auditors need rejection reasons.,Use a **different train/test split** for each algorithm to explore more data.,"1, 3, 4",6a2a6697103c434af8ed485c,1,markdown,"Small labelled data + interpretability needs → simple classifiers first (A), F1-aware comparison (C), explainable choices (D). Skipping baselines (B) and varying splits (E) break fair comparison and good practice."
+mcmc,markdown,"A team is ready to ship a tuned **sklearn pipeline** to production. Which actions align with **safe, correct persistence**?",,,,,,,,"`joblib.dump(full_pipeline, 'model_v1.joblib')` — save scaler and model together.",Load a `.joblib` file from an **unknown email attachment** without security review.,Run **test predictions** on a small batch after `joblib.load()` before full rollout.,Never load `.joblib` / `.pkl` files from **untrusted sources** — they can run malicious code.,Prefer **pickle** over **joblib** for large sklearn models because sklearn recommends pickle.,"1, 3, 4",6a2a6697103c434af8ed485c,1,markdown,"Save the full fitted pipeline (A), sanity-check after load (C), treat serialized files as security-sensitive (D). Loading untrusted files (B) is dangerous. sklearn recommends **joblib** for models, not pickle as primary (E is false)."
+subjective,markdown,"**CareScan** is a diagnostics startup building a **benign vs malignant tumour** classifier. The ML lead wants a reproducible workflow: compare three candidates fairly, check for overfitting, pick a winner using the **start-simple rule**, and **persist** the chosen pipeline so the inference team can load it without retraining.
+
+Use the built-in **`load_breast_cancer()`** dataset from sklearn (569 rows, 30 features, binary target). No external CSV is required.
+
+### Requirements
+
+1. **Data split (reproducible):**
+   - Load features `X` and target `y` from `load_breast_cancer()`.
+   - `train_test_split(X, y, test_size=0.2, random_state=42)`.
+
+2. **Build three sklearn `Pipeline` objects** (each with `StandardScaler` + model):
+   - **Logistic Regression (Simple):** `LogisticRegression(max_iter=1000)`
+   - **Decision Tree (Medium):** `DecisionTreeClassifier(random_state=42)` — no `max_depth` limit
+   - **Random Forest (Complex):** `RandomForestClassifier(n_estimators=100, random_state=42)`
+
+3. **Metric comparison table (test set):**
+   - Train each pipeline on `X_train, y_train`.
+   - For each model, compute **test Accuracy** and **test F1** (use `f1_score` with default settings).
+   - Print a pandas DataFrame with columns: `Model`, `Test_Accuracy`, `Test_F1` (round to 4 decimals).
+
+4. **Overfitting check:**
+   - For each pipeline, also compute **train accuracy** and **test accuracy**.
+   - Print one line per model: `Model: train_acc=..., test_acc=..., gap=...` where `gap = train_acc - test_acc` (4 decimals).
+
+5. **Start-simple selection rule:**
+   - Find the **best test F1** across the three models.
+   - Select the **first model in this order** whose test F1 is within **0.02** of the best:
+     `Logistic Regression (Simple)` → `Decision Tree (Medium)` → `Random Forest (Complex)`.
+   - Print: `Selected model: <name>`.
+
+6. **Model persistence:**
+   - `joblib.dump(selected_pipeline, 'carescan_selected_pipeline.joblib')`
+   - Load it back with `joblib.load(...)`.
+   - Predict on **`X_test[0:1]`** (first test row) using the loaded pipeline.
+   - Print: `Loaded pipeline prediction for first test row: <value>`
+
+### Expected Output (minimum)
+
+```
+   Model  Test_Accuracy  Test_F1
+0  ...
+
+Logistic Regression (Simple): train_acc=..., test_acc=..., gap=...
+Decision Tree (Medium): train_acc=..., test_acc=..., gap=...
+Random Forest (Complex): train_acc=..., test_acc=..., gap=...
+
+Selected model: ...
+
+Loaded pipeline prediction for first test row: ...
+```
+
+### Submission Instruction
+
+- Code all the points mentioned in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,,6a2a6697103c434af8ed485c,0.5,markdown,"```python
+import joblib
+import pandas as pd
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score
+
+# 1) Load data and split
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# 2) Three pipelines — simple → complex
+model_order = [
+    (""Logistic Regression (Simple)"", LogisticRegression(max_iter=1000)),
+    (""Decision Tree (Medium)"", DecisionTreeClassifier(random_state=42)),
+    (""Random Forest (Complex)"", RandomForestClassifier(n_estimators=100, random_state=42)),
+]
+
+pipelines = {}
+for name, estimator in model_order:
+    pipelines[name] = Pipeline([
+        (""scaler"", StandardScaler()),
+        (""model"", estimator),
+    ])
+
+# 3) Metric comparison table (test set)
+rows = []
+for name, pipe in pipelines.items():
+    pipe.fit(X_train, y_train)
+    y_test_pred = pipe.predict(X_test)
+    rows.append({
+        ""Model"": name,
+        ""Test_Accuracy"": round(accuracy_score(y_test, y_test_pred), 4),
+        ""Test_F1"": round(f1_score(y_test, y_test_pred), 4),
+    })
+
+comparison_df = pd.DataFrame(rows)
+print(comparison_df.to_string(index=False))
+
+# 4) Overfitting check — train vs test gap
+for name, pipe in pipelines.items():
+    train_acc = accuracy_score(y_train, pipe.predict(X_train))
+    test_acc = accuracy_score(y_test, pipe.predict(X_test))
+    gap = train_acc - test_acc
+    print(
+        f""{name}: train_acc={train_acc:.4f}, test_acc={test_acc:.4f}, gap={gap:.4f}""
+    )
+
+# 5) Start-simple selection rule
+best_f1 = comparison_df[""Test_F1""].max()
+selected_name = None
+selected_pipeline = None
+for name, _ in model_order:
+    f1 = comparison_df.loc[comparison_df[""Model""] == name, ""Test_F1""].iloc[0]
+    if best_f1 - f1 <= 0.02:
+        selected_name = name
+        selected_pipeline = pipelines[name]
+        break
+
+print(f""Selected model: {selected_name}"")
+
+# 6) Persist, reload, predict one test row
+joblib.dump(selected_pipeline, ""carescan_selected_pipeline.joblib"")
+loaded_pipeline = joblib.load(""carescan_selected_pipeline.joblib"")
+prediction = loaded_pipeline.predict(X_test[0:1])
+print(f""Loaded pipeline prediction for first test row: {prediction[0]}"")
+```"
