@@ -2,456 +2,467 @@
 
 ## Context of This Session
 
-In the **previous** session you worked on the **Tesla annual report** — **`retriever`** on `./Tesla_db`, **`rag_answer`**, **`tesla_chat_history.json`**, **`run_chat_turn`**, **`MAX_STEPS`**, and user-visible errors. That helper could remember *"And in 2023?"* and stop safely — but every answer still came from **searching report text**. It had no structured way to **run a live function** and **read the result** before speaking.
+In the **previous** session you built a **Tesla report chat helper** with **short-term memory** — conversation history saved to a JSON file, **`MAX_STEPS`** so the loop cannot run forever, and **friendly error messages** when the API fails. The bot could follow up on *"And in 2023?"* because it remembered earlier turns. Every answer still came from **searching report text** in `./Tesla_db`.
 
-A Tesla PDF will never hold *"Order #48291 is out for delivery today."* Questions like that need a **tool**, not another chunk search. **Today's lab introduces a new ShopEasy support scenario** for tool calling — you reuse the same **Groq** client, **`MAX_STEPS`**, and JSON-history pattern from the Tesla work, but practice on a mock **`lookup_order`** function instead of `./Tesla_db`.
-
-ShopEasy was **not** part of the **previous** session; it is **today's** domain because order status is the clearest example of something RAG cannot answer from a static document. You close that gap with **function calling**, **tool schemas**, and the **model–tool loop**: **propose → run → return → reason again**.
+Real analyst questions often need **more than text search** — live stock prices, compound-interest math, or a web lookup. A PDF cannot hold today's Nvidia price. **Today's lab introduces your first AI agent** using the **ReAct** pattern in **LangChain**: the model **thinks**, **acts** with a tool, **reads the observation**, and only then answers.
 
 **What you will learn:**
 
-- **Describe tools in schema form** so the model can pick the right action and fill in arguments
-- **Register and bind** at least one callable tool to your agent executor
-- **Execute** the model–tool loop: propose a call, run the function, return the result
-- **Verify** tool outputs reach the model **before** the next reasoning step
+- **Define** what an **AI agent** is and how it differs from a plain chatbot
+- **Explain** the **ReAct paradigm** — **Thought**, **Action**, **Observation**, and the **scratchpad**
+- **Wrap** tools with LangChain **`Tool`** — **Python REPL** and **Serper search**
+- **Build** a **Python ReAct agent** and a **Search ReAct agent** with **`create_react_agent`**
+- **Trace** how tool outputs flow back into the loop before the final answer
 
-![Previous Tesla RAG vs today's ShopEasy tool lab — tesla_chat_history.json and ./Tesla_db from prior work; shopeasy_tool_history.json and lookup_order introduced today](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-01-tesla-rag-vs-shopeasy-tools.png)
+![From memory loop to ReAct agent — previous Tesla RAG with JSON history; today LangChain Thought Action Observation with Python REPL and Serper](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-01-tesla-rag-vs-shopeasy-tools.png)
 
 ---
 
-## Why Tools Matter — From Chat to Real Actions
+## Introduction to AI Agents
 
-The **previous** labs searched **`./Tesla_db`** — revenue, margins, and strategy live in the report. **Today's ShopEasy lab** is a different kind of question: live order status from a warehouse system, not text in a PDF.
+A **chatbot** only generates text from what it already "knows" from training. An **agent** can **plan**, **pick a tool**, **run it**, and **use the result** before speaking to you.
 
-Picture a **ShopEasy service counter**. A customer asks: *"Is my order #48291 out for delivery today?"* The staff member knows the **returns policy by heart** but **cannot open the warehouse system**. They guess: *"It should arrive soon!"* The customer checks the tracking app and sees **"Delayed — rescheduled for tomorrow."** Trust is gone.
+- **Official Definition:** An **AI agent** is a program where a **large language model (LLM)** works inside a **loop** with **tools** (search, code runner, database, etc.) to achieve a **user objective**.
+- **In Simple Words:** A chatbot is a **clever speaker**. An agent is a **speaker with hands** — it can look things up and calculate instead of only guessing.
+- **Real-Life Example:** At a **bank branch**, a trainee who only memorised the brochure is like a chatbot. A staff member who can open the **core banking system** is like an agent.
 
-- **Official Definition:** **Function calling** (also called **tool use**) is when the model outputs a **structured request** — tool name plus argument values — instead of (or before) a final user-facing reply. A **tool** is a **real capability** your Python code exposes — search policy, look up an order, calculate a fee.
-- **In Simple Words:** **RAG** is reading a **policy handbook**. **Tools** are **picking up the phone** to the warehouse. The model **fills a form** — *"Run `lookup_order` with `order_id=48291`"* — instead of only chatting.
-- **Real-Life Example:** A restaurant **floor manager** writes a **kitchen chit** — **`check_stock`**, **`paneer_tikka`** — instead of shouting a guess. Your **executor** runs Python; the model only **plans** and **speaks after seeing results**.
-
-| User question | RAG alone | Tool needed |
+| Capability | Plain chatbot | ReAct agent |
 |---|---|---|
-| *"How many days to return an item?"* | Policy chunk says **30 days** | Often enough |
-| *"When was **my** order delivered?"* | No order dates in policy | **`lookup_order`** |
-| *"Return fee for pincode 560001?"* | Rate not in policy text | **`calculate_fee`** |
+| Answer from memory | Yes | Yes |
+| Run Python for exact math | No | Yes — **python_repl** |
+| Fetch live web facts | No | Yes — **serper_search** |
+| Show reasoning steps | Rarely | Yes — **verbose=True** |
 
-- **Memory** helps follow-ups; **RAG** helps policy questions; **tools** help **live facts** tied to a specific order or calculation.
-- The model **plans**; your code **acts**; the model **speaks** only after seeing what happened. Only tools you **register** and **bind** can run — not arbitrary functions on your laptop.
-- **Common mistake:** Letting the model **guess** a delivery date — that is a **hallucinated action**, not a grounded answer.
+- **Common mistake:** Expecting the LLM to **multiply large numbers perfectly** — agents delegate math to **Python REPL**.
+- **Common mistake:** Trusting a **stock price** from chat without a **search tool** — the number may be outdated.
 
-![RAG vs tools — policy questions may need only chunk search; order status and fees need lookup_order or calculate_fee](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-02-rag-vs-tools.png)
+![Chatbot vs agent — plain chat may guess Nvidia price; ReAct agent searches then calculates with observations](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-02-rag-vs-tools.png)
 
----
+### Activity — Spot Agent vs Chatbot
 
-## Tool Schemas — Describe Tools So the Model Can Choose
+Read these two replies to *"What is Nvidia's stock price right now?"*
 
-A **tool schema** is the **menu entry** for one action: **name**, **purpose**, and **required inputs**.
+1. *"Nvidia trades around $500."* — no tool mentioned.
+2. *"Thought: I need a live price. Action: serper_search. Observation: … Final Answer: $142.38 as of today."*
 
-- **Official Definition:** A **tool schema** is a structured description (usually JSON) listing the tool's **name**, **description**, and **parameters** with types and **required** fields.
-- **In Simple Words:** The **standard chit format** on the manager's desk — every field has a label so the kitchen never gets *"make something nice."*
-- **Real-Life Example:** A **UPI app** shows *"Pay ₹500 to Rajesh (UPI ID: raj@okbank)"* before you confirm — payee, amount, and ID are all explicit.
-
-```python
-# Tool schema — the model reads this dict to know HOW to call lookup_order
-LOOKUP_ORDER_SCHEMA = {
-    "type": "function",  # Tells the API this entry is a callable tool
-    "function": {
-        "name": "lookup_order",  # Must match the Python function name exactly
-        "description": (
-            "Get delivery status, delivery date, and ETA for a ShopEasy order. "
-            "Use when the user asks about a specific order number."
-        ),
-        "parameters": {
-            "type": "object",  # Arguments arrive as one JSON object
-            "properties": {
-                "order_id": {
-                    "type": "string",  # Digits as string, e.g. "48291"
-                    "description": "ShopEasy order ID, digits only, e.g. 48291",
-                }
-            },
-            "required": ["order_id"],  # Model must always supply order_id
-        },
-    },
-}
-```
-
-**How the code works:**
-
-- **`name`** must match the Python function you register — mismatch means the executor cannot find the handler.
-- **`description`** tells the model **when** to pick this tool; **`required`** marks fields the model must never leave empty.
-- Good schemas use verb-led names (`lookup_order`), clear **when-to-use** text, and types that match your Python function.
-- **Common mistake:** Vague names like `helper`, or omitting **`required`** so the warehouse API gets empty IDs.
-
-### Activity — Read a Schema Like the Model Does
-
-1. For *"When was order 48291 delivered?"*, write the expected tool name and argument.
-2. Mentally remove `"order_id"` from **`required`** — what breaks when the warehouse API runs?
-
-![Tool schema as menu — LOOKUP_ORDER_SCHEMA with name, description, and required order_id parameter](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-03-tool-schema.png)
+Write one line each: which is chatbot-style, which is agent-style, and why the second is safer.
 
 ---
 
-## Registering and Binding a Tool
+## The ReAct Paradigm
 
-**Registering** = add `(tool_name → Python function)` to a registry. **Binding** = pass schemas to the Groq API and wire the registry into the executor loop.
+**ReAct** stands for **Reasoning + Acting**. Instead of jumping straight to an answer, the agent writes a **Thought**, picks an **Action** (a tool call), reads the **Observation** (tool output), and repeats until it can give a **Final Answer**.
 
-- **Official Definition:** **Register** maps tool names to callables. **Bind** connects schemas on the API side to **`run_registered_tool`** on the code side.
-- **In Simple Words:** Put the recipe card in the **kitchen index** and connect the **order bell** to the right stove.
-- **Real-Life Example:** Hospital triage selects **"Lab"** — the call routes to the lab extension, not billing.
+- **Official Definition:** The **ReAct paradigm** is an agent design where the LLM alternates between **reasoning traces** and **tool actions**, using **observations** from the environment to update its plan.
+- **In Simple Words:** Think → do → read what happened → think again. Like solving a sums paper and **showing rough work** in the margin.
+- **Real-Life Example:** A **detective** thinks *"I should check CCTV"*, visits the control room (**action**), reads the timestamp (**observation**), then thinks *"Now I need the witness list"*.
 
-```python
-import json  # Turn tool results into strings for the message list
+| Step | What the agent writes | Example |
+|---|---|---|
+| **Thought** | Reasoning about what to do next | *"I need compound interest — I should use Python."* |
+| **Action** | Tool name + input | `python_repl` with `print(450 * (630/450)**(2/6))` |
+| **Observation** | Raw tool output | `337.50` printed in the REPL |
+| **Final Answer** | User-facing reply | *"₹450 grows to about ₹337.50 in 2 years at the same rate."* |
 
-# Mock warehouse — production would call a real API
-MOCK_ORDERS = {
-    "48291": {"status": "out_for_delivery", "delivered_on": None, "eta": "today by 6 PM"},
-    "51002": {"status": "delivered", "delivered_on": "12 May 2025", "eta": None},
-}
-
-
-def lookup_order(order_id: str) -> dict:
-    """Callable the executor runs when the model proposes lookup_order."""
-    clean_id = order_id.strip()  # Remove accidental spaces from model output
-    if not clean_id.isdigit():
-        return {"error": f"Invalid order_id '{order_id}'. Use digits only, e.g. 48291."}
-    if clean_id not in MOCK_ORDERS:
-        return {"error": f"Order {clean_id} not found in ShopEasy records."}
-    return MOCK_ORDERS[clean_id]  # Success payload the model reads next
-
-
-TOOL_SCHEMAS = [LOOKUP_ORDER_SCHEMA]  # List sent to Groq tools= parameter
-
-TOOL_REGISTRY = {"lookup_order": lookup_order}  # Register step — name → function
-
-
-def run_registered_tool(tool_name: str, arguments: dict) -> str:
-    """Bind step: find function by name, execute, return JSON string."""
-    if tool_name not in TOOL_REGISTRY:
-        return json.dumps({"error": f"Unknown tool: {tool_name}"})
-    try:
-        result = TOOL_REGISTRY[tool_name](**arguments)  # Unpack order_id=... into lookup_order
-        return json.dumps(result)  # Model reads this string in the next turn
-    except TypeError as exc:
-        return json.dumps({"error": f"Bad arguments for {tool_name}: {exc}"})
-```
-
-**How the code works:**
-
-- **`lookup_order`** is ordinary Python — test it without any LLM first.
-- **`TOOL_SCHEMAS`** goes to Groq; **`TOOL_REGISTRY`** stays in your code — you control which functions exist.
-- **`run_registered_tool`** is the bind bridge: proposed name + args → real result string.
-
-### Activity — Test the Registry Without the Model
-
-1. Call `run_registered_tool("lookup_order", {"order_id": "48291"})` — print the result.
-2. Try `{"order_id": "99999"}` (not found) and `{"order_id": "forty-eight"}` (validation error).
-
-![Register and bind — TOOL_SCHEMAS to Groq API, TOOL_REGISTRY to Python, run_registered_tool as bridge](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-04-register-bind.png)
-
----
-
-## The Model–Tool Loop and Tool Result Handling
-
-Your **previous** Tesla loop had: read context → decide → **`rag_answer` on `./Tesla_db`** → remember → check stop. **Tool use** upgrades **act** from *"always search the report"* to *"maybe call a named tool first."*
-
-| Step | What happens |
-|---|---|
-| **1. Propose** | Model outputs a **tool call** (name + args) or a final reply |
-| **2. Run** | Executor runs the function from **`TOOL_REGISTRY`** |
-| **3. Return** | Result appended as a **`tool`** role message |
-| **4. Reason again** | Model reads result; may call another tool or answer the user |
-| **5. Stop** | **`MAX_STEPS`** from the **previous** lab still applies |
-
-- **Official Definition:** The **model–tool loop** repeats **propose → execute → return → reason** until a final answer or stop rule fires. A **tool message** is the payload the model must read on the next API call.
-- **In Simple Words:** Manager writes chit → kitchen cooks → runner brings answer → manager replies or writes another chit.
-- **Real-Life Example:** Same discipline as **RAG grounding** — you would not answer if the retrieved chunk never reached the prompt.
-
-| Role | Example |
-|---|---|
-| **`user`** | *"When was order 48291 delivered?"* |
-| **`assistant`** | Contains **`tool_calls`** instead of plain text |
-| **`tool`** | JSON string from `run_registered_tool` |
-| **`assistant`** | Final reply: *"Order 48291 is out for delivery today by 6 PM."* |
-
-- **Common mistake:** Model **says** it checked the order but code **never ran** `lookup_order` — fiction. Or tool ran but result **never appended** — model guesses anyway.
-
-![Model–tool loop — propose, run, return, reason again until final reply or MAX_STEPS](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-05-model-tool-loop.png)
+The **scratchpad** is the **running log** of every Thought, Action, and Observation. LangChain's **`AgentExecutor`** manages this scratchpad for you when **`verbose=True`**.
 
 ```mermaid
 flowchart LR
-  U[User message] --> M[Model proposes tool or reply]
-  M -->|tool call| R[Run registered function]
-  R --> T[Append tool result to messages]
-  T --> M
-  M -->|final text| A[Assistant reply to user]
+  T[Thought] --> A[Action]
+  A --> O[Observation]
+  O --> T
+  T --> F[Final Answer]
+```
+
+- **Why ReAct first:** You **see** the reasoning trail in the notebook. That builds intuition before wiring raw **function-calling** APIs by hand in a later session.
+- **Common mistake:** Skipping **`verbose=True`** and wondering why the agent "magically" knew a number — you never saw the **Action** step.
+
+![ReAct paradigm — Thought Action Observation loop on scratchpad until Final Solution](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-03-tool-schema.png)
+
+### Activity — Label a ReAct Trace
+
+A verbose log shows:
+
+```
+Thought: The user wants Tesla's founder — I should search the web.
+Action: serper_search
+Action Input: Who founded Tesla?
+Observation: Elon Musk co-founded Tesla ...
+Thought: I now know the final answer.
+Final Answer: Tesla was co-founded by Elon Musk and others; ...
+```
+
+Label four lines as **Thought**, **Action**, **Observation**, or **Final Answer**. One sentence: why must **Observation** come **before** **Final Answer**?
+
+---
+
+## Environment Setup
+
+Today's notebook installs **LangChain**, **LangChain-Groq**, and community tools. You reuse the same **Groq** model from earlier labs and add a **Serper** API key for web search.
+
+```python
+# Install packages — run once in the notebook
+!pip install langchain==0.1.9 \
+                langchain-groq \
+                langchain-experimental==0.0.52 \
+                langchainhub==0.1.15 \
+                google-search-results \
+                langchain-community
 ```
 
 ```python
-def append_tool_result(messages, tool_call_id, result_string):
-    """Return step — tool output must appear BEFORE the next model call."""
-    messages.append(
-        {
-            "role": "tool",  # Special role for function results
-            "tool_call_id": tool_call_id,  # Must match the assistant tool call id
-            "content": result_string,  # Actual JSON from run_registered_tool — not a summary
-        }
-    )
-    return messages
+# Import everything needed for ReAct agents
+import os  # Read API keys from environment variables
 
+import pandas as pd  # Used in later dataframe agent work
 
-def verify_tool_feedback(messages, expected_tool_name):
-    """Test helper — confirm tool call is followed by a tool result message."""
-    saw_call = False
-    for msg in messages:
-        if msg.get("role") == "assistant" and msg.get("tool_calls"):
-            for call in msg["tool_calls"]:
-                if call["function"]["name"] == expected_tool_name:
-                    saw_call = True
-        if saw_call and msg.get("role") == "tool" and msg.get("content"):
-            return True  # Safe to reason again
-    return False  # Wiring bug — do not trust the final answer
+from langchain import hub  # Pull the standard ReAct prompt template
+from langchain_groq import ChatGroq  # Groq chat model wrapper
+from langchain.agents import Tool, AgentExecutor, create_react_agent  # ReAct building blocks
+from langchain_experimental.utilities import PythonREPL  # Safe Python runner for agents
+from langchain_community.utilities import GoogleSerperAPIWrapper  # Serper search wrapper
+```
+
+```python
+# API keys — use os.environ locally; Colab may use userdata.get instead
+serper_api_key = os.environ.get("SERPER_API_KEY")  # From serper.dev dashboard
+groq_api_key = os.environ.get("GROQ_API_KEY")  # Same Groq key as prior labs
+
+groq_llm = ChatGroq(
+    model="llama-3.3-70b-versatile",  # Groq model with strong reasoning
+    api_key=groq_api_key,  # Authenticate requests
+    temperature=0,  # Low randomness — same habit as grounded RAG labs
+)
 ```
 
 **How the code works:**
 
-- **`tool_call_id`** links result to the exact call Groq made — mismatch breaks the next turn.
-- **`verify_tool_feedback`** catches the bug where the model cites data the tool never returned.
-- Without **`append_tool_result`**, the next `client.chat.completions.create(...)` is blind to what the tool returned.
+- **`langchain==0.1.9`** matches the instructor notebook — newer versions may change import paths.
+- **`ChatGroq`** wraps the same Groq backend you used before, now inside LangChain's agent API.
+- **`SERPER_API_KEY`** powers live Google search results through the Serper service.
+- **Common mistake:** Forgetting to export keys before opening the notebook — both searches and the LLM will fail immediately.
 
-### Activity — Spot the Wiring Bug
+---
 
-Below is a broken message list — a **`tool_calls`** entry exists but the **`tool`** result was never appended.
+## LangChain Tools — Python REPL and Serper Search
+
+Before building an agent, understand **`Tool`** — LangChain's way to **describe** and **register** one callable action. This is your **tool schema** in beginner-friendly form: **name**, **description**, and **function**.
+
+- **Official Definition:** A LangChain **`Tool`** bundles a **name**, **natural-language description**, and **Python callable** so the agent can select and invoke it.
+- **In Simple Words:** A **labelled button** on a remote — the agent reads the label to know which button to press.
+- **Real-Life Example:** A **Swiggy** app shows *"Track order"* and *"Call restaurant"* — each button has a clear purpose, like **`description`**.
+
+### Python REPL Tool
 
 ```python
-buggy_messages = [
-    {"role": "user", "content": "Status of order 48291?"},
-    {
-        "role": "assistant",
-        "tool_calls": [
-            {
-                "id": "call_abc",
-                "function": {"name": "lookup_order", "arguments": '{"order_id": "48291"}'},
-            }
-        ],
-    },
-    # Tool result never appended here — this is the wiring bug
+# Create a Python REPL instance — runs code in a controlled shell
+python_repl = PythonREPL()
+
+# Test the REPL directly — no agent yet
+python_repl.run(
+    "print('Hello World! I am a langchain tool that allows running arbitrary Python code')"
+)
+
+# See the schema the agent will read
+print(python_repl.schema())
+
+# Wrap the REPL as a LangChain Tool
+repl_tool = Tool(
+    name="python_repl",  # Short id the agent writes in the Action line
+    description=(
+        "A Python shell used to execute python commands. "
+        "Input should be a valid python command."
+    ),
+    func=python_repl.run,  # Actual function that runs when agent invokes the tool
+)
+
+# Invoke exactly as an agent would — sanity check before building the agent
+print(repl_tool.invoke('print("Hello World!")'))
+```
+
+**How the code works:**
+
+- **`PythonREPL`** executes one Python command string and returns printed output as the **observation**.
+- **`name`** and **`description`** are what the ReAct prompt shows the LLM — clear text reduces wrong tool picks.
+- **`repl_tool.invoke(...)`** proves the tool works **without** paying for an LLM call.
+
+### Serper Search Tool
+
+```python
+# Serper wraps Google search results via API
+serper_search = GoogleSerperAPIWrapper(serper_api_key=serper_api_key)
+
+# Test search alone
+print(serper_search.run("Who is the founder of Tesla?"))
+
+# Wrap as a Tool — same pattern as repl_tool
+search_tool = Tool(
+    name="serper_search",  # Agent uses this name in Action lines
+    description="An interface to the Serper search engine. Input should be a string.",
+    func=serper_search.run,  # Runs the search and returns text snippets
+)
+
+# Invoke like an agent would
+print(search_tool.invoke("Who is the founder of Tesla?"))
+```
+
+**How the code works:**
+
+- **`GoogleSerperAPIWrapper.run`** takes a plain English query string — the agent fills that string in **Action Input**.
+- Search returns **snippets** the model reads as **Observation** — not hidden inside the model weights.
+- **Common mistake:** Vague **`description`** like *"helps with stuff"* — the agent may pick the wrong tool or answer without searching.
+
+![LangChain Tool wrapper — name description func; PythonREPL and Serper; test with invoke before agent](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-04-register-bind.png)
+
+### Activity — Test Both Tools Without an Agent
+
+1. Run **`repl_tool.invoke("print(7 * 8)")`** — note the printed observation.
+2. Run **`search_tool.invoke("Who is the founder of Tesla?")`** — note that the answer comes from the web, not memory.
+3. One sentence: which tool would you use for *"₹450 grows to ₹630 in 6 years — amount in 2 years?"* and why?
+
+---
+
+## Building a Python ReAct Agent
+
+The **Python agent** has one tool: **`python_repl`**. It is ideal for **exact calculations** the LLM might approximate wrongly.
+
+LangChain hides most of the loop: **`hub.pull("hwchase17/react")`** fetches the standard ReAct prompt; **`create_react_agent`** binds the LLM, tools, and prompt; **`AgentExecutor`** runs the Thought → Action → Observation cycle until a final answer.
+
+```python
+# Fresh REPL and tool — same as earlier section
+python_repl = PythonREPL()
+repl_tool = Tool(
+    name="python_repl",
+    description="A Python shell used to execute python commands. Input should be a valid python command.",
+    func=python_repl.run,
+)
+
+# Pull the community ReAct prompt — defines Thought / Action / Observation format
+react_prompt = hub.pull("hwchase17/react")
+
+# Bind LLM + tools + prompt into a ReAct agent object
+react_agent = create_react_agent(
+    llm=groq_llm,  # Groq chat model drives reasoning
+    tools=[repl_tool],  # Only Python REPL for this agent
+    prompt=react_prompt,  # Standard ReAct instruction template
+)
+
+# Executor runs the loop; verbose=True prints every step to the notebook
+react_agent_executor = AgentExecutor(
+    agent=react_agent,  # The agent policy
+    tools=[repl_tool],  # Must match tools passed to create_react_agent
+    verbose=True,  # Show Thought / Action / Observation in output
+)
+```
+
+```python
+# Sample queries from the lab notebook
+sample_queries = [
+    "If $ 450 amounts to $ 630 in 6 years, what will it amount to in 2 years at the same interest rate?",
+    (
+        "The stock price of the shares of a certain company A closes at $ 117.25 on August 1st "
+        "whose strike price is $100. The stock expires on November 1st. There are no dividends "
+        "that need to be paid till the expiry date and the risk-free annual interest rate is 8.5%. "
+        "If the standard deviation of the volatility of the stock returns is 0.8445, calculate "
+        "the price of the call option using the Black-Scholes model formula."
+    ),
 ]
-```
 
-1. Run `verify_tool_feedback(buggy_messages, "lookup_order")` — expect **`False`**.
-2. Add a **`tool`** message with `tool_call_id="call_abc"` and the JSON from your registry test — expect **`True`**.
-3. One sentence: why is a confident final answer unsafe when verify returns **`False`**?
+# Run one query through the full ReAct loop
+user_input = sample_queries[0]  # Start with the compound-interest question
 
-![Tool message roles — user, assistant with tool_calls, tool result, final assistant reply; verify_tool_feedback catches wiring bugs](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-06-tool-message-roles.png)
+response = react_agent_executor.invoke(
+    {"input": user_input}  # User question enters the scratchpad
+)
 
----
-
-## Groq, Executor, and Memory — Put It Together
-
-Your **previous** Tesla memory lab already used **Groq**, **`MAX_STEPS`**, and **`tesla_chat_history.json`**. **Today's cells are a separate ShopEasy tool lab** — same patterns, new file **`shopeasy_tool_history.json`**. Do not overwrite the Tesla history file; the two demos serve different purposes.
-
-The same Groq client accepts **`tools=TOOL_SCHEMAS`**. The **agent executor** orchestrates model calls, runs tools, updates memory, and checks stop conditions — everything below is your executor for **today's ShopEasy lab**.
-
-This section wires propose, run, return, and the **previous** stop rules into one bounded loop.
-
-```python
-import os
-from groq import Groq
-
-client = Groq(api_key=os.environ.get("GROQ_API_KEY"))  # Same env var as prior labs
-MODEL_NAME = "llama-3.3-70b-versatile"  # Groq model with tool-calling support
-MAX_STEPS = 5  # Same safety rail as the previous memory lab — never remove
-HISTORY_FILE = "shopeasy_tool_history.json"
-
-
-def propose_tool_or_reply(messages):
-    """Propose step — model picks a tool or writes plain text."""
-    response = client.chat.completions.create(
-        model=MODEL_NAME,
-        messages=messages,  # Full history including prior tool results
-        tools=TOOL_SCHEMAS,  # Bind schemas on the API side
-        tool_choice="auto",  # Model decides tool vs direct reply
-        temperature=0,  # Same low-randomness setting as prior grounded generation
-    )
-    return response.choices[0].message  # May include tool_calls
-
-
-def run_tool_agent_turn(user_message, history):
-    """One user question — full propose-run-return loop until reply or step limit."""
-    messages = list(history)  # Copy so we do not mutate caller's list
-    messages.append({"role": "user", "content": user_message})
-    step = 0
-    final_reply = ""
-
-    while step < MAX_STEPS:
-        step += 1
-        assistant_msg = propose_tool_or_reply(messages)
-
-        if assistant_msg.tool_calls:
-            messages.append(
-                {
-                    "role": "assistant",
-                    "content": assistant_msg.content or "",
-                    "tool_calls": [
-                        {
-                            "id": call.id,
-                            "type": "function",
-                            "function": {
-                                "name": call.function.name,
-                                "arguments": call.function.arguments,
-                            },
-                        }
-                        for call in assistant_msg.tool_calls
-                    ],
-                }
-            )
-            for call in assistant_msg.tool_calls:
-                args = json.loads(call.function.arguments)  # Parse JSON args from model
-                result_string = run_registered_tool(call.function.name, args)  # Run step
-                messages = append_tool_result(messages, call.id, result_string)  # Return step
-                if not verify_tool_feedback(messages, call.function.name):
-                    final_reply = "Internal error: tool result missing. Please try again."
-                    break
-            if final_reply:
-                break
-            continue  # Reason again
-
-        final_reply = assistant_msg.content or "I could not generate a reply."
-        messages.append({"role": "assistant", "content": final_reply})
-        break
-
-    if step >= MAX_STEPS and not final_reply:
-        final_reply = "I could not finish within the safe step limit. Please try a simpler question."
-
-    return final_reply, messages
-
-
-def save_tool_history(messages):
-    """Persist full message list — tool roles included."""
-    with open(HISTORY_FILE, "w") as f:
-        json.dump(messages, f, indent=2)
-
-
-def load_tool_history():
-    """Reload on notebook restart — same pattern as tesla_chat_history.json."""
-    try:
-        with open(HISTORY_FILE, "r") as f:
-            return json.load(f)
-    except FileNotFoundError:
-        return []
-
-
-def chat_with_tools(user_message):
-    """Load history, run one turn, save, return reply."""
-    history = load_tool_history()
-    reply, updated = run_tool_agent_turn(user_message, history)
-    save_tool_history(updated)
-    return reply
+print(response["output"])  # Final natural-language answer after all observations
 ```
 
 **How the code works:**
 
-- **`while step < MAX_STEPS`** keeps runaway protection — multi-tool questions can take several model calls.
-- When **`tool_calls`** exist: **run**, **append**, **verify**, then **`continue`** — never skip to the user without feeding results back.
-- **`save_tool_history`** saves the **entire** list including **`tool`** entries — not only final assistant text.
-- **Common mistake:** Saving only the reply string — turn 2 forgets order **#48291** was already looked up.
+- **`hub.pull("hwchase17/react")`** saves you from writing the ReAct format rules by hand.
+- **`create_react_agent`** registers **`repl_tool`** with the LLM — this is **binding** the tool to the executor.
+- **`AgentExecutor.invoke`** repeats: LLM proposes Thought/Action → tool runs → Observation appended → LLM continues.
+- **`verbose=True`** is your best debugging friend — read the trace before trusting **`output`**.
+- **Common mistake:** Mismatching the **`tools=`** list between **`create_react_agent`** and **`AgentExecutor`** — the executor cannot run a tool the agent was not trained on.
 
-![Groq executor — load_tool_history, propose_tool_or_reply, run_registered_tool, save_tool_history; separate from tesla_chat_history.json](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-07-groq-executor.png)
+![Python ReAct agent — ChatGroq, hwchase17/react prompt, create_react_agent, AgentExecutor verbose for compound interest](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-05-model-tool-loop.png)
 
-### Notebook demo
+### Activity — Read the Verbose Trace
 
-```python
-# Step A — kitchen works without the model
-print(run_registered_tool("lookup_order", {"order_id": "48291"}))
+Run the compound-interest query with **`verbose=True`**. In your notebook, highlight:
 
-# Step B — full loop
-history = load_tool_history()
-reply, messages = run_tool_agent_turn("Is order 48291 out for delivery today?", history)
-print("Bot:", reply)
-save_tool_history(messages)
+1. The first line starting with **`Thought:`**
+2. The line starting with **`Action:`** and **`Action Input:`**
+3. The **`Observation:`** line with the numeric result
+4. The **`Final Answer:`** line
 
-# Step C — confirm tool results in saved history
-loaded = load_tool_history()
-print("Tool messages saved:", any(m.get("role") == "tool" for m in loaded))
-```
-
-![Notebook demo — Step A registry test, Step B full loop, Step C verify tool roles in JSON](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-08-notebook-demo-flow.png)
-
-### Activity — Two-Turn ShopEasy Chat
-
-1. `chat_with_tools("When was order 51002 delivered?")` — expect a date from **`MOCK_ORDERS`**.
-2. `chat_with_tools("What about the ETA on that same order?")` — memory should still know **51002**.
-3. Open `shopeasy_tool_history.json` — confirm **`tool`** role entries appear between assistant turns.
+One sentence: what would go wrong if **`Observation`** were empty but the agent still wrote a **Final Answer**?
 
 ---
 
-## Optional Extension — Tesla RAG as a Second Tool
+## Building a Search ReAct Agent
 
-Once **`lookup_order`** works, you can add a **second tool** that wraps your **previous** Tesla stack — same schema + registry pattern, one executor. This shows how a real agent mixes **live tools** (ShopEasy orders) with **document search** (`./Tesla_db`).
+The **search agent** combines **`serper_search`** and **`python_repl`**. Real questions often need **live data** plus **calculation** — for example, today's Nvidia price and how much ₹100 invested a week ago would be worth today.
 
 ```python
-SEARCH_TESLA_SCHEMA = {
-    "type": "function",
-    "function": {
-        "name": "search_tesla_report",
-        "description": "Search the Tesla annual report. Use for revenue, margins, or strategy questions.",
-        "parameters": {
-            "type": "object",
-            "properties": {"query": {"type": "string", "description": "Analyst question about the report"}},
-            "required": ["query"],
-        },
-    },
-}
+# Recreate Serper wrapper and search tool
+serper_search = GoogleSerperAPIWrapper(serper_api_key=serper_api_key)
+search_tool = Tool(
+    name="serper_search",
+    description="An interface to the Serper search engine. Input should be a string.",
+    func=serper_search.run,
+)
 
+# Reuse the same ReAct prompt template
+react_prompt = hub.pull("hwchase17/react")
 
-def search_tesla_report(query: str) -> dict:
-    """Wrap rag_answer + retriever from the previous Tesla lab on ./Tesla_db."""
-    try:
-        result = rag_answer(query, retriever)  # retriever unchanged from prior notebook
-        return {"answer": result["answer"]}
-    except Exception:
-        return {"error": "Report search is unavailable. Please try again in a minute."}
+# Agent now has TWO tools — model must choose search vs Python per step
+react_agent = create_react_agent(
+    llm=groq_llm,
+    tools=[search_tool, repl_tool],  # Both search and Python available
+    prompt=react_prompt,
+)
 
+# Optional: inspect prompts attached to the agent
+print(react_agent.get_prompts())
 
-# Add to TOOL_SCHEMAS and TOOL_REGISTRY alongside lookup_order — loop code unchanged
+# Executor with parsing-error recovery — format slips do not crash the loop
+react_agent_executor = AgentExecutor(
+    agent=react_agent,
+    tools=[search_tool, repl_tool],
+    verbose=True,  # Essential for multi-step traces
+    handle_parsing_errors=True,  # Re-prompt LLM if Action line is malformed
+)
 ```
 
-- Model picks **`search_tesla_report`** for *"What was 2023 revenue?"* and **`lookup_order`** for *"Where is my ShopEasy package?"*
-- **One agent, many tools** — memory, stop rules, and error handling wrap the same executor loop.
-- Today's lab focuses on **`lookup_order`** only — add **`search_tesla_report`** once the single-tool loop is stable.
+```python
+# Multi-step query: needs web price AND a calculation
+user_input = (
+    "What is the latest stock price of Nvidia and please help me calculate "
+    "if I had invested 100 dollar a week back how much money would I have today?"
+)
 
-### Activity — Plan Two Tools for One Question
+response = react_agent_executor.invoke({"input": user_input})
 
-An analyst asks: *"What was Tesla's 2023 revenue, and separately — when was ShopEasy order 51002 delivered?"* Write which tool handles each part. One sentence each for **`search_tesla_report`** and **`lookup_order`**.
+print(response["output"])
+```
+
+**How the code works:**
+
+- With **two tools**, the **Thought** step must decide: search first, then Python — or the reverse.
+- **`handle_parsing_errors=True`** catches malformed **Action** lines and lets the LLM retry instead of crashing.
+- Typical trace: **Thought** → **serper_search** → **Observation** (price) → **Thought** → **python_repl** → **Observation** (computed return) → **Final Answer**.
+- **Common mistake:** Only enabling **`python_repl`** for a *"latest price"* question — the model cannot know today's market price without **search**.
+
+![Search ReAct agent — serper_search then python_repl; multi-step observations; handle_parsing_errors](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-06-tool-message-roles.png)
+
+### Activity — Plan the Tool Sequence
+
+For the Nvidia + **$100 investment** query, write the expected order:
+
+1. Which tool runs first and what **Action Input** might look like?
+2. Which tool runs second and why?
+3. What belongs in the **Final Answer** that should **not** appear in the first **Observation** alone?
 
 ---
 
-## Tool Errors and When Something Goes Wrong
+## Inside the Loop — Schemas, Registration, and Observations
 
-When tools fail, use the same rule as the **previous** session: **friendly text for the user**, details in your notebook log. Return errors as JSON inside the tool result so the model can phrase them politely.
+You did not write a manual **Groq function-calling** loop today — **LangChain ReAct** did it for you. Under the hood, the same ideas apply and you will wire them explicitly in a **future** session.
 
-| Failure | Tool returns | Fix / user sees |
+| Concept | In LangChain ReAct today | In raw function-calling (later) |
 |---|---|---|
-| Bad **`order_id`** | `{"error": "Invalid order_id ..."}` | Validate in **`lookup_order`**; model asks for digits |
-| Order not found | `{"error": "Order not found ..."}` | Model asks user to double-check number |
-| Tool result ignored | Confident wrong answer | Call **`append_tool_result`** before next Groq request |
-| Model never calls tool | Weak or missing schema | Sharpen **`description`**; confirm **`tools=TOOL_SCHEMAS`** |
-| Infinite loop | No step limit | Keep **`MAX_STEPS = 5`** |
-| Name mismatch | *"Unknown tool"* | Align **`name`** in schema and **`TOOL_REGISTRY`** |
+| **Tool schema** | **`Tool(name, description, func)`** | JSON schema with **`parameters`** |
+| **Register / bind** | Pass **`tools=[...]`** to **`create_react_agent`** | Pass **`tools=`** to **`chat.completions.create`** |
+| **Propose call** | LLM writes **`Action:`** line | Model returns **`tool_calls`** object |
+| **Run function** | **`AgentExecutor`** calls **`func`** | Your Python **`run_registered_tool`** |
+| **Return result** | **Observation** appended to scratchpad | **`role: tool`** message in chat history |
+| **Reason again** | Next **Thought** sees observation | Next API call sees tool message |
 
-- **Never** show raw tracebacks to the customer. Most demo failures are **wiring** (step 3 skipped), not a weak model — check the message list first.
+- **Official Definition:** **Tool result handling** means every tool output must reach the model **before** the next reasoning step — as a ReAct **Observation** or a **`tool`** chat message.
+- **In Simple Words:** The chef must **taste the dish** before telling the customer it is ready.
+- **Real-Life Example:** Same discipline as **RAG grounding** — you would not answer if retrieved chunks never reached the prompt.
+
+```python
+# Conceptual check — after a tool runs, the scratchpad must contain the observation
+# AgentExecutor does this automatically; in a hand-rolled loop you would append manually:
+
+def observation_reached_scratchpad(trace_text: str, tool_name: str) -> bool:
+    """Return True only if an Observation follows an Action for the given tool."""
+    action_seen = False  # Track whether we saw the tool action line
+    for line in trace_text.splitlines():  # Walk verbose log line by line
+        if line.startswith("Action:") and tool_name in line:
+            action_seen = True  # Model proposed this tool
+        if action_seen and line.startswith("Observation:") and line.strip() != "Observation:":
+            return True  # Non-empty observation after action — safe to trust Final Answer
+    return False  # Wiring bug — Final Answer may be a guess
+```
+
+**How the code works:**
+
+- **`observation_reached_scratchpad`** mirrors **`verify_tool_feedback`** from hand-rolled loops — check trace, not vibes.
+- **`handle_parsing_errors=True`** is LangChain's safety net when the **Action** line format breaks.
+- **`MAX_STEPS`** from the **previous** memory lab still applies when you write **custom** loops — **`AgentExecutor`** has its own iteration limit you can tune later.
+- **Common mistake:** Treating **`response["output"]`** as grounded when **`verbose`** shows **no Observation** for a factual claim.
+
+![AgentExecutor loop — invoke input, Thought Action, run tool, append Observation until Final Answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-07-groq-executor.png)
+
+### Activity — Map ReAct to Function Calling
+
+Complete this table from memory:
+
+| ReAct line | Rough function-calling equivalent |
+|---|---|
+| **Action: serper_search** | ? |
+| **Action Input: Nvidia stock price** | ? |
+| **Observation: snippet text** | ? |
+| **Final Answer:** | ? |
+
+One sentence: why learn ReAct **first** if production systems often use JSON **tool_calls**?
+
+---
+
+## Reading Verbose Output and Handling Errors
+
+Most beginner bugs are **missing API keys**, **wrong package versions**, or **trusting output without reading the trace**.
+
+| Symptom | Likely cause | What to do |
+|---|---|---|
+| Auth error on first cell | **`GROQ_API_KEY`** or **`SERPER_API_KEY`** missing | Export keys; restart kernel |
+| `ImportError` for LangChain | Version mismatch | Install exact versions from setup cell |
+| Agent answers without searching | Weak tool choice; no **`serper_search`** in list | Check **`tools=[...]`**; sharpen **`description`** |
+| `Parsing LLM output produced exception` | Malformed **Action** line | Set **`handle_parsing_errors=True`** |
+| Confident wrong number | No **python_repl** observation | Read **verbose** trace; fix tool list |
+| Loop feels endless | Rare with **`AgentExecutor`** | Tune **`max_iterations`** in a later session |
+
+- **Never** show raw API tracebacks to an end user — log details in the notebook, show a short friendly message in apps.
+- **`verbose=True`** during lab; turn verbosity off in production UIs where users should only see the final reply.
+
+![Notebook lab flow — pip install, test tools, Python agent, Search agent; API keys and verbose trace](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-08-notebook-demo-flow.png)
+
+### Activity — Full Notebook Walkthrough
+
+Work through the instructor notebook in order:
+
+1. Run setup and confirm both API keys work.
+2. **`repl_tool.invoke`** and **`search_tool.invoke`** — both return sensible text.
+3. Python agent — compound-interest query; save a screenshot of the **verbose** trace.
+4. Search agent — Nvidia query; count how many **Action** steps ran.
+
+One sentence: what is the biggest difference you noticed between the **one-tool** and **two-tool** agents?
 
 ---
 
 ## Key Takeaways
 
-- **Function calling** lets the model request **named actions with structured arguments** instead of only generating text.
-- **Tool schemas** are the **menu** — name, description, and required parameters so the model picks and fills calls correctly.
-- **Register and bind** via **`TOOL_REGISTRY`** + Groq **`tools=`** so proposed calls dispatch to **real Python**.
-- The **model–tool loop** is **propose → run → return → reason again**; **`MAX_STEPS`** still stops runaway loops.
-- **Tool results must appear in `messages` before the next model call** — otherwise answers become **hallucinated actions**.
+- An **AI agent** pairs an **LLM** with **tools** in a **loop** — it can act, not only chat.
+- **ReAct** alternates **Thought → Action → Observation** until a **Final Answer**; the **scratchpad** holds the full trace.
+- LangChain **`Tool`** describes each action with **name**, **description**, and **func** — register tools by passing them to **`create_react_agent`**.
+- **`AgentExecutor`** with **`verbose=True`** runs and displays the loop; **`handle_parsing_errors=True`** keeps the search agent stable.
+- **Tool results must appear as Observations before the final reply** — otherwise answers become educated guesses.
 
-In **upcoming** work you will combine multiple tools, workflow graphs, and stronger production guardrails on the same loop you built today.
+In **upcoming** work you will wire **function-calling schemas** and **custom executors** directly — the ReAct trace you read today is the mental model for that code.
 
 ---
 
@@ -459,24 +470,22 @@ In **upcoming** work you will combine multiple tools, workflow graphs, and stron
 
 | Term / Command | Type | Meaning |
 |---|---|---|
-| **Function calling** | Concept | Model outputs structured tool name + arguments |
-| **Tool schema** | Concept | JSON description of name, purpose, and parameters |
-| **Register / bind** | Concept | Map name → function; pass schemas to API |
-| **Model–tool loop** | Concept | Propose → run → return → reason until final reply |
-| **Tool message** | Concept | Payload appended after execution for model to read |
-| **Hallucinated action** | Concept | Bot claims it checked data that was never retrieved |
-| `LOOKUP_ORDER_SCHEMA` | Code | Schema dict for order lookup |
-| `TOOL_SCHEMAS` / `TOOL_REGISTRY` | Code | Schemas for API; name → callable map |
-| `lookup_order` | Code | Mock warehouse lookup function |
-| `run_registered_tool` | Code | Execute registry function; return JSON string |
-| `append_tool_result` | Code | Add `role: tool` with matching `tool_call_id` |
-| `verify_tool_feedback` | Code | Test — tool call followed by tool result |
-| `propose_tool_or_reply` | Code | Groq call with `tools` and `tool_choice="auto"` |
-| `run_tool_agent_turn` | Code | Bounded loop with `MAX_STEPS` |
-| `chat_with_tools` | Code | Load history, run turn, save JSON |
-| `search_tesla_report` | Code | Optional second tool — wraps prior `rag_answer` on `./Tesla_db` |
-| `Groq` / `client.chat.completions.create` | Library | Chat API with tool-calling support |
-| `MAX_STEPS` | Config | Hard ceiling on loop iterations |
-| `tesla_chat_history.json` | File | **Previous** Tesla memory lab — do not overwrite today |
-| `shopeasy_tool_history.json` | File | **Today's** ShopEasy tool lab — includes tool roles |
-| `rag_answer` / `retriever` | Code | **Previous** Tesla lab on `./Tesla_db` — reuse in optional extension |
+| **AI agent** | Concept | LLM + tools in a loop to reach a user goal |
+| **ReAct** | Concept | Reasoning and Acting — Thought, Action, Observation cycle |
+| **Scratchpad** | Concept | Running log of agent steps before the final answer |
+| **Thought / Action / Observation** | Concept | ReAct steps — plan, run tool, read result |
+| **Tool schema** | Concept | Description of a tool's name, purpose, and inputs |
+| **LangChain `Tool`** | Code | Wraps `name`, `description`, `func` for agents |
+| **PythonREPL** | Code | Runs Python command strings; returns printed output |
+| **GoogleSerperAPIWrapper** | Code | Serper API search — live web snippets |
+| **`repl_tool` / `search_tool`** | Code | Wrapped tools for Python and search |
+| **`hub.pull("hwchase17/react")`** | Code | Standard ReAct prompt from LangChain Hub |
+| **`create_react_agent`** | Code | Binds LLM, tools, and ReAct prompt |
+| **`AgentExecutor`** | Code | Runs the agent loop until final output |
+| **`verbose=True`** | Config | Print Thought / Action / Observation in notebook |
+| **`handle_parsing_errors=True`** | Config | Recover from malformed Action lines |
+| **`ChatGroq`** | Library | Groq LLM inside LangChain |
+| **`invoke({"input": ...})`** | Code | Start one agent run; read `response["output"]` |
+| **Function calling** | Concept | JSON tool calls — deeper wiring in a later session |
+| **`GROQ_API_KEY`** | Secret | Groq authentication |
+| **`SERPER_API_KEY`** | Secret | Serper web search authentication |

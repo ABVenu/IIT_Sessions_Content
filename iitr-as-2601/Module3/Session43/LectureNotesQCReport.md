@@ -103,3 +103,45 @@
 **Line count:** ~482 lines.
 
 **Fix applied:** Repositioned `session43-07-groq-executor.png` to immediately follow Groq executor code (was after two-turn activity, out of section order).
+
+---
+
+## Iteration 5
+
+**Trigger:** Instructor revision — replace heavy manual Groq function-calling / ShopEasy lab with ReAct-first LangChain approach aligned to `GROQ_python_search_dataframe_agent.ipynb` and Session 5.pptx.
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | ReAct paradigm (Thought/Action/Observation/scratchpad); LangChain `Tool`; Python REPL + Serper; `create_react_agent` + `AgentExecutor`; Python agent + Search agent with sample queries from notebook. Metadata subtopics mapped via ReAct lens: tool schema (`Tool`), register/bind (`tools=` to agent), execution cycle (AgentExecutor loop), result handling (Observation before Final Answer). Function calling deferred to upcoming session per instructor. |
+| **Creativity** | **5 / 5** | Bank trainee vs core banking; detective CCTV; Swiggy labelled buttons; chef tasting before serving; compound-interest and Nvidia lab scenarios from notebook. |
+| **Structural Adherence** | **5 / 5** | `#` title; context + What you will learn; Official/Simple/Real-life on new terms; full code with line comments + How the code works; 8 student-facing activities; Key Takeaways; terminology table; mermaid ReAct loop; 8 S3 diagrams regenerated. |
+| **No Logical Mistakes** | **True** | Aligns with notebook cells (setup, repl_tool, search_tool, python agent, search agent with `handle_parsing_errors`). Colab `userdata.get` noted; local `os.environ` variant provided. Prior Tesla memory/`MAX_STEPS` continuity preserved. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no "Ask students to"; paragraphs ≤3 sentences; ~491 lines. |
+| **No Previous Session Number References** | **True** | Uses **previous**, **upcoming**, **future** only. |
+| **No Metadata/internal reference** | **True** | No instructor-instruction leakage. |
+
+**Outcome:** QC passed on iteration 5.
+
+**Line count:** ~491 lines.
+
+**Major change:** Removed ShopEasy `lookup_order` manual Groq loop; added ReAct + LangChain lab path.
+
+---
+
+## Iteration 6
+
+**Trigger:** Second QC pass on revised `Lecture Notes.md` (post S3 image upload).
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Verified all notebook demo paths: pip install versions, `hub.pull("hwchase17/react")`, both agents, sample_queries[0], Nvidia multi-tool query. Mapping table connects ReAct to function calling for future sessions. |
+| **Creativity** | **5 / 5** | Verified analogies consistent across sections; activities trace verbose output. |
+| **Structural Adherence** | **5 / 5** | Grep: no session numbers, no internal metadata. All 8 diagram URLs match uploaded S3 assets. |
+| **No Logical Mistakes** | **True** | `tools` lists match between `create_react_agent` and `AgentExecutor`; temperature=0; API key setup documented. |
+| **No Presentation Mistakes** | **True** | Verified. |
+| **No Previous Session Number References** | **True** | Verified. |
+| **No Metadata/internal reference** | **True** | Verified. |
+
+**Outcome:** QC passed on iteration 6.
+
+**Assets:** 8 PNG diagrams regenerated and uploaded to S3 (`session43-01` … `session43-08`).
