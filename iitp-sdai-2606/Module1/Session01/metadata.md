@@ -1,4 +1,4 @@
-lecture ID:
+lecture ID: 157706
 
 Course Name: Certification in
 Software Development Engineering with Applied AI

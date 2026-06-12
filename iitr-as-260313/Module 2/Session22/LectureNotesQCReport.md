@@ -69,3 +69,21 @@
 **Notes:** Expanded from ~293 to ~471 lines. Added clinic section, five ShopKart walkthrough examples, hallucination section, lever definitions (Official/Simple/Example), precision vs recall, 8-query TEST_QUERIES, expanded verification tables, production triggers. Code snippets remain simple (no score_retrieval/diagnose_failure). Implementation is still the primary activity.
 
 **Pass 4 outcome:** PASS
+
+---
+
+## QC Pass 5 (Released Notes — aligned to Live Topic Coverage)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Created `Lecture Notes Released.md` trimmed to live-session coverage. Removed: Precision vs Recall section (not taught); ShopKart Examples 4–5 walkthroughs and 7 PM dispatch query (not demo'd); Mentimeter/quiz content (session protocol only). Added: single-category filter limitation, subdividing RAG by metadata, guess_category hit-and-trial/fallback, prompt diff tip, output.txt comparison, Groq rate-limit note, code.py alias. Retained all 8 images. TEST_QUERIES reduced from 8 to 7 (removed 7 PM dispatch). Lever 4 marked optional follow-up. Live walkthrough focus noted on Examples 1–3.
+
+**Pass 5 outcome:** PASS — expected QC result achieved for Released notes.

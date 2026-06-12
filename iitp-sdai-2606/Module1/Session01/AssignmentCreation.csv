@@ -1,0 +1,240 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya uses **PhonePe** every day to pay her college canteen bill. The app shows her balance, sends payment confirmations, and blocks wrong PIN attempts.
+
+What is the **best description** of what makes all of this work behind the screen?",,,,,,2,,The phone hardware stores money physically inside the SIM card,Step-by-step instructions written in code tell the computer exactly what to do for each action,The internet automatically guesses what Priya wants without any instructions,UPI apps work only because users type faster on the keyboard,,6a2ba93f608f1474b9118577,0,markdown,"Programming means giving the computer **clear, step-by-step instructions**. Apps like PhonePe are built from code that handles payments, messages, and checks — the computer does not guess.
+
+**Why other options are wrong:**
+- A: Digital payments are software logic, not physical cash in a SIM.
+- C: Computers follow instructions; they do not guess intent on their own.
+- D: Typing speed has nothing to do with how an app is built."
+mcsc,markdown,"Amit writes his first Python program in an **online compiler** on his friend's laptop because he has not installed Python yet.
+
+What is the **main advantage** of using an online compiler for a beginner on day one?",,,,,,2,,It permanently replaces the need to learn Python syntax,He can write and run Python code in the browser without installing Python on the machine,It automatically writes all programs for him so he never has to type code,It converts Python programs into WhatsApp messages,,6a2ba93f608f1474b9118577,0,markdown,"An **online compiler** is a web tool with a code editor and Run button. Beginners can start coding immediately without local installation.
+
+**Why other options are wrong:**
+- A: You still must learn syntax and logic.
+- C: Online compilers execute code you write; they do not auto-generate full programs.
+- D: That is not what an online compiler does."
+mcsc,markdown,"In a Python program, Rahul adds this line above his code:
+
+```python
+# Show today's menu to the customer
+```
+
+What happens when Python runs this line?",,,,,,3,,"Python prints ""Show today's menu to the customer"" on the screen",Python stops the program with an error,Python ignores this line because it is a comment,Python stores the text in a variable called `menu`,,6a2ba93f608f1474b9118577,0,markdown,"Lines starting with `#` are **comments** — notes for humans. Python skips them during execution.
+
+**Why other options are wrong:**
+- A: Only `print()` displays text; comments do not.
+- B: Comments are valid Python; they do not cause errors.
+- D: Comments are not variable assignments."
+mcsc,markdown,"Neha creates these variables in Python:
+
+```python
+age = 19
+city = ""Pune""
+```
+
+Which statement is **correct** about `age` and `city`?",,,,,,2,,`age` stores text and `city` stores a whole number,`age` stores a whole number (int) and `city` stores text (str),Both variables must be declared with `int` and `str` keywords in Python,Python cannot store numbers and text in variables at the same time in one program,,6a2ba93f608f1474b9118577,0,markdown,"`19` is a whole number (**int**). `""Pune""` in quotes is text (**str**). Python uses **dynamic typing** — you assign values directly without declaring types upfront.
+
+**Why other options are wrong:**
+- A: The types are reversed.
+- C: Python does not require `int age = 19` style declarations.
+- D: One program can hold many variables of different types."
+mcsc,markdown,"Karan checks whether a student's marks equal the full score:
+
+```python
+marks = 78
+```
+
+Which line **correctly checks** if `marks` is equal to `100` without changing the value stored in `marks`?",,,,,,2,,`marks = 100`,`marks == 100`,`100 = marks`,`marks === 100`,,6a2ba93f608f1474b9118577,0.5,markdown,"`==` is the **comparison** operator — it checks equality and returns `True` or `False`. `=` is **assignment** and would overwrite `marks`.
+
+**Why other options are wrong:**
+- A: `=` assigns 100 to `marks`; it does not compare.
+- C: Invalid syntax — you cannot assign to a literal on the left.
+- D: Python uses `==`, not `===`."
+mcsc,markdown,"Sneha runs this program:
+
+```python
+quantity = input(""How many notebooks did you buy? "")
+total = quantity + 2
+print(total)
+```
+
+She types `5` at the prompt. The program crashes with a **TypeError**.
+
+What is the **most likely fix**?",,,,,,2,,Change `print` to `Print`,Convert the input to an integer before adding: `total = int(quantity) + 2`,Remove the quotes from the `input()` message,Replace `+` with `==`,,6a2ba93f608f1474b9118577,0.5,markdown,"`input()` always returns a **string**. `""5"" + 2` is invalid in Python. Use `int(quantity)` before arithmetic.
+
+**Why other options are wrong:**
+- A: `Print` would cause a `NameError`, not fix the type issue.
+- C: The prompt message must stay in quotes.
+- D: `==` compares values; it does not add them."
+mcmc,markdown,"A coaching centre stores student records in Python variables:
+
+```python
+roll_number = 1042
+percentage = 88.5
+name = ""Anita""
+is_scholarship = True
+```
+
+Which statements about these variables are **correct**?
+
+*Select all correct options.*",,,,,,,,`roll_number` holds an integer value,`percentage` holds a float value because it has a decimal point,`name` holds a string value,`is_scholarship` can be stored as `true` (lowercase) in standard Python,"1, 2, 3",6a2ba93f608f1474b9118577,0.5,markdown,"`1042` is **int**, `88.5` is **float**, `""Anita""` is **str**, and `True` is **bool** with a capital **T**.
+
+**Why other options are wrong:**
+- D: Boolean literals in Python are `True` and `False` with capital first letters; lowercase `true` causes a `NameError`."
+mcmc,markdown,"Vikram splits a ₹1,500 dinner bill among 3 friends using Python variables:
+
+```python
+total_bill = 1500
+friends = 3
+share = total_bill / friends
+```
+
+Which statements about **arithmetic operators** in this snippet are **correct**?
+
+*Select all correct options.*",,,,,,,,`/` divides `total_bill` by `friends`,`share` will be `500.0` (a float result in Python 3),`%` would give the remainder if used as `1500 % 3`,`**` is required to divide two numbers in Python,"1, 2, 3",6a2ba93f608f1474b9118577,0.5,markdown,"`/` performs division. `1500 / 3` is `500.0`. `%` returns remainder (`1500 % 3` is `0`). `**` is for exponentiation, not division.
+
+**Why other options are wrong:**
+- D: Division uses `/`, not `**`."
+mcmc,markdown,"A library membership rule says: a member gets a discount only if they are **18 or older** **and** have **paid the annual fee**.
+
+```python
+age = 20
+fee_paid = True
+```
+
+Which expressions evaluate to **True** for this member?
+
+*Select all correct options.*",,,,,,,,`age >= 18 and fee_paid`,`age < 18 or fee_paid`,`not (age < 18)`,`age == 20 and not fee_paid`,"1, 2, 3",6a2ba93f608f1474b9118577,1,markdown,"- A: `20 >= 18` is `True` and `fee_paid` is `True` → `True and True` → **True**.
+- B: `age < 18` is `False`, but `fee_paid` is `True` → `False or True` → **True**.
+- C: `not (20 < 18)` → `not False` → **True**.
+- D: `not fee_paid` is `False`, so the `and` chain is **False**.
+
+**Why other options are wrong:**
+- D: Fee was paid (`True`), so `not fee_paid` makes the whole expression false."
+mcmc,markdown,"Meera debugs this program meant to print the sum of two numbers from the user:
+
+```python
+v1 = input(""Enter first number: "")
+v2 = input(""Enter second number: "")
+total = v1 + v2
+print(""Total is"", total)
+```
+
+She enters `10` and `20`. The output is `Total is 1020` instead of `Total is 30`.
+
+Which changes would **correctly fix** the program? (Select all that apply.)",,,,,,,,"`v1 = int(input(""Enter first number: ""))` and `v2 = int(input(""Enter second number: ""))`",`total = int(v1) + int(v2)` after the two `input()` lines,`total = v1 + v2` with no other changes — Python will auto-convert strings to integers,"Replace `print(""Total is"", total)` with `# Total is` so Python adds numbers silently","1, 2",6a2ba93f608f1474b9118577,1,markdown,"`input()` returns strings, so `""10"" + ""20""` concatenates to `""1020""`. Converting with `int()` before addition fixes the maths. Both A (convert at input) and B (convert before adding) work.
+
+**Why other options are wrong:**
+- C: Python does **not** auto-convert strings to integers for `+` between two strings.
+- D: Commenting out `print` hides output and does not fix the calculation."
+subjective,markdown,"**Riya** runs a **college fest food stall**. She sells **samosas** at **₹15 each** and **chai** at **₹10 per cup**. Customers often order both, and she wants a small Python program on her laptop to calculate each bill quickly instead of using a calculator every time.
+
+### Problem Statement
+
+Write a Python program that:
+
+1. Asks the customer for their **name** (text input).
+2. Asks how many **samosas** they bought (whole number).
+3. Asks how many **chai cups** they bought (whole number).
+4. Uses **variables** to store:
+   - fixed prices: samosa = `15`, chai = `10`
+   - the quantities entered by the customer
+   - the **total bill** (samosas × price + chai × price)
+5. Prints a clear bill summary on separate lines, for example:
+
+```
+Customer: Aarav
+Samosas: 2 x 15 = 30
+Chai: 3 x 10 = 30
+Total Bill: 60
+```
+
+(Your program should work for **any** valid name and non-negative whole numbers the user types.)
+
+### Sample Run
+
+**Input (user types when prompted):**
+
+```
+Enter customer name: Aarav
+How many samosas? 2
+How many chai cups? 3
+```
+
+**Expected Output:**
+
+```
+Customer: Aarav
+Samosas: 2 x 15 = 30
+Chai: 3 x 10 = 30
+Total Bill: 60
+```
+
+### Constraints
+
+- Use `input()` and `print()` for user interaction and output.
+- Convert samosa and chai counts to integers with `int()` before doing maths.
+- Use **arithmetic operators** (`*`, `+`) for calculations — do not hard-code the final total.
+- Add at least **one comment** (`#`) explaining what your program does.
+- Write your complete program in [OneCompiler Python](https://onecompiler.com/python).
+
+### Submission Instruction
+
+1. Open [https://onecompiler.com/python](https://onecompiler.com/python) and create a new Python file.
+2. Write your complete program in the editor, then click **Run** and verify the output.
+3. Click the **Save** button at the top right.
+4. Enter your **assignment name**, set visibility to **Public**, and save.
+5. Click the **Share** button, copy the link, and submit that link in the answer box on the LMS.
+
+![Step - 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5b930478-03c2-4255-a724-d0990da5e4f4/C0AFXttOJJhW3o1S.png)
+
+![Step-2](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/c817d308-66ca-4b5a-8579-db26951ad1a2/PGcKY2hqUQgysgPo.png)",,,,,,,,,,,,,6a2ba93f608f1474b9118577,0.5,markdown,"### Step-by-step Walkthrough
+
+1. Prompt for the customer name with `input()` and store it in a variable.
+2. Prompt for samosa and chai counts; wrap each `input()` with `int()` so maths works on numbers, not strings.
+3. Store fixed prices in variables (`15` and `10`).
+4. Calculate line totals with `*` and grand total with `+`.
+5. Use multiple `print()` calls to show the bill in the required format.
+
+### Reference Solution
+
+```python
+# College fest stall bill calculator for samosas and chai
+
+# Step 1: Get customer name
+customer_name = input(""Enter customer name: "")
+
+# Step 2: Get quantities (convert to integers for maths)
+samosas_count = int(input(""How many samosas? ""))
+chai_count = int(input(""How many chai cups? ""))
+
+# Step 3: Fixed prices
+samosa_price = 15
+chai_price = 10
+
+# Step 4: Calculate line totals and grand total
+samosas_total = samosas_count * samosa_price
+chai_total = chai_count * chai_price
+grand_total = samosas_total + chai_total
+
+# Step 5: Print bill summary
+print(""Customer:"", customer_name)
+print(""Samosas:"", samosas_count, ""x"", samosa_price, ""="", samosas_total)
+print(""Chai:"", chai_count, ""x"", chai_price, ""="", chai_total)
+print(""Total Bill:"", grand_total)
+```
+
+### Sample Verification
+
+For input `Aarav`, `2`, `3`:
+
+- Samosas: `2 * 15 = 30`
+- Chai: `3 * 10 = 30`
+- Total: `30 + 30 = 60`
+
+### Alternative Approaches
+
+- Store `int(input(...))` directly in one line for each quantity (same logic, fewer variables).
+- Add a short `#` comment above each major step for readability."

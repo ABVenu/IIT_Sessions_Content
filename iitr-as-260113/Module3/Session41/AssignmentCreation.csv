@@ -1,0 +1,312 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"An ed-tech company runs a **standalone LangChain RAG chain** for course policies. Every student question triggers retrieval, even when the student only asks: *""What is the status of ticket TKT-51001?""*
+
+What is the **main limitation** of this design compared to an **integrated tool-calling agent**?",,,,,,2,,The chain cannot search policy documents at all,The chain always retrieves documents and cannot autonomously choose a ticket-lookup tool instead,The chain automatically refuses all out-of-domain questions without any prompt rules,The chain stores chat history in Chroma by default,,6a2b838b8ce4c01a2c7d42b7,0,markdown,"A standalone RAG chain follows a fixed retrieve-then-answer path. An integrated agent can **arbitrate** between a retriever-backed tool and auxiliary tools such as ticket lookup.
+
+**Why other options are wrong:**
+- A: RAG chains are built for document search; that is not the limitation here.
+- C: Refusal behaviour depends on prompts, not on chain vs agent architecture alone.
+- D: Chat history is a separate memory concern, not a default Chroma feature."
+mcsc,markdown,"A developer wraps an existing Chroma retriever using:
+
+```python
+course_policy_tool = create_retriever_tool(
+    retriever=retriever,
+    name=""course_policy_tool"",
+    description=""Search official course policy documents for refund and attendance rules."",
+)
+```
+
+What is the **primary purpose** of `create_retriever_tool`?",,,,,,2,,Fine-tune the LLM on every policy PDF,Expose the retriever as a callable tool the agent can select like any other `@tool`,Delete the vector database after each query,Replace `AgentExecutor` with an LCEL chain,,6a2b838b8ce4c01a2c7d42b7,0,markdown,"`create_retriever_tool` turns a retriever into a **tool contract** (name + description) so a tool-calling agent can invoke policy search when appropriate.
+
+**Why other options are wrong:**
+- A: No fine-tuning happens in this wrapper.
+- C: Chroma data remains unless you delete it explicitly.
+- D: Agents and LCEL chains solve different orchestration patterns."
+mcsc,markdown,"A course support agent has two tools:
+
+- **`course_policy_tool`** — searches policy documents
+- **`get_ticket_status`** — looks up a ticket ID in a support database
+
+A student asks: *""What is the status of ticket TKT-1002?""*
+
+Which tool should the agent call **first**?",,,,,,2,,`course_policy_tool`,`get_ticket_status`,Both tools in every case,Neither — the LLM should answer from general world knowledge,,6a2b838b8ce4c01a2c7d42b7,0,markdown,"Ticket status is **live operational data** tied to a ticket ID, not a paragraph inside the policy corpus. That is a **tool-first** routing case.
+
+**Why other options are wrong:**
+- A: Policy search does not return ticket workflow status.
+- C: Both tools are needed only when the user asks for policy **and** ticket facts together.
+- D: Production support bots should use registered tools, not open-ended trivia."
+mcsc,markdown,"In a tool-calling agent prompt you define:
+
+```python
+MessagesPlaceholder(variable_name=""chat_history"", optional=True),
+(""human"", ""{input}""),
+MessagesPlaceholder(variable_name=""agent_scratchpad""),
+```
+
+Turn 1: *""My ticket is TKT-51001.""*
+Turn 2: *""What is the status of it?""*
+
+Which placeholder helps the agent resolve *""it""* as **TKT-51001**?",,,,,,2,,`agent_scratchpad` only,`chat_history` only,Both placeholders store the same past user-assistant turns,Neither — the LLM always remembers prior turns without placeholders,,6a2b838b8ce4c01a2c7d42b7,0,markdown,"**`chat_history`** holds prior **user ↔ assistant** messages across invocations. **`agent_scratchpad`** holds tool steps for the **current** run only.
+
+**Why other options are wrong:**
+- A: Scratchpad tracks tool calls inside one execution, not multi-turn dialogue memory.
+- C: They serve different roles and are filled differently.
+- D: You must pass and maintain history explicitly (or use a history helper)."
+mcsc,markdown,"After shipping a course support agent, the team notices: refund questions sometimes call **`get_ticket_status`** instead of **`course_policy_tool`**, even though the code runs without errors.
+
+What is the **most practical first fix**?",,,,,,2,,Increase `max_iterations` to 100,Rewrite tool descriptions and system prompt routing rules so each tool's *when to use* is explicit,Delete Chroma and stop using retrieval entirely,Switch from `gpt-4o-mini` to a smaller embedding model,,6a2b838b8ce4c01a2c7d42b7,0.5,markdown,"This is a **wrong tool** failure signature. Clear tool **contracts** (name + description + prompt rules) are the first arbitration fix before tuning retrieval knobs.
+
+**Why other options are wrong:**
+- A: More iterations do not fix incorrect tool choice.
+- C: Removing retrieval breaks policy questions.
+- D: Embedding model changes address weak retrieval, not tool routing."
+mcsc,markdown,"A developer wires `MessagesPlaceholder(""chat_history"")` and passes `chat_history=[]` on every `invoke`, but **never appends** `HumanMessage` / `AIMessage` after each reply.
+
+What symptom appears on turn 2?",,,,,,2,,The agent cannot call any tools on turn 1,Turn 2 behaves like turn 1 with **no memory** of earlier messages,Chroma automatically stores chat history,`agent_scratchpad` replaces the need to append messages,,6a2b838b8ce4c01a2c7d42b7,0.5,markdown,"The placeholder reserves space; **you** must append messages after each `invoke`. Without append, the list stays empty — classic **missing memory** behaviour.
+
+**Why other options are wrong:**
+- A: Turn 1 can still work; the bug shows on follow-ups.
+- C: Chroma stores document vectors, not dialogue turns.
+- D: Scratchpad does not persist cross-turn user facts."
+mcmc,markdown,Which components are **required** to run a LangChain **tool-calling agent with conversational memory** like the course support demo?,,,,,,,,"`create_tool_calling_agent` bound to an LLM, tools, and prompt",`AgentExecutor` with the same `tools` list and parameters such as `max_iterations`,`MessagesPlaceholder` for `agent_scratchpad` in the prompt,`RunnablePassthrough` as a substitute for `chat_history`,"1, 2, 3",6a2b838b8ce4c01a2c7d42b7,0.5,markdown,"The agent graph, executor loop, scratchpad placeholder, and manual or automatic **`chat_history`** maintenance form the integrated pattern taught in the lab.
+
+**Why other options are wrong:**
+- D: `RunnablePassthrough` forwards inputs in LCEL chains; it does not replace conversational memory in agent prompts."
+mcmc,markdown,"An **EvalPack** row for the course support agent includes:
+
+```python
+{
+    ""name"": ""refund_policy"",
+    ""input"": ""What is the refund policy within the first week?"",
+    ""expected_tool"": ""course_policy_tool"",
+    ""expected_keywords"": [""7 days"", ""refund"", ""30 days""],
+    ""failure_type"": ""weak_retriever_or_missing_retrieval"",
+}
+```
+
+Which statements about this EvalPack design are **correct**?",,,,,,,,`expected_tool` helps verify **tool arbitration** for in-domain policy questions,`expected_keywords` supports checking grounded answer content after a run,`failure_type` suggests what to fix if the case fails (retrieval vs routing),EvalPack rows must always set `expected_tool` to `get_ticket_status`,"1, 2, 3",6a2b838b8ce4c01a2c7d42b7,0.5,markdown,"Compact eval cases combine **routing expectations**, **answer checks**, and **failure hints** for regression testing.
+
+**Why other options are wrong:**
+- D: Each case sets the tool that **should** fire for that scenario; ticket cases use `get_ticket_status`, policy cases use `course_policy_tool`."
+mcmc,markdown,A team debugs a course support agent and records these **failure signatures**. Which **first-fix** statements are **correct**?,,,,,,,,**Wrong tool** (policy question calls `get_ticket_status`) → improve tool descriptions and routing rules in the system prompt,"**Weak retrieval** (right tool, irrelevant policy chunk) → tune `chunk_size`, `chunk_overlap`, or retriever `k`",**Over-refusal** (agent refuses when policy exists in corpus) → review overly strict refusal wording in the system prompt,**Wrong tool** failures → fix first by setting LLM `temperature=1.0` so the model explores more random tools,"1, 2, 3",6a2b838b8ce4c01a2c7d42b7,1,markdown,"Wrong-tool, weak-retrieval, and over-refusal fixes map to **contracts**, **retrieval tuning**, and **prompt strictness** respectively — the debugging order taught for integrated agents.
+
+**Why other options are wrong:**
+- D: Higher temperature increases randomness; it does not repair tool arbitration. Routing fixes start with descriptions and prompt rules, not temperature tricks."
+mcmc,markdown,"A course support agent exposes **`course_policy_tool`** and **`get_ticket_status`**. The system prompt says the bot only helps with **course policies and support tickets**.
+
+For each user message, which routing outcomes are **correct**?",,,,,,,,"*""What is the refund policy?""* → call `course_policy_tool`","*""Status of ticket TKT-51001?""* → call `get_ticket_status`","*""Who won IPL 2025?""* → refuse politely; do not invent an answer from tools","*""What is the refund policy?""* → always call `get_ticket_status` first, then never retrieve","1, 2, 3",6a2b838b8ce4c01a2c7d42b7,1,markdown,"In-domain policy → retriever tool. Ticket ID → auxiliary tool. Out-of-domain sports trivia → guarded refusal without tool misuse.
+
+**Why other options are wrong:**
+- D: Refund policy lives in documents; forcing ticket lookup first is incorrect arbitration."
+subjective,markdown,"A coding institute's **student helpdesk** wants one assistant that can (1) search **official course rules** and (2) check **support ticket status** — and remember a ticket ID across turns. Your task is to build a small **integrated LangChain agent** in a **single Python file**.
+
+### Policy and ticket data to use
+
+Embed these three policies as inline `Document` objects (include `metadata={""source"": ""<filename>""}`):
+
+| `source` metadata | `page_content` (use exactly) |
+|---|---|
+| `refund_policy.md` | `Refund policy: Full refund within 7 days of enrollment if no live class attended. Partial refund within 30 days per program rules.` |
+| `attendance_policy.md` | `Attendance policy: Minimum 75% attendance is required for certification and placement support.` |
+| `batch_change_policy.md` | `Batch change policy: Students may request one batch change per cohort. Missing more than three classes without approved leave may delay batch change.` |
+
+Use this **fake ticket database** inside your `@tool` function:
+
+```python
+FAKE_TICKET_DATABASE = {
+    ""TKT-2001"": ""Refund request under review. Expected response in 2 working days."",
+    ""TKT-2002"": ""Batch change request approved. New batch starts next Monday."",
+}
+```
+
+### Problem Statement
+
+Create **`course_support_agent.py`** that:
+
+1. **Ingests** the three policies into Chroma:
+   - `RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=60)`
+   - `OpenAIEmbeddings(model=""text-embedding-3-small"")`
+   - Collection name: `helpdesk_policy_docs`
+2. Builds **`course_policy_tool`** with `create_retriever_tool` (`similarity`, `k=2`) and a clear description mentioning **refund, attendance, and batch change** rules.
+3. Defines **`get_ticket_status(ticket_id: str)`** with `@tool` and a docstring that says when to use it for ticket / refund-request status.
+4. Creates a **tool-calling agent** with:
+   - `MessagesPlaceholder` for **`chat_history`** (`optional=True`) and **`agent_scratchpad`**
+   - System rules: use policy tool for policy questions; ticket tool for ticket IDs; refuse politely on out-of-domain topics
+   - `AgentExecutor(..., verbose=True, max_iterations=3)`
+5. Implements **`ask_agent(user_query: str) -> str`** that invokes the executor, then **appends** `HumanMessage` and `AIMessage` to `chat_history`.
+6. In `main()`, run these **four** labelled prints (same `chat_history` list across turns 3 and 4):
+
+| Label | User message | Expected behaviour |
+|---|---|---|
+| **Demo A** | `What is the refund policy in the first week?` | Calls `course_policy_tool`; answer mentions **7 days** / refund |
+| **Demo B** | `What is the status of ticket TKT-2001?` | Calls `get_ticket_status`; mentions **review** or **working days** |
+| **Demo C (turn 1)** | `My support ticket is TKT-2002.` | Acknowledges or records context |
+| **Demo C (turn 2)** | `What is the status of it?` | Uses memory + calls `get_ticket_status`; mentions **batch change** or **Monday** |
+| **Demo D** | `Who won IPL 2025?` | Polite refusal — no invented sports answer |
+
+Set `OPENAI_API_KEY` in your environment before running:
+
+```bash
+python3 course_support_agent.py
+```
+
+### Expected Outcome
+
+- **Demo A:** Policy retrieval path; grounded refund wording.
+- **Demo B:** Ticket tool path; no policy search required.
+- **Demo C:** Two-turn memory — turn 2 resolves **TKT-2002** without the user repeating the ID.
+- **Demo D:** Out-of-domain refusal within course-support scope.
+- Terminal `verbose=True` output should show which tools fired.
+
+### Submission Instruction
+
+- code all the points mentioned in VS Code in a single `.py` file (`course_support_agent.py`)
+- run the code and verify it is working
+- then submit the code in the code editor / answer box in the LMS",,,,,,,,,,,,,6a2b838b8ce4c01a2c7d42b7,0.5,markdown,"### Reference — `course_support_agent.py`
+
+```python
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_core.documents import Document
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.tools import tool
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_chroma import Chroma
+from langchain.tools.retriever import create_retriever_tool
+from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+
+RAW_DOCUMENTS = [
+    Document(
+        page_content=(
+            ""Refund policy: Full refund within 7 days of enrollment if no live class attended. ""
+            ""Partial refund within 30 days per program rules.""
+        ),
+        metadata={""source"": ""refund_policy.md""},
+    ),
+    Document(
+        page_content=(
+            ""Attendance policy: Minimum 75% attendance is required for certification and placement support.""
+        ),
+        metadata={""source"": ""attendance_policy.md""},
+    ),
+    Document(
+        page_content=(
+            ""Batch change policy: Students may request one batch change per cohort. ""
+            ""Missing more than three classes without approved leave may delay batch change.""
+        ),
+        metadata={""source"": ""batch_change_policy.md""},
+    ),
+]
+
+splitter = RecursiveCharacterTextSplitter(chunk_size=400, chunk_overlap=60)
+split_docs = splitter.split_documents(RAW_DOCUMENTS)
+
+embeddings = OpenAIEmbeddings(model=""text-embedding-3-small"")
+vectorstore = Chroma.from_documents(
+    documents=split_docs,
+    embedding=embeddings,
+    collection_name=""helpdesk_policy_docs"",
+)
+
+retriever = vectorstore.as_retriever(
+    search_type=""similarity"",
+    search_kwargs={""k"": 2},
+)
+
+course_policy_tool = create_retriever_tool(
+    retriever=retriever,
+    name=""course_policy_tool"",
+    description=(
+        ""Searches official course policy documents for refund rules, attendance requirements, ""
+        ""and batch change policy. Use when the user asks about program rules or policies.""
+    ),
+)
+
+FAKE_TICKET_DATABASE = {
+    ""TKT-2001"": ""Refund request under review. Expected response in 2 working days."",
+    ""TKT-2002"": ""Batch change request approved. New batch starts next Monday."",
+}
+
+@tool
+def get_ticket_status(ticket_id: str) -> str:
+    """"""Returns support ticket status for the given ticket ID.
+
+    Use when the user asks about ticket status, refund request status,
+    or support ticket progress for a specific ticket ID.
+    """"""
+    status = FAKE_TICKET_DATABASE.get(ticket_id)
+    if not status:
+        return f""Ticket status not found for ticket ID {ticket_id}.""
+    return status
+
+tools = [course_policy_tool, get_ticket_status]
+
+llm = ChatOpenAI(model=""gpt-4o-mini"", temperature=0)
+
+prompt = ChatPromptTemplate.from_messages([
+    (
+        ""system"",
+        (
+            ""You are a helpful course support assistant. ""
+            ""Use course_policy_tool for official policy questions. ""
+            ""Use get_ticket_status when a ticket ID or ticket status is needed. ""
+            ""Use chat history to resolve follow-ups like 'status of it'. ""
+            ""If the question is outside course policies and support tickets, refuse politely. ""
+            ""When answering from documents, mention available policy documents.""
+        ),
+    ),
+    MessagesPlaceholder(variable_name=""chat_history"", optional=True),
+    (""human"", ""{input}""),
+    MessagesPlaceholder(variable_name=""agent_scratchpad""),
+])
+
+agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
+
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    verbose=True,
+    max_iterations=3,
+)
+
+chat_history = []
+
+def ask_agent(user_query: str) -> str:
+    response = agent_executor.invoke({
+        ""input"": user_query,
+        ""chat_history"": chat_history,
+    })
+    answer = response[""output""]
+    chat_history.append(HumanMessage(content=user_query))
+    chat_history.append(AIMessage(content=answer))
+    return answer
+
+def main():
+    print(""Demo A"")
+    print(""User:"", ""What is the refund policy in the first week?"")
+    print(""AI:"", ask_agent(""What is the refund policy in the first week?""))
+    print()
+
+    print(""Demo B"")
+    print(""User:"", ""What is the status of ticket TKT-2001?"")
+    print(""AI:"", ask_agent(""What is the status of ticket TKT-2001?""))
+    print()
+
+    print(""Demo C (turn 1)"")
+    print(""User:"", ""My support ticket is TKT-2002."")
+    print(""AI:"", ask_agent(""My support ticket is TKT-2002.""))
+    print()
+
+    print(""Demo C (turn 2)"")
+    print(""User:"", ""What is the status of it?"")
+    print(""AI:"", ask_agent(""What is the status of it?""))
+    print()
+
+    print(""Demo D"")
+    print(""User:"", ""Who won IPL 2025?"")
+    print(""AI:"", ask_agent(""Who won IPL 2025?""))
+
+if __name__ == ""__main__"":
+    main()
+```"

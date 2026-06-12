@@ -1,0 +1,238 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Rahul's team is building a **FinPulse** assistant that must look up today's index prices on the web and run exact interest calculations in Python before replying.
+
+Which definition best describes what they are building?",,,,,,1,,An **AI agent** — an LLM working in a loop with **tools** and a **system prompt** to reach a user goal,A plain chatbot that only generates text from training data with no external actions,A static PDF keyword search with no language model,A spreadsheet macro that cannot call an LLM,,,6a2baa73bbd2230f2126052a,0,markdown,"A is correct because an agent pairs an LLM with tools (search, code runner, etc.) and a prompt inside a reasoning loop.
+
+B is incorrect because a chatbot alone cannot invoke live search or a Python runtime. C is incorrect because PDF search is retrieval, not an agent loop with tools. D is incorrect because spreadsheets do not define the LLM + tools + prompt pattern taught for agents."
+mcsc,markdown,"A verbose agent log shows lines like `Thought: ...`, `Action: python_repl`, `Observation: 503.41`, and finally `Final Answer: ...`.
+
+What does **ReAct** stand for in this design?",,,,,,1,,**Reasoning + Acting**,**Recursive + Automated**,**Retrieval + Augmentation**,**Reactive + Compiled**,,,6a2baa73bbd2230f2126052a,0,markdown,"A is correct — ReAct alternates reasoning traces with tool actions and observations.
+
+B, C, and D are plausible-sounding acronyms but do not match the Thought → Action → Observation framework used by ReAct agents."
+mcsc,markdown,"In a ReAct trace, the line `Observation: SyntaxError: invalid syntax` appears immediately after `Action: python_repl`.
+
+What is the **Observation** in this step?",,,,,,1,,The **raw output** returned from the tool run — including errors — before the manager writes the next **Thought**,The user's original question in English,The LangChain Hub URL for the prompt template,The final polished answer shown to the end user,,,6a2baa73bbd2230f2126052a,0,markdown,"A is correct because Observation is whatever the tool returns (success or error) and the LLM must read it before continuing.
+
+B is incorrect because the user question enters as input, not Observation. C is incorrect because hub URLs are setup metadata, not per-step trace lines. D is incorrect because Final Answer is a separate closing step after enough observations."
+mcsc,markdown,"Before adding a Python REPL or Serper search to a LangChain agent, you wrap each callable with `Tool(...)`.
+
+Which three fields are required in that wrapper?",,,,,,1,,"**`name`**, **`description`**, **`func`**","**`temperature`**, **`model`**, **`api_key`**","**`chunk_size`**, **`overlap`**, **`embedder`**","**`user`**, **`assistant`**, **`system`**",,,6a2baa73bbd2230f2126052a,0,markdown,"A is correct — the tool schema in beginner form is name (id for Action lines), description (what the manager reads), and func (callable to run).
+
+B is incorrect because those are LLM client settings, not Tool fields. C is incorrect because chunking belongs to document indexing, not tool registration. D is incorrect because those are chat roles, not Tool components."
+mcsc,markdown,"A developer registers two tools for a ReAct agent:
+
+- `python_repl` — clear description about executing Python commands
+- `serper_search` — description says only *""helps with stuff""*
+
+An analyst asks: *""What is the closing stock price of Nifty today?""*
+
+What is the **most likely** problem?",,,,,,1,,The vague search **description** may cause the manager to pick the wrong worker or skip search entirely,`temperature=0` automatically blocks all Serper calls,`AgentExecutor` ignores descriptions and always picks the first tool in the list,Python REPL cannot print numeric results,,,6a2baa73bbd2230f2126052a,0.5,markdown,"A is correct — tool descriptions act like worker biodata; vague text hurts correct delegation.
+
+B is incorrect because temperature controls randomness, not tool routing. C is incorrect because the ReAct prompt exposes descriptions for selection. D is incorrect because Python REPL is designed to return printed output as observations."
+mcsc,markdown,"Meera wires `create_react_agent(...)` and then `AgentExecutor(agent=react_agent, tools=[...])`.
+
+What is the **best** distinction between these two objects?",,,,,,1,,**`create_react_agent`** builds the **reasoning policy** (Thought / Action / Observation format); **`AgentExecutor`** is the **runtime** that runs the loop when you call **`invoke`**,They are duplicate aliases — only one is needed,**`AgentExecutor`** defines tool descriptions; **`create_react_agent`** only prints API keys,**`create_react_agent`** runs Python code; **`AgentExecutor`** only fetches prompts from the hub,,,6a2baa73bbd2230f2126052a,0.5,markdown,"A is correct — the agent object is the playbook; the executor is the referee that executes steps until a final answer.
+
+B is incorrect because both are required in the standard LangChain pattern. C is incorrect because descriptions are set on `Tool`, not on the executor alone. D is incorrect because both are orchestration layers, not direct replacements for REPL or hub pulls."
+mcmc,markdown,"A QA engineer reviews a ReAct verbose log before trusting `response[""output""]` for a factual stock-price answer.
+
+Which statements about **tool result handling** are **correct**?",,,,,,,,Every **Observation** should reach the model **before** the next **Thought** for grounded reasoning,A **Final Answer** about live market data is unsafe if no search **Observation** appears in the trace,**`verbose=True`** helps verify that each **Action** is followed by an **Observation**,The manager may skip reading tool output if the **Final Answer** already sounds confident,**`AgentExecutor`** appends observations to the scratchpad automatically during the loop,"1, 2, 3, 5",6a2baa73bbd2230f2126052a,0.5,markdown,"A, B, C, and E match the observation-before-next-reasoning rule and debugging practice from the lab.
+
+D is incorrect because skipping tool output defeats grounding — confident text can still be wrong."
+mcmc,markdown,"An intern is registering **Python REPL** and **Serper search** tools before building a two-tool ReAct agent.
+
+Which steps are **valid** parts of that setup?",,,,,,,,"Wrap each callable with **`Tool(name=..., description=..., func=...)`**",Pass the **same** `tools=[...]` list to both **`create_react_agent`** and **`AgentExecutor`**,Call **`repl_tool.invoke(...)`** and **`search_tool.invoke(...)`** once to sanity-check before paying for LLM calls,Pass the raw **`PythonREPL`** object directly to **`create_react_agent`** without a **`Tool`** wrapper,"Pull **`hub.pull(""hwchase17/react"")`** to supply the standard Thought / Action / Observation template","1, 2, 3, 5",6a2baa73bbd2230f2126052a,0.5,markdown,"A, B, C, and E are the taught registration and bind pattern.
+
+D is incorrect because LangChain expects tools to be wrapped with name and description before binding to the agent."
+mcmc,markdown,"A production agent starts looping on syntax errors, burning API quota during a demo.
+
+Which responses follow **sound loop control and debugging** practice?",,,,,,,,Set **`max_iterations`** on **`AgentExecutor`** to cap Thought → Action → Observation rounds,"Remember that each loop round can consume **many tokens**, raising cost and rate-limit risk",Read the **verbose** trace to see whether the manager picked the wrong tool or sent bad Python syntax,Always show the full **verbose** trace to retail banking customers in the chat UI,"If a Groq model hits **rate limits**, switch models or wait before retrying","1, 2, 3, 5",6a2baa73bbd2230f2126052a,1,markdown,"A, B, C, and E align with max_iterations, token awareness, trace debugging, and rate-limit handling.
+
+D is incorrect because production UIs usually show only the final answer while developers log traces internally."
+mcmc,markdown,"An analyst asks a two-tool ReAct agent:
+
+*""What is the latest stock price of Nvidia, and if I had invested $100 a week ago, how much would I have today?""*
+
+Which expectations about the **tool sequence and trace** are **correct**?",,,,,,,,**`serper_search`** will likely run **before** **`python_repl`** to fetch live or recent price data,**`python_repl` alone** can know today's live Nvidia price without any search observation,The run may require **multiple** Thought → Action → Observation cycles (including retries on bad Python syntax),"The **first Observation** may contain search snippets, not the final investment dollar amount",A trustworthy **Final Answer** can be produced with **zero** tool observations if the LLM memorized prices,"1, 3, 4",6a2baa73bbd2230f2126052a,1,markdown,"A, C, and D match the multi-tool Nvidia demo pattern: search first, several steps possible, intermediate observations differ from the final reply.
+
+B is incorrect because live prices require search (or another live data tool), not REPL alone. E is incorrect because skipping observations means the answer is not grounded in tool results."
+subjective,markdown,"**FinPulse Research Desk** helps junior analysts answer questions that need **live web facts** (for example today's index price) and **exact Python math** (for example compound growth) in one workflow.
+
+Your task is to build a **single-file ReAct agent script** that:
+
+1. Wraps and smoke-tests two LangChain tools
+2. Runs a **Python-only** ReAct agent for a calculation question
+3. Runs a **search + Python** ReAct agent for a live-market question
+
+Use **Groq** and **Serper** API keys from environment variables: `GROQ_API_KEY` and `SERPER_API_KEY`.
+
+---
+
+Create one file: `finpulse_react_agent.py`
+
+### Step 1 — Setup and tools
+
+- Import `os`, `hub`, `ChatGroq`, `Tool`, `AgentExecutor`, `create_react_agent`, `PythonREPL`, and `GoogleSerperAPIWrapper`.
+- Read both API keys from `os.environ`.
+- Create `groq_llm = ChatGroq(model=""llama-3.3-70b-versatile"", api_key=groq_api_key, temperature=0)`.
+- Wrap **`repl_tool`** with `name=""python_repl""`, a clear description, and `func=python_repl.run`.
+- Wrap **`search_tool`** with `name=""serper_search""`, a clear description, and `func=serper_search.run`.
+
+### Step 2 — Smoke-test both tools
+
+Write `test_tools(repl_tool, search_tool)` that:
+
+- Calls `repl_tool.invoke('print(1250 * 1.08)')` and prints the result.
+- Calls `search_tool.invoke(""Who is the founder of Tesla?"")` and prints the first **120 characters** of the result.
+
+### Step 3 — Python-only ReAct agent
+
+- Pull `react_prompt = hub.pull(""hwchase17/react"")`.
+- Build a Python agent with `create_react_agent(llm=groq_llm, tools=[repl_tool], prompt=react_prompt)`.
+- Build an executor with `AgentExecutor(agent=..., tools=[repl_tool], verbose=True)`.
+- Run this query and print the final answer:
+
+```text
+If $ 450 amounts to $ 630 in 6 years, what will it amount to in 2 years at the same interest rate?
+```
+
+### Step 4 — Search + Python ReAct agent
+
+- Reuse the same `react_prompt`.
+- Build a second agent with **both** tools: `[search_tool, repl_tool]` — use the **same list** in `create_react_agent` and `AgentExecutor`.
+- Set `verbose=True` and `max_iterations=8` on the executor.
+- Run this query and print the final answer:
+
+```text
+What is the closing stock price of Nifty today?
+```
+
+### Step 5 — `main()` entry point
+
+```python
+def main():
+    # Step 1: read keys, create groq_llm, repl_tool, search_tool
+
+    print(""=== Tool smoke tests ==="")
+    test_tools(repl_tool, search_tool)
+
+    print(""\n=== Python-only agent ==="")
+    # Step 3 here
+
+    print(""\n=== Two-tool search agent ==="")
+    # Step 4 here
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+---
+
+## Expected behaviour
+
+When you run `python finpulse_react_agent.py`:
+
+| Section | What you should see |
+|---|---|
+| Tool smoke tests | A numeric REPL result (for example `1350.0`) and a short Tesla-founder search snippet |
+| Python-only agent | A natural-language answer to the compound-interest question |
+| Two-tool search agent | An answer about **Nifty** based on live search (exact wording may vary by market day) |
+
+With `verbose=True`, you should see **Thought → Action → Observation** steps before each **Final Answer**.
+
+---
+
+## Submission Instructions
+
+- Code all steps in VS Code in a single `.py` file named `finpulse_react_agent.py`.
+- Export `GROQ_API_KEY` and `SERPER_API_KEY`, run the script, and verify all three sections print output.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,,6a2baa73bbd2230f2126052a,0.5,markdown,"### Walkthrough
+
+1. **Step 1** registers each worker (`repl_tool`, `search_tool`) with a **name**, **description**, and **func** — the manager reads these before picking a tool.
+2. **Step 2** proves each tool works on its own with `.invoke()` before paying for agent loops.
+3. **Step 3** binds one tool via `create_react_agent` and runs the ReAct loop through `AgentExecutor.invoke`.
+4. **Step 4** adds a second tool and `max_iterations=8` so the loop cannot run forever on live-search questions.
+5. **`verbose=True`** prints Thought / Action / Observation so you can confirm tool results arrive before the final answer.
+
+### Reference Solution
+
+```python
+import os
+
+from langchain import hub
+from langchain_groq import ChatGroq
+from langchain.agents import Tool, AgentExecutor, create_react_agent
+from langchain_experimental.utilities import PythonREPL
+from langchain_community.utilities import GoogleSerperAPIWrapper
+
+
+def test_tools(repl_tool, search_tool):
+    print(""REPL:"", repl_tool.invoke(""print(1250 * 1.08)""))
+    snippet = search_tool.invoke(""Who is the founder of Tesla?"")
+    print(""Search:"", snippet[:120])
+
+
+def main():
+    groq_api_key = os.environ[""GROQ_API_KEY""]
+    serper_api_key = os.environ[""SERPER_API_KEY""]
+
+    groq_llm = ChatGroq(
+        model=""llama-3.3-70b-versatile"",
+        api_key=groq_api_key,
+        temperature=0,
+    )
+
+    python_repl = PythonREPL()
+    repl_tool = Tool(
+        name=""python_repl"",
+        description=""A Python shell used to execute python commands. Input should be a valid python command."",
+        func=python_repl.run,
+    )
+
+    serper_search = GoogleSerperAPIWrapper(serper_api_key=serper_api_key)
+    search_tool = Tool(
+        name=""serper_search"",
+        description=""An interface to the Serper search engine. Input should be a string."",
+        func=serper_search.run,
+    )
+
+    print(""=== Tool smoke tests ==="")
+    test_tools(repl_tool, search_tool)
+
+    react_prompt = hub.pull(""hwchase17/react"")
+
+    python_agent = create_react_agent(
+        llm=groq_llm, tools=[repl_tool], prompt=react_prompt
+    )
+    python_executor = AgentExecutor(
+        agent=python_agent, tools=[repl_tool], verbose=True
+    )
+
+    compound_query = (
+        ""If $ 450 amounts to $ 630 in 6 years, what will it amount to in 2 years ""
+        ""at the same interest rate?""
+    )
+    print(""\n=== Python-only agent ==="")
+    result_python = python_executor.invoke({""input"": compound_query})
+    print(""Python agent answer:"", result_python[""output""])
+
+    search_agent = create_react_agent(
+        llm=groq_llm, tools=[search_tool, repl_tool], prompt=react_prompt
+    )
+    search_executor = AgentExecutor(
+        agent=search_agent,
+        tools=[search_tool, repl_tool],
+        verbose=True,
+        max_iterations=8,
+    )
+
+    nifty_query = ""What is the closing stock price of Nifty today?""
+    print(""\n=== Two-tool search agent ==="")
+    result_search = search_executor.invoke({""input"": nifty_query})
+    print(""Search agent answer:"", result_search[""output""])
+
+
+if __name__ == ""__main__"":
+    main()
+```"

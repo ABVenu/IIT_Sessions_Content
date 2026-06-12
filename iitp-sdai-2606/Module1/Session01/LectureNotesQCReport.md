@@ -1,65 +1,35 @@
-# Lecture Notes QC Report
+# QC Report — Session 01: Introduction to Programming & Python Basics
 
-## QC Iteration 1
+## QC Pass 1
 
-| Criteria | Result |
-|----------|--------|
-| Content Coverage | 5/5 |
-| Creativity | 5/5 |
-| Structural Adherence | 4/5 |
-| No Logical Mistakes | **False** |
-| No Presentation Mistakes | **False** |
-| No Previous Session Number References | True |
-| No Metadata/Internal References in Student Notes | True |
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
 
-**Issues Found:**
-1. **Logical Mistake:** The variable reassignment example set `balance = 120` after spending ₹120, which incorrectly replaced the wallet balance instead of subtracting from it.
-2. **Presentation Mistake:** A few code lines (`number = 150`, `marks = 92`, and some `print()` lines in the report card program) were missing inline comments, which violates the full-code commenting requirement.
+**Notes:** Released notes aligned to Live Topic Coverage — online compiler (onlinecompiler.com/python, Programiz alternative), variables, core data types (int, float, str, bool), dynamic typing, arithmetic/comparison/logical/assignment operators, `input()`/`print()` with `int()` conversion, comments (single-line and multi-line), compiler concept, and introductory functions (`print()`). Removed untaught content: OneCompiler-specific setup, `type()`, f-strings, floor division (`//`), compound assignment operators (`+=`, `-=`, etc.), EMI/report-card capstone programs. Added multi-line comments section and V1+V2 sum capstone matching live demo. All 9 session images retained with updated surrounding text.
 
-**Action Taken:** Corrected the balance example to `balance = balance - 120` with output 380. Added missing inline comments to affected code lines.
+**Pass 1 outcome:** PASS
 
 ---
 
-## QC Iteration 2
+## QC Pass 2
 
-| Criteria | Result |
-|----------|--------|
-| Content Coverage | 5/5 |
-| Creativity | 5/5 |
-| Structural Adherence | 5/5 |
-| No Logical Mistakes | True |
-| No Presentation Mistakes | True |
-| No Previous Session Number References | True |
-| No Metadata/Internal References in Student Notes | True |
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
 
-**Verification Summary:**
-- All metadata subtopics covered: online compiler setup, variables/data types, operators (arithmetic, comparison, logical, assignment), input/output.
-- Notes follow documentation-style layout with bold terms, bullets, connecting sentences, Official Definition / In Simple Words / Real-Life Example pattern, full code with per-line comments, and "How the code works" sections.
-- Student-facing activities included (Hello with name, Personal Info Card, Type Detective, Pocket Money Calculator, EMI Calculator, Mini Report Card) without instructor-style phrasing.
-- No session numbers, duration, or internal instruction references present.
-- Key Takeaways and Important Commands/Libraries/Terminologies table included.
+**Notes:** Re-verified code blocks include per-line comments and "How the code works" sections. No session numbers, duration, Mentimeter/quiz content, or internal instruction leakage. Student activities written in professional notes voice. Paragraphs follow 3-sentence rule; connecting sentences link compiler → Hello World → variables → operators → I/O. Terminology table matches taught content only.
 
-**QC Status: PASSED**
-
----
-
-## QC Iteration 3 (Post-Trim & OneCompiler Update)
-
-| Criteria | Result |
-|----------|--------|
-| Content Coverage | 5/5 |
-| Creativity | 5/5 |
-| Structural Adherence | 5/5 |
-| No Logical Mistakes | True |
-| No Presentation Mistakes | True |
-| No Previous Session Number References | True |
-| No Metadata/Internal References in Student Notes | True |
-
-**Verification Summary:**
-- Notes reduced to ~565 lines while retaining all metadata subtopics: OneCompiler setup, variables/data types, all operator types, input/output.
-- Google Colab references fully replaced with OneCompiler ([onecompiler.com](https://onecompiler.com/)).
-- Balance reassignment example uses correct subtraction logic (`balance = balance - 120`).
-- No session numbers, duration, or internal instruction references present.
-- Key Takeaways and terminology table included.
-
-**QC Status: PASSED**
+**Pass 2 outcome:** PASS — expected QC result achieved.

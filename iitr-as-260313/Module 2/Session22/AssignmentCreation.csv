@@ -1,0 +1,188 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,A ShopKart customer asks about **returning an opened laptop charger**. The bot's **Rank 1** chunk is from **shipping_policy.txt** and mentions delivery timelines—not return eligibility. The final answer talks about express delivery. What **failure mode** best describes this?,,,,,,1,,Retrieval problem,Generation problem,Hallucination,API rate-limit problem,,6a2baaa3dd479fb7cedb2af1,0,markdown,"A is correct because the wrong policy area and wrong chunk were retrieved before generation ran.
+
+B is incorrect because generation misreads **good** evidence—the evidence here was the wrong chunk. C is incorrect because the main issue is surfacing the wrong policy, not inventing facts absent from retrieved text (though the answer may also be wrong). D is incorrect because rate limits affect whether answers generate, not which chunk ranks first."
+mcsc,markdown,"Priya is debugging a wrong ShopKart reply. Her team lead says: *""Do not touch the prompt until you have read what evidence the bot actually saw.""* What should Priya inspect **first** in the terminal?",,,,,,2,,The Groq model name in `.env`,"**Rank 1** retrieved chunk—category, source, and text",The Python version installed on her laptop,The number of lines in `rag_pipeline.py`,,6a2baaa3dd479fb7cedb2af1,0,markdown,"B is correct because Rank 1 shows what retrieval surfaced—the first step in separating retrieval failure from generation failure.
+
+A is incorrect because the model name does not show which policy excerpt was used. C and D are unrelated to diagnosing a specific wrong answer."
+mcsc,markdown,"A customer asks: *""Is UPI refund available for prepaid orders?""* Retrieved excerpts mention **COD refunds to UPI/bank only**—there is **no prepaid UPI rule**. The bot replies with a detailed **prepaid UPI refund workflow** not found in any excerpt. What failure mode is this?",,,,,,3,,Retrieval problem,Generation problem only,Hallucination,Chunk overlap misconfiguration,,6a2baaa3dd479fb7cedb2af1,0,markdown,"C is correct because the answer adds authoritative-sounding facts not supported by retrieved policy text.
+
+A is incorrect if excerpts were at least partially relevant—the issue is invented prepaid steps. B alone is too narrow when the model fabricates policy that never appeared in context. D is incorrect because overlap settings do not explain invented payment workflows."
+mcsc,markdown,"A junior engineer wants to fix a bad RAG answer by immediately raising **top-k**, rewriting the **system prompt**, and adding a **metadata filter**—all in one commit. What is the **best first step** before changing anything?",,,,,,1,,"Diagnose whether retrieval, generation, or hallucination caused the failure",Delete the Chroma collection and rebuild from scratch,Switch to a larger paid LLM,Add ten more policy PDFs to the folder,,6a2baaa3dd479fb7cedb2af1,0,markdown,"A is correct because each failure mode maps to a different lever—changing everything at once hides what actually helped.
+
+B might be needed after chunk changes but is not the first diagnostic step. C and D do not identify which pipeline stage failed."
+mcsc,markdown,"For the query *""Can I return a laptop charger if the box is opened?""*, **Rank 1** shows **returns** category but only the **unopened 7-day** sentence. The **opened-item rule** exists in **Rank 3**. The answer ignores opened-box eligibility. What is the **best first fix** to try?",,,,,,2,,Rewrite the grounding prompt only—retrieval already found returns,Raise **top-k** (e.g. from 3 to 5) or improve chunk boundaries so the opened rule surfaces earlier,Change the refusal sentence to be more polite,Lower LLM temperature and hope Rank 3 is read automatically,,6a2baaa3dd479fb7cedb2af1,0.5,markdown,"B is correct because the right policy area was found but the **incomplete chunk set** is a retrieval tuning problem—more ranks or better chunking can surface the opened rule.
+
+A is incorrect because the generator never received the opened rule in the top context. C does not add missing evidence. D is incorrect—the LLM only sees the chunks you pass in; temperature does not fetch Rank 3 by itself."
+mcsc,markdown,"Your `guess_category()` function returns **`None`** for the query *""Do you offer gift wrapping on bulk corporate orders?""* because no keyword matches. In the **improved run** with `use_filter=True`, what should `retrieve_filtered(...)` do?",,,,,,2,,Return zero chunks and skip generation,Search the **full index** without a `where` category filter,"Force category `""returns""` as a default",Raise a Python exception and stop the script,,6a2baaa3dd479fb7cedb2af1,0.5,markdown,"B is correct because `None` means no category filter—the search should fall back to the entire Chroma collection.
+
+A is incorrect because no match should not block retrieval. C invents a category with no keyword basis. D is incorrect—the lab design uses graceful fallback, not a crash."
+mcmc,markdown,Which situations are best classified as **retrieval problems**? Select **all** that apply.,,,,,,,,A warranty question retrieves **shipping** chunks in Rank 1,Rank 1 is **returns** but text only shows the unopened rule while the opened rule is in Rank 4,"Rank 1 excerpts clearly state **5–7 business days**, but the answer says **instant refund**",The wrong **refunds** chunk is retrieved even though a better refunds paragraph exists in the index,"1,2,4",6a2baaa3dd479fb7cedb2af1,0.5,markdown,"A, B, and D are correct because wrong category, incomplete top ranks, or wrong chunk selection are retrieval-stage failures.
+
+C is incorrect because good excerpts were retrieved but the final answer misread them—that is generation (or hallucination if facts were invented), not retrieval."
+mcmc,markdown,ShopKart runs a **baseline** pass and an **improved** pass on the same `TEST_QUERIES`. Which settings belong to the **improved** pass? Select **all** that apply.,,,,,,,,`top_k=5`,`use_filter=True` with `guess_category()`,`generate_strict_answer()` with explicit **do not invent** rules,"`top_k=3`, `use_filter=False`, and `generate_grounded_answer()` only","1,2,3",6a2baaa3dd479fb7cedb2af1,0.5,markdown,"A, B, and C are correct—they are the three levers applied together in the improved run: higher top-k, metadata filter, and stricter grounding prompt.
+
+D is incorrect because it describes the **baseline** configuration, not the improved pass."
+mcmc,markdown,A QA engineer pairs each symptom with a **recommended first lever**. Which pairings are **sound**? Select **all** that apply.,,,,,,,,Answer invents **coupon codes** not in excerpts → tighten **grounding prompt** with refusal rules,Rank 1 has the right category but misses the second half of a split rule → raise **top-k** or tune **chunk overlap**,Returns questions keep pulling **shipping** paragraphs → add **metadata filter** by category,Rank 1 is **warranty** but answer adds facts not in excerpts → increase **chunk size** only (no prompt change),"1,2,3",6a2baaa3dd479fb7cedb2af1,1,markdown,"A is correct— invented offers are generation/hallucination issues; stricter prompts help. B is correct—incomplete retrieval suggests top-k or chunking fixes. C is correct—wrong policy type surfacing is a precision/filter problem.
+
+D is incorrect because facts not in excerpts when Rank 1 category is already right points to **generation/hallucination**—a stricter prompt should be tried before or alongside chunk tuning, not chunk size alone with no prompt change."
+mcmc,markdown,"Your team uses `guess_category()` plus Chroma `where={""category"": ...}` filtering. Which statements are **true**? Select **all** that apply.",,,,,,,,The filter restricts similarity search to chunks whose metadata matches the guessed category,A question needing both **refunds** and **shipping** evidence may get incomplete answers when only one category is searched,"When `guess_category()` returns `None`, retrieval can still run across the **full** index",Keyword routing guarantees the correct category for every possible customer phrasing,"1,2,3",6a2baaa3dd479fb7cedb2af1,1,markdown,"A is correct—that is how Chroma metadata filtering works in the lab. B is correct—the single-category limitation was demonstrated when multi-policy answers need merged retrieval. C is correct—`None` triggers full-index fallback.
+
+D is incorrect because `guess_category()` is a simple hit-and-trial keyword router, not a guarantee for all phrasing."
+subjective,markdown,"ShopKart's QA team flagged one recurring bad answer: customers asking about **prepaid UPI refunds** get a confident reply even though policy files only describe **COD → UPI/bank** refunds.
+
+You already have a **working file-based ShopKart RAG script** (policy folder, Chroma index, Groq answers). Your job is to add a small **improvement layer** and prove the fix on **two test queries**.
+
+Use your existing project folder:
+
+```text
+shopkart_rag_lab/
+├── policy_documents/     # four policy .txt files
+├── .env                  # GROQ_API_KEY=your-key-here
+└── rag_pipeline.py       # your working script from the prior build
+```
+
+No need to rebuild the project from scratch. If `rag_pipeline.py` already loads policies and answers questions, **keep that code** and add only what is listed below.
+
+Add the following to **`rag_pipeline.py`**.
+
+### Test queries (exactly two)
+
+```python
+TEST_QUERIES = [
+    ""Is UPI refund available for prepaid orders?"",
+    ""I returned a defective kettle on COD last week. When will the refund reach my UPI?"",
+]
+```
+
+### Copy these two functions into your file
+
+```python
+def guess_category(query):
+    q = query.lower()
+    if ""return"" in q or ""opened"" in q or ""unopened"" in q:
+        return ""returns""
+    if ""ship"" in q or ""express"" in q or ""metro"" in q or ""dispatch"" in q or ""deliver"" in q:
+        return ""shipping""
+    if ""warranty"" in q or ""water"" in q or ""repair"" in q or ""liquid"" in q:
+        return ""warranty""
+    if ""refund"" in q or ""cod"" in q or ""upi"" in q or ""money back"" in q:
+        return ""refunds""
+    return None
+
+
+def retrieve_filtered(collection, model, user_query, top_k=3, category=None):
+    embedding = model.encode([user_query], convert_to_numpy=True).tolist()
+    args = {
+        ""query_embeddings"": embedding,
+        ""n_results"": top_k,
+        ""include"": [""documents"", ""metadatas"", ""distances""],
+    }
+    if category:
+        args[""where""] = {""category"": category}
+    results = collection.query(**args)
+    chunks = []
+    for doc, meta, dist in zip(
+        results[""documents""][0],
+        results[""metadatas""][0],
+        results[""distances""][0],
+    ):
+        chunks.append({""text"": doc, ""metadata"": meta, ""distance"": dist})
+    return chunks
+```
+
+### Write `generate_strict_answer` yourself
+
+Create **`build_strict_prompt`** and **`generate_strict_answer`** that:
+
+- use only retrieved excerpts
+- forbid inventing payment methods or policy rules
+- use this **exact refusal line** when evidence is missing:
+
+  `""I do not have enough information in the provided policy excerpts.""`
+
+You may follow the same Groq call pattern as your existing `generate_grounded_answer`.
+
+### Add a simple runner in `main()`
+
+After `build_knowledge_base(...)`, loop over `TEST_QUERIES` and for **each** query:
+
+1. Call `guess_category(user_query)` and `retrieve_filtered(..., top_k=5, category=...)`
+2. Print **Rank 1** category and a short snippet of Rank 1 text (reuse your existing print helper if you have one)
+3. Call `generate_strict_answer(...)` and print the answer
+
+Label the section in the terminal: `--- IMPROVED RUN ---`
+
+**Expected behaviour**
+
+- Script runs without errors.
+- Both test queries print retrieval output **before** the answer.
+- Improved settings used: **`top_k=5`**, **category filter on**, **strict prompt**.
+- For the **prepaid UPI** query, the answer should **refuse** or stay grounded — no invented prepaid UPI workflow.
+
+**Submission Instruction**
+
+- Code all the points mentioned in VS Code in a single `.py` file (`rag_pipeline.py`).
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,6a2baaa3dd479fb7cedb2af1,0.5,markdown,"### Step-by-step solution walkthrough
+
+1. Keep your existing ingestion and `build_knowledge_base` — do not rewrite loaders or chunking.
+2. Paste `guess_category` and `retrieve_filtered` as given.
+3. Add `build_strict_prompt` / `generate_strict_answer` with the fixed refusal sentence and **do not invent** rules.
+4. In `main()`, run the improved loop on the two `TEST_QUERIES` only.
+5. Read Rank 1 in the terminal to confirm **refunds** category for both queries before judging the answer.
+
+### Reference — functions you write + improved `main()` loop
+
+```python
+REFUSAL = ""I do not have enough information in the provided policy excerpts.""
+
+TEST_QUERIES = [
+    ""Is UPI refund available for prepaid orders?"",
+    ""I returned a defective kettle on COD last week. When will the refund reach my UPI?"",
+]
+
+
+def build_strict_prompt(user_query, retrieved_chunks):
+    context = """"
+    for i, chunk in enumerate(retrieved_chunks, start=1):
+        src = chunk[""metadata""].get(""source"", ""unknown"")
+        cat = chunk[""metadata""].get(""category"", ""unknown"")
+        context += f""\nExcerpt {i} (source: {src}, category: {cat}):\n{chunk['text']}\n""
+    return f""""""You are ShopKart customer support.
+Use ONLY the excerpts below.
+Rules:
+1. Do not invent numbers, payment methods, or rules not in the excerpts.
+2. If the excerpts do not contain enough information, say exactly: ""{REFUSAL}""
+3. Keep the answer short and faithful to the excerpts.
+
+Excerpts:
+{context}
+
+Question: {user_query}
+
+Answer:""""""
+
+
+def generate_strict_answer(client, user_query, retrieved_chunks):
+    prompt = build_strict_prompt(user_query, retrieved_chunks)
+    response = client.chat.completions.create(
+        model=GENERATION_MODEL_NAME,
+        messages=[
+            {""role"": ""system"", ""content"": ""Follow excerpts exactly. Never guess missing policy details.""},
+            {""role"": ""user"", ""content"": prompt},
+        ],
+    )
+    return response.choices[0].message.content.strip()
+
+
+# Inside main(), after build_knowledge_base:
+print(""\n--- IMPROVED RUN ---"")
+for user_query in TEST_QUERIES:
+    category = guess_category(user_query)
+    chunks = retrieve_filtered(collection, model, user_query, top_k=5, category=category)
+    print_retrieved_chunks(user_query, chunks)  # your existing helper
+    answer = generate_strict_answer(client, user_query, chunks)
+    print(""\nAnswer:"", answer)
+    print(""-"" * 72)
+```"

@@ -145,3 +145,27 @@
 **Outcome:** QC passed on iteration 6.
 
 **Assets:** 8 PNG diagrams regenerated and uploaded to S3 (`session43-01` … `session43-08`).
+
+---
+
+## Iteration 7
+
+**Trigger:** Post-session alignment — `Lecture Notes Released.md` trimmed to live coverage per transcript + `Live Topic Coverage.md`; extras from class added.
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics retained via ReAct lens. Removed untaught items: `python_repl.schema()`, Black-Scholes sample query, `get_prompts()`, `handle_parsing_errors`, `observation_reached_scratchpad`, pandas import. Added session-taught extras: manager–worker model, LLM + tools + prompt, Nifty + Nvidia demos, ReAct agent vs AgentExecutor, `max_iterations`/token/debugging, built-in vs custom agents, RAG-as-tool pointer, Groq rate-limit note. All 8 S3 images retained. |
+| **Creativity** | **5 / 5** | Manager/worker biodata; detective CCTV; Swiggy buttons; chef tasting; built-in agent spot-the-tool-call activity; compound-interest self-correction trace. |
+| **Structural Adherence** | **5 / 5** | `#` title; context + What you will learn; Official/Simple/Real-life on new terms; full code with line comments + How the code works; student-facing activities; Key Takeaways; terminology table; mermaid ReAct loop; 8 diagrams. |
+| **No Logical Mistakes** | **True** | Prior Tesla memory/`MAX_STEPS` continuity; `tools` lists match; observation-before-next-thought enforced; Nifty (search-only) vs Nvidia (search + Python) sequencing accurate. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no "Ask students to"; paragraphs ≤3 sentences; ~505 lines. |
+| **No Previous Session Number References** | **True** | Uses **previous**, **upcoming**, **later** only — no session numbers. |
+| **No Metadata/internal reference** | **True** | No instructor-instruction leakage. |
+
+**Outcome:** QC passed on iteration 7.
+
+**File:** `Lecture Notes Released.md` (~505 lines).
+
+**Removed (not covered in live session):** `handle_parsing_errors=True`; `print(react_agent.get_prompts())`; `print(python_repl.schema())`; Black-Scholes `sample_queries[1]`; `observation_reached_scratchpad` helper; `import pandas as pd`.
+
+**Added (extra live coverage):** Manager–worker analogy; agent = LLM + tools + prompt; Nifty closing-price demo; syntax-error retry behavior; `max_iterations` + token cost + monitoring; built-in ChatGPT/Gemini vs custom enterprise agents; ReAct policy vs AgentExecutor runtime.
