@@ -13,6 +13,8 @@ This session shifts from *what goes inside one request* to *how you manage promp
 - **Explain** **HTTP rate limits** and implement **exponential backoff** on API errors
 - **Log** retry events so failures are visible while you build and debug
 
+![Prompt versioning and API rate limits — named prompt files, registry bundles, backoff, and retry logs for safe development](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-01-prompt-versioning-overview.png)
+
 ---
 
 ## Why Prompts Need Versioning
@@ -31,6 +33,8 @@ A prompt is not a one-time sticky note — it is **living product logic**. When 
 
 - **Common mistake:** Editing the system prompt **inline in a notebook cell** without saving the old text — you lose the baseline forever.
 - **Design habit:** Every meaningful prompt change gets a **new version label** (`v1`, `v2`, or a date stamp) — even for small wording tweaks that affect tone or grounding rules.
+
+![Why prompt versioning — without it no proof or rollback; with it v1 and v2 files plus same eval questions; recipe notebook and menu card analogies](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-02-why-versioning.png)
 
 ---
 
@@ -66,6 +70,8 @@ project/
 
 - **Why separate config from prompt text:** Wording changes often; model name or temperature changes less often. Mixing both in one giant string makes diffs hard to read.
 - **Common doubt:** *"Is a `.txt` file enough?"* — Yes for learning and small teams. A **registry** (next section) wraps files when you have many prompts.
+
+![Versioned folder layout — prompts, config, and logs folders with one file per version; prose separate from model settings](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-03-versioned-folder-layout.png)
 
 ### Loading a Versioned Prompt in Python
 
@@ -151,6 +157,8 @@ When one project holds **many agents** (support, summarizer, email drafter), a f
 
 - **Tool configs in the registry:** Register not just Python functions but **which tools this agent may call** and **max steps** — same place as the prompt version so one `"support_agent/v2"` entry is complete.
 - **Common mistake:** Registry points to **`v2` prompt** but code still loads **`v1` config** — always register **prompt + config + tools** as one bundle.
+
+![Registry pattern — central lookup from agent name and version to prompt path, config, tools, and max steps](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-04-registry-pattern.png)
 
 ### Full Registry Example
 
@@ -247,6 +255,8 @@ Before you ship **v2**, run the **same questions** through **v1** and **v2** and
 - **Eval set size:** Start with **5–10 questions** — enough to spot regressions, small enough to review in one sitting.
 - **Same context for both versions:** Pass identical **RAG chunks** or **tool mocks** — otherwise you are comparing apples and oranges.
 - **Common mistake:** Changing **temperature** and **prompt text** at the same time — you cannot tell which change fixed the bug. Change **one knob per version**.
+
+![Qualitative eval — same eval question and shared context run through v1 and v2; checklist before promoting v2](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-05-qualitative-eval.png)
 
 ### Eval Questions File
 
@@ -385,6 +395,8 @@ Cloud LLM APIs protect shared infrastructure with **rate limits** — caps on ho
 - **Common mistake:** Hammering the API in a **`for` loop** with **no delay** — you burn the quota and teach bad habits before production.
 - **Designer note:** Show users a **friendly wait message** when retries happen — not a raw *"429"* string.
 
+![HTTP rate limits — RPM, TPM, and daily quota; RTO token counter analogy; one user message can trigger many agent API calls](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-06-http-rate-limits.png)
+
 ---
 
 ## Exponential Backoff and Retries
@@ -406,6 +418,8 @@ When a call fails with a **retryable** error (429, transient 503), wait before t
 - **Retry only retryable errors:** **429**, **503**, timeouts — not **401** (fix your key) or **400** (fix your JSON).
 - **Cap max attempts:** **`max_retries=4`** is enough for dev — infinite retry hides broken code.
 - **Jitter:** Add **`random.uniform(0, 0.3) * delay`** so ten notebook users do not retry in perfect sync.
+
+![Exponential backoff — wait grows 1s, 2s, 4s, 8s with jitter; retry 429 and 503 only; cap max_retries at 4](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-07-exponential-backoff.png)
 
 ### Full Backoff Wrapper
 
@@ -711,6 +725,8 @@ A mature **development** flow connects all pieces:
 - **Change discipline:** Version bump → eval → log review → promote — skip eval only for typo fixes that cannot affect behaviour.
 - **Rate limit hygiene:** Space eval loops with **`time.sleep(1)`** between questions in shared org keys — backoff is for failures, politeness is for prevention.
 - **Link to token budgeting:** Shorter prompts (from your earlier internals work) reduce **TPM** pressure — versioning and token trimming work together.
+
+![Resilient prompt pipeline — design, register, evaluate, operate with backoff logs, then promote; sample api_retries.log lines](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-08-retry-logs-pipeline.png)
 
 ### End-to-End Demo Script (Condensed)
 
