@@ -22,7 +22,7 @@ By the end, you will be able to write programs that check exam results, apply di
 
 Without conditionals, every program would be like a fixed recipe that never changes. Conditionals make programs **smart and responsive**.
 
-![Program flow control diagram — railway platform fork shows True and False paths; real apps use the same decision logic for UPI balance, exam results, and ATM PIN validation](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-01-program-decision-flow.png)
+![Program flow control diagram — railway platform fork shows True and False paths; real apps use the same decision logic for UPI balance, exam results, and ATM PIN validation](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-01-program-decision-flow.png?v=20260614)
 
 ---
 
@@ -53,7 +53,7 @@ A **condition** is any expression that Python evaluates as either **True** or **
 | `or` | At least one must be True | `True or False` | `True` |
 | `not` | Reverses True to False | `not True` | `False` |
 
-![Boolean values and comparison operators — all six comparison operators with examples, logical and/or/not truth table, and the common = vs == mistake](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-02-boolean-conditions.png)
+![Boolean values and comparison operators — all six comparison operators with examples, logical and/or/not truth table, and the common = vs == mistake](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-02-boolean-conditions.png?v=20260614)
 
 ```python
 # Check scholarship eligibility: marks >= 80 AND attendance >= 75
@@ -89,7 +89,7 @@ if condition:  # Condition followed by a colon
 - Indented lines belong to the `if` block. If the condition is `False`, Python **skips** that block.
 - Lines **not indented** after the block always run.
 
-![if statement diagram — full voting eligibility code, syntax rules, True vs False paths, and step-by-step flow from input to output](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-03-if-statement-flow.png)
+![if statement diagram — full voting eligibility code, syntax rules, True vs False paths, and step-by-step flow from input to output](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-03-if-statement-flow.png?v=20260614)
 
 ### `if` with User Input
 
@@ -132,7 +132,7 @@ An `if` handles "when true, do something." When the condition is false, `else` p
 - **In Simple Words:** `else` means "otherwise, do this instead."
 - **Real-Life Example:** "If the milk is boiled, turn off the gas; **else**, keep heating."
 
-![if/else diagram — pass/fail decision tree with complete code for even/odd checker and modulus remainder explanation](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-04-if-else-branches.png)
+![if/else diagram — pass/fail decision tree with complete code for even/odd checker and modulus remainder explanation](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-04-if-else-branches.png?v=20260614)
 
 ### Pass or Fail Program
 
@@ -189,7 +189,7 @@ else:                # Runs when all above are False
 - Python checks **top to bottom** and stops at the **first** `True` condition.
 - Only **one** block in the chain runs. Put the **strictest** condition first.
 
-![if/elif/else chain — full grade A to F ladder with complete condition and outcome text, wrong-order warning, and billing slab use cases](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-05-elif-chain.png)
+![if/elif/else chain — full grade A to F ladder with complete condition and outcome text, wrong-order warning, and billing slab use cases](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-05-elif-chain.png?v=20260614)
 
 ### Grade Calculator
 
@@ -285,7 +285,7 @@ else:  # No discount applies
 - `and` — both sides must be `True`. `or` — at least one side must be `True`.
 - `not` flips `True` to `False` — useful when you want the opposite check.
 
-![Logical operators in conditions — complete scholarship, discount, and login examples with full truth table and parentheses readability tip](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-06-logical-operators.png)
+![Logical operators in conditions — complete scholarship, discount, and login examples with full truth table and parentheses readability tip](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-06-logical-operators.png?v=20260614)
 
 ### Using `not` — Reversing a Condition
 
@@ -335,7 +335,7 @@ else:  # Username did not match
 - The inner `if` only runs when the username is correct — different error messages for each failure.
 - If nesting goes deeper than 2–3 levels, rewrite with `and`/`or` or `elif` for readability.
 
-![Nested conditionals — full login validation flowchart with complete username/password code and separate error messages for each failure](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-07-nested-conditionals.png)
+![Nested conditionals — full login validation flowchart with complete username/password code and separate error messages for each failure](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-07-nested-conditionals.png?v=20260614)
 
 ---
 
@@ -350,7 +350,7 @@ else:  # Username did not match
 | Wrong `elif` order | `>= 40` before `>= 90` | Put `>= 90` first | Higher threshold first |
 | Empty `if` block | Nothing below `if` | Use `pass` or real code | Python disallows empty blocks |
 
-![Common conditional mistakes — all six errors with wrong code, correct code, reason, and debugging tips for boundary values](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-09-common-mistakes.png)
+![Common conditional mistakes — all six errors with wrong code, correct code, reason, and debugging tips for boundary values](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-09-common-mistakes.png?v=20260614)
 
 Use **`pass`** as a placeholder in an empty block while building structure — replace it with real code when ready.
 
@@ -376,7 +376,7 @@ if number > 0:  # Condition for positive numbers
 3. **E — List conditions and outcomes** for each case.
 4. **P — Write Python code** following step 3.
 
-![STEP method — State, inputs, conditions/outcomes, and Python code with full cinema ticket example and complete working program](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-08-step-method.png)
+![STEP method — State, inputs, conditions/outcomes, and Python code with full cinema ticket example and complete working program](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module1/session02/session02-08-step-method.png?v=20260614)
 
 **Example:** Cinema charges ₹150 for adults, ₹80 for children (age 12 or below).
 

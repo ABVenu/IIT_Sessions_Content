@@ -1,0 +1,314 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"An **AC remote app** checks the room temperature before switching the compressor on. The line `temperature == 30` is evaluated when the actual temperature stored in the variable is `30`.
+
+What will Python evaluate this comparison as?",,,,,,1,,`True`,`False`,`30`,A `TypeError` because numbers cannot be compared,,6a2ee49b7dcd9d741d497322,0,markdown,"The `==` operator checks whether two values are **equal**. Since `30 == 30`, the expression evaluates to the boolean **`True`**.
+
+**Why other options are wrong:**
+- B: The values match, so the result is not `False`.
+- C: Comparisons return booleans (`True`/`False`), not the number itself.
+- D: Comparing two integers with `==` is valid Python."
+mcsc,markdown,"A **UPI payment app** runs this check before allowing a transfer:
+
+```python
+if account_balance > 500:
+    print(""Payment allowed"")
+```
+
+The customer's balance is **₹200**, so the condition is `False`.
+
+What happens to the indented `print(""Payment allowed"")` line?",,,,,,2,,Python runs it twice to double-check the balance,Python skips that indented block and continues with code after the `if`,Python stops the entire program with a `SyntaxError`,Python automatically changes the balance to ₹600,,6a2ee49b7dcd9d741d497322,0,markdown,"When an `if` condition is **`False`**, Python **does not execute** the indented block under it. Lines after the block still run normally.
+
+**Why other options are wrong:**
+- A: Python never re-runs a block automatically.
+- C: A false condition is normal behaviour, not a syntax error.
+- D: Conditionals do not modify variable values on their own."
+mcsc,markdown,"At a **railway station kiosk**, a program decides which platform message to show:
+
+```python
+if ticket_platform == 3:
+    print(""Walk left to Platform 3"")
+else:
+    print(""Walk right to other platforms"")
+```
+
+The ticket is for **Platform 5**, so the `if` condition is `False`.
+
+What is the role of the `else` block here?",,,,,,2,,It runs only when the `if` condition is `True`,It runs when the `if` condition is `False`,It checks a second condition before the `if` runs,It runs at the same time as the `if` block,,6a2ee49b7dcd9d741d497322,0,markdown,"`else` means **""otherwise.""** It executes when the matching `if` condition evaluated to **`False`**.
+
+**Why other options are wrong:**
+- A: That describes the `if` block, not `else`.
+- C: A second condition uses `elif`, not `else`.
+- D: Exactly **one** branch in an `if`/`else` pair runs — never both."
+mcsc,markdown,"A student writes this line while building an **exam result checker**:
+
+```python
+if marks = 50:
+    print(""Exactly fifty"")
+```
+
+What will happen when Python tries to run this program?",,,,,,3,,It compares `marks` with `50` and prints the message when they match,It assigns `50` to `marks` and then prints the message every time,It raises a `SyntaxError` because `=` cannot be used for comparison inside `if`,It prints `Exactly fifty` only when `marks` is not equal to `50`,,6a2ee49b7dcd9d741d497322,0,markdown,"Inside a condition you must use **`==`** to compare. **`=`** is for **assignment**, and Python does not allow a plain assignment expression as an `if` condition — this causes a **`SyntaxError`**.
+
+**Why other options are wrong:**
+- A: `=` assigns; it does not compare.
+- B: Even assignment inside `if` is invalid syntax here.
+- D: The program fails before any message can print."
+mcsc,markdown,"A **school grade portal** uses this logic for maths marks:
+
+```python
+math_marks = 85
+if math_marks > 90:
+    print(""Grade A"")
+elif math_marks >= 80:
+    print(""Grade B"")
+elif math_marks >= 70:
+    print(""Grade C"")
+else:
+    print(""Grade F"")
+```
+
+What will the program print for `math_marks = 85`?",,,,,,2,,`Grade A`,`Grade B`,`Grade C`,`Grade F`,,6a2ee49b7dcd9d741d497322,0.5,markdown,"Python checks conditions **top to bottom** and stops at the first match.
+- `85 > 90` → `False`
+- `85 >= 80` → `True` → prints **`Grade B`**
+Remaining `elif`/`else` blocks are skipped.
+
+**Why other options are wrong:**
+- A: 85 is not above 90.
+- C: The `>= 80` branch matches first, so `Grade C` never runs.
+- D: 85 is well above the fail threshold."
+mcsc,markdown,"An **ATM PIN checker** uses this code:
+
+```python
+age = input(""Enter your age: "")
+if age > 18:
+    print(""You can open a savings account"")
+```
+
+The user types `20`, but the program crashes with a **`TypeError`**.
+
+What is the **best fix**?",,,,,,3,,Remove the colon after `if age > 18`,Change `>` to `==`,"Convert the input to an integer: `age = int(input(""Enter your age: ""))`",Replace `print` with `Print`,,6a2ee49b7dcd9d741d497322,0.5,markdown,"`input()` always returns a **string**. Comparing `""20"" > 18` mixes text and number, causing a **`TypeError`**. Wrap the input with **`int()`** before comparing.
+
+**Why other options are wrong:**
+- A: Removing the colon creates a different syntax error.
+- B: `==` checks equality; it does not fix the string-vs-int problem.
+- D: `Print` is undefined and would cause a `NameError`."
+mcmc,markdown,"A **scholarship desk** stores a student's marks in `score = 55` and checks eligibility bands.
+
+Which of the following expressions evaluate to **`True`**?
+
+*Select all correct options.*",,,,,,,,`score > 50 and score < 60`,`score == 55 or score == 100`,`not (score > 60)`,`score > 60 and score < 70`,"1, 2, 3",6a2ee49b7dcd9d741d497322,0.5,markdown,"With `score = 55`:
+- A: `55 > 50` is `True` and `55 < 60` is `True` → **`True`**.
+- B: `55 == 55` is `True` → **`True or False`** → **`True`**.
+- C: `55 > 60` is `False`; `not False` → **`True`**.
+- D: `55 > 60` is `False`, so the whole `and` chain is **`False`**.
+
+**Why other options are wrong:**
+- D: 55 is not greater than 60, so this band check fails."
+mcmc,markdown,"A team is reviewing how **`if` / `elif` / `else`** chains work in a **food-delivery discount engine**.
+
+Which statements about these chains are **correct**?
+
+*Select all correct options.*",,,,,,,,Python evaluates conditions from top to bottom and stops at the first `True` match,Exactly one block in a properly built `if` / `elif` / `else` chain runs per execution,An `else` block is **mandatory** after every `if` statement,An `elif` block is checked only when all previous conditions in the chain were `False`,"1, 2, 4",6a2ee49b7dcd9d741d497322,0.5,markdown,"- A: Order matters — first matching branch wins.
+- B: Mutual exclusivity is the point of `elif` chains.
+- D: Each `elif` is a fallback after earlier failures.
+- C is incorrect: `else` is **optional**; an `if` alone is valid.
+
+**Why other options are wrong:**
+- C: Many programs use only `if`, or `if`/`elif` without `else`."
+mcmc,markdown,"A **learning portal** validates login with stored credentials:
+
+```python
+username = ""Masai""
+password = ""Masai123""
+
+uname = ""masai""       # user typed lowercase
+pwd = ""Masai123""      # user typed correct password
+```
+
+The program uses this chain:
+
+```python
+if uname == username and pwd == password:
+    print(""Logged in successfully"")
+elif uname != username and pwd != password:
+    print(""Username and password both are incorrect"")
+elif uname != username:
+    print(""Username is incorrect"")
+elif pwd != password:
+    print(""Password is not correct"")
+```
+
+Which statements are **correct** for this input?
+
+*Select all correct options.*",,,,,,,,`uname == username` evaluates to `False` because Python string comparison is case-sensitive,`pwd == password` evaluates to `True`,"The first `if` block runs and prints `""Logged in successfully""`","The program prints `""Username is incorrect""` because the username alone does not match","1, 2, 4",6a2ee49b7dcd9d741d497322,1,markdown,"- A: `""masai""` and `""Masai""` differ in case → **`False`**.
+- B: `""Masai123"" == ""Masai123""` → **`True`**.
+- First `if`: `False and True` → **`False`**.
+- Second `elif`: `True and False` → **`False`**.
+- Third `elif`: `uname != username` → **`True`** → prints **`Username is incorrect`**.
+
+**Why other options are wrong:**
+- C: Username mismatch prevents successful login even though the password is correct."
+mcmc,markdown,"A developer wrote this **grade calculator**, but the conditions are in the wrong order:
+
+```python
+math_marks = int(input(""Enter the marks: ""))
+if math_marks >= 70:
+    print(""Grade C"")
+elif math_marks >= 80:
+    print(""Grade B"")
+elif math_marks > 90:
+    print(""Grade A"")
+else:
+    print(""Grade F"")
+```
+
+Which statements are **true** about this code?
+
+*Select all correct options.*",,,,,,,,"For `math_marks = 85`, the program prints `Grade C`","For `math_marks = 95`, the program prints `Grade C`","Putting `> 90` first, then `>= 80`, then `>= 70` would assign grades correctly",Both `Grade B` and `Grade A` can print in a single run for the same input,"1, 2, 3",6a2ee49b7dcd9d741d497322,1,markdown,"Because `>= 70` is checked first, any mark from 70 upward matches the first branch:
+- 85 → **`Grade C`** (A is true).
+- 95 → **`Grade C`** as well (B is true) — the higher bands are never reached.
+- C: Strictest/highest thresholds must come **first** in the chain.
+- D: Only **one** block runs per chain execution.
+
+**Why other options are wrong:**
+- D: Python stops after the first matching branch; multiple grades cannot print."
+subjective,markdown,"**Ananya** manages billing at a **college cafeteria**. Regular customers often flash a **membership card**, and the counter gets busy during **peak hours** when bills are high. She wants a small Python program that automatically tells the cashier which **discount message** to apply — instead of mentally checking three different rules for every order.
+
+### Problem Statement
+
+Write a Python program that:
+
+1. Asks for the **bill amount in rupees** (whole number) and stores it in a variable.
+2. Asks **""Do you have a membership card? (yes/no): ""** and stores the answer in a variable.
+3. Stores whether the customer is a member in a **boolean variable** using a comparison, for example:
+   ```python
+   is_member = membership_answer == ""yes""
+   ```
+4. Uses an **`if` / `elif` / `else`** chain to print **exactly one** of these messages based on the rules below:
+
+   | Condition | Message to print |
+   | --- | --- |
+   | Bill is **₹1000 or more** **and** customer has membership | `Premium discount: 20% off` |
+   | Bill is **₹1000 or more** (membership does not matter) | `Bulk discount: 10% off` |
+   | Customer has membership (bill below ₹1000) | `Member discount: 5% off` |
+   | None of the above | `No discount today` |
+
+   **Important:** Check the **strictest / most specific rule first** (the row that needs both a high bill **and** membership), then fall through to the simpler rules — just like ordering grade bands from highest to lowest.
+
+5. Uses `int()` when reading the bill amount so comparisons work on numbers, not strings.
+
+### Sample Runs
+
+**Sample Run 1**
+
+Input:
+```
+Enter bill amount: 1200
+Do you have a membership card? (yes/no): yes
+```
+
+Expected Output:
+```
+Premium discount: 20% off
+```
+
+**Sample Run 2**
+
+Input:
+```
+Enter bill amount: 1200
+Do you have a membership card? (yes/no): no
+```
+
+Expected Output:
+```
+Bulk discount: 10% off
+```
+
+**Sample Run 3**
+
+Input:
+```
+Enter bill amount: 450
+Do you have a membership card? (yes/no): yes
+```
+
+Expected Output:
+```
+Member discount: 5% off
+```
+
+**Sample Run 4**
+
+Input:
+```
+Enter bill amount: 300
+Do you have a membership card? (yes/no): no
+```
+
+Expected Output:
+```
+No discount today
+```
+
+### Constraints
+
+- Use `input()` and `print()` for interaction and output.
+- Use **`and`** in the condition that checks both bill amount and membership.
+- Do **not** hard-code which message prints — let the `if` / `elif` / `else` chain decide from the user's inputs.
+- Add at least **one comment** (`#`) explaining what the program does.
+- Write your complete program in [OneCompiler Python](https://onecompiler.com/python).
+
+### Submission Instruction
+
+1. Open [https://onecompiler.com/python](https://onecompiler.com/python) and create a new Python file.
+2. Write your complete program in the editor, then click **Run** and verify the output.
+3. Click the **Save** button at the top right.
+4. Enter your **assignment name**, set visibility to **Public**, and save.
+5. Click the **Share** button, copy the link, and submit that link in the answer box on the LMS.
+
+![Step - 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5b930478-03c2-4255-a724-d0990da5e4f4/C0AFXttOJJhW3o1S.png)
+
+![Step-2](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/c817d308-66ca-4b5a-8579-db26951ad1a2/PGcKY2hqUQgysgPo.png)",,,,,,,,,,,,,6a2ee49b7dcd9d741d497322,0.5,markdown,"### Step-by-step Walkthrough
+
+1. Read the bill amount with `int(input(...))` so numeric comparisons work.
+2. Read the membership answer as text and store a boolean with `is_member = membership_answer == ""yes""`.
+3. Build an `if` / `elif` / `else` chain with the **combined rule first** (`bill >= 1000 and is_member`), then the high-bill-only rule, then membership-only, then the default.
+4. Print exactly one message — Python stops at the first matching branch.
+
+### Reference Solution
+
+```python
+# Cafeteria discount checker — applies one discount rule per bill
+
+# Step 1: Read bill amount as integer
+bill_amount = int(input(""Enter bill amount: ""))
+
+# Step 2: Read membership answer and store boolean result
+membership_answer = input(""Do you have a membership card? (yes/no): "")
+is_member = membership_answer == ""yes""
+
+# Step 3: Check rules from most specific to most general
+if bill_amount >= 1000 and is_member:
+    print(""Premium discount: 20% off"")
+elif bill_amount >= 1000:
+    print(""Bulk discount: 10% off"")
+elif is_member:
+    print(""Member discount: 5% off"")
+else:
+    print(""No discount today"")
+```
+
+### Sample Verification
+
+| Bill | Membership | Branch matched | Output |
+| --- | --- | --- | --- |
+| 1200 | yes | First `if` (`>= 1000 and is_member`) | `Premium discount: 20% off` |
+| 1200 | no | Second `elif` (`>= 1000`) | `Bulk discount: 10% off` |
+| 450 | yes | Third `elif` (`is_member`) | `Member discount: 5% off` |
+| 300 | no | `else` | `No discount today` |
+
+### Alternative Approaches
+
+- Compare membership directly: `membership_answer == ""yes""` inside each condition instead of storing `is_member` — storing the boolean first matches the pattern of reusing comparison results and keeps conditions shorter.
+- Use `.lower()` on the membership answer if you want to accept `""Yes""` or `""YES""` — for this assignment, exact `""yes""` is enough.
+- You could add a short comment above each branch naming the rule it implements."

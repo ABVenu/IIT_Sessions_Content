@@ -102,3 +102,43 @@
 - Full code with per-line comments, Key Takeaways, and terminology table present.
 
 **QC Status: PASSED**
+
+---
+
+## QC Iteration 6 (Post-Session Alignment — Lecture Notes Released.md)
+
+**Trigger:** Align released notes to Live Topic Coverage report and session transcript. Created `Lecture Notes Released.md`.
+
+| Criteria | Result |
+|----------|--------|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References in Student Notes | True |
+
+**Removed (not covered in session):**
+- Temperature quick activity (`float`, >35°C)
+- Even/odd checker and modulus example
+- Electricity bill slab and train ticket `elif` examples
+- Scholarship + membership `or` discount examples
+- `not is_locked` standalone example
+- Nested `if`-inside-`if` login pattern (session used flat `elif` chain with `and`)
+- `pass` placeholder section
+- Formal STEP cinema/shop discount activities
+- ATM withdrawal, leap year, and complete multi-subject student result exercises
+- Dedicated debugging section
+
+**Retained / aligned to session:**
+- All 8 S3 images from `Lecture Notes.md`
+- `if` / `elif` / `else` with rain/umbrella, age, and English marks examples
+- Storing `result_for_english` boolean in a variable
+- Logical operators (`and`, `or`, `not`) with mark-range and login checks
+- Variable naming conventions
+- Four in-class exercises: positive/negative, largest of two numbers, Masai login, maths grade calculator
+- Common mistakes table (colon, indentation, `=` vs `==`, `int()` on input)
+- Practice-led logical thinking steps (no extra uncaught activities)
+
+**QC Status: PASSED**
