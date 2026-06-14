@@ -7,18 +7,17 @@ Target Audience : Students from any backgorund may not be necessarily form tech 
 
 session duration: 1hr 50mins
 
-title: Structured Outputs for Agents
+title: Prompt Versioning & API Rate Limits
 
-objective: Require machine-readable JSON outputs that downstream code can parse reliably.
+objective: Version prompts and configs and respect provider rate limits in development.
 
-topics be covered: JSON schema; structured generation; output parsing; validation (lite)
+topics be covered: Prompt versioning; config files; rate limits; retries and backoff
 
 
 detailed subtopics to be covered:
-* Define a JSON schema for an agent response required by the application.
-* Prompt the model to return JSON that conforms to the schema.
-* Parse model output into Python objects and handle malformed JSON safely.
-* Validate required fields before passing results to tools or UI components."
-
+* Store prompts and tool configs in versioned files or a simple registry pattern.
+* Compare two prompt versions against the same eval questions (qualitative).
+* Explain HTTP rate limits and implement exponential backoff on API errors.
+* Log retry events so failures are visible during development.
 
 		

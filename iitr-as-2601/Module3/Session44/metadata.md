@@ -7,17 +7,17 @@ Target Audience : Students from any backgorund may not be necessarily form tech 
 
 session duration: 1hr 50 mins
 
-title: LangGraph Basics
+title: LLM Internals for Designers
 
-objective: Model agent workflows as graphs with nodes; edges; and state for orchestration.
+objective: Understand token behavior; randomness; and limits without model-engineering depth — applied after RAG; memory; and tool use.
 
-topics be covered: Nodes and transitions; graph state; simple graph build; execution walkthrough
+topics be covered: Tokens vs words; context limits; temperature and determinism; practical implications for RAG and agents
 
 
 detailed subtopics to be covered:
-* Represent an agent workflow as nodes (steps) and transitions (conditions) on a diagram.
-* Define minimal graph state shared across nodes in LangGraph (or equivalent).
-* Build and run a simple two- to three-node graph that completes a bounded task.
-* Trace execution order through the graph and interpret state updates after each node."
+* Relate tokens to billing; latency; and prompt length decisions for designers.
+* Explain how context limits constrain RAG and memory design choice.
+* Configure temperature or seed (where available) to trade creativity vs consistency in agent responses.
+* Predict user-visible effects when context is truncated or overloaded in multi-turn agent loops.
 
 		
