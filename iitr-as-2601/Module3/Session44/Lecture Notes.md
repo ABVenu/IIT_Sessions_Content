@@ -13,7 +13,7 @@ This document explains **LLM internals for designers** — **tokens**, **context
 - **Configure** **temperature** (and **seed** where available) for **consistency** vs **creativity**
 - **Predict** what users see when **context is truncated** or **overloaded** in multi-turn agent loops
 
-![LLM internals for designers — RAG chunks, chat history, and tool logs share one context window tiffin box](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-01-designer-llm-internals.png)
+![LLM internals for designers — RAG chunks, chat history, and tool logs share one context window tiffin box](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-01-designer-llm-internals.png?v=20250614)
 
 ---
 
@@ -52,7 +52,7 @@ When you type *"Namaste, how are you?"* you see **six words**. The model does no
 | Hindi + English mix | Token count can exceed word count |
 | Empty line breaks | Still cost a few tokens |
 
-![Tokens vs words — screen shows words; API bills and limits by tokens including URLs and mixed language](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-02-tokens-vs-words.png)
+![Tokens vs words — screen shows words; API bills and limits by tokens including URLs and mixed language](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-02-tokens-vs-words.png?v=20250614)
 
 **Rule of thumb for planning (not exact):** ~4 characters ≈ 1 token in English prose. Always **measure** for production; use this only for back-of-envelope sketches.
 
@@ -142,20 +142,8 @@ Exact numbers change by **model name** and **provider** — always read the curr
 - **Memory implication:** Saving **full** history to a file (e.g. `chat_history.json`) is correct for persistence — but **loading all of it** into every API call is not always wise. Designers often keep **last N turns** or a **summary** for long sessions.
 - **Agent implication:** Each ReAct cycle appends **Thought**, **Action**, and **Observation** to the scratchpad. Five tool calls with verbose web snippets can consume more window than the entire RAG corpus you carefully chunked.
 
-![Context window budget — system, RAG, history, tool logs, question, and output slot share one fixed ceiling](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-03-context-window-budget.png)
+![Context window budget — system, RAG, history, tool logs, question, and output slot share one fixed ceiling](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-03-context-window-budget.png?v=20250614)
 
-```mermaid
-flowchart TB
-  subgraph budget [Single context window]
-    SYS[System instructions]
-    RAG[Retrieved chunks]
-    MEM[Chat history]
-    TOOL[Tool observations]
-    Q[New user message]
-    OUT[Model output slot]
-  end
-  SYS --> RAG --> MEM --> TOOL --> Q --> OUT
-```
 
 - **Common mistake:** Assuming **JSON file on disk** equals **model memory** — the file can be huge while the **API call** only includes what your code attaches this turn.
 - **Design pattern:** **Progressive disclosure** — retrieve less first; if the answer is thin, run a **second** search with higher **`k`** instead of always shipping everything.
@@ -181,7 +169,7 @@ flowchart TB
 - **Grounding vs stuffing:** More chunks ≠ better answers. Irrelevant chunks add **noise** and **eat memory** for chat history — the model may cite the wrong paragraph.
 - **Second-pass retrieval:** If the first answer says *"not in context,"* run retrieval again with a **rephrased query** before dumping more static text into the system prompt.
 
-![RAG token budget — top_k chunks hard-capped at MAX_CONTEXT_TOKENS; excess chunks dropped from prompt](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-04-rag-token-budget.png)
+![RAG token budget — top_k chunks hard-capped at MAX_CONTEXT_TOKENS; excess chunks dropped from prompt](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-04-rag-token-budget.png?v=20250614)
 
 ### Full Example — Trim Context Assembly for Token Budget
 
@@ -262,7 +250,7 @@ print("Full prompt tokens:", count_tokens(full_prompt))
 - **Silent truncation:** Many stacks **drop oldest messages** when over limit — users see the bot "forget" a constraint from ten turns ago with **no error toast**.
 - **Visible truncation:** Sometimes the answer ends abruptly or the model says *"I don't have access to earlier context"* — treat that as a **window signal**, not random stupidity.
 
-![Memory truncation — full chat_history.json on disk vs only last N messages sent to model; grounding rule dropped](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-05-truncation-memory.png)
+![Memory truncation — full chat_history.json on disk vs only last N messages sent to model; grounding rule dropped](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-05-truncation-memory.png?v=20250614)
 
 ### Simulating Truncation — What Users Feel
 
@@ -345,7 +333,7 @@ Write four bullets:
 | **`0.7 – 1.0`** | Creative, diverse wording | Marketing copy, brainstorming names |
 | **Above 1.0** | Often chaotic — rare in production | Experiments only |
 
-![Temperature and determinism — temperature 0 stable for RAG and tools; 0.8 varied for creative copy; seed for QA](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-06-temperature-determinism.png)
+![Temperature and determinism — temperature 0 stable for RAG and tools; 0.8 varied for creative copy; seed for QA](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-06-temperature-determinism.png?v=20250614)
 
 - **Determinism:** Even at **0**, tiny differences (API updates, batching) can shift output slightly — design for **"stable enough,"** not physics-level repeatability.
 - **Seed (where available):** Some APIs accept a **`seed`** integer so random sampling becomes **reproducible** for tests. Not every provider exposes it — check Groq docs for your model.
@@ -438,7 +426,7 @@ A single chat message is one sampling pass. An **agent** chains **many** passes 
   - **Sudden brevity or refusal** — model lacks room for a proper answer  
   - **Tool hallucination** — model skips **`Action`** and guesses because scratchpad was trimmed  
 
-![Multi-turn agent token growth — each ReAct lap adds tokens to scratchpad; cap observations and use temperature 0](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-07-agent-loop-token-growth.png)
+![Multi-turn agent token growth — each ReAct lap adds tokens to scratchpad; cap observations and use temperature 0](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-07-agent-loop-token-growth.png?v=20250614)
 
 ---
 
@@ -475,7 +463,7 @@ A typical **RAG + memory + agent** request might look like this inside the windo
 Estimated total                             ~5,530 tokens
 ```
 
-![End-to-end request anatomy — typical RAG memory agent call token breakdown totaling about 5530 tokens](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-08-end-to-end-anatomy.png)
+![End-to-end request anatomy — typical RAG memory agent call token breakdown totaling about 5530 tokens](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session44/session44-08-end-to-end-anatomy.png?v=20250614)
 
 - Numbers are **illustrative** — replace guesses with **`tiktoken`** counts on real prompts.
 - The **designer job** is to ensure the **sum** stays below your provider window with **safety margin** (~10–15% free for longer answers).
