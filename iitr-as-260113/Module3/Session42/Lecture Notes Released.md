@@ -45,6 +45,8 @@ Input → [identify query type] → [maybe call tool] → [maybe retrieve docs] 
 - **Common doubt:** *Can I reuse the same pass/fail idea as DSA problems?* Only for the **final text** slice. For agents you need **step-by-step expectations** — which tool, which document, whether to refuse.
 - The **refund-on-Amazon** example from class: first identify query type → fetch **order status** → retrieve **correct policy docs** → only then judge the answer. Skipping any step breaks trust.
 
+![Agent evaluation checks the full trajectory — tools, retrievals, and refusals — not just the final answer like a simple function test](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session42/session42-01-agent-evaluation-trajectory.png)
+
 ### Quick Activity — What Should You Check?
 
 For each scenario, list **at least two things** you would check besides the final sentence.
@@ -83,6 +85,8 @@ evaluation_cases.json  →  runner.py  →  agent (with logging)  →  traces/*.
 
 - **Common doubt:** *Is this only for LangChain?* The **philosophy** is framework-agnostic. Today's demo uses a LangChain-style agent file plus a **plain Python runner** for scoring — separation keeps evaluation logic easy to read.
 
+![Evaluation harness pipeline — eval JSON checklist, runner coordinator, structured traces as CCTV plus receipt, results.csv mark sheet, and failure trace for weak cases](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session42/session42-02-evaluation-harness-pipeline.png)
+
 ---
 
 ## Structured Evaluation Cases — `evaluation_cases.json`
@@ -107,6 +111,8 @@ evaluation_cases.json  →  runner.py  →  agent (with logging)  →  traces/*.
 - **`forbidden_tools`** — for out-of-scope queries, **no tool** should fire; list tools that must stay idle.  
 - **`must_cite_doc_ids`** — **grounding** check: answer must come from the right policy document ID, not random text.  
 - **`should_refuse`** — `false` for normal policy Q&A; `true` for private phone numbers or unsupported transfers.
+
+![Structured evaluation case — each JSON row is an exam question plus marking scheme with must_use_tools, must_cite_doc_ids, must_contain, and should_refuse flags](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session42/session42-03-evaluation-cases-json.png)
 
 **Scenario types in the cohort file (six live cases):**
 
@@ -221,6 +227,8 @@ Save in your LangChain apps folder next to the agent and runner files.
 - **Trace** = step-by-step replay: *agent received query → called tool X in 120 ms → retrieved doc Y → answered Z*.  
 - In class you use Python's **`contextvars`** so each evaluation case gets its **own trace context** — traces from case 1 do not mix with case 75.  
 - **`record_event`** appends `{type, payload, elapsed_ms}` rows into the active trace list.
+
+![Structured traces as a per-case flight recorder — contextvars isolate each test timeline; logs persist unlike print output that vanishes when the terminal closes](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session42/session42-04-structured-traces-flight-recorder.png)
 
 ### Quick Activity — Design Your Log Fields
 
@@ -687,6 +695,8 @@ score = max(0, 1 − 0.25 × number_of_failures)
 1. Sort by **`score`** ascending → open matching file in **`traces/`**  
 2. Compare **`failure_type`** across runs before/after a prompt change  
 3. Fix **lowest performers first** — highest impact before release review  
+
+![Reading results.csv — partial-credit scores, failure_type labels, and lowest-performing cases linked to their trace JSON files for debugging](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session42/session42-05-results-csv-scoring.png)
 
 ### Quick Activity — Read a Failing Row
 
