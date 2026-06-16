@@ -1,0 +1,220 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A ShopKart customer asks: *""Where is my order ORD-88421 right now?""* The support bot must answer with **live courier location** that changes every few minutes. Which data source fits best?",,,,,,2,,RAG search over **returns_policy.txt**,**API** call to the order-tracking system,RAG search over **warranty_policy.txt**,A static FAQ paragraph saved in a Word file on the laptop,,6a30aeeb81040bc182185bf5,0,markdown,"B is correct because order location is a **live fact** that changes constantly — it must come from an external system via an API, not stored policy documents.
+
+A and C are incorrect because returns and warranty policies do not contain real-time courier positions. D is incorrect because a local static file cannot reflect minute-by-minute tracking updates."
+mcsc,markdown,"A customer asks: *""What is the warranty period for electronics?""* Which approach should the assistant use **first**?",,,,,,2,,**GET** request to a weather API,**RAG** retrieval from indexed warranty policy chunks,**POST** request to create a new warranty record,Parse a JSON exchange-rate response,,6a30aeeb81040bc182185bf5,0,markdown,"B is correct because warranty duration is a **rule stored in policy documents** — the right pattern is document-grounded retrieval (RAG), not a live external feed.
+
+A and D fetch unrelated live data (weather, rates). C is incorrect because the customer is asking to **read** a policy rule, not create a new warranty entry on a server."
+mcsc,markdown,Your weather script prints `Weather API status code: 404` after a URL typo (`/forcast` instead of `/forecast`). What should you do **before** calling `response.json()`?,,,,,,2,,Assume the body is valid weather JSON and parse it,**Stop and handle the error** — do not trust the body as weather data,Immediately send the error HTML to Groq as context,Change the HTTP method from GET to POST,,6a30aeeb81040bc182185bf5,0,markdown,"B is correct because **non-200 status codes** mean the response is not trustworthy weather data — always check status before parsing.
+
+A is incorrect because 404 responses often return error pages, not weather JSON. C is incorrect because error pages must not be fed to an LLM as facts. D is incorrect because the failure is a wrong URL, not the HTTP method choice."
+mcsc,markdown,A teammate runs forty Groq completions in one minute on a free-tier key and sees failures. Which HTTP status code best matches this situation?,,,,,,3,,**200**,**404**,**429**,**201**,,6a30aeeb81040bc182185bf5,0,markdown,"C is correct because **429 Too Many Requests** signals **rate limiting** — too many calls in a short window, which matches heavy Groq usage on a free account.
+
+A and D indicate success (OK / Created), not throttling. B means the resource path was not found, not quota exhaustion."
+mcsc,markdown,"In your ShopKart weather lab you call Open-Meteo with `requests.get(url, params={...})` to read current temperature for Delhi. Which REST mapping is correct?",,,,,,2,,**POST** — creating a new weather record on the server,**GET** — reading live data without changing server state,**DELETE** — removing old forecast entries,**PATCH** — partially updating the city's temperature field,,6a30aeeb81040bc182185bf5,0.5,markdown,"B is correct because fetching current weather is a **read-only** operation — REST convention uses **GET** with query parameters, no request body.
+
+A, C, and D describe create, remove, or update actions — none apply when you only **fetch** existing forecast data."
+mcsc,markdown,"You receive this raw text from a log file (not yet parsed):
+
+```json
+{""order_id"": ""ORD-4421"", ""status"": ""refund_processed""}
+```
+
+Which Python call turns it into a dictionary you can index with `data[""status""]`?",,,,,,3,,`json.dumps(raw_text)`,`response.json()` on a string variable,**`json.loads(raw_text)`**,"`print(raw_text[""status""])`",,6a30aeeb81040bc182185bf5,0.5,markdown,"C is correct because **`json.loads()`** parses a JSON **string** into a Python **dict** — the right tool when data arrives as text.
+
+A does the opposite (dict → string). B is a `requests` response method, not for an ordinary string variable. D fails because you cannot index a raw string with a key name before parsing."
+mcmc,markdown,"ShopKart's support lead asks you to label each customer line as **RAG**, **API**, or **neither alone is enough** for a production answer. Which labels are **correct**? Select **all** that apply.",,,,,,,,"*""Is express delivery available in metro cities?""* → **RAG** (policy wording)","*""Has my refund for order ORD-4421 been processed yet?""* → **API** (live order/refund status)","*""What is today's temperature in Mumbai for courier pickup?""* → **API** (live weather reading)","*""Summarise the 7-day return window politely""* → **API** only — no documents needed","1,2,3",6a30aeeb81040bc182185bf5,0.5,markdown,"A, B, and C are correct — metro express rules live in policy text (RAG); refund status is live transactional data (API); temperature is an external live reading (API).
+
+D is incorrect because summarising the return window requires **policy evidence** (RAG) plus natural language generation — not an API weather/order call alone."
+mcmc,markdown,You map parts of a **Groq chat completion call** onto the generic API request–response pattern. Which pairings are **correct**? Select **all** that apply.,,,,,,,,**Authorization header with API key** → request metadata / authentication,**`messages` list in the request body** → data you send to the service,**`choices[0].message.content`** → structured data you read back from the response body,**HTTP 404** → Groq successfully returned the model's answer text,"1,2,3",6a30aeeb81040bc182185bf5,0.5,markdown,"A, B, and C correctly map Groq usage onto URL/method/headers/body (auth, payload, parsed reply field).
+
+D is incorrect because **404** means **not found** — a client or path error, not a successful completion payload."
+mcmc,markdown,Your `shopkart_api_json_lab.py` fetches weather JSON. Which practices prevent **confident wrong answers** when you extend this script later? Select **all** that apply.,,,,,,,,Check **`response.status_code == 200`** (or `response.ok`) before calling **`response.json()`**,"Extract only needed fields (e.g. `temperature_c`, `weather_code`) instead of dumping the entire payload into a prompt",Keep **`CITY_NAME`** label aligned with the **latitude/longitude** actually sent in the GET request,Skip status checks when the API is free and public — free APIs always return 200,"1,2,3",6a30aeeb81040bc182185bf5,1,markdown,"A is correct — status-first discipline avoids parsing error pages as data. B is correct — selective field extraction reduces token waste and invented fields later. C is correct — mismatched label vs coordinates produces misleading ""Mumbai"" labels with Delhi weather.
+
+D is incorrect — public APIs still return **4xx/5xx** on bad URLs, timeouts, or server errors; status must always be checked."
+mcmc,markdown,"Given this parsed weather fragment:
+
+```json
+{
+  ""latitude"": 28.6139,
+  ""current"": {
+    ""temperature_2m"": 34.2,
+    ""weather_code"": 3
+  }
+}
+```
+
+Which statements are **true**? Select **all** that apply.",,,,,,,,Path to current temperature: **`current` → `temperature_2m`**,"In Python after parsing: **`data[""current""][""temperature_2m""]`** returns **34.2**","**`json.dumps(data, indent=2)`** converts a Python dict into a formatted JSON **string**",**`json.loads()`** is required immediately after **`response.json()`** on the same `requests` response,"1,2,3",6a30aeeb81040bc182185bf5,1,markdown,"A and B are correct — nested key navigation in JSON maps to chained dict access in Python. C is correct — **`json.dumps()`** serialises a dict to a JSON text string (useful for logging).
+
+D is incorrect because **`response.json()`** already parses the body into a dict — calling **`json.loads()`** again on that dict is unnecessary and wrong (loads expects a string)."
+subjective,markdown,"ShopKart's ops desk wants a **quick courier-weather snapshot** before dispatching express handoffs. You already have most of the weather fetch script from the lab. Finish two small pieces, run it once, and prove you can also parse a **static order JSON string** the way API responses arrive as text.
+
+No Groq calls, no agent routing, no GitHub repo — one short `.py` file only.
+
+Create a folder and file:
+
+```text
+shopkart_api_json_lab/
+└── shopkart_api_json_lab.py
+```
+
+Install if needed:
+
+```bash
+pip install requests
+```
+
+Copy this into **`shopkart_api_json_lab.py`**. The GET helper is **already complete** — do not rewrite it.
+
+```python
+import json
+import sys
+
+import requests
+
+OPEN_METEO_URL = ""https://api.open-meteo.com/v1/forecast""
+DELHI_LAT = 28.6139
+DELHI_LON = 77.2090
+CITY_NAME = ""Delhi""
+REQUEST_TIMEOUT_SECONDS = 15
+
+
+def fetch_current_weather(latitude: float, longitude: float) -> dict:
+    params = {
+        ""latitude"": latitude,
+        ""longitude"": longitude,
+        ""current"": ""temperature_2m,weather_code"",
+    }
+    response = requests.get(OPEN_METEO_URL, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
+    print(f""Weather API status code: {response.status_code}"")
+
+    if response.status_code != 200:
+        print(""Weather API call failed. Body preview:"")
+        print(response.text[:500])
+        sys.exit(1)
+
+    return response.json()
+
+
+# ── TODO 1: YOU WRITE THIS FUNCTION ──────────────────────────────────────────
+def extract_weather_fields(city_name: str, weather_data: dict) -> dict:
+    """"""Return a small dict with city, temperature_c, weather_code, latitude, longitude.""""""
+    pass
+
+
+# ── TODO 2: YOU WRITE THIS BLOCK ─────────────────────────────────────────────
+ORDER_JSON_STRING = """"""
+{
+    ""order_id"": ""ORD-88421"",
+    ""status"": ""out_for_delivery"",
+    ""customer_city"": ""Delhi""
+}
+""""""
+
+
+def main():
+    print(f""Step 1 — GET live weather for {CITY_NAME}..."")
+    weather_data = fetch_current_weather(DELHI_LAT, DELHI_LON)
+
+    print(""\nStep 2 — Extract selected JSON fields..."")
+    fields = extract_weather_fields(CITY_NAME, weather_data)
+    print(json.dumps(fields, indent=2))
+
+    print(""\nStep 3 — Parse order JSON string with json.loads()..."")
+    # Parse ORDER_JSON_STRING, then print order_id and status on separate lines
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+### Your tasks
+
+**1. Complete `extract_weather_fields`**
+
+Return a dictionary with exactly these keys:
+
+- `city` — use the `city_name` argument
+- `temperature_c` — from `weather_data[""current""][""temperature_2m""]`
+- `weather_code` — from `weather_data[""current""][""weather_code""]`
+- `latitude` — from `weather_data[""latitude""]`
+- `longitude` — from `weather_data[""longitude""]`
+
+**2. Parse the order string in `main()`**
+
+After Step 3's print line:
+
+- Use **`json.loads(ORDER_JSON_STRING)`** to get a Python dict
+- Print **`order_id`** and **`status`** on two separate lines (labels optional)
+
+**3. Run and verify**
+
+```bash
+cd shopkart_api_json_lab
+python shopkart_api_json_lab.py
+```
+
+Confirm in the terminal:
+
+- Status code **200**
+- Pretty-printed weather dict with all five keys
+- Order ID **ORD-88421** and status **out_for_delivery** printed after Step 3
+
+**Submission Instruction**
+
+- Code all the points mentioned in VS Code in a single `.py` file (`shopkart_api_json_lab.py`).
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,6a30aeeb81040bc182185bf5,0.5,markdown,"### Step-by-step solution walkthrough
+
+1. Keep the provided `fetch_current_weather` unchanged — it already demonstrates GET, status check, and `response.json()`.
+2. Implement `extract_weather_fields` by reading nested keys from the parsed dict (same shape as the lab).
+3. In `main()`, call `json.loads` on the multiline order string and print two fields — this mirrors JSON arriving as text before parsing.
+4. Run once with Delhi coordinates; no second city or error-drill required for this assignment.
+
+### Reference solution — parts you write
+
+```python
+def extract_weather_fields(city_name: str, weather_data: dict) -> dict:
+    current = weather_data[""current""]
+    return {
+        ""city"": city_name,
+        ""temperature_c"": current[""temperature_2m""],
+        ""weather_code"": current[""weather_code""],
+        ""latitude"": weather_data[""latitude""],
+        ""longitude"": weather_data[""longitude""],
+    }
+
+
+def main():
+    print(f""Step 1 — GET live weather for {CITY_NAME}..."")
+    weather_data = fetch_current_weather(DELHI_LAT, DELHI_LON)
+
+    print(""\nStep 2 — Extract selected JSON fields..."")
+    fields = extract_weather_fields(CITY_NAME, weather_data)
+    print(json.dumps(fields, indent=2))
+
+    print(""\nStep 3 — Parse order JSON string with json.loads()..."")
+    order = json.loads(ORDER_JSON_STRING)
+    print(""Order ID:"", order[""order_id""])
+    print(""Status:"", order[""status""])
+```
+
+### Sample terminal output (values will vary)
+
+```text
+Step 1 — GET live weather for Delhi...
+Weather API status code: 200
+
+Step 2 — Extract selected JSON fields...
+{
+  ""city"": ""Delhi"",
+  ""temperature_c"": 34.2,
+  ""weather_code"": 3,
+  ""latitude"": 28.6139,
+  ""longitude"": 77.209
+}
+
+Step 3 — Parse order JSON string with json.loads()...
+Order ID: ORD-88421
+Status: out_for_delivery
+```"

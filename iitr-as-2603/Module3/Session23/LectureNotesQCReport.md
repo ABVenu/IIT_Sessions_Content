@@ -84,3 +84,77 @@ Grep confirmed zero `Session N` / `session N` patterns.
 Grep confirmed zero duration, target-audience, or "keep it lite" leakage.
 
 **Expected result:** All criteria met. `Lecture Notes.md` approved.
+
+---
+
+## Iteration 3 (Align Notes Against Covered LOs — Release pass)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference | True |
+
+### Alignment actions (vs `Live Topic Coverage.md` + transcript)
+
+**Removed (not covered in live session):**
+- **Temperature** setting — not taught in this session.
+- **Search engine vs LLM** comparison table — not delivered live.
+- **Quick Activity — Sentence Completion Game** — not run in class.
+- **Rule-Based vs LLM Python demo** — keyword-router script not demonstrated live (concept covered verbally via WhatsApp banking / refund examples).
+
+**Retained (covered or partly introduced — per release policy):**
+- All four metadata LO sections, including **hallucinations and failure modes** — live delivery was cut short (~1:46 transcript), but the topic was on the agenda, introduced in class (probability, junior-copywriter analogy, disclaimers), and explicitly requested for student release notes.
+- Classical ML → GenAI mapping, rule-based vs LLM, LLM definition, rise-of-LLMs history, tokens (`tiktoken` code), context windows (`check_context_fit` code), probabilistic generation — all taught in session.
+- All **seven diagram images** retained.
+
+**Added (extra content taught in session):**
+- **OTP authentication** as a rule-based use case.
+- **Grammar vs rules** student Q&A (Grammarly can still flag LLM text).
+- **Code-specialised models** (Codex-style fine-tuning on code).
+- **Practical context-window tips** — avoid huge single PDF uploads; split and ask targeted questions.
+- **Retrieval > bigger prompts** design takeaway and **RAG/tools preview** in Key Takeaways.
+- **Mutual-fund-style disclaimer** framing for hallucination risk.
+
+**Not included (session protocol, not lecture content):**
+- Mentimeter / post-lecture quiz.
+
+**Output:** `Lecture Notes Released.md` created in Session23 folder.
+
+**Expected result:** All criteria met.
+
+---
+
+## Iteration 4 (Fresh QC verification — Released notes)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 / 5 |
+| Creativity | 5 / 5 |
+| Structural Adherence | 5 / 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference | True |
+
+### Verification focus
+
+**Content Coverage (5/5):** Released notes match taught scope plus retained hallucination/failure-mode curriculum (transcript incomplete). Extra live topics (OTP, Grammarly Q&A, Codex, PDF/retrieval tips) integrated.
+
+**Creativity (5/5):** Indian English examples preserved — IVR gas booking, ration-shop tokens, Hinglish token demo, tiffin-box context window, mutual-fund disclaimer.
+
+**Structural Adherence (5/5):** Two complete code blocks (`tiktoken`, `check_context_fit`) with per-line comments; five student-facing activities; Key Takeaways + Quick Reference table; no session numbers.
+
+**No Logical Mistakes (True):** Context-fit arithmetic, token billing, probabilistic generation vs lookup, hallucination cause — consistent with transcript.
+
+**No Presentation Mistakes (True):** Markdown tables, code fences, and seven images well-formed.
+
+**No Previous Session Number References (True):** Uses "previous session" / "upcoming sessions" only.
+
+**No Metadata/internal reference (True):** No duration, audience, or internal instruction leakage.
+
+**Expected result:** All criteria met. `Lecture Notes Released.md` approved for student release.

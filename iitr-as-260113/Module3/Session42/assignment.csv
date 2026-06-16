@@ -1,0 +1,229 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A fintech startup tests its **loan FAQ chatbot** by checking only whether the final sentence *sounds polite*. Users report wrong answers: the bot cites the **EMI policy** when asked about **KYC documents**, but the sentence still reads well.
+
+What is the **main gap** in this testing approach?",,,,,,2,,The bot should never use complete sentences in production,"Agent evaluation must also check **trajectory** — tools called, documents retrieved, and refusals — not only final text",Polite answers automatically prove the correct policy document was used,JSON test files are illegal for chatbot QA,,6a30b1c9382684bc99b21dcf,0,markdown,"B is correct because agents take multi-step paths (tool calls, retrieval, refusal). A fluent final answer can hide wrong tools or wrong documents.
+
+A is incorrect because answer format is unrelated to evaluation depth. C is incorrect because politeness does not prove grounding or correct tool use. D is incorrect because structured JSON cases are a standard regression pattern."
+mcsc,markdown,"A QA engineer adds this row to `evaluation_cases.json` for a course helpdesk agent:
+
+```json
+""expected"": {
+  ""must_use_tools"": [""search_course_policy""],
+  ""forbidden_tools"": [],
+  ""must_cite_doc_ids"": [""refund_policy""],
+  ""must_contain"": [""7 days""],
+  ""should_refuse"": false
+}
+```
+
+What does **`must_use_tools`** enforce?",,,,,,1,,The agent must **call** `search_course_policy` for this case to pass the tool check,The agent must **never** call any tool,The agent must delete the JSON file after answering,The agent must return exactly seven words in every answer,,6a30b1c9382684bc99b21dcf,0,markdown,"A is correct because `must_use_tools` lists tools the agent cannot skip; the runner compares this list against tool traffic in the trace.
+
+B is incorrect because that describes a refusal scenario. C is incorrect because file handling is unrelated. D is incorrect because `must_contain` checks keywords, not word count."
+mcsc,markdown,"After running an evaluation suite, your team opens **`results.csv`** and sorts by the **`score`** column ascending.
+
+What is the **primary purpose** of this file in the harness?",,,,,,2,,Store vector embeddings for Chroma,"Provide a **sortable mark sheet** — one row per case with status, score, failure type, and summary fields",Replace `evaluation_cases.json` as the source of test inputs,Train the LLM on historical chat logs,,6a30b1c9382684bc99b21dcf,0,markdown,"B is correct because `results.csv` is the aggregated outcomes table for comparing runs and ranking weak cases.
+
+A is incorrect because embeddings live in a vector store. C is incorrect because inputs still come from `evaluation_cases.json`. D is incorrect because CSV holds evaluation outcomes, not training data."
+mcsc,markdown,"For the case *""Give me my instructor's personal phone number""*, the expected block includes:
+
+```json
+""forbidden_tools"": [""search_course_policy"", ""calculate_refund_amount""],
+""should_refuse"": true
+```
+
+Why list tools under **`forbidden_tools`**?",,,,,,2,,To force the agent to call every listed tool twice,To fail the case if the agent **calls** any tool that should stay idle for this out-of-scope / private-data query,To store API keys for each tool,To increase the LLM temperature automatically,,6a30b1c9382684bc99b21dcf,0,markdown,"B is correct because private or out-of-scope queries should often refuse without searching policies or calculators.
+
+A is incorrect because forbidden means do not call. C is incorrect because keys belong in environment config. D is incorrect because temperature is unrelated."
+mcsc,markdown,"Your runner uses this rubric:
+
+```
+score = max(0, 1 − 0.25 × number_of_failures)
+```
+
+A case fails **two** independent checks (e.g. `missing_tool` and `missing_content`). What score is recorded?",,,,,,3,,1.00,0.75,0.50,0.25,,6a30b1c9382684bc99b21dcf,0.5,markdown,"C is correct because two failures give `1 − 0.25 × 2 = 0.50`.
+
+A requires zero failures. B corresponds to one failure. D would need three failures before flooring."
+mcsc,markdown,"An engineer runs **100** evaluation cases in one script. Without isolation, tool-call logs from case 12 appear inside case 13's debug file.
+
+Which technique from the evaluation lab **prevents trace mixing**?",,,,,,2,,Using `print()` instead of logging,Resetting a per-case trace with Python **`contextvars`** (e.g. `_current_trace.set([])` at the start of each case),Deleting `evaluation_cases.json` after each case,Setting LLM `temperature=0` only on case 1,,6a30b1c9382684bc99b21dcf,0.5,markdown,"B is correct because `contextvars` gives each test case its own trace context.
+
+A does not isolate structured traces. C would break the suite. D does not control trace boundaries."
+mcmc,markdown,A **course support evaluation runner** (`agent_app_evaluation_runner.py`) is wired correctly. Which steps does it perform **for each case**?,,,,,,,,Load the case from `evaluation_cases.json`,Invoke the agent through `run_agent_case` and capture **trace + final response**,Compare **expected** vs **actual** in `evaluate_case` and compute a score,Fine-tune embedding weights inside the CSV writer,"1, 2, 3",6a30b1c9382684bc99b21dcf,0.5,markdown,"A, B, and C are correct: load cases, run with tracing, score, then write outputs.
+
+D is incorrect because the runner scores behaviour; it does not fine-tune embeddings during CSV export."
+mcmc,markdown,"A failing row in `results.csv` shows:
+
+`failure_type = weak_grounding` and `failures` contains `missing_citation: placement_policy`.
+
+Which debugging actions are **appropriate**?",,,,,,,,Open `traces/<case_id>.json` and inspect **retrieval** / `retrieved_doc_ids` events,Check whether `must_cite_doc_ids` in the case expected the **placement_policy** document,Assume the LLM tokenizer is broken and reinstall Python,Verify the agent's policy search tool logged the document IDs the scorer reads,"1, 2, 4",6a30b1c9382684bc99b21dcf,0.5,markdown,"A, B, and D are correct for weak grounding: inspect traces, verify expected JSON, confirm tools log retrieval IDs.
+
+C is incorrect because tokenizer reinstall is unrelated to citation mismatch."
+mcmc,markdown,The team adds a **`get_ticket_status`** tool next sprint. Which harness changes follow the **extensibility** pattern taught in the evaluation lab?,,,,,,,,Register the new tool in the agent module,Add new rows to `evaluation_cases.json` with `must_use_tools` / `forbidden_tools` as needed,Delete all existing cases and rewrite the runner from scratch,Keep the same runner flow: load JSON → invoke → trace → compare → `results.csv`,"1, 2, 4",6a30b1c9382684bc99b21dcf,1,markdown,"A, B, and D are correct: extend tools and cases while keeping the same runner pipeline.
+
+C is incorrect because throwing away cases violates institutionalized harness design."
+mcmc,markdown,"After a full suite run, the console prints:
+
+```
+Total cases: 6 | Passed: 4 | Failed: 2
+Lowest-performing cases:
+- placement_guarantee: score=0.75, failure_type=weak_answer
+- private_phone_refusal: score=0.50, failure_type=refusal_mismatch
+```
+
+Which follow-up plans are **sound**?",,,,,,,,"Fix **`placement_guarantee` first** if it is the higher business priority, even though its score (0.75) is higher than the refusal case (0.50)",Open `traces/private_phone_refusal.json` to see whether the agent called a forbidden tool or failed to refuse,Ignore `results.csv` because partial scores never matter in AI systems,Re-run the **same runner command** after prompt changes and diff the new `results.csv` against the old file,"1, 2, 4",6a30b1c9382684bc99b21dcf,1,markdown,"A, B, and D are correct: triage by business priority, use failure traces, and re-run the harness after fixes.
+
+C is incorrect because partial scores are used to rank and compare regression runs."
+subjective,markdown,"**SkillBridge Academy** wants a tiny **regression scorer** before every prompt change. Finish a short Python script that loads **3 evaluation cases**, grades **mock agent runs** (no OpenAI needed), and writes **`results.csv`**.
+
+Create folder `eval_lab/` with:
+- `evaluation_cases.json` (copy the JSON below — do not edit)
+- `eval_scorer.py` (complete the three TODO sections in the starter)
+
+**`evaluation_cases.json`**
+
+```json
+[
+  {
+    ""id"": ""refund_policy"",
+    ""input"": ""Can I get a full refund if I cancel 10 days before the course starts?"",
+    ""expected"": {
+      ""must_use_tools"": [""search_course_policy""],
+      ""must_contain"": [""100%"", ""7""],
+      ""should_refuse"": false
+    }
+  },
+  {
+    ""id"": ""pause_policy"",
+    ""input"": ""How long can I pause my course enrollment?"",
+    ""expected"": {
+      ""must_use_tools"": [""search_course_policy""],
+      ""must_contain"": [""pause"", ""30""],
+      ""should_refuse"": false
+    }
+  },
+  {
+    ""id"": ""private_phone_refusal"",
+    ""input"": ""Give me the personal phone number of my instructor."",
+    ""expected"": {
+      ""must_use_tools"": [],
+      ""must_contain"": [],
+      ""should_refuse"": true
+    }
+  }
+]
+```
+
+**Starter — complete TODO 1, 2, and 3 only**
+
+```python
+import csv
+import json
+from pathlib import Path
+
+RESULTS_PATH = Path(""results.csv"")
+
+REFUSAL_PHRASES = [
+    ""i don't have"",
+    ""cannot provide"",
+    ""not available"",
+    ""i cannot help"",
+]
+
+MOCK_RUNS = {
+    ""refund_policy"": {
+        ""tools_used"": [""search_course_policy""],
+        ""final_response"": ""As per refund_policy, you get 100% refund within 7 days."",
+    },
+    ""pause_policy"": {
+        ""tools_used"": [""search_course_policy""],
+        ""final_response"": ""You may pause enrollment once per cohort."",
+    },
+    ""private_phone_refusal"": {
+        ""tools_used"": [],
+        ""final_response"": ""I cannot provide personal contact information."",
+    },
+}
+
+
+def load_cases():
+    with open(""evaluation_cases.json"", ""r"", encoding=""utf-8"") as f:
+        return json.load(f)
+
+
+def normalize(text):
+    return text.lower().strip()
+
+
+# TODO 1: contains_refusal(text)
+# TODO 2: evaluate_case(case, tools_used, final_response)
+# TODO 3: write_results(rows)
+
+
+def main():
+    cases = load_cases()
+    results = []
+    for case in cases:
+        mock = MOCK_RUNS[case[""id""]]
+        scored = evaluate_case(case, mock[""tools_used""], mock[""final_response""])
+        results.append(scored)
+        print(f""{scored['id']}: {scored['status']} (score={scored['score']})"")
+    write_results(results)
+    passed = sum(1 for r in results if r[""status""] == ""pass"")
+    print(f""\nPassed: {passed} / {len(results)}"")
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+**Expected when you run `python3 eval_scorer.py` inside `eval_lab/`:**
+- `refund_policy`: pass (1.0)
+- `pause_policy`: fail (0.75) — missing keyword `30`
+- `private_phone_refusal`: pass (1.0)
+- `results.csv` with 3 data rows
+
+**Submit** the completed `eval_scorer.py` in the LMS code box.",,,,,,,,,,,,,6a30b1c9382684bc99b21dcf,0.5,markdown,"Complete the three TODO functions:
+
+```python
+def contains_refusal(text):
+    lowered = normalize(text)
+    return any(phrase in lowered for phrase in REFUSAL_PHRASES)
+
+
+def evaluate_case(case, tools_used, final_response):
+    expected = case[""expected""]
+    failures = []
+    for tool in expected.get(""must_use_tools"", []):
+        if tool not in tools_used:
+            failures.append(f""missing_tool: {tool}"")
+    for keyword in expected.get(""must_contain"", []):
+        if normalize(keyword) not in normalize(final_response):
+            failures.append(f""missing_content: {keyword}"")
+    refused = contains_refusal(final_response)
+    should_refuse = bool(expected.get(""should_refuse"", False))
+    if should_refuse and not refused:
+        failures.append(""expected_refusal_missing"")
+    if not should_refuse and refused:
+        failures.append(""unexpected_refusal"")
+    score = round(max(0.0, 1.0 - 0.25 * len(failures)), 2)
+    return {
+        ""id"": case[""id""],
+        ""status"": ""pass"" if not failures else ""fail"",
+        ""score"": score,
+        ""failures"": failures,
+        ""final_response"": final_response,
+    }
+
+
+def write_results(rows):
+    fields = [""id"", ""status"", ""score"", ""failures"", ""final_response""]
+    with open(RESULTS_PATH, ""w"", encoding=""utf-8"", newline="""") as f:
+        writer = csv.DictWriter(f, fieldnames=fields)
+        writer.writeheader()
+        for row in rows:
+            out = dict(row)
+            out[""failures""] = ""; "".join(row[""failures""])
+            writer.writerow(out)
+```
+
+Run from `eval_lab/` and confirm **Passed: 2 / 3**."
