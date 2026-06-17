@@ -153,3 +153,40 @@
 | **Activity 2 — Context Budget Planner** | ~40 min | Context limits; RAG/memory design; truncation user-visible effects |
 | **Activity 3 — Temperature, Seed, and Feature Design** | ~40 min | Temperature; seed; creativity vs consistency; multi-turn overload |
 
+---
+
+## Iteration 6 — Post-Session Alignment (Lecture Notes Released.md)
+
+**Trigger:** Align `Lecture Notes Released.md` against live session transcript and `Live Topic Coverage.md`. Remove content not taught; retain partly covered material; add session-taught extras.
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics retained. Session-taught extras added: LLM-as-model-not-storage clarification; grounding vs stuffing distinction; incremental top_k tuning; two-wheeler temperature trade-off; never omit system prompt; back-to-square-one agent effect; fewer-steps checklist item. |
+| **Creativity** | **5 / 5** | Session analogies preserved (DMRC, tiffin box, backpack/trek, auto-rickshaw, board exam, two-wheeler). Activity 3 reframed to match live refund/lookup/SMS exercise. |
+| **Structural Adherence** | **5 / 5** | All 8 images retained. Three activities, four code blocks, Key Takeaways, terminology table. No Mentimeter/quiz content. |
+| **No Logical Mistakes** | **True** | Removed untaught UX patterns (typing indicator, context-length-exceeded error mapping, progressive disclosure, second-pass retrieval) without breaking flow. System-prompt guidance consistent with truncation simulation. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; student-facing activities; paragraphs ≤3 sentences. |
+| **No Previous Session Number References** | **True** | Verified — no session numbers in released notes. |
+| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
+
+**Outcome:** QC passed on iteration 6.
+
+**Line count:** ~518 lines.
+
+### Alignment changes (Released vs instructor Lecture Notes.md)
+
+| Change | Reason |
+|---|---|
+| Removed **progressive disclosure** and **second-pass retrieval** | Not taught in live session |
+| Removed **typing indicator** and **context length exceeded** error UX bullets | Not taught in live session |
+| Removed **Progressive disclosure** / **Context length exceeded** from terminology table | Not taught in live session |
+| Added **never omit system prompt** bullet + playbook row | Taught in end-of-session Q&A |
+| Sharpened **grounding vs stuffing** | Explicitly taught in session |
+| Added **two-wheeler temperature trade-off** analogy | Taught in session |
+| Added **back to square one** user-visible effect | Flight-booking example in session |
+| Activity 3: **ShopEasy** → generic product features | Matches live refund/lookup/SMS activity |
+| Replaced WhatsApp analogy with **trek/backpack** | Matches session backpacking analogy |
+| Added **Grounding vs stuffing** and **System prompt** to terminology table | Session-taught concepts |
+
+**Coverage vs Live Topic Coverage.md:** All rows marked **covered** — no subtopic gaps in released notes.
+
