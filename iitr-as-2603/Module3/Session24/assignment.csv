@@ -1,0 +1,135 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A **college admission helpdesk** bot is configured once with the rule: *""Answer only admission, fee, and scholarship questions.""* Every afternoon, students type new questions like *""What is the hostel fee deadline?""*
+
+Which statement correctly maps **system prompt** vs **user prompt** in this setup?",,,,,,2,,The daily student question is the **system prompt**; the admission rule is the **user prompt**,The admission rule is the **system prompt**; each student question is the **user prompt**,Both are user prompts because students type the messages,The model generates the system prompt automatically on each turn,,,,6a33b1a17edb35dffca5df83,0,markdown,"B is correct — the **system prompt** sets persistent background rules **once**; the **user prompt** is the live input that changes every turn.
+
+A is incorrect because it reverses the roles. C is incorrect because students type user messages while developers set system rules. D is incorrect because system prompts are written by the builder, not auto-generated each turn."
+mcsc,markdown,"Ravi is building a **medical-notes JSON extractor** in Groq Playground. He wants the model to always output the same five fields (`age`, `gender`, `diagnosis`, `weight`, `smoking`) and never invent missing values.
+
+Where should he place the JSON schema and *""use null if missing — do not guess""* rule?",,,,,,2,,"Only in the first user message, then hope the model remembers","In the **system prompt**, so rules persist for every pasted note",In the assistant response panel before submitting,In a separate PDF the model cannot read,,,,6a33b1a17edb35dffca5df83,0,markdown,"B is correct — stable **output format** and **guardrails** belong in the **system prompt** so they apply to every user turn.
+
+A is incorrect because rules in the first user message get lost in long chats. C is incorrect because you cannot pre-fill the assistant slot as instructions. D is incorrect because the model only reads system/user slots."
+mcsc,markdown,"Meera runs a travel blog and asks an LLM: *""Translate to Hindi: The library opens at 9 AM on weekdays.""* She gives **no examples** — only the instruction and the English sentence.
+
+Which prompting style is she using?",,,,,,3,,Few-shot prompting,Chain-of-thought prompting,Zero-shot prompting,Prompt template with five building blocks only,,,,6a33b1a17edb35dffca5df83,0,markdown,"C is correct — **zero-shot** means no worked examples; the model relies on training patterns.
+
+A is incorrect because few-shot requires demonstration examples. B is incorrect because CoT requires step-by-step reasoning instructions. D is incorrect because this is a single direct instruction, not a reusable template pattern."
+mcsc,markdown,"A network team at a company needs an assistant to map **internal router error descriptions** to **company-specific error codes** that never appeared in public training data. Zero-shot guesses are wrong or empty.
+
+What is the **best first upgrade**?",,,,,,1,,Add **few-shot examples** in the prompt showing issue → error code pairs,Remove the system prompt entirely,"Switch to chain-of-thought only, with no examples",Ask the model to guess faster by shortening the prompt to one word,,,,6a33b1a17edb35dffca5df83,0,markdown,"A is correct — **few-shot prompting** teaches custom labels via issue → code demonstrations in the prompt.
+
+B is incorrect because removing system rules worsens format and scope. C is incorrect because CoT helps reasoning, not proprietary label mapping without examples. D is incorrect because shorter prompts do not teach unknown mappings."
+mcsc,markdown,"A health-tech startup tries **few-shot prompting** for a diagnosis assistant: *fever + cough → influenza*, *chest pain → heart issue*, then asks about a new patient with fever and fatigue.
+
+Why does this approach **fail** for diagnosis?",,,,,,2,,Few-shot always uses too many tokens for any task,One symptom can map to **many diseases** — examples cannot teach the full **reasoning process**,"LLMs cannot read the word ""fever""",System prompts are illegal for medical apps,,,,6a33b1a17edb35dffca5df83,0.5,markdown,"B is correct — diagnosis needs multi-step reasoning; few-shot input→output pairs skip that process.
+
+A is incorrect because token cost is a trade-off, not the logical failure reason here. C is incorrect because models understand common symptom words. D is incorrect because the issue is technique choice, not legality."
+mcsc,markdown,"An engineering lead compares three prompt styles for the **same task volume** on a paid API billed per **million tokens**:
+
+- Style A: zero-shot instruction only
+- Style B: zero-shot + two few-shot examples
+- Style C: chain-of-thought with five numbered steps in the system prompt
+
+Which ordering correctly ranks **typical token usage** from **lowest to highest**?",,,,,,1,,A → B → C,C → B → A,B → A → C,A → C → B,,,,6a33b1a17edb35dffca5df83,0.5,markdown,"A is correct — **zero-shot** uses the fewest tokens; **few-shot** adds example cost; **chain-of-thought** with long step lists uses the most.
+
+B, C, and D are incorrect because they reverse or scramble the ordering."
+mcmc,markdown,Divya is assembling a **reusable prompt template** for a campus career counsellor agent. Which items are among the **five standard building blocks**?,,,,,,,,**Role** — persona and expertise,**Task** — what must be delivered this run,**Instructions** — ordered steps to follow,**API key** — provider authentication string,**Constraints** — guardrails and limits,**Output format** — exact structure of the answer,"1, 2, 3, 5, 6",6a33b1a17edb35dffca5df83,0.5,markdown,"A, B, C, E, and F are correct — the five blocks are **Role**, **Task**, **Instructions**, **Constraints**, and **Output format**.
+
+D is incorrect because API keys are deployment config, not a prompt template block."
+mcmc,markdown,A **meeting summarizer agent** must not invent attendees or decisions. Which prompt constraints are **effective hallucination guardrails** for this agent?,,,,,,,,"*""Answer only from the provided transcript. Do not invent facts.""*","*""Do not add attendees or decisions not present in the transcript.""*","*""Always guess missing names so the summary looks complete.""*","*""If a field is unknown, write 'not stated' instead of fabricating.""*","*""Use longer chain-of-thought steps on every task, including simple word counts.""*",,"1, 2, 4",6a33b1a17edb35dffca5df83,0.5,markdown,"A, B, and D are correct — **hallucination guardrails** ground the model in provided context and forbid fabrication.
+
+C is incorrect because it encourages fabrication. E is incorrect because CoT on trivial tasks wastes tokens without reducing hallucination risk."
+mcmc,markdown,"Match each **real task** to the **best first prompting technique** (before escalating to heavier methods):
+
+| Task | Best first technique |
+|---|---|
+| 1. Translate a product manual paragraph to Tamil | ? |
+| 2. Route support tickets into five **company-internal** category codes | ? |
+| 3. Help a student compare two career paths with pros, cons, and a recommendation | ? |
+| 4. Extract `age` and `gender` from a short medical note into JSON | ? |
+
+Which **task → technique** pairings are **correct**?",,,,,,,,Task 1 → **Zero-shot**,Task 2 → **Few-shot** with labelled examples,Task 3 → **Chain-of-thought** with numbered comparison steps,Task 4 → **Few-shot with twenty tagline examples** before extraction,Task 4 → **Strong system prompt** with JSON output format (zero-shot extraction),,"1, 2, 3, 5",6a33b1a17edb35dffca5df83,1,markdown,"A, B, C, and E are correct — translation is zero-shot; internal labels need few-shot; career comparison needs CoT; simple extraction needs a strong system prompt with JSON schema.
+
+D is incorrect because twenty tagline examples do not help structured medical field extraction and waste context."
+mcmc,markdown,Ankit is shipping a **beginner single-agent workflow** in Groq Playground for a bounded **fee-payment FAQ bot**. Which design choices follow **sound prompt engineering**?,,,,,,,,"Put **persona, scope, and refusal rules** in the **system prompt**",Define a predictable **output format** (e.g. labelled sections) for every reply,Add **fifteen few-shot examples** to every prompt to be safe,Include a **grounding rule**: answer only from the FAQ text provided in the user message,Use a **long chain-of-thought workflow** to extract a single fee amount from one sentence,Keep the system prompt short enough to leave room for FAQ text in the **context window**,"1, 2, 4, 6",6a33b1a17edb35dffca5df83,1,markdown,"A, B, D, and F are correct — reliable beginner agents use system-layer rules, bounded scope, parseable output, grounding, and token-aware prompt length.
+
+C is incorrect because too many examples steal context window space. E is incorrect because CoT is unnecessary for simple single-field extraction."
+subjective,markdown,"**CampusShelf** — a college library — wants a **Book Recommendation Assistant** for first-year students. Students will paste their **degree, favourite subjects, and reading time available**; the assistant must suggest **three books** with a one-line reason each — nothing outside academics and leisure reading.
+
+You are the prompt engineer. Design, test, and document one **beginner single-agent prompt package** using **Groq Playground** (`console.groq.com`).
+
+**What you must deliver (in one Google Doc)**
+
+Your document must contain **all six parts** below:
+
+**Part 1 — System prompt (bounded agent)**
+Write the full **system prompt** for the Groq **system** slot: named persona, scope, one refusal line for off-topic requests, a grounding/hallucination guardrail, and explicit output format with three labelled book entries.
+
+**Part 2 — User message template**
+Write a **user message template** with placeholder `[STUDENT PROFILE]` and one filled example:
+> BCom first year. Likes business biographies and light fiction. Has 30 minutes per day to read.
+
+**Part 3 — Five building blocks map**
+Table mapping your prompt to Role, Task, Instructions, Constraints, and Output format (quote one line each).
+
+**Part 4 — Technique choice**
+In **3–5 sentences**, justify whether you used **zero-shot**, **few-shot**, or **chain-of-thought** and why that fits book recommendation better than the other options.
+
+**Part 5 — Groq Playground tests**
+Two screenshots: (1) on-topic test with the filled profile; (2) off-topic test (e.g. *""Write my entire economics exam answers""*). Under each, write **2–3 lines** on scope, output format, and guardrails.
+
+**Part 6 — Token-awareness note**
+In **2–3 sentences**, note which prompt part costs the most tokens at scale and one cost-saving change that keeps safety rules.
+
+**Submit** a public Google Doc link (`Anyone with the link` → Viewer) in the LMS answer box.",,,,,,,,,,,,,,,6a33b1a17edb35dffca5df83,0.5,markdown,"**Part 1 — Sample system prompt:**
+
+```text
+You are Priya, a friendly campus library assistant for first-year college students in India.
+
+Scope:
+- Recommend books for study and leisure reading based on the student's profile.
+- Suggest exactly three books per request with a one-line reason each.
+- Do not answer exam cheating requests, medical advice, or political debates.
+
+Refusal:
+- If asked off-topic, say: ""I help with book recommendations only — please ask the library desk for other queries.""
+
+Grounding:
+- Recommend well-known, real book titles. If unsure a title exists, say so instead of inventing.
+
+Output format:
+Book 1: <title> / <author if known> / Why it fits: <one line>
+Book 2: ...
+Book 3: ...
+Keep total reply under 200 words.
+```
+
+**Part 2 — Sample user template:**
+
+```text
+[STUDENT PROFILE]
+Degree: BCom first year. Likes business biographies and light fiction. 30 minutes/day to read.
+
+Please recommend three books.
+```
+
+**Part 3 — Building blocks map (sample):**
+
+| Block | Example line |
+|---|---|
+| Role | ""You are Priya, a friendly campus library assistant…"" |
+| Task | ""Recommend exactly three books per request…"" |
+| Instructions | ""Read profile → match genres → give one-line reasons"" |
+| Constraints | Refusal line + grounding rule + word limit |
+| Output format | Three labelled Book 1 / Book 2 / Book 3 lines |
+
+**Part 4 — Technique justification (sample):**
+Most designs use **zero-shot + strong system prompt** with five-block structure — book recommendation is a general language task where format and scope live in system, not via many examples. **Few-shot** is valid with 1–2 sample book entries. **CoT** is valid with numbered steps (read profile → shortlist genres → pick three → format). Mark correct if justification matches the chosen technique.
+
+**Part 5 — Screenshots:**
+On-topic: three books in requested format. Off-topic: refusal or scope message, not full exam answers.
+
+**Part 6 — Token note (sample):**
+Long system prompts and few-shot blocks cost the most; shorten examples or keep a concise system prompt while retaining refusal and grounding lines.
+
+**Alternative valid approaches:** Few-shot with two sample recommendations; light CoT with 3–4 numbered steps; different persona names if structure stays predictable."

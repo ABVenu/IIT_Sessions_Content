@@ -1,88 +1,53 @@
-# Lecture Notes QC Report — Session 24: Mastering Prompt Engineering
+# Lecture Notes QC Report — Mastering Prompt Engineering
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-06-18  
+**Iteration:** 1
 
 ---
 
-## QC Iteration 1
+## QC Criteria
 
-| Criteria | Result |
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics covered with session-aligned examples: system/user roles + medical-notes bounded task; zero-shot/few-shot with product taglines and Cisco proprietary-code case; CoT with medical diagnosis workflow; five-block templates + single-agent framing. Extra live content added: Groq Playground hands-on, technique selection table, token cost awareness, hallucinations/guardrails, agents-built table. Python/API demos removed (deferred in live session); replaced with Groq text prompts matching class. |
+| **Creativity** | **5 / 5** | Wedding caterer brief; restaurant system/user analogy; hospital discharge notes; Cisco error-code few-shot; doctor consultation CoT; railway reservation form; DMV clerk agent script; bank call-transcription enterprise angle; gradient-boosting analogy for prompt simplicity. |
+| **Structural Adherence** | **5 / 5** | `#` title only; context bridges prior LLM session without session numbers; Official/Simple/Real-life on new terms; text prompt blocks with "How this prompt works" explanations; five student-facing activities; Key Takeaways; terminology table; all six original images retained. |
+| **No Logical Mistakes** | **True** | Zero-shot vs few-shot vs CoT decision logic matches transcript; few-shot fails on diagnosis, CoT succeeds; token cost ordering correct; hallucination guardrails tied to constraints; Groq Playground steps accurate. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no Mentimeter/MCQ content; paragraphs ≤3 sentences; professional documentation tone; activities student-facing (not "Ask students to…"). |
+| **No Previous Session Number References** | **True** | Uses **previous session** only; no `Session N`. |
+| **No Metadata/internal reference** | **True** | No internal instruction leakage (lite, live coverage remarks, deferred labels as meta, etc.). |
+
+---
+
+## Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
+
+**Outcome:** QC passed on iteration 1.
+
+---
+
+## Alignment Checklist (Live Topic Coverage → Released Notes)
+
+| Live coverage item | Section in released notes |
 |---|---|
-| **Content Coverage** | 5 / 5 |
-| **Creativity** | 5 / 5 |
-| **Structural Adherence** | 5 / 5 |
-| **No Logical Mistakes** | True |
-| **No Presentation Mistakes** | True |
-| **No Previous Session Number References** | True |
-| **No Metadata / Internal References in Student Notes** | True |
+| System vs user roles + bounded system prompt | System Prompts vs User Prompts; medical notes + meeting summarization examples |
+| Zero-shot and few-shot | Zero-Shot vs Few-Shot Prompting; Cisco proprietary example |
+| Chain-of-thought | Chain-of-Thought Prompting; medical diagnosis CoT |
+| Reusable prompt templates | Reusable Prompt Templates; five building blocks; career counsellor template |
+| Groq console and Playground | Hands-On with Groq Playground |
+| Token cost trade-offs | Choosing the Right Prompting Technique |
+| When to use each technique | Choosing the Right Prompting Technique; layering table |
+| Hallucinations and constraint guardrails | Hallucinations and Constraint Guardrails (under Single-Agent section) |
+| Agent prompt design (lite) | Designing a Beginner Single-Agent Prompt; Agents Built in This Session |
+| End-of-session MCQ | Excluded per protocol (not in released notes) |
 
-### Content Coverage Notes
-- All metadata subtopics addressed: system vs user roles with bounded system prompt; zero-shot and few-shot with format/consistency examples; chain-of-thought for multi-step reasoning; reusable prompt templates; beginner single-agent prompt assembly.
-- Session objective (design prompts that reliably steer model behaviour for beginner agent tasks) is met end-to-end.
-- Context paragraph links to previous GenAI concepts (tokens, context windows, hallucinations) without session numbers.
-- Full runnable Python examples with per-line comments and "How the code works" sections included.
+## Removed from Original Lecture Notes (not taught live)
 
-### Creativity Notes
-- Indian relatable analogies throughout (caterer brief, restaurant briefing, ration/form patterns, campus Tech Fest agent, bookstore triage).
-- Integrated solo practice activities embedded as student-facing exercises.
+- Python code blocks (`system_prompt.py`, `cot_in_system.py`, `template_demo.py`, `prompt_agent_demo.py`)
+- Tech Fest FAQ agent Python demo
+- `string.Template` / `Template.substitute()` references (programmatic templates deferred to upcoming API session)
 
-### Structural Adherence Notes
-- Clean start with `# Mastering Prompt Engineering`.
-- No target audience, duration, or internal instruction labels in student-facing text.
-- Scannable bullets, bold key terms, connecting flow between sections, Key Takeaways, and Quick Reference table present.
-- Activities written for individual students (no group/swap-with-partner wording).
-
-### Issues Found
-- None. Expected QC result achieved.
-
----
-
-## QC Iteration 2
-
-| Criteria | Result |
-|---|---|
-| **Content Coverage** | 5 / 5 |
-| **Creativity** | 5 / 5 |
-| **Structural Adherence** | 5 / 5 |
-| **No Logical Mistakes** | True |
-| **No Presentation Mistakes** | True |
-| **No Previous Session Number References** | True |
-| **No Metadata / Internal References in Student Notes** | True |
-
-### Re-verification Checklist
-- **Logical accuracy:** System/user separation, zero-shot vs few-shot trade-offs, CoT reasoning benefits, template placeholders, and hallucination guardrails align with standard prompt-engineering practice.
-- **Presentation:** Headings are direct; no "Part 1/Section A"; code blocks are complete; 3-sentence paragraph rule observed in narrative sections.
-- **Reference hygiene:** Only "previous session" and "upcoming work" used — no numeric session references.
-- **Internal metadata:** No mention of "lite", session duration, target audience labels, or instructor-only notes.
-- **Prompt compliance:** Official Definition / In Simple Words / Real-Life Example pattern used for major concepts; integrated learning (reasons, doubts, mistakes) inside topic bullets.
-
-### Issues Found
-- None. Expected QC result achieved on second pass.
-
----
-
-## Final Status
-
-**PASSED** — All ratings ≥ 5; all boolean checks True. No improvisation required after Iteration 1.
-
----
-
-## QC Iteration 3 (Post-Shortening Revision)
-
-| Criteria | Result |
-|---|---|
-| **Content Coverage** | 5 / 5 |
-| **Creativity** | 5 / 5 |
-| **Structural Adherence** | 5 / 5 |
-| **No Logical Mistakes** | True |
-| **No Presentation Mistakes** | True |
-| **No Previous Session Number References** | True |
-| **No Metadata / Internal References in Student Notes** | True |
-
-### Revision Notes
-- Reduced from ~639 lines to ~280 lines per user request.
-- Merged three separate Python demos into one `prompt_agent_demo.py`.
-- Removed redundant conversation examples, duplicate "How the code works" blocks, and the standalone "Putting the Techniques Together" section.
-- All metadata subtopics retained: system/user roles, zero-shot/few-shot, CoT, templates, beginner single-agent design.
-- One capstone practice, shorter per-section activities, trimmed quick-reference table.
-
-### Issues Found
-- None. Expected QC result achieved after shortening.
+**Approximate line count:** ~430 lines.
