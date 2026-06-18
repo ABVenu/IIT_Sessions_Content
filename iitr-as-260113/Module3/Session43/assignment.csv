@@ -1,0 +1,179 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya's **UPI payment** fails at a tea stall. Instead of guessing, she checks whether the issue is **network**, **wrong PIN**, or **bank server downtime** before trying again.
+
+Which definition best matches **debugging** in software?",,,,,,2,,Rewriting the entire application whenever one user complains,Finding the **root cause** of incorrect behaviour and fixing it so the system works as expected,Changing the LLM model name without reading logs,Deleting all test cases so failures disappear from reports,,6a33a77a7edb35dffca5c4b7,0,markdown,"B is correct because debugging means locating where things break and repairing the underlying cause.
+
+A is incorrect because full rewrites without diagnosis waste time. C is incorrect because model swaps without checking prompt, tools, or retrieval are an anti-pattern. D is incorrect because removing tests does not fix bugs."
+mcsc,markdown,"A team tests a **GST calculator agent** by comparing only the **final sentence** to an expected answer. Traces show the agent called **`search_course_policy`** instead of **`calculate_gst`**, but the final text still sounds confident.
+
+What is the **main limitation** of final-answer-only debugging here?",,,,,,2,,Trajectory checks are illegal for LangChain agents,"The polite final text can hide a **wrong tool path** — you must inspect tools, retrievals, and refusals too",GST questions never need tools,CSV files cannot store failure types,,6a33a77a7edb35dffca5c4b7,0,markdown,"B is correct because trajectory debugging inspects the step-by-step path; a confident answer on the wrong tool is still a failure.
+
+A is incorrect because trajectory inspection is standard practice. C is incorrect because arithmetic cases often need a calculator tool. D is incorrect because results.csv and traces support this workflow."
+mcsc,markdown,"Your lead files an incident as **failure class: weak retrieval** after users complain that policy answers cite irrelevant paragraphs.
+
+What does **failure class** mean in agent debugging?",,,,,,2,,A random nickname for any bug,"A **category of defect** (e.g. wrong tool, weak retrieval) used to pick the right fix",The Python class name of the LangChain retriever,The number of tokens in the system prompt,,6a33a77a7edb35dffca5c4b7,0,markdown,"B is correct because failure classes group similar mistakes so remediation is targeted.
+
+A is incorrect because the label is purposeful. C is incorrect because it is a QA concept, not a code class name. D is incorrect because token count relates to cost metrics, not defect taxonomy."
+mcsc,markdown,"A user asks about **return policy**, but the agent calls **`get_weather`**. The engineer notices the weather tool's **description** still says *""use for any user question.""*
+
+What is the **most likely** failure class and first fix direction?",,,,,,2,,Excessive tool calling — add `max_iterations` only,**Wrong tool selection** — apply a **tool patch** (clearer name and description),Slow response — buy a faster laptop,Under-refusal — remove all guardrails,,6a33a77a7edb35dffca5c4b7,0,markdown,"B is correct because vague tool metadata steers the LLM to the wrong worker; sharpening tool name/description is the classic tool patch.
+
+A is incorrect because no loop is described. C is incorrect because latency is unrelated to tool routing. D is incorrect because the agent used the wrong tool, not refusal tuning."
+mcsc,markdown,"A **course support bot** refuses a valid question: *""What is the refund window for my batch?""* with *""I cannot discuss unrelated topics.""*
+
+Which failure class applies?",,,,,,1,,**Over-refusal** — guardrails are too strict for an in-domain query,**Under-refusal** — the bot answered an out-of-domain cricket score,**Bad tool arguments** — empty `order_id` was passed,**Hallucinated response** — the bot invented a phone number,,6a33a77a7edb35dffca5c4b7,0.5,markdown,"A is correct because over-refusal rejects questions the product should answer; fix by relaxing prompt guardrails for in-domain topics.
+
+B is incorrect because under-refusal means answering what should be blocked. C is incorrect because no tool argument issue is described. D is incorrect because no fabricated contact info is described."
+mcsc,markdown,"A ShopEasy RAG bot uses **`chunk_size=50`**. For *""What is the return window for electronics items?""*, similarity search returns a chunk containing **""electronics""** but not **""seven days""**. The LLM replies: *""I don't know based on the provided documents.""*
+
+What is the **best** failure class label?",,,,,,2,,Missing API key,**Weak retrieval** caused by **bad chunking** — tune `chunk_size` / `chunk_overlap`,Excessive tool calling loop,Under-refusal on out-of-domain query,,6a33a77a7edb35dffca5c4b7,0.5,markdown,"B is correct because the retriever surfaced a partially relevant chunk; this is weak retrieval fixed by retrieval tuning.
+
+A is incorrect because the pipeline ran. C is incorrect because no retry loop is described. D is incorrect because the query is in-domain."
+mcmc,markdown,"An agent keeps answering GST math questions **without** calling **`calculate_gst`**, even though the tool exists.
+
+Which remediation steps are **appropriate** (first iteration)?",,,,,,,,"**Prompt patch** — add *""You **must** call `calculate_gst` for tax and percentage questions""*",**Tool patch** — rewrite the calculator tool description with explicit use cases,Delete the vector database to force tool use,Add one or two **few-shot examples** in the system prompt showing calculator routing,"1, 2, 4",6a33a77a7edb35dffca5c4b7,0.5,markdown,"A, B, and D are correct for missing tool call failures: prompt enforcement, sharper tool metadata, and examples.
+
+C is incorrect because wiping Chroma does not teach the LLM to call a calculator and breaks unrelated RAG cases."
+mcmc,markdown,"A production agent serves **millions** of chats per day. The SRE team sets up **observability**.
+
+Which signals should they **monitor** with automated alerts?",,,,,,,,**Latency** — response time drifting above a healthy band (e.g. p95 > 3 seconds),**Memory usage** — context or leaks pushing the service toward OOM,**Token utilization** — sudden 2× daily token spend without traffic growth,**IDE font size** used by developers,"1, 2, 3",6a33a77a7edb35dffca5c4b7,0.5,markdown,"A, B, and C are correct production observability signals.
+
+D is incorrect because editor settings have no bearing on runtime health."
+mcmc,markdown,"An engineer raises retrieval **`k`** from **3** to **8** chunks. Answer quality improves on policy questions, but the monthly **OpenAI bill** rises sharply and p95 latency increases.
+
+Which statements about the **cost–latency trade-off** are **correct**?",,,,,,,,"More chunks increase **input tokens** passed to the LLM, which raises cost",Higher `k` can improve context quality but is not free — teams pick a budget and latency target,Token usage is unrelated to prompt size,Doubling `k` and chunk size together without measuring is a common mistake,"1, 2, 4",6a33a77a7edb35dffca5c4b7,1,markdown,"A, B, and D are correct: trade-off means gaining quality by paying tokens and time; tune one knob and re-measure.
+
+C is incorrect because cost is directly tied to tokens consumed."
+mcmc,markdown,"After reading **`results.csv`**, your team sees four **wrong-tool** failures and two **over-refusal** failures. Everyone proposes changes the same afternoon: full prompt rewrite, rename all tools, and double chunk size.
+
+Which iteration practices are **sound**?",,,,,,,,Group failures by **failure class** and apply **one controlled change** per experiment when possible,Re-run the **same evaluation harness** after each patch and compare pass rates,"Change prompt, tools, and retrieval simultaneously so the sprint finishes faster",Check **token usage and latency** on a representative workflow — not only pass count,"1, 2, 4",6a33a77a7edb35dffca5c4b7,1,markdown,"A, B, and D are correct: targeted patches, before/after metrics, and resource awareness.
+
+C is incorrect because simultaneous multi-knob changes violate controlled configuration change practice."
+subjective,markdown,"**ShopEasy**'s support team keeps seeing the same RAG bug: with **small chunks**, the bot retrieves text about **electronics** but misses **seven days**, so it answers *""I don't know.""*
+
+Build a small Python script **`debug_helper.py`** that helps engineers **reproduce** and **triage** this locally — **no OpenAI key**, **no vector database**.
+
+Your script must do two jobs when run:
+
+1. **Chunk simulation** — split a fixed policy string into chunks and show whether a simulated top-1 retrieval would fail.
+2. **Remediation hints** — print the recommended fix for four common failure symptoms.
+
+**Constants (use exactly)**
+
+```python
+POLICY_TEXT = (
+    ""Electronics items including phones and laptops may be returned within ""
+    ""seven days of delivery if unused. Open-box items follow the same window. ""
+    ""Contact support with your order ID for defects.""
+)
+
+QUERY_KEYWORD = ""electronics""
+ANSWER_KEYWORD = ""seven days""
+```
+
+**Implement these functions**
+
+- `split_into_chunks(text, chunk_size, overlap)` — character chunks; next start = previous_start + chunk_size - overlap.
+- `diagnose_chunk_gap(chunks, query_keyword, answer_keyword)` — simulate **top-1 retrieval** (first chunk containing query keyword); return dict with `query_hit`, `answer_hit`, and `diagnosis` (`ok_both_present`, `weak_retrieval_split`, or `weak_retrieval_miss`).
+- `suggest_remediation(symptom_id)` — return exact strings for `gst_wrong_tool`, `missing_calculator_call`, `tiny_chunk_miss`, `refusal_on_valid_refund`; else `unknown_symptom`.
+
+**Expected output when you run `python3 debug_helper.py`**
+
+```
+=== Chunk simulation on POLICY_TEXT ===
+
+chunk_size=50, overlap=10, chunks=5
+  query_hit=True, answer_hit=False
+  diagnosis=weak_retrieval_split
+
+chunk_size=150, overlap=20, chunks=2
+  query_hit=True, answer_hit=True
+  diagnosis=ok_both_present
+
+=== Symptom → remediation hints ===
+gst_wrong_tool: tool_patch: sharpen calculate_gst description; add prompt examples
+missing_calculator_call: prompt_patch: must call calculate_gst for math queries
+tiny_chunk_miss: retrieval_tune: increase chunk_size / overlap and re-ingest
+refusal_on_valid_refund: prompt_patch: relax over-strict guardrails for in-domain topics
+```
+
+**Submit** the full `debug_helper.py` in the LMS code box after verifying the output.",,,,,,,,,,,,,6a33a77a7edb35dffca5c4b7,0.5,markdown,"Reference implementation:
+
+```python
+POLICY_TEXT = (
+    ""Electronics items including phones and laptops may be returned within ""
+    ""seven days of delivery if unused. Open-box items follow the same window. ""
+    ""Contact support with your order ID for defects.""
+)
+
+QUERY_KEYWORD = ""electronics""
+ANSWER_KEYWORD = ""seven days""
+
+
+def split_into_chunks(text, chunk_size, overlap):
+    chunks = []
+    start = 0
+    while start < len(text):
+        end = min(start + chunk_size, len(text))
+        chunks.append(text[start:end])
+        if end == len(text):
+            break
+        start += chunk_size - overlap
+    return chunks
+
+
+def diagnose_chunk_gap(chunks, query_keyword, answer_keyword):
+    q = query_keyword.lower()
+    a = answer_keyword.lower()
+    retrieved = next((c for c in chunks if q in c.lower()), chunks[0] if chunks else """")
+    query_hit = q in retrieved.lower()
+    answer_hit = a in retrieved.lower()
+
+    if query_hit and answer_hit:
+        diagnosis = ""ok_both_present""
+    elif query_hit:
+        diagnosis = ""weak_retrieval_split""
+    else:
+        diagnosis = ""weak_retrieval_miss""
+
+    return {
+        ""query_hit"": query_hit,
+        ""answer_hit"": answer_hit,
+        ""diagnosis"": diagnosis,
+    }
+
+
+def suggest_remediation(symptom_id):
+    mapping = {
+        ""gst_wrong_tool"": ""tool_patch: sharpen calculate_gst description; add prompt examples"",
+        ""missing_calculator_call"": ""prompt_patch: must call calculate_gst for math queries"",
+        ""tiny_chunk_miss"": ""retrieval_tune: increase chunk_size / overlap and re-ingest"",
+        ""refusal_on_valid_refund"": ""prompt_patch: relax over-strict guardrails for in-domain topics"",
+    }
+    return mapping.get(symptom_id, ""unknown_symptom"")
+
+
+def main():
+    print(""=== Chunk simulation on POLICY_TEXT ==="")
+    for size, overlap in [(50, 10), (150, 20)]:
+        chunks = split_into_chunks(POLICY_TEXT, size, overlap)
+        result = diagnose_chunk_gap(chunks, QUERY_KEYWORD, ANSWER_KEYWORD)
+        print(f""\nchunk_size={size}, overlap={overlap}, chunks={len(chunks)}"")
+        print(f""  query_hit={result['query_hit']}, answer_hit={result['answer_hit']}"")
+        print(f""  diagnosis={result['diagnosis']}"")
+
+    print(""\n=== Symptom → remediation hints ==="")
+    for symptom_id in [
+        ""gst_wrong_tool"",
+        ""missing_calculator_call"",
+        ""tiny_chunk_miss"",
+        ""refusal_on_valid_refund"",
+    ]:
+        print(f""{symptom_id}: {suggest_remediation(symptom_id)}"")
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+Run and confirm chunk counts 5 and 2 with diagnoses `weak_retrieval_split` and `ok_both_present`."
