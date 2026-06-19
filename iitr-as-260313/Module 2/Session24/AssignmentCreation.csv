@@ -1,0 +1,338 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A ShopKart customer writes: *""Can I return unopened headphones within seven days?""* Your agent has **`search_shopkart_policy`** and **`get_city_weather`** registered with **`tool_choice=""auto""`**. Which tool should the model route to for this question?",,,,,,2,,**`get_city_weather`**,**`search_shopkart_policy`**,Both tools must always run for every message,No tool — the model should invent policy rules from memory,,6a34f24e756f0bcb6cf8fe44,0,markdown,"B is correct because the question is about **returns eligibility and timelines** — policy text, not live weather. The policy search tool is the right match.
+
+A is incorrect because temperature data does not answer a returns window question. C is incorrect because **`auto`** routing picks only what the question needs — not every tool on every turn. D is incorrect because support answers must be **grounded in tool JSON**, not invented policy."
+mcsc,markdown,"Ankita builds a ShopKart agent with **Groq function calling**. When the model chooses **`get_city_weather`**, who actually sends the HTTP GET request to Open-Meteo?",,,,,,3,,The Groq cloud service imports and runs her `.py` file on her laptop automatically,The customer's phone browser,**Ankita's Python runtime** after it parses **`tool_calls`** and calls the local wrapper function,Open-Meteo pushes weather data directly into the LLM weights,,6a34f24e756f0bcb6cf8fe44,0,markdown,"C is correct because the **model only requests** a tool in structured JSON — **your agent runtime** executes the Python function that performs **`requests.get`**.
+
+A is incorrect because Groq does not execute undeployed local code on your machine. B and D describe unrelated paths — browsers and model weights do not perform the weather GET in this architecture."
+mcsc,markdown,"Your Groq chat call includes **`tool_choice=""auto""`**. What does this setting mean in practice?",,,,,,3,,The user must type the tool name in the terminal before each question,The vector database picks which tool to execute,**The model decides** whether to call tools and **which registered tools** to use,**`get_city_weather`** is always invoked before **`search_shopkart_policy`**,,6a34f24e756f0bcb6cf8fe44,0,markdown,"C is correct — **`auto`** lets the LLM read tool **descriptions** and the user message, then emit zero or more **`tool_calls`** as needed.
+
+A and B shift the decision to the human or database, which is not how **`auto`** works. D describes a hard-coded order, which defeats flexible routing."
+mcsc,markdown,"A stock-data company publishes an **MCP server** so agents can fetch live prices without hand-written HTTP code for every ticker. In simple terms, what job does that MCP server do?",,,,,,2,,Permanently fine-tunes the LLM on every historical price,**Acts as a translator** — the LLM sends English tool requests; the server turns them into the company's internal API calls,Removes the need for JSON in function calling entirely,Stores and shares every user's **`GROQ_API_KEY`** publicly,,6a34f24e756f0bcb6cf8fe44,0,markdown,"B is correct — an MCP server is a **standard integration layer** that understands the LLM's tool requests and runs the vendor's APIs behind the scenes.
+
+A is incorrect — MCP connects at runtime; it is not model training. C is incorrect — tool calling still uses structured JSON. D is incorrect and unsafe — API keys stay in your **`.env`**, not on a public MCP listing."
+mcsc,markdown,"In the standard **tool execution loop**, a customer has just sent a ShopKart question. The runtime has passed the **system prompt**, **user message**, and **`tools`** list to Groq. The question clearly needs live weather. What is the **first** action typically taken by the **model** (not your Python script)?",,,,,,3,,Run **`get_city_weather`** on the laptop,Append a **`role: tool`** message with JSON results,**Return structured `tool_calls`** naming the function and JSON arguments,Print the final natural-language answer directly to the customer,,6a34f24e756f0bcb6cf8fe44,0.5,markdown,"C is correct — step 3 in the loop is the **model proposing** **`tool_calls`** (or a direct answer if no tool is needed). Execution happens **after** that.
+
+A and B are **runtime** steps that occur only after the model proposes tools. D is the **final** step after tool results are fed back."
+mcsc,markdown,"Inside your tool loop you write:
+
+```python
+raw_arguments = tool_call.function.arguments
+arguments = ???  # fill this line
+result = TOOL_FUNCTIONS[function_name](**arguments)
+```
+
+The model sends **`arguments`** as a JSON **string**. Which call correctly converts it to a Python **dict** before `**arguments`?",,,,,,1,,**`json.loads(raw_arguments)`**,`json.dumps(raw_arguments)`,`response.json()`,`str(raw_arguments)`,,6a34f24e756f0bcb6cf8fe44,0.5,markdown,"A is correct — **`json.loads()`** parses a JSON string into a Python dictionary so keyword arguments can be unpacked into your tool function.
+
+B serialises dict to string (opposite direction). C is a **`requests`** response method, not for model tool argument strings. D keeps a string type and will not work with `**arguments`."
+mcmc,markdown,You register ShopKart tools in Groq's **`tools`** list. Which fields belong in the **function schema the model reads for routing**? Select **all** that apply.,,,,,,,,**`name`** — short identifier emitted in **`tool_calls`**,**`description`** — when and why to use this tool,**`parameters`** — JSON Schema for expected arguments,**`tool_call_id`** — assigned when registering the tool at startup,"1,2,3",6a34f24e756f0bcb6cf8fe44,0.5,markdown,"A, B, and C are the three schema pieces that guide routing — identifier, routing instructions, and argument contract.
+
+D is incorrect — **`tool_call_id`** is generated on the **assistant message** when the model responds, not supplied in the registration schema at startup."
+mcmc,markdown,"A customer asks: *""I chose express delivery to Bangalore metro tomorrow. What does policy say about express timing, and what is the current temperature there?""* Your agent uses **`tool_choice=""auto""`** with policy and weather tools registered. Which statements are **correct**? Select **all** that apply.",,,,,,,,**Both** **`search_shopkart_policy`** and **`get_city_weather`** may be called before the final reply,"Replacing **`auto`** with hard-coded `if ""express"" in query: get_city_weather()` is **more flexible** than model routing",The final answer should cite **express timing from policy tool JSON excerpts** when available,"If policy text has **no weather-impact rule**, the model should **still invent** courier delay guidance so the answer sounds complete","1,3",6a34f24e756f0bcb6cf8fe44,0.5,markdown,"A is correct — this question mixes **policy rules** and **live weather**, so both tools may be needed. C is correct — grounded answers must trace policy numbers to **tool JSON**, not guesswork.
+
+B is incorrect — hard-coded branches break on wording variants; **`auto`** routing scales better. D is incorrect — inventing rules when tools lack evidence is **hallucination**; honest answers stop at what tools returned."
+mcmc,markdown,Your **`get_city_weather`** wrapper receives **HTTP 503** from Open-Meteo. Which practices prevent **hallucinated weather** in the final ShopKart reply? Select **all** that apply.,,,,,,,,"Return structured JSON such as **`{""error"": ""Weather API failed"", ""status_code"": 503, ""city"": ""Delhi""}`** instead of fake temperature fields",Call **`response.json()`** on the error body and pass guessed **`temperature_c: 28.0`** to the model,Include a system prompt rule: **ground answers in tool JSON only — do not invent weather**,Omit the tool result message so the model freely estimates today's rain,"1,3",6a34f24e756f0bcb6cf8fe44,1,markdown,"A is correct — **honest error JSON** tells the model weather is unavailable. C is correct — grounding instructions plus error JSON lead to safe refusals.
+
+B is incorrect — guessing temperature from failed responses invents data. D is incorrect — skipping tool results encourages the model to fill gaps with fiction."
+mcmc,markdown,You run **Groq function calling** with **locally defined** Python tools (not deployed online). Which statements are **true**? Select **all** that apply.,,,,,,,,Groq returns **`tool_calls`** as structured JSON; your script matches names in **`TOOL_FUNCTIONS`** and runs them locally,Groq's servers directly **`import shopkart_tool_agent`** from your laptop and execute it in the cloud,"After each tool runs, you append a message with **`role: tool`**, matching **`tool_call_id`**, and **`content: json.dumps(result)`**",**`json.dumps(result)`** serialises the Python dict so the model can read tool output as JSON text,"1,3,4",6a34f24e756f0bcb6cf8fe44,1,markdown,"A is correct — cloud LLM proposes tools; **local runtime executes**. C is correct — tool results must link **`tool_call_id`** and carry serialised JSON. D is correct — **`json.dumps`** is the standard serialisation step before the next model call.
+
+B is incorrect — undeployed local files are **not** imported by Groq; your machine runs the functions."
+subjective,markdown,"ShopKart's support desk already has **policy** and **weather tool functions** tested and registered in Groq's **`tools`** list. The missing piece is the **agent runtime** — the loop that sends customer questions to Groq, executes whatever **`tool_calls`** come back, feeds JSON results to the model, and returns one **grounded** reply.
+
+Your job: implement **`run_tool_agent`** and prove routing works on **two customer questions** — one policy-only, one that needs **both** policy and live weather.
+
+---
+
+## Setup
+
+Create a folder and file:
+
+```text
+shopkart_tool_agent/
+├── shopkart_tool_agent.py
+└── .env                  # GROQ_API_KEY=your-key-here
+```
+
+Install:
+
+```bash
+pip install groq requests python-dotenv
+```
+
+---
+
+## Starter code
+
+Copy into **`shopkart_tool_agent.py`**. **Do not rewrite** the tool functions or **`TOOLS`** registry — they are complete.
+
+```python
+import json
+import sys
+
+import requests
+from dotenv import load_dotenv
+from groq import Groq
+
+GENERATION_MODEL = ""llama-3.3-70b-versatile""
+OPEN_METEO_URL = ""https://api.open-meteo.com/v1/forecast""
+REQUEST_TIMEOUT_SECONDS = 15
+
+POLICY_SNIPPETS = {
+    ""returns"": (
+        ""Unopened items may be returned within 7 calendar days of delivery. ""
+        ""Opened or used items are not eligible unless defective.""
+    ),
+    ""shipping"": (
+        ""Standard delivery takes 3-5 business days after dispatch. ""
+        ""Express delivery (paid) arrives in 1-2 business days in metro cities only.""
+    ),
+    ""warranty"": (
+        ""Electronics carry a 12-month manufacturer warranty from delivery date. ""
+        ""Warranty does not cover physical damage or liquid exposure.""
+    ),
+    ""refunds"": (
+        ""Refunds are credited within 5-7 business days after warehouse verification. ""
+        ""Cash-on-delivery orders are refunded to UPI or bank account only.""
+    ),
+}
+
+TOOLS = [
+    {
+        ""type"": ""function"",
+        ""function"": {
+            ""name"": ""search_shopkart_policy"",
+            ""description"": (
+                ""Search ShopKart customer policy for returns, shipping, warranty, or refunds. ""
+                ""Use when the question is about rules, timelines, or eligibility in policy documents.""
+            ),
+            ""parameters"": {
+                ""type"": ""object"",
+                ""properties"": {
+                    ""query"": {
+                        ""type"": ""string"",
+                        ""description"": ""Customer policy question in plain English"",
+                    },
+                },
+                ""required"": [""query""],
+            },
+        },
+    },
+    {
+        ""type"": ""function"",
+        ""function"": {
+            ""name"": ""get_city_weather"",
+            ""description"": (
+                ""Fetch current weather for a delivery city using latitude and longitude. ""
+                ""Use when live weather may affect courier handoff or delivery timing.""
+            ),
+            ""parameters"": {
+                ""type"": ""object"",
+                ""properties"": {
+                    ""city_name"": {""type"": ""string"", ""description"": ""City label for logs and replies""},
+                    ""latitude"": {""type"": ""number"", ""description"": ""City latitude""},
+                    ""longitude"": {""type"": ""number"", ""description"": ""City longitude""},
+                },
+                ""required"": [""city_name"", ""latitude"", ""longitude""],
+            },
+        },
+    },
+]
+
+
+def search_shopkart_policy(query: str) -> dict:
+    query_lower = query.lower()
+    matched = []
+    keyword_map = {
+        ""returns"": [""return"", ""unopened"", ""opened"", ""eligible"", ""send back""],
+        ""shipping"": [""shipping"", ""express"", ""delivery"", ""metro"", ""dispatch""],
+        ""warranty"": [""warranty"", ""repair"", ""defect"", ""liquid"", ""water""],
+        ""refunds"": [""refund"", ""cod"", ""upi"", ""money back"", ""credit""],
+    }
+    for category, keywords in keyword_map.items():
+        if any(word in query_lower for word in keywords):
+            matched.append({""category"": category, ""text"": POLICY_SNIPPETS[category]})
+    if not matched:
+        return {""error"": ""No policy excerpt found"", ""query"": query, ""excerpts"": []}
+    return {""query"": query, ""excerpts"": matched}
+
+
+def get_city_weather(city_name: str, latitude: float, longitude: float) -> dict:
+    params = {
+        ""latitude"": latitude,
+        ""longitude"": longitude,
+        ""current"": ""temperature_2m,weather_code"",
+    }
+    response = requests.get(OPEN_METEO_URL, params=params, timeout=REQUEST_TIMEOUT_SECONDS)
+    if response.status_code != 200:
+        return {
+            ""error"": ""Weather API failed"",
+            ""status_code"": response.status_code,
+            ""city"": city_name,
+        }
+    data = response.json()
+    current = data[""current""]
+    return {
+        ""city"": city_name,
+        ""temperature_c"": current[""temperature_2m""],
+        ""weather_code"": current[""weather_code""],
+        ""latitude"": latitude,
+        ""longitude"": longitude,
+    }
+
+
+TOOL_FUNCTIONS = {
+    ""search_shopkart_policy"": search_shopkart_policy,
+    ""get_city_weather"": get_city_weather,
+}
+
+
+# ── TODO: YOU IMPLEMENT THIS FUNCTION ────────────────────────────────────────
+def run_tool_agent(client: Groq, user_message: str) -> str:
+    """"""Run model → tool loop until the model returns a final text answer.""""""
+    pass
+
+
+def main():
+    load_dotenv()
+    client = Groq()
+
+    demo_queries = [
+        ""Can I return unopened earphones within seven days?"",
+        ""I chose express delivery to Delhi metro tomorrow. What does policy say about express timing, and is current weather likely to affect courier handoff today?"",
+    ]
+
+    for user_message in demo_queries:
+        print(""\n"" + ""="" * 72)
+        print(""Customer:"", user_message)
+        print(""="" * 72)
+        answer = run_tool_agent(client, user_message)
+        print(""\nFinal answer:"")
+        print(answer)
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+---
+
+## Your tasks
+
+### 1. Implement `run_tool_agent`
+
+Build the full **tool execution loop**:
+
+- Start **`messages`** with a **system prompt** that tells the assistant to use tools when policy or weather are needed, **ground answers in tool JSON only**, and **not invent** policy numbers or weather when tools fail or return **`error`**.
+- Call **`client.chat.completions.create`** with **`model=GENERATION_MODEL`**, **`messages`**, **`tools=TOOLS`**, and **`tool_choice=""auto""`**.
+- While **`assistant_message.tool_calls`** is non-empty:
+  - Append the assistant message to **`messages`**.
+  - For each **`tool_call`**: parse arguments with **`json.loads`**, look up the function in **`TOOL_FUNCTIONS`** (return **`{""error"": f""Unknown tool: {name}""}`** if missing), execute it, and append a **`role: tool`** message with matching **`tool_call_id`** and **`content=json.dumps(result)`**.
+  - Call Groq again with the updated **`messages`** and the same **`tools`** / **`tool_choice=""auto""`**.
+- Return **`assistant_message.content.strip()`** when the model stops requesting tools.
+
+### 2. Run both demo queries
+
+```bash
+cd shopkart_tool_agent
+python shopkart_tool_agent.py
+```
+
+Verify in the terminal:
+
+| Query | Expected routing | Answer should |
+|---|---|---|
+| Unopened earphones return | **Policy tool only** | Mention **7 days** (from policy excerpts) — no invented weather |
+| Express Delhi + weather | **Policy + weather tools** | Cite **metro express 1–2 days** **and** a live **temperature** value |
+
+Temperature will vary by run — that is expected. Policy numbers must match tool JSON, not guesses.
+
+---
+
+## Submission Instruction
+
+- Code all the points mentioned in VS Code in a single `.py` file (`shopkart_tool_agent.py`).
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.
+
+---",,,,,,,,,,,,,6a34f24e756f0bcb6cf8fe44,0.5,markdown,"### Step-by-step solution walkthrough
+
+1. Keep **`search_shopkart_policy`**, **`get_city_weather`**, **`TOOLS`**, and **`TOOL_FUNCTIONS`** unchanged — they are the tested tool layer.
+2. In **`run_tool_agent`**, build the system + user messages, then enter the **`while assistant_message.tool_calls`** loop — this is the core agent runtime from the lab.
+3. Inside the loop, always **`json.loads`** tool arguments before calling Python functions, and always **`json.dumps`** results into **`role: tool`** messages with the correct **`tool_call_id`**.
+4. Run both demo queries with a valid **`GROQ_API_KEY`** in **`.env`** — query 1 should route policy-only; query 2 should combine policy shipping rules with Open-Meteo temperature.
+
+### Reference solution — `run_tool_agent`
+
+```python
+def run_tool_agent(client: Groq, user_message: str) -> str:
+    messages = [
+        {
+            ""role"": ""system"",
+            ""content"": (
+                ""You are a precise ShopKart support assistant. ""
+                ""Use tools when policy rules or live weather are needed. ""
+                ""Ground answers in tool JSON only — do not invent policy numbers or weather. ""
+                ""If a tool returns error, say you cannot confirm that part.""
+            ),
+        },
+        {""role"": ""user"", ""content"": user_message},
+    ]
+
+    response = client.chat.completions.create(
+        model=GENERATION_MODEL,
+        messages=messages,
+        tools=TOOLS,
+        tool_choice=""auto"",
+    )
+    assistant_message = response.choices[0].message
+
+    while assistant_message.tool_calls:
+        messages.append(assistant_message)
+
+        for tool_call in assistant_message.tool_calls:
+            function_name = tool_call.function.name
+            raw_arguments = tool_call.function.arguments
+            arguments = json.loads(raw_arguments)
+
+            if function_name not in TOOL_FUNCTIONS:
+                result = {""error"": f""Unknown tool: {function_name}""}
+            else:
+                result = TOOL_FUNCTIONS[function_name](**arguments)
+
+            messages.append(
+                {
+                    ""role"": ""tool"",
+                    ""tool_call_id"": tool_call.id,
+                    ""content"": json.dumps(result),
+                }
+            )
+
+        response = client.chat.completions.create(
+            model=GENERATION_MODEL,
+            messages=messages,
+            tools=TOOLS,
+            tool_choice=""auto"",
+        )
+        assistant_message = response.choices[0].message
+
+    return assistant_message.content.strip()
+```
+
+### Sample terminal output (temperature will vary)
+
+```text
+Customer: Can I return unopened earphones within seven days?
+...
+Final answer:
+You may return unopened items within 7 calendar days of delivery ...
+
+Customer: I chose express delivery to Delhi metro tomorrow...
+...
+Final answer:
+Express delivery in metro cities arrives in 1-2 business days ... Current temperature in Delhi is around 33°C ...
+```
+
+### Alternative approaches
+
+- Logging each **`tool_call`** name and raw JSON to the terminal before execution helps debugging — optional but useful.
+- A small helper **`execute_tool_call(tool_call) -> dict`** is acceptable if the same loop behaviour is preserved."

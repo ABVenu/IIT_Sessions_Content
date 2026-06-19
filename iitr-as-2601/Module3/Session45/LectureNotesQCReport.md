@@ -1,8 +1,8 @@
 # Lecture Notes QC Report — Prompt Versioning & API Rate Limits
 
-**File reviewed:** `Lecture Notes.md`  
-**Review date:** 2026-06-14  
-**Iteration:** 1
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-06-19  
+**Iteration:** 1 (post live-session alignment)
 
 ---
 
@@ -10,13 +10,13 @@
 
 | Criterion | Rating / Result | Notes |
 |---|---|---|
-| **Content Coverage** | **5 / 5** | All metadata topics: prompt versioning; config files; rate limits; retries and backoff. All four subtopics: versioned files + registry; qualitative v1 vs v2 eval; HTTP 429 + exponential backoff; retry logging. |
-| **Creativity** | **5 / 5** | Recipe versions; Zomato menu; IRCTC filename; school timetable; chai taste test; RTO tokens; UPI busy server; shop ledger analogies. |
-| **Structural Adherence** | **5 / 5** | `#` title only; Introduction + What you will learn; Official/Simple/Real-life on new terms; 6 full code blocks with line comments and "How the code works"; 3 student-facing activities; Key Takeaways; terminology table. |
-| **No Logical Mistakes** | **True** | Registry bundles prompt+config+tools; eval uses shared context; backoff catches RateLimitError only; jitter + max_retries capped; mock demo mirrors real backoff math. |
-| **No Presentation Mistakes** | **True** | No duration/audience metadata; no "Ask students to"; paragraphs ≤3 sentences; activities use imperative student voice. |
-| **No Previous Session Number References** | **True** | Grep: no `Session N` / `session N`. Uses "previous session" without number only in Introduction. |
-| **No Metadata/internal reference** | **True** | No objective/duration/target-audience leakage; no internal instruction phrasing in student text. |
+| **Content Coverage** | **5 / 5** | All metadata subtopics covered and aligned to transcript: versioned files + registry; qualitative eval on same inputs; HTTP rate limits + exponential backoff; retry logging. Session extras added: prompt injection eval, Git versioning analogy, Tenacity library, Groq dashboard, jitter/synchronized retries. |
+| **Creativity** | **5 / 5** | Zomato menu card; IRCTC PNR filenames; Big Bazaar store directory; RTO token counter; IRCTC Tatkal refresh; hospital form-filling injection analogy; shop ledger retry logs. |
+| **Structural Adherence** | **5 / 5** | `#` title only; context + What you will learn; Official/Simple/Real-life on new terms; full code with line comments and "How the code works"; student-facing activities (3); Key Takeaways; terminology table; all 8 session images retained. |
+| **No Logical Mistakes** | **True** | Tenacity `@retry` matches live demo; eval fairness rule preserved; registry bundles prompt + config; backoff capped at 4 attempts; logging via `before_sleep_log` matches session. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no "Ask students to"; activities student-facing; paragraphs ≤3 sentences. |
+| **No Previous Session Number References** | **True** | Grep: no `Session N` / `session N` in released notes. Uses **previous** only in introduction. |
+| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
 
 ---
 
@@ -29,48 +29,26 @@
 
 ---
 
+## Live-Session Alignment Changes (vs `Lecture Notes.md`)
+
+| Change | Reason |
+|---|---|
+| Replaced manual `groq_with_backoff.py` / `mock_backoff_demo.py` with **Tenacity** demos | Session taught Tenacity `@retry`, not hand-written backoff loops |
+| Removed `retry_logger.py` and `tail_retries.py` | Not covered; logging taught via `before_sleep_log` |
+| Removed `dev_pipeline_demo.py` end-to-end script | Not walked through in session |
+| Added **prompt injection** eval subsection + `compare_injection.py` | Extra content taught in live demo |
+| Added **Git** code-versioning analogy | Taught in session |
+| Removed **Retry-After** header and **503** retry references | Not covered in transcript |
+| Added **Groq dashboard** rate-limit note | Taught in session |
+| Updated activities and terminology table | Match Tenacity and injection content |
+
+---
+
 ## Coverage Checklist (metadata subtopics)
 
-| Subtopic | Section in notes |
+| Subtopic | Section in released notes |
 |---|---|
-| Store prompts and tool configs in versioned files or simple registry | Storing Prompts in Versioned Files; The Simple Registry Pattern |
-| Compare two prompt versions against the same eval questions (qualitative) | Comparing Two Prompt Versions; Activity 1 |
-| Explain HTTP rate limits and implement exponential backoff | HTTP Rate Limits; Exponential Backoff and Retries; Mock Backoff Demo |
-| Log retry events so failures are visible during development | Logging Retry Events; Activity 3 |
-
-**Line count:** ~732 lines.
-
----
-
-## Iteration 2
-
-**Trigger:** Second mandatory QC pass; add eval-loop rate-limit hygiene and standalone mock backoff demo for Activity 2.
-
-| Criterion | Rating / Result | Notes |
-|---|---|---|
-| **Content Coverage** | **5 / 5** | Added `time.sleep(1)` in eval comparison loop; full **mock_backoff_demo.py** with FakeRateLimitError for quota-free practice. |
-| **Creativity** | **5 / 5** | Mock demo framed as "practice without burning quota" — fits classroom shared-key reality. |
-| **Structural Adherence** | **5 / 5** | Mock block includes full code + "How the code works"; Activity 2 steps updated to reference mock script. |
-| **No Logical Mistakes** | **True** | compare_versions import adds `time`; mock attempt counter yields 3 calls (2 fail + 1 success); removed misleading hardcoded log_retry_success from pipeline demo. |
-| **No Presentation Mistakes** | **True** | Re-grep: no session numbers, duration, or instructor-only phrasing. |
-| **No Previous Session Number References** | **True** | Verified clean. |
-| **No Metadata/internal reference** | **True** | Verified clean. |
-
-**Outcome:** QC passed on iteration 2.
-
-**Line count:** ~795 lines.
-
-**Changes in iteration 2:**
-- Added **`time.sleep(1)`** after each eval question pair in `compare_versions`
-- Added **Mock Backoff Demo** section with complete runnable script
-- Simplified **dev_pipeline_demo** "How the code works" bullets; removed unused import
-
----
-
-## Activity checklist (3 total)
-
-| Activity | Session segment | Subtopics covered |
-|---|---|---|
-| **Activity 1 — Run a Two-Version Eval** | ~35 min | Versioned files; registry; qualitative eval checklist |
-| **Activity 2 — Observe Backoff Without Burning Quota** | ~35 min | HTTP rate limits; exponential backoff; retry logs (mock) |
-| **Activity 3 — Build a Retry Audit Trail** | ~35 min | Logging retry events; reading `api_retries.log`; mini-report |
+| Store prompts and tool configs in versioned files or registry | Storing Prompts in Versioned Files; Registry Pattern |
+| Compare two prompt versions on same eval questions (qualitative) | Comparing Two Prompt Versions; Prompt Injection; checklist + Activity 1 |
+| Explain HTTP rate limits and exponential backoff | HTTP Rate Limits; Exponential Backoff and Retries with Tenacity |
+| Log retry events during development | Logging Retry Events; `before_sleep_log` in Tenacity demos |
