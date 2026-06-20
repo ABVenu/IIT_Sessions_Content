@@ -9,16 +9,16 @@ session duration: 1hr  50mins
 
 title: Agent Build Workshop
 
-objective: Integrate RAG; tools; structured output; and safety checks in one small agent.
+objective: IBuild a simple end-to-end RAG application using the RAG skills from Module 3.
 
 type of session: theory/implementation/mixture of theory + implementation / You take the call or decide
 
-topics be covered: Plan step; RAG retrieval; tool call; structured JSON response; safety smoke test	
+topics be covered: Document selection; ingest and chunk; embed and store; retrieve; grounded generation; simple runnable RAG app
 
 
 detailed subtopics to be covered:
-* Plan a bounded user task and decompose it into retrieve; tool; and respond steps.
-* Integrate the RAG pipeline from S28–29 into the agent graph or executor.
-* Invoke at least one tool and return a schema-valid JSON final answer.
-* Run a short safety smoke test (injection string; tool deny) and document results.
-* Demo the working agent end-to-end for peer review.
+* Choose a small document corpus (or reuse a corpus from S39–41 labs).
+* Apply the Module 3 RAG flow: load and chunk documents; create embeddings; store in a vector database.
+* Configure retrieval and assemble context for the LLM prompt.
+* Generate grounded answers from retrieved chunks only.
+* Package as a simple runnable RAG application (script or notebook) and demo for peer review.
