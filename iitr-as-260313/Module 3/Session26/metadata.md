@@ -17,13 +17,7 @@ topics be covered: definition; why framework; stack placement; Runnables; module
 
 
 detailed subtopics to be covered:
-* Explain LangChain’s definition purpose and the class of problems it addresses in agentic applications.
-* Justify use of a framework over ad hoc LLM API calls in terms of composability and maintainability.
-* Position LangChain correctly in the agentic stack between model providers and application logic.
-* Describe the Runnable-based mental model and how chains compose in LangChain.
-* Map LangChain’s modular surface (chains agents tools memory retrievers) to a coherent single-agent workflow.
-* Distinguish LangChain Core from Community packages for typical project needs.
-* Explain the role of PromptTemplate and ChatPromptTemplate in reusable prompt authoring.
-* Interpret LCEL and the pipe operator as the composition mechanism for a first chain.
-* Explain string output handling and parsers for predictable downstream consumption.
-* Observe an instructor-led walkthrough of a minimal PromptTemplate → LLM chain end-to-end.
+* Explain LangChain’s definition and purpose, justify framework use over ad hoc LLM API calls for composability and maintainability, and position LangChain on the agentic stack between model providers and application logic.
+* Describe the Runnable-based composition model, map LangChain’s modular surface (chains agents tools memory retrievers) to a single-agent workflow, and distinguish Core from Community packages for typical project needs.
+* Author reusable prompts with PromptTemplate and ChatPromptTemplate, and compose a first chain using LCEL and the pipe operator.
+* Apply output parsers for predictable string handling and follow an instructor-led walkthrough of a minimal PromptTemplate → LLM chain end-to-end.
