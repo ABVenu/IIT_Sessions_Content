@@ -7,15 +7,15 @@ Target Audience : Students from any backgorund may not be necessarily form tech 
 
 session duration: 1hr 50mins
 
-title: Safety & Guardrails for Agents
+title:  Structured Outputs for Agents
 
-objective: Recognize prompt-injection and unsafe tool use and apply beginner guardrails.
+objective: Require machine-readable JSON outputs that downstream code can parse reliably.
 
-topics be covered: Malicious prompt injection; tool safety; guardrails; safe code review habit (lite)	
+topics be covered:  JSON schema; structured generation; output parsing; validation (lite)
 
 
 detailed subtopics to be covered:
-* Identify prompt-injection patterns where user text overrides system intent.
-* List unsafe tool scenarios and block them with simple allow-list rules.
-* Apply guardrails: output checks and refusal templates appropriate for demos.
-* Review AI-generated code before merge (folded from removed S33)."
+* Define a JSON schema for an agent response required by the application.
+* Prompt the model to return JSON that conforms to the schema.
+* Parse model output into Python objects and handle malformed JSON safely.
+* Validate required fields before passing results to tools or UI components.
