@@ -1,0 +1,323 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A **Swiggy-style grocery app** builds a cart from scratch. A developer writes:
+
+```python
+cart = []
+cart.append(""Rice"")
+cart.append(""Dal"")
+cart.append(""Milk"")
+print(len(cart))
+```
+
+What is printed?",,,,,,3,,`0`,`1`,`3`,"`['Rice', 'Dal', 'Milk']`",,6a3a2b20b59fd37f6abddb16,0,markdown,"Each **`append()`** adds one item to the end of the list. After three appends, the list has **3 items**, and **`len(cart)`** returns **3**.
+
+**Why other options are wrong:**
+- A and B: The list is not empty after three `append` calls.
+- D: `len()` returns a **number**, not the list itself."
+mcsc,markdown,"A **festival countdown board** stores names in order:
+
+```python
+festivals = [""Holi"", ""Diwali"", ""Eid"", ""Christmas""]
+print(festivals[0])
+```
+
+What is printed?",,,,,,1,,`Holi`,`Diwali`,`1`,`IndexError`,,6a3a2b20b59fd37f6abddb16,0,markdown,"Python lists use **0-based indexing**. The **first** item is at index **`0`**, which is **`""Holi""`**.
+
+**Why other options are wrong:**
+- B: `""Diwali""` is at index `1`.
+- C: Indexing returns the **item**, not its position number.
+- D: Index `0` is valid for a list of length 4."
+mcsc,markdown,"A **typing tutor app** checks character positions in the word `""Python""`.
+
+Which index correctly refers to the **last character** `'n'` using **positive** indexing?",,,,,,2,,`6`,`5`,`0`,`-6`,,6a3a2b20b59fd37f6abddb16,0,markdown,"`""Python""` has **6 characters**, so valid positive indices are **`0` through `5`**. The last character **`'n'`** is at index **`5`** (`len(word) - 1`).
+
+**Why other options are wrong:**
+- A: Index `6` is **out of range** and would raise `IndexError`.
+- C: Index `0` is the first character `'P'`.
+- D: `-6` is valid negative indexing for `'P'`, not the last character (`-1` would be `'n'`)."
+mcsc,markdown,"A beginner stores team names but accidentally uses the wrong brackets:
+
+```python
+team_a = (10, 20, 30)   # Line 1
+team_b = [10, 20, 30]   # Line 2
+```
+
+Which statement is **correct**?",,,,,,3,,Both `team_a` and `team_b` are Python lists,`team_a` is a list; `team_b` is a tuple,`team_b` is a list; `team_a` is a tuple,Both are tuples,,6a3a2b20b59fd37f6abddb16,0,markdown,"**Square brackets `[ ]`** create a **list**. **Parentheses `( )`** with comma-separated values create a **tuple** — not a list.
+
+**Why other options are wrong:**
+- A: Parentheses do not create a list.
+- B: The bracket types are swapped.
+- D: Line 2 clearly uses `[ ]`, which is a list."
+mcsc,markdown,"A **weather dashboard** stores seven daily temperatures (in °C):
+
+```python
+temps = [32, 34, 31, 33, 35, 30, 29]
+print(temps[2:5])
+```
+
+What is printed?",,,,,,1,,"`[31, 33, 35]`","`[34, 31, 33]`","`[31, 33, 35, 30]`","`[32, 34, 31]`",,6a3a2b20b59fd37f6abddb16,0.5,markdown,"Slicing **`[2:5]`** includes indices **2, 3, and 4** and **stops before 5**. Those values are **`31`, `33`, and `35`**.
+
+**Why other options are wrong:**
+- B: Starts at index 1, not 2.
+- C: Includes index 5 (`30`), but `stop` is **exclusive**.
+- D: That slice would be `temps[:3]`."
+mcsc,markdown,"A **stationery shop** updates inventory after a sale:
+
+```python
+items = [""Pen"", ""Pencil"", ""Eraser"", ""Sharpener""]
+removed = items.pop(1)
+print(removed)
+print(items)
+```
+
+What is printed (two lines)?",,,,,,1,,"`Pencil` then `['Pen', 'Eraser', 'Sharpener']`","`Pen` then `['Pencil', 'Eraser', 'Sharpener']`","`Eraser` then `['Pen', 'Pencil', 'Sharpener']`","`Pencil` then `['Pen', 'Pencil', 'Eraser', 'Sharpener']`",,6a3a2b20b59fd37f6abddb16,0.5,markdown,"**`pop(1)`** removes and returns the item at **index 1** — **`""Pencil""`**. The remaining list is **`['Pen', 'Eraser', 'Sharpener']`**.
+
+**Why other options are wrong:**
+- B: Index 1 is not `""Pen""`.
+- C: Index 1 is not `""Eraser""`.
+- D: `pop` **removes** the item — the list cannot still contain `""Pencil""`."
+mcmc,markdown,"A **college attendance app** stores roll numbers in a Python list.
+
+Which statements about **lists** are **correct**?
+
+*Select all correct options.*",,,,,,,,"Lists are **mutable** — you can change an item after creation (e.g., `marks[2] = 95`)",**`append(x)`** adds a single item to the **end** of the list,"Writing `grades = (90, 85, 88)` creates a mutable list",An empty list `[]` is valid and can be grown later with `append`,"1, 2, 4",6a3a2b20b59fd37f6abddb16,0.5,markdown,"- A: Lists allow in-place updates by index.
+- B: `append` always adds at the **last position**.
+- D: Empty lists are a standard pattern before collecting data in a loop.
+- C is **false**: parentheses create a **tuple**, which is not the same as a mutable list.
+
+**Why other options are wrong:**
+- C: `( )` does not create a list."
+mcmc,markdown,"A **campus ID card kiosk** builds a display line from a student's name and age:
+
+```python
+name = ""Riya""
+age = 20
+line = ""Student: "" + name + "" | Age: "" + str(age)
+```
+
+Which statements about **strings and concatenation** are **correct**?
+
+*Select all correct options.*",,,,,,,,**`+`** joins strings end to end when both sides are strings,"**`str(age)`** converts the integer `20` to the string `""20""` so it can be joined with text","**`""Age: "" + age`** works without `str()` because Python auto-converts numbers in `+`","Strings are **immutable** — you cannot change a single character in place like `name[0] = ""r""`","1, 2, 4",6a3a2b20b59fd37f6abddb16,0.5,markdown,"- A and B: Concatenation requires **string operands**; numbers must be converted with **`str()`**.
+- D: Strings cannot be updated by index assignment.
+- C is **false**: `""Age: "" + 20` raises **`TypeError`** — Python does not auto-convert for `+`.
+
+**Why other options are wrong:**
+- C: Mixing `str` and `int` with `+` causes a type error."
+mcmc,markdown,"A **exam marks portal** processes scores:
+
+```python
+marks = [78, 92, 64, 85]
+backup = marks[:]
+marks.sort(reverse=True)
+```
+
+Which statements are **correct**?
+
+*Select all correct options.*",,,,,,,,"After `sort(reverse=True)`, `marks` becomes `[92, 85, 78, 64]`","`backup` remains `[78, 92, 64, 85]` because slicing created a **new list**",`marks.sort(reverse=True)` returns a new sorted list and leaves `marks` unchanged,"Calling `sort()` on a list that mixes integers and strings (e.g., `[1, ""two""]`) can raise `TypeError`","1, 2, 4",6a3a2b20b59fd37f6abddb16,1,markdown,"- A: Descending sort arranges from largest to smallest.
+- B: **`marks[:]`** copies into a separate list; `sort()` changes **`marks` only**.
+- D: Python cannot compare incompatible types during sorting.
+- C is **false**: **`sort()`** modifies the list **in place** and returns **`None`**, not a new list.
+
+**Why other options are wrong:**
+- C: Confuses **`sort()`** (in-place method) with a non-mutating copy-returning pattern."
+mcmc,markdown,"A **fitness tracker** stores five daily step counts:
+
+```python
+steps = [4500, 8200, 6100, 9800, 7200]
+total = sum(steps)
+count = len(steps)
+average = total / count
+peak = max(steps)
+low = min(steps)
+```
+
+Which statements are **correct**?
+
+*Select all correct options.*",,,,,,,,`total` is `35800`,`count` is `5`,`sum(steps)` removes the largest value from the list before returning the total,`peak` is `9800` and `low` is `4500`,"1, 2, 4",6a3a2b20b59fd37f6abddb16,1,markdown,"- A: `4500 + 8200 + 6100 + 9800 + 7200 = 35800`.
+- B: The list has **five** integers.
+- D: **`max()`** finds the highest; **`min()`** finds the lowest — neither changes the list.
+- C is **false**: **`sum()`** only **adds** values; it does **not** remove anything from the list.
+
+**Why other options are wrong:**
+- C: Built-in `sum()` does not modify the original list."
+subjective,markdown,"**Arjun** manages a weekend **street food stall** near his college gate. Every evening he records how many plates of each dish he sold. Instead of adding numbers on paper, he wants a small Python program that stores each dish name and plate count in **lists**, then prints a quick **sales summary** — total plates sold, busiest and slowest day-by-dish counts, average plates per dish, and a sorted view of the counts.
+
+### Problem Statement
+
+Write a Python program that:
+
+1. Asks **`Enter number of dishes sold today: `** and stores the value as an integer (use `int()`).
+2. Creates two **empty lists**: **`dish_names`** and **`plate_counts`**.
+3. Uses a **`for` loop** with **`range()`** to run exactly that many times — once per dish.
+4. Inside each round of the loop:
+   - Asks **`Enter dish name: `** and **`append`** the name to **`dish_names`**.
+   - Asks **`Enter plates sold: `** and **`append`** the integer count to **`plate_counts`** (use `int()` on input).
+5. **After** the loop ends (not inside it), calculates:
+   - **`total_plates = sum(plate_counts)`**
+   - **`highest = max(plate_counts)`**
+   - **`lowest = min(plate_counts)`**
+   - **`average = total_plates / len(plate_counts)`**
+6. Creates a **copy** of the counts for sorting: **`sorted_counts = plate_counts[:]`**, then calls **`sorted_counts.sort()`** (ascending).
+7. Prints the lines below in order. For the summary line, use **string concatenation** with **`+`** and **`str()`** — do not use f-strings.
+
+```
+Total plates sold: <total_plates>
+Highest plates (one dish): <highest>
+Lowest plates (one dish): <lowest>
+Average plates per dish: <average>
+Sorted plate counts: <sorted_counts>
+Summary: <total_plates> plates recorded across <count> dishes.
+```
+
+Replace `<total_plates>`, `<highest>`, `<lowest>`, `<average>`, `<sorted_counts>`, and `<count>` with the computed values. The average may be a decimal — that is expected. The last line must be built with **`+`** and **`str()`** (e.g., `""Summary: "" + str(total_plates) + "" plates recorded across "" + str(count) + "" dishes.""`).
+
+### Sample Runs
+
+**Sample Run 1**
+
+Input:
+```
+Enter number of dishes sold today: 3
+Enter dish name: Pani Puri
+Enter plates sold: 45
+Enter dish name: Vada Pav
+Enter plates sold: 30
+Enter dish name: Dosa
+Enter plates sold: 52
+```
+
+Expected Output:
+```
+Total plates sold: 127
+Highest plates (one dish): 52
+Lowest plates (one dish): 30
+Average plates per dish: 42.333333333333336
+Sorted plate counts: [30, 45, 52]
+Summary: 127 plates recorded across 3 dishes.
+```
+
+**Sample Run 2**
+
+Input:
+```
+Enter number of dishes sold today: 2
+Enter dish name: Idli
+Enter plates sold: 20
+Enter dish name: Samosa
+Enter plates sold: 20
+```
+
+Expected Output:
+```
+Total plates sold: 40
+Highest plates (one dish): 20
+Lowest plates (one dish): 20
+Average plates per dish: 20.0
+Sorted plate counts: [20, 20]
+Summary: 40 plates recorded across 2 dishes.
+```
+
+**Sample Run 3**
+
+Input:
+```
+Enter number of dishes sold today: 4
+Enter dish name: Biryani
+Enter plates sold: 15
+Enter dish name: Chaat
+Enter plates sold: 38
+Enter dish name: Kulcha
+Enter plates sold: 22
+Enter dish name: Lassi
+Enter plates sold: 10
+```
+
+Expected Output:
+```
+Total plates sold: 85
+Highest plates (one dish): 38
+Lowest plates (one dish): 10
+Average plates per dish: 21.25
+Sorted plate counts: [10, 15, 22, 38]
+Summary: 85 plates recorded across 4 dishes.
+```
+
+### Constraints
+
+- Use **`append`** inside the loop to grow both lists — do not pre-fill dish data.
+- Use **`sum()`**, **`len()`**, **`max()`**, and **`min()`** for the summary calculations.
+- Sort **`sorted_counts`** with **`.sort()`** on the **slice copy** so **`plate_counts`** stays in entry order.
+- Build the **`Summary:`** line only with **`+`** and **`str()`**.
+- Add at least **one comment** (`#`) explaining what the program does.
+- Write your complete program in [OneCompiler Python](https://onecompiler.com/python).
+
+### Submission Instruction
+
+1. Open [https://onecompiler.com/python](https://onecompiler.com/python) and create a new Python file.
+2. Write your complete program in the editor, then click **Run** and verify the output against the sample runs above.
+3. Click the **Save** button at the top right.
+4. Enter your **assignment name**, set visibility to **Public**, and save.
+5. Click the **Share** button, copy the link, and submit that link in the answer box on the LMS.
+
+![Step - 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5b930478-03c2-4255-a724-d0990da5e4f4/C0AFXttOJJhW3o1S.png)
+
+![Step-2](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/c817d308-66ca-4b5a-8579-db26951ad1a2/PGcKY2hqUQgysgPo.png)",,,,,,,,,,,,,6a3a2b20b59fd37f6abddb16,0.5,markdown,"### Step-by-step Walkthrough
+
+1. Read **`dish_count`** with `int(input(...))` so the loop runs once per dish.
+2. Start with empty **`dish_names`** and **`plate_counts`** lists.
+3. Loop with **`for i in range(dish_count):`** — each round reads one dish name and plate count, then **`append`** both values.
+4. **After** the loop, use **`sum`**, **`max`**, **`min`**, and **`len`** for the numeric summary.
+5. Copy counts with **`plate_counts[:]`**, **`sort()`** the copy, and print all lines.
+6. Build the **`Summary:`** line with **`+`** and **`str()`** as required.
+
+### Reference Solution
+
+```python
+# Street food stall — collect dish sales and print summary
+
+# Step 1: Read how many dishes were sold
+dish_count = int(input(""Enter number of dishes sold today: ""))
+
+# Step 2: Empty lists for parallel data
+dish_names = []
+plate_counts = []
+
+# Step 3: Collect one dish per loop round
+for i in range(dish_count):
+    name = input(""Enter dish name: "")
+    plates = int(input(""Enter plates sold: ""))
+    dish_names.append(name)
+    plate_counts.append(plates)
+
+# Step 4: Summary calculations after all input
+total_plates = sum(plate_counts)
+highest = max(plate_counts)
+lowest = min(plate_counts)
+average = total_plates / len(plate_counts)
+
+# Step 5: Sorted copy — original entry order preserved
+sorted_counts = plate_counts[:]
+sorted_counts.sort()
+
+# Step 6: Print report
+print(""Total plates sold:"", total_plates)
+print(""Highest plates (one dish):"", highest)
+print(""Lowest plates (one dish):"", lowest)
+print(""Average plates per dish:"", average)
+print(""Sorted plate counts:"", sorted_counts)
+print(""Summary: "" + str(total_plates) + "" plates recorded across "" + str(dish_count) + "" dishes."")
+```
+
+### Sample Verification
+
+| Dishes | Plate counts | total | highest | lowest | average | sorted_counts |
+| --- | --- | --- | --- | --- | --- | --- |
+| 3 | 45, 30, 52 | 127 | 52 | 30 | 42.333… | [30, 45, 52] |
+| 2 | 20, 20 | 40 | 20 | 20 | 20.0 | [20, 20] |
+| 4 | 15, 38, 22, 10 | 85 | 38 | 10 | 21.25 | [10, 15, 22, 38] |
+
+### Alternative Approaches
+
+- Store **`count = len(plate_counts)`** in a variable for the summary line instead of reusing **`dish_count`** — both are equal if every round appends once.
+- Use **`sorted_counts = plate_counts.copy()`** instead of **`plate_counts[:]`** — same idea for a shallow copy.
+- **`plate_counts.sort()`** without a copy would reorder the original list; the assignment asks for a **sorted copy** while keeping entry order in **`plate_counts`**."

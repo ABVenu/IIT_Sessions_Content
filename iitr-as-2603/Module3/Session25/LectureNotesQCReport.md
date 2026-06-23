@@ -70,3 +70,49 @@
 - No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
 
 **Outcome:** QC passed on iteration 2. Notes approved for release.
+
+---
+
+# Lecture Notes QC Report — LLM Internals for Designers (Released notes)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-06-23  
+**Iteration:** 1 (post-alignment with transcript + Live Topic Coverage)
+
+---
+
+## QC Criteria
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Released notes match taught content: token definition and subword example; input/output billing; OpenAI pricing reference; Groq dashboard (tokens, latency, request IDs); tiktoken introduced; zero-shot Groq Python recap; context window with model tiers and WhatsApp/Gemini file exercise; system/few-shot/history trade-offs; `max_tokens` + temperature live demo (Razer marketing); softmax intuition; silent truncation and overflow symptoms. Removed: seed (not taught), Groq Playground temperature walkthrough (replaced with Python API), `context_budget.py`, `overflow_predictor.py`, Campus Event mini case study, Hindi/Devanagari token-ratio claims. |
+| **Creativity** | **5 / 5** | Zomato ETA, prepaid MB, tiffin box, NEET notebook, spice dial, WhatsApp export, pages-ripped analogy preserved; Groq monitoring table added. |
+| **Structural Adherence** | **5 / 5** | `#` title; context bridge without session numbers; Official/Simple/Real-life on new terms; full Python with per-line comments + "How the code works"; student-facing Practice blocks; designer checklist + capstone; Key Takeaways; terminology table; both session images retained. |
+| **No Logical Mistakes** | **True** | Token billing = input + output; truncation silent; temperature 0 for consistency; few-shot/CoT cost trade-off; `max_tokens` caps output only; ChatGPT default temp ~0.6–0.7 stated as product default. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no Mentimeter/quiz; professional student-facing tone; activities as Practice/Your notes. |
+| **No Previous Session Number References** | **True** | Uses **previous session** and **earlier work** only; no `S23`, `S24`, or numeric session IDs. |
+| **No Metadata/internal reference** | **True** | No "applied depth," internal spillover labels, or instructor-only phrasing. |
+
+---
+
+## Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
+
+**Outcome:** QC passed on iteration 1. `Lecture Notes Released.md` approved for student release.
+
+---
+
+## Alignment summary (Live Topic Coverage → released notes)
+
+| Live coverage item | Released notes action |
+|---|---|
+| Token counts, billing, latency | Kept + Groq dashboard section added |
+| Context window shapes prompt/history | Kept design tables; removed untaught `context_budget.py` |
+| Temperature (no seed) | Kept; removed all seed content; Python Groq demo replaces Playground steps |
+| Truncation user-visible effects | Kept symptom framework (partly named in class via overflow demo) |
+| Extra: Groq API / zero-shot Python | New section added |
+| Extra: softmax intuition | Added under temperature |
+| Extra: `max_tokens` | Integrated in Groq demo |
+| Not taught: seed, Hindi token ratios, Campus Event case study | Removed |

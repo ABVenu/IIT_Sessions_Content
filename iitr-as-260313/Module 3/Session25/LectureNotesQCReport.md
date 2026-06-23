@@ -105,3 +105,39 @@
 **Notes:** **Fixed:** Per-line English comments added to `ask_ollama_local.py` and `ask_ollama.py`; Key Takeaways trimmed to **5 bullets**. Re-verified: context paragraph links previous ShopKart/Groq work to Ollama entry point; connecting sentences between CLI → trade-offs → Python → cloud → `.env` → capstone; Official/Simple/Example blocks on Ollama, pull/run, cloud, `.env`; five student activities in professional voice; six images with alt text; terminology table complete; no duration or session-number leakage. Full capstone code with `load_dotenv`, `ask_local`, `ask_cloud`, `main`, and `if __name__` pattern intact.
 
 **Pass 6 outcome:** PASS — expected QC result achieved.
+
+---
+
+## QC Pass 7 (Released Notes — aligned to Live Topic Coverage)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Created `Lecture Notes Released.md` aligned to `Live Topic Coverage.md` and transcript. **Removed (not taught):** Linux install block; `ollama ps` / `ollama serve`; `.gitignore`, `.env.example`, and `git status` workflow; `ollama signin` optional step; embeddings/multimodal preview line. **Retained (partially covered):** `.env` + `python-dotenv` + `OLLAMA_API_KEY` / `USE_CLOUD` — taught live; reframed as “keys in `.env`, not hard-coded in Python” without untaught Git hygiene steps. **Added (extra taught):** Ollama desktop app vs terminal; web search toggle → cloud sign-in; knowledge cutoff and “model does not read laptop files”; Ollama as learning tool (rare in production); GitHub sign-in for Ollama Cloud; live local-vs-cloud wrong/correct train demo note; optional ChatGPT/Gemini sanity check; instructor `code.py` alias. **Retained all 5 images.** Mentimeter/quiz excluded (session protocol). Full capstone and local scripts with per-line comments intact.
+
+**Pass 7 outcome:** PASS
+
+---
+
+## QC Pass 8 (Re-verification — Released notes)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Re-verified all four metadata subtopics against released scope — install/validate (Windows, macOS, desktop app, CLI pull/run/list/rm), Python `chat()` API, dual-mode compare on identical prompt, `.env` credential loading. Connecting sentences link cloud vs local → install → CLI → trade-offs → Python → cloud → `.env` → capstone. Key Takeaways = 5 bullets. Student activities in professional voice; no duration, session numbers, or Mentimeter content. Code paths consistent: local `chat()`, cloud `Client` + Bearer, branch on `USE_CLOUD`.
+
+**Pass 8 outcome:** PASS — expected QC result achieved for Released notes.

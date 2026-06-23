@@ -61,3 +61,35 @@
 **Notes:** Independent re-read of full notes. Verified list index bounds (0 to len-1), slice stop-is-exclusive rule, `sort()` vs `sorted()` distinction, f-string syntax, and built-in function type constraints (`sum` on numbers only, `min`/`max` on comparable types). Confirmed 3-sentence paragraph rule, consistent 4-space indentation in code blocks, and 30/30 code blocks paired with **"How the code works"** sections.
 
 **QC Status: PASSED**
+
+---
+
+## QC Iteration 4 — Lecture Notes Released (Post-Session Alignment)
+
+**Scope:** Align `Lecture Notes Released.md` against Live Topic Coverage report and session transcript for Session 04.
+
+| Criteria | Result |
+|----------|--------|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References in Student Notes | True |
+
+**Alignment Actions Taken:**
+1. **Removed (not covered):** Entire f-string formatting section, f-string quick activity, f-string image (`session04-06-fstrings.png`), and all f-string-based code examples.
+2. **Removed (not demonstrated):** `sorted()` built-in function examples and table row; string repetition with `*` operator.
+3. **Retained (covered or partly covered):** List creation and methods (`append`, `pop`, `sort` with `reverse=True`), positive and negative indexing, list slicing including `[::-1]`, string indexing and brief string slicing, concatenation with `+` and `str()` conversion, built-ins `len()`, `min()`, `max()`, `sum()`.
+4. **Added (extra concepts taught live):** New section **Traversing Lists with `for` Loops** (`for i in range(len(scores))`); replaced class report example with **Student Marks Collection Program** (input loop + parallel lists + `max`/`min`/`sum`/`len`).
+5. **Updated:** Practice exercises rewritten without f-strings; Key Takeaways and terminology table aligned to taught content.
+6. **Images retained:** `session04-01` through `session04-05` and `session04-07` (6 of 7 original images — f-string image excluded as topic not taught).
+
+**Verification Summary:**
+- Released notes reflect only what was taught in the live session per Live Topic Coverage report.
+- No Mentimeter or post-lecture quiz content included.
+- Documentation-style layout, Official Definition / In Simple Words / Real-Life Example pattern, full code blocks, and **How the code works** sections maintained.
+- Code outputs verified: list indices, slice bounds, `sort(reverse=True)`, `min("course")` → `c`, student marks average calculation.
+
+**QC Status: PASSED**

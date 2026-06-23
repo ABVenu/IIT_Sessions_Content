@@ -1,0 +1,229 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"**QuickKart** noticed its LLM API bill jumped after engineers started pasting full product catalogues into every customer chat. The finance team asks what metric the provider actually multiplies by its per-million rate.
+
+What do LLM providers primarily bill for?",,,,,,3,,Total word count in the user message only,"Number of API calls at a flat fee per request, ignoring message size","**Input tokens** (everything sent) and **output tokens** (everything generated), usually priced separately",Character count excluding spaces and punctuation,,,,6a3a2be233ef23ca9e59f722,0,markdown,"API pricing is **token-based**. **Input tokens** cover system prompt, examples, history, documents, and the user message. **Output tokens** cover the model's reply — and are often priced **higher** than input.
+
+Option 3 is correct.
+
+Option 1 is incorrect because billing includes all input layers, not only the latest user message; output is billed too. Option 2 is incorrect because cost scales with tokens processed, not a flat per-call fee. Option 4 is incorrect because providers use tokenisers, not raw character counts."
+mcsc,markdown,"While auditing a prompt, **Dev** tokenises the English word **""unbelievable""** and sees **three** subword tokens instead of one.
+
+What is the most important **product design** lesson from this?",,,,,,2,,English word count always equals token count,"**One word can become multiple tokens**, so cost, latency, and context usage can exceed word-based estimates",Subword tokenisation applies only to JSON payloads,Every token is always exactly four characters long,,,,6a3a2be233ef23ca9e59f722,0,markdown,"Tokenisers split text into reusable **subword pieces**. Designers who plan budgets by **word count** often **underestimate** bills and context consumption.
+
+Option 2 is correct.
+
+Option 1 is directly contradicted by the example. Option 3 is incorrect because subword splitting applies broadly. Option 4 is incorrect because token length varies."
+mcsc,markdown,"A hostel helpdesk bot sends **system rules + few-shot examples + 35 prior chat turns + today's question** in a single Groq API call. The model then writes its reply.
+
+What hard limit must **input + output together** stay within?",,,,,,3,,The model's original training dataset size,The **`max_tokens`** parameter alone,The model's **context window** for one request,The length of the Groq **request ID** string,,,,6a3a2be233ef23ca9e59f722,0,markdown,"The **context window** is the maximum tokens an LLM can process in **one request** — full input **plus** generated output.
+
+Option 3 is correct.
+
+Option 1 is unrelated to per-call limits. Option 2 caps output only. Option 4 describes trace labels, not size limits."
+mcsc,markdown,"**CampusPay** must enforce: *""Never quote live stock prices — only explain UPI refund policy.""* The bot will run for long support threads.
+
+Where should this rule live so it is least likely to disappear as chat history grows?",,,,,,2,,Only in the **first user message** on turn 1,"In the **system prompt**, resent on every API call",In a previous **assistant** reply the user liked,Only in the Groq dashboard notes field,,,,6a3a2be233ef23ca9e59f722,0,markdown,"**Stable rules** belong in the **system** slot — pinned each call. Rules in early **user** turns drop first when **history overflows**.
+
+Option 2 is correct.
+
+Option 1 can truncate. Option 3 is not authoritative configuration. Option 4 is not sent to the model."
+mcsc,markdown,"A team uses a model with an **8,192-token** context window. They reserve **800 tokens** for the reply and **200** as a safety buffer.
+
+Their input stack per call:
+
+- System prompt: **350 tokens**
+- Few-shot examples: **280 tokens**
+- FAQ chunk: **600 tokens**
+- Chat history: **6,200 tokens**
+
+What is the correct conclusion?",,,,,,2,,"The stack fits comfortably with more than 1,500 tokens to spare",**Usable input is exceeded** — overflow/truncation is likely; history or other layers must be trimmed,Only **output** tokens will be truncated; input always fits,The API will always show a red error banner before answering,,,,6a3a2be233ef23ca9e59f722,0.5,markdown,"Usable input = 8,192 − 800 − 200 = **7,192 tokens**. Stack = 350 + 280 + 600 + 6,200 = **7,430 tokens** → **238 tokens over**.
+
+Option 2 is correct.
+
+Option 1 misstates the arithmetic. Option 3 is incorrect because input can exceed the window. Option 4 is incorrect because overflow is often **silent**."
+mcsc,markdown,"**Riya** compares two JSON extraction prompts. She runs each **once** at **temperature 0.9** and picks the winner because one JSON ""looked nicer.""
+
+What is the main flaw in her test method?",,,,,,1,,"JSON tasks should use **low temperature** (near 0) and **multiple runs** to compare **structure**, not luck",`max_tokens` must be set to 0 for JSON tasks,Temperature 0.9 guarantees identical outputs every run,Groq cannot return structured text at any temperature setting,,,,6a3a2be233ef23ca9e59f722,0.5,markdown,"High temperature adds **sampling randomness**. A single run at 0.9 may reflect **luck**, not better prompt design.
+
+Option 1 is correct.
+
+Option 2 would block output entirely. Option 3 is false — high temperature increases variation. Option 4 is false — the issue is testing methodology."
+mcmc,markdown,**FoodLoop** is optimising a Groq-powered canteen bot. Which changes typically increase **both** API **billing** and user-perceived **latency** for the same task?,,,,,,,,"Pasting a **12,000-token** hygiene policy into every request",Adding a long **chain-of-thought** workflow to the system prompt,Setting **`max_tokens=20`** on a one-word classification reply,Sending the **full 25-turn** chat history on every call,Reducing temperature from **0.7** to **0.0** for routing labels,,"1, 2, 4",6a3a2be233ef23ca9e59f722,0.5,markdown,"**Larger input** (policies, CoT steps, full history) costs more **input tokens** and takes longer to process.
+
+Options 1, 2, and 4 are correct.
+
+Option 3 reduces output cost. Option 5 improves consistency without materially increasing input size."
+mcmc,markdown,"After **40 minutes**, a campus FAQ bot starts quoting **wrong fee amounts** and ignores *""answer only from the FAQ text""* even though developers swear the rule is still in the codebase. Users see no error banner.
+
+Which explanations and fixes are **plausible**?",,,,,,,,**Context overflow** dropped early FAQ or instruction text — trim history or **re-send/re-retrieve** grounding each turn,The scope rule lived only in **turn 2's user message** — move critical rules to the **system prompt**,**Temperature 0 alone** always fixes truncation with no other changes,**Silent truncation** — the model cannot read what fell outside the window,"The model became ""tired"" after 40 minutes like a human support agent",,"1, 2, 4",6a3a2be233ef23ca9e59f722,0.5,markdown,"Long threads overflow the **context window**. Content drops **silently**; grounding and scope rules vanish from what the model reads.
+
+Options 1, 2, and 4 are correct.
+
+Option 3 is false — temperature does not fix window size. Option 5 is false — this is a context budget failure."
+mcmc,markdown,"Match each **real task** to the **best default design choice**:
+
+| Task | Best default choice |
+|---|---|
+| 1. Classify UPI tickets as Billing / Technical / Other (**one word**) | ? |
+| 2. Brainstorm varied ad taglines for a new masala chai brand | ? |
+| 3. Verify whether a prompt edit changed **JSON field names** | ? |
+| 4. Ask questions about **year 1** messages in a **multi-year WhatsApp export** uploaded to a 1M-context chat UI | ? |
+
+Which **task → choice** pairings are **correct**?",,,,,,,,Task 1 → **`temperature ≈ 0`** with a tight **`max_tokens`** cap,Task 2 → **Higher temperature** (e.g. 0.8–1.0) to encourage wording variation,Task 3 → **Lock temperature near 0** and compare **structure** across multiple identical runs,Task 4 → Assume the **entire export is always visible** with **no truncation and no extra cost**,Task 1 → **`temperature = 1.5`** for maximum creative routing labels,,"1, 2, 3",6a3a2be233ef23ca9e59f722,1,markdown,"Routing/JSON needs **low temperature** and short output caps. Creative copy needs higher temperature. Prompt A/B tests need controlled randomness.
+
+Options 1, 2, and 3 are correct.
+
+Option 4 is false — large attachments can still truncate and cost tokens. Option 5 harms stable one-word classification."
+mcmc,markdown,**Arjun** is launching a Groq-powered library assistant. Which practices reflect **sound LLM internals** design before go-live?,,,,,,,,"**Audit token layers** (system, examples, history, docs) with `tiktoken` or the provider dashboard",Use Groq **Activity logs** and **request IDs** to trace latency or token spikes,Add **fifteen few-shot examples** to every call to be extra safe,Set **`max_tokens`** on replies to limit output cost and rambling,**Reserve token space** for the assistant reply instead of filling 100% of the window with input,Ignore **input token** counts because providers bill **only** completion tokens,"1, 2, 4, 5",6a3a2be233ef23ca9e59f722,1,markdown,"Designers **measure** layers, **monitor** production calls, **cap** outputs, and **reserve** reply space.
+
+Options 1, 2, 4, and 5 are correct.
+
+Option 3 wastes context and raises cost. Option 6 is false — **input tokens** are billed separately."
+subjective,markdown,"**QuickBite** runs a campus food court. Students complain about billing mistakes and food quality on a busy WhatsApp channel. The product team wants a **small Python probe** that:
+
+1. **Classifies** a complaint into exactly one label for routing.
+2. **Drafts** apology copy at two temperature settings so marketing can see **consistency vs creativity**.
+3. **Prints token usage** after each API call so ops can estimate cost.
+
+You are the builder. Write one script that exercises these internals on **Groq**.
+
+### Scenario copy (use exactly as given)
+
+**Classifier system message:**
+
+```text
+You classify student canteen complaints into exactly one word: Billing, Food, or Other.
+Reply with one word only. No punctuation. No explanation.
+```
+
+**Classifier user message:**
+
+```text
+My biryani was cold and the cashier charged me twice on UPI.
+```
+
+**Creative system message:**
+
+```text
+You write one short apology line for a campus food court when an item runs out during lunch rush.
+Keep it under 20 words. No emojis.
+```
+
+**Creative user message:**
+
+```text
+We ran out of masala dosa during the lunch rush and many students left unhappy.
+```
+
+### What your script must do
+
+Create a single file named **`quickbite_internals.py`** that:
+
+1. Reads the API key from the environment variable **`GROQ_API_KEY`** (no hard-coded keys).
+2. Uses the **`groq`** Python client with model **`llama-3.3-70b-versatile`**.
+3. **Call A — Classifier:** Send the classifier system + user messages with **`temperature=0.0`** and **`max_tokens=10`**. Print a header `=== CLASSIFIER (temp=0.0) ===`, the assistant reply, and **`prompt_tokens`** / **`completion_tokens`** from `response.usage`.
+4. **Call B — Creative (steady):** Send the creative system + user messages with **`temperature=0.0`** and **`max_tokens=80`**. Print header `=== APOLOGY steady (temp=0.0) ===`, reply, and usage tokens.
+5. **Call C — Creative (varied):** Repeat **the same** creative messages with **`temperature=1.0`** and **`max_tokens=80`**. Print header `=== APOLOGY varied (temp=1.0) ===`, reply, and usage tokens.
+6. After all three calls, print one line: `Total completion tokens across 3 calls: <sum>`.
+
+**Expected behaviour (illustrative — your exact wording may differ):**
+
+```text
+=== CLASSIFIER (temp=0.0) ===
+Billing
+prompt_tokens: 62
+completion_tokens: 1
+
+=== APOLOGY steady (temp=0.0) ===
+We are sorry masala dosa was unavailable during lunch; please visit again tomorrow morning.
+prompt_tokens: 58
+completion_tokens: 18
+
+=== APOLOGY varied (temp=1.0) ===
+Sincere apologies for the dosa shortage at lunch — we are restocking for the evening slot.
+prompt_tokens: 58
+completion_tokens: 22
+
+Total completion tokens across 3 calls: 41
+```
+
+### Submission instructions
+
+- Code all requirements in a **single file** `quickbite_internals.py` in VS Code (or Colab).
+- Set `GROQ_API_KEY` in your environment or Colab Secrets before running.
+- Run the script and confirm all three calls print replies and usage lines.
+- Submit the **complete `.py` file** in the LMS code editor / answer box.",,,,,,,,,,,,,,,6a3a2be233ef23ca9e59f722,1,markdown,"```python
+# quickbite_internals.py — QuickBite internals probe
+
+import os  # Read API key from environment
+from groq import Groq  # Groq Python client
+
+client = Groq(api_key=os.environ.get(""GROQ_API_KEY""))  # Authenticate with env var
+MODEL = ""llama-3.3-70b-versatile""  # Model specified in the assignment
+
+CLASSIFIER_SYSTEM = (
+    ""You classify student canteen complaints into exactly one word: ""
+    ""Billing, Food, or Other. Reply with one word only. No punctuation. No explanation.""
+)  # Routing rules for Call A
+
+CLASSIFIER_USER = ""My biryani was cold and the cashier charged me twice on UPI.""  # Fixed test input
+
+CREATIVE_SYSTEM = (
+    ""You write one short apology line for a campus food court when an item runs out ""
+    ""during lunch rush. Keep it under 20 words. No emojis.""
+)  # Creative rules for Calls B and C
+
+CREATIVE_USER = (
+    ""We ran out of masala dosa during the lunch rush and many students left unhappy.""
+)  # Shared user message for temperature comparison
+
+
+def run_call(label, system_msg, user_msg, temperature, max_tokens):  # Helper for one completion
+    response = client.chat.completions.create(  # Single chat completion request
+        model=MODEL,  # Groq model name
+        messages=[  # Standard chat roles
+            {""role"": ""system"", ""content"": system_msg},  # System instructions
+            {""role"": ""user"", ""content"": user_msg},  # User input this turn
+        ],
+        temperature=temperature,  # Sampling randomness knob
+        max_tokens=max_tokens,  # Output cap for billing and length control
+    )
+    text = response.choices[0].message.content.strip()  # Assistant reply string
+    usage = response.usage  # Token accounting object from Groq
+    print(f""=== {label} ==="")  # Section header required by brief
+    print(text)  # Model output
+    print(f""prompt_tokens: {usage.prompt_tokens}"")  # Input token count
+    print(f""completion_tokens: {usage.completion_tokens}"")  # Output token count
+    print()  # Blank line between sections
+    return usage.completion_tokens  # Return output tokens for final sum
+
+
+def main():  # Entry point
+    total_completion = 0  # Running sum of output tokens
+    total_completion += run_call(
+        ""CLASSIFIER (temp=0.0)"",
+        CLASSIFIER_SYSTEM,
+        CLASSIFIER_USER,
+        temperature=0.0,
+        max_tokens=10,
+    )  # Call A — stable one-word label
+    total_completion += run_call(
+        ""APOLOGY steady (temp=0.0)"",
+        CREATIVE_SYSTEM,
+        CREATIVE_USER,
+        temperature=0.0,
+        max_tokens=80,
+    )  # Call B — low-temperature apology
+    total_completion += run_call(
+        ""APOLOGY varied (temp=1.0)"",
+        CREATIVE_SYSTEM,
+        CREATIVE_USER,
+        temperature=1.0,
+        max_tokens=80,
+    )  # Call C — high-temperature apology for contrast
+    print(f""Total completion tokens across 3 calls: {total_completion}"")  # Final aggregate line
+
+
+if __name__ == ""__main__"":  # Run only when executed directly
+    main()  # Start the three-call demo
+```"

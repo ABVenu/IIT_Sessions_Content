@@ -1,0 +1,95 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"**Riya** joins a company and asks the internal **HR chatbot**: *""How many paid leaves do full-time employees get?""* The bot first searches policy documents, then calls no other tool, and replies with **24 paid leaves** citing **HR Policy 002**.
+
+Which step in the **enterprise agent pattern** is the **policy document search**?",,,,,,2,,Intent understanding only — no retrieval step exists,**RAG retrieval** — pulling relevant business context before answering,Random text generation without a knowledge base,Deleting chat history after every message,,6a3a2ba5f376a4a6b8e33b9c,0,markdown,"B is correct because policy search from a vector store is **retrieval-augmented generation (RAG)** — the agent grounds the answer in approved documents before replying.
+
+A is incorrect because intent may happen first, but policy search is explicitly retrieval, not intent alone. C is incorrect because the scenario describes structured policy lookup, not blind generation. D is incorrect because memory management is unrelated to retrieving leave policy."
+mcsc,markdown,"A **finance team** builds an agent to **approve travel reimbursements**. An employee submits a claim for a **personal weekend trip**. The agent approves it without reading the reimbursement policy.
+
+Why is this a serious **operational guardrail** failure?",,,,,,2,,Agents should always approve claims to keep employees happy,**Approvals must trace to company policy** — random yes/no creates fraud and compliance risk,GST filing is unrelated to reimbursements,Vector databases cannot store policy text,,6a3a2ba5f376a4a6b8e33b9c,0,markdown,"B is correct because finance agents must **read policy** before approve/reject; personal travel paid by mistake is a serious compliance failure.
+
+A is incorrect because policy-bound decisions override convenience. C is incorrect because GST is another finance use case, not the issue here. D is incorrect because policies are commonly stored in vector DBs or document stores."
+mcsc,markdown,"A developer builds a **lab demo** of an HR onboarding agent with five policy documents. Data can be lost when the script stops, and no advanced metadata filters are needed yet.
+
+Which vector store choice fits **best** for this quick prototype?",,,,,,1,,**InMemoryVectorStore** — embeddings live in RAM for the running process,A production Pinecone cluster with multi-region replication,A handwritten Excel sheet with no embeddings,Deleting all policy documents to save memory,,6a3a2ba5f376a4a6b8e33b9c,0,markdown,"A is correct because **InMemoryVectorStore** is fast to set up for small corpora in demos.
+
+B is over-engineered for a five-document lab. C is incorrect because Excel without embeddings cannot power semantic RAG search. D removes the knowledge base the agent needs."
+mcsc,markdown,"After `agent.invoke(...)`, a developer prints the full result object. They see a long **ToolMessage** with the entire leave-policy paragraph, but the employee should only see a short summary with a citation.
+
+Which message type should be shown to the **end user**?",,,,,,1,,**AIMessage** — the polished assistant reply after tool results are processed,Raw ToolMessage only — paste the full policy chunk,HumanMessage — the user's own question repeated,Empty string always,,6a3a2ba5f376a4a6b8e33b9c,0,markdown,"A is correct because **ToolMessage** holds raw tool output for the LLM; the **AIMessage** summarises in plain language with evidence.
+
+B dumps verbose policy text to users. C is the user's input, not the answer. D is incorrect when evidence exists and a summary should be returned."
+mcsc,markdown,"**Karan** asks the HR onboarding agent: *""What mandatory trainings must a backend engineer complete?""* The agent has three tools: `search_hr_policy`, `get_employee_profile`, and `get_mandatory_trainings`.
+
+Which tool is the **most direct** first choice?",,,,,,1,,`get_mandatory_trainings` — role-based training lists are its purpose,`get_employee_profile` — only needed when personalising by employee ID,`search_hr_policy` — only for weather forecasts,No tool — the LLM should guess training names,,6a3a2ba5f376a4a6b8e33b9c,0.5,markdown,"A is correct because training recommendations by **role** map to `get_mandatory_trainings`.
+
+B helps personalisation by employee ID, not role-wide training lists. C is incorrect — policy search covers leave/benefits, not weather. D violates grounded-agent design."
+mcsc,markdown,"A joiner asks: *""Is there a relocation bonus for eligible moves?""* The retriever returns **no matching policy chunk**. The system prompt says: *""Never invent a policy. If evidence is not found, say HR confirmation is required.""*
+
+What should the agent do?",,,,,,2,,"Invent a ₹1,00,000 bonus so the user feels welcomed",**Escalate** — state that **HR confirmation** is needed because evidence is missing,Call `get_mandatory_trainings` and ignore the question,Return the entire vector database dump,,6a3a2ba5f376a4a6b8e33b9c,0.5,markdown,"B is correct because **escalation** hands off to humans when the corpus lacks proof.
+
+A hallucinates benefits. C uses the wrong tool. D is not a user-facing answer."
+mcmc,markdown,"A product manager compares **finance reimbursement**, **HR onboarding**, and **LinkedIn content** agents. All three follow intent → retrieve → tool → validate → respond.
+
+Which statements about **how they differ** are **correct**?",,,,,,,,Finance agents need **strict policy-bound approve/reject** guardrails because money is involved,HR onboarding agents need **high retrieval** on policy docs and tools for **employee profile** and **trainings**,Content agents typically focus on **scheduling posts** and **brand tone** rather than leave-policy citations,All three domains never use tools — only plain chat,"1, 2, 3",6a3a2ba5f376a4a6b8e33b9c,0.5,markdown,"A, B, and C are correct — each domain shares the enterprise skeleton but differs in data sources, risk, and guardrails.
+
+D is incorrect because all three patterns use tools (payments, HR lookups, platform upload, etc.)."
+mcmc,markdown,"An HR agent's system prompt requires every grounded answer to include structured parts for trust and audit.
+
+Which components belong in a **well-designed HR response** (when applicable)?",,,,,,,,**Answer** — concise professional text,**Evidence** — policy source ID or document name,**Actions taken** — which tool was triggered (e.g. searched leave policy),**Employee's personal bank PIN** — always included for transparency,"1, 2, 3",6a3a2ba5f376a4a6b8e33b9c,0.5,markdown,"A, B, and C match the class answer format: Answer + Evidence + Actions + Escalation when needed.
+
+D is incorrect — sensitive credentials must never appear in agent replies."
+mcmc,markdown,"An evaluation harness row tests the HR agent with:
+
+- **Input:** *""What is the weather in Bangalore today?""*
+- **`should_refuse`:** `true`
+- **`forbidden_tools`:** includes `search_hr_policy`
+
+The agent politely answers with a weather forecast and called `search_hr_policy` anyway.
+
+Which failures does the harness correctly flag?",,,,,,,,**Out-of-corpus** question answered instead of refused,**Forbidden tool** used when it should not run,Test passes because the weather text sounds fluent,"**`should_refuse`** expectation violated — valid in-domain leave questions should not refuse, but this weather case should","1, 2, 4",6a3a2ba5f376a4a6b8e33b9c,1,markdown,"A, B, and D are correct — eval JSON checks trajectory and refusal behaviour, not fluency alone.
+
+C is incorrect because polite wrong answers still fail grounded/refusal tests."
+mcmc,markdown,"**TechNova** plans a **stakeholder demo** of the HR onboarding agent before go-live.
+
+Which demo and risk practices are **sound**?",,,,,,,,Show one **in-domain** win (e.g. leave count with **HR_POLICY_002** citation),Show one **out-of-corpus** question handled with **refusal or HR escalation** — no hallucination,"Mention **residual risks** such as hallucination if retrieval misses, or needing **human-in-the-loop** before irreversible HR actions",Demo only happy paths and hide refusal behaviour so stakeholders stay impressed,"1, 2, 3",6a3a2ba5f376a4a6b8e33b9c,1,markdown,"A, B, and C build trust with grounded success, clean refusal, and honest risk/mitigation talk.
+
+D is incorrect because hiding failure modes creates false confidence."
+subjective,markdown,"**Ananya** is the HR lead at **GreenLeaf Tech**. The company is rolling out an **HR onboarding chat assistant** for new joiners. On the first day, two employees send these messages:
+
+1. **Priya:** *""How many paid leaves does a full-time employee get per year?""*
+2. **Rahul:** *""What is the weather in Pune today?""*
+
+GreenLeaf's assistant is built with:
+- HR policy documents stored in a **vector database** (searchable by meaning)
+- Three tools: **`search_hr_policy`**, **`get_employee_profile`**, **`get_mandatory_trainings`**
+- System rules: **never invent policy**; if evidence is missing, say **HR confirmation is required**; include **evidence** and **actions taken** when answering policy questions
+
+**Your task:** Explain in your own words how a **well-designed** HR onboarding assistant should handle **Priya's question** and **Rahul's question** separately.
+
+For **each** employee message, write a short explanation covering:
+
+1. Whether the question is **in-domain** (answerable from HR policies/tools) or **out-of-corpus** (outside HR scope)
+2. Which **tool(s)** the agent should use — or whether it should **not** call HR tools
+3. What kind of **answer** the employee should see (include **evidence** or **refusal/escalation** as appropriate)
+4. One **risk** if the agent handles that message badly
+
+Keep your total answer between **150 and 250 words**. Write in clear paragraphs or bullet points. **No code** is required.
+
+Type your answer in the answer box in the LMS.",,,,,,,,,,,,,6a3a2ba5f376a4a6b8e33b9c,0,markdown,"**Priya (leave policy):**
+- **In-domain** — leave count is in the HR policy corpus.
+- Use **`search_hr_policy`** as the primary tool (`get_employee_profile` only if personalisation by employee record is needed).
+- Answer with a concise summary (e.g. 24 paid leaves for full-time staff), **evidence** citing **HR_POLICY_002** / leave section, and **actions taken** (policy search) — not the raw full PDF paragraph.
+- **Risk:** Hallucinated leave count or missing citation — employee trusts wrong information.
+
+**Rahul (weather):**
+- **Out-of-corpus** — weather is outside HR onboarding scope.
+- Should **not** call `search_hr_policy`, `get_employee_profile`, or `get_mandatory_trainings` for weather.
+- **Polite refusal** or redirect to HR/onboarding topics; no fabricated forecast.
+- **Risk:** **Under-refusal** — inventing weather or misusing HR tools breaks trust and fails eval cases with `should_refuse: true`.
+
+**Sample model answer:**
+
+**Priya:** This is an in-domain HR question. The agent should call `search_hr_policy` to retrieve the leave-policy chunk, then reply with a short summary (e.g. 24 paid leaves for full-time staff), cite HR_POLICY_002 as evidence, and note that it searched the leave policy. A bad response would guess the number or paste the entire policy document.
+
+**Rahul:** Weather is out-of-corpus for HR onboarding. The agent should refuse politely without calling HR tools — it is not a weather service. A bad response would make up a forecast or waste retrieval on irrelevant policies."
