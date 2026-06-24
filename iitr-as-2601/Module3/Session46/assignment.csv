@@ -1,0 +1,250 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,option.6,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A **hospital notes** agent extracts patient data into a SQL table. The `weight` column is an **integer**, but the model returns `""80 KGs""` in free-form text.
+
+What is the **core problem** this causes for the application?",,,,,,1,,The answer may be **factually correct in English** but **unusable** for a typed database column,SQL tables cannot store numbers above 80,The model hallucinated because medical notes were missing,"JSON Schema automatically converts `""80 KGs""` to integer 80",,,,6a3b7fc06e8d0f08b2ae1df6,0,markdown,"A is correct — structured output exists so downstream systems receive **predictable types and keys**, not prose that breaks inserts.
+
+B is incorrect — there is no 80 kg SQL limit; the issue is **format/type mismatch**. C is incorrect — the scenario is about **output shape**, not hallucination. D is incorrect — JSON Schema does not auto-cast strings with units into integers."
+mcsc,markdown,"A developer receives this string from an LLM API: `'{""category"": ""billing"", ""priority"": ""low""}'`.
+
+What is the **correct** way to turn it into a Python **`dict`** for further processing?",,,,,,1,,Call **`json.loads()`** on the string,Assign the string to a variable named `dict`,Wrap the string in **`eval()`** because it looks like a dictionary,Split the string on spaces and hope keys appear,,,,6a3b7fc06e8d0f08b2ae1df6,0,markdown,"A is correct — the standard library **`json.loads()`** safely parses JSON text into Python objects.
+
+B is incorrect — a string variable is still a string, not a parsed dict. C is incorrect — **`eval()`** on model output is unsafe and can execute malicious code. D is incorrect — naive splitting cannot parse JSON structure reliably."
+mcsc,markdown,"In a ShopEasy support-ticket **JSON Schema**, the **`required`** array lists: `category`, `priority`, `summary`, `needs_human`, `suggested_reply`.
+
+What does **`required`** enforce?",,,,,,1,,Those keys **must appear** in every valid model response — missing any one should fail validation,The model may omit keys it does not know and still pass validation,Only the first key in the list is mandatory,Required fields are optional in the system prompt but mandatory in the UI only,,,,6a3b7fc06e8d0f08b2ae1df6,0,markdown,"A is correct — **`required`** is the contract that every listed key must be present (use **`null`** if unknown, not omission).
+
+B is incorrect — omitting required keys breaks schema validation. C is incorrect — **all** listed keys are mandatory. D is incorrect — validation applies to the **parsed dict**, not UI-only rules."
+mcsc,markdown,"A team stores **`support_ticket_v1.json`** under **`schemas/`** and **`v1_system.txt`** under **`prompts/support_agent/`**.
+
+Why keep these as **separate files**?",,,,,,1,,The **schema** is the application's validation blueprint; the **prompt** instructs the model — they serve different roles and should stay aligned but not merged,Groq rejects API calls unless schema and prompt are in one file,Python cannot load two files in one project,JSON Schema files must be named `.txt` for Groq JSON mode,,,,6a3b7fc06e8d0f08b2ae1df6,0,markdown,"A is correct — prompt text shapes generation; the schema file is what Python compares against after parsing.
+
+B is incorrect — Groq has no single-file requirement. C is incorrect — projects routinely load multiple files. D is incorrect — schema files use **`.json`**, not `.txt`."
+mcsc,markdown,"A ShopEasy engineer enables Groq **`response_format={""type"": ""json_object""}`** and lists every required key in the system prompt.
+
+After deployment, some responses are **valid JSON** but use **`""priority"": ""HIGH""`** (wrong case) instead of **`""high""`**.
+
+What is the **best explanation**?",,,,,,1,,"JSON mode guarantees **syntax**, not full **schema semantics** — you still need a **Python validator** for enums and types",JSON mode is broken and should never be used,The fix is to remove the system prompt because JSON mode replaces it,Raising **`temperature`** to 1.0 will fix enum casing,,,,6a3b7fc06e8d0f08b2ae1df6,0.5,markdown,"A is correct — **`json_object`** mode helps produce parseable JSON; **enum casing** is enforced by your **`validate_ticket`** logic.
+
+B is incorrect — JSON mode is useful when paired with validation. C is incorrect — strong prompt text plus JSON mode is the recommended combo. D is incorrect — higher temperature increases randomness and worsens consistency."
+mcsc,markdown,"A support dashboard auto-fills ticket fields from model output. The team calls **`json.loads()`** on the raw string and immediately updates the UI. On some runs, tickets show **`""Billing""`** in a dropdown that only accepts **`billing`**, **`shipping`**, **`product`**, **`other`**.
+
+Which step was **skipped**?",,,,,,1,,"**Validation** against the schema (required keys, enums, types) before routing to the UI",Training a new embedding model,Increasing **`max_tokens`** on every request,Converting the prompt file from `.txt` to `.yaml`,,,,6a3b7fc06e8d0f08b2ae1df6,0.5,markdown,"A is correct — parsing proves **syntax**; **validation** proves the dict is **usable** before side effects like UI updates.
+
+B is irrelevant to output-shape enforcement. C might help truncated JSON but does not fix wrong enum values. D is unrelated to enum validation."
+mcmc,markdown,"You are designing the ShopEasy **`support_ticket_v1.json`** schema file.
+
+Which items belong in the **JSON Schema file** (not just the system prompt)?",,,,,,,,"**`""required""`** array listing mandatory keys","**`""properties""`** with per-field **`type`** and **`enum`** constraints",The customer's raw chat message text,"**`""type"": ""object""`** declaring a single JSON object output","Instructions like *""You are ShopEasy Support Classifier""*",,"1, 2, 4",6a3b7fc06e8d0f08b2ae1df6,0.5,markdown,"A, B, and D are schema vocabulary — contract structure, field definitions, and top-level object type.
+
+C is incorrect — user messages are runtime inputs, not schema content. E is incorrect — persona instructions belong in the **system prompt**, not the schema blueprint."
+mcmc,markdown,"A model returns messy text that includes the line *""Sure, here is the ticket JSON:""* followed by a fenced JSON block containing:
+
+`{""category"": ""shipping"", ""priority"": ""medium"", ""summary"": ""Late delivery"", ""needs_human"": false, ""suggested_reply"": ""We are tracking your parcel.""}`
+
+Which **defensive parsing** steps are **appropriate** before **`json.loads()`**?",,,,,,,,**`strip_markdown_fences`** to remove triple-backtick wrappers,**`extract_json_object`** to slice from the first **`{`** to the last **`}`**,**`eval()`** on the raw string because it starts with `{`,Raise a clear **`ValueError`** with a short snippet if parsing still fails,Delete the schema file so validation cannot fail,,"1, 2, 4",6a3b7fc06e8d0f08b2ae1df6,0.5,markdown,"A, B, and D match the taught clean → extract → parse → clear-error pipeline.
+
+C is incorrect — never use **`eval()`** on model output. E is incorrect — removing the schema removes safety; it does not fix parsing."
+mcmc,markdown,"ShopEasy runs this pipeline for each customer message:
+
+**Groq call (JSON mode)** → **`safe_parse_model_json`** → **`validate_or_raise`** → **`route_to_ui`**
+
+Which statements about this design are **correct**?",,,,,,,,"**`safe_parse_model_json`** should run **before** **`validate_or_raise`** because validation needs a Python **`dict`**, not a raw string",**`route_to_ui`** should run **only after** validation passes,"If parsing fails, the app should still write to the database so no data is lost",**`validate_or_raise`** can raise **`ValueError`** so callers use one **`try`/`except`** path for parse and validation failures,Groq JSON mode removes the need for **`validate_or_raise`** entirely,,"1, 2, 4",6a3b7fc06e8d0f08b2ae1df6,1,markdown,"A, B, and D describe the correct order: parse → validate → route, with unified error handling.
+
+C is incorrect — invalid output must **not** reach side effects; that is the gate/checkpoint pattern. E is incorrect — JSON mode does not replace semantic validation."
+mcmc,markdown,"A ShopEasy staging agent intermittently returns truncated or malformed JSON. The system prompt and schema file already match.
+
+Which **debugging actions** are **sound**?",,,,,,,,Print the **`raw`** model string before parsing and compare with a known-good saved response,"Confirm **`response_format={""type"": ""json_object""}`** is set **and** the system prompt **mentions JSON**","Check whether **`max_tokens`** is too low, causing JSON cut off mid-string",Remove all **`required`** keys from the schema so validation always passes,Run the same message twice at **`temperature: 0.0`** to see if output shape still drifts,,"1, 2, 3, 5",6a3b7fc06e8d0f08b2ae1df6,1,markdown,"A, B, C, and E are the practical debugging checklist items for syntax and shape drift.
+
+D is incorrect — weakening the schema hides bugs instead of fixing generation or parsing issues."
+subjective,markdown,"**ShopEasy** saves raw LLM responses before they reach the support dashboard. Your teammate already wrote the **parsing helpers** — they turn messy text into a Python **`dict`**. Your job is to add the **validator** so bad tickets (like wrong priority spelling) are caught **before** the UI updates.
+
+No live Groq API calls are needed for this exercise.
+
+---
+
+Create **`shopeasy_ticket_parser.py`** using the **starter code** below. You only need to complete the parts marked **`# TODO`**.
+
+### What you must implement
+
+1. **`validate_ticket(data: dict) -> tuple[bool, str]`**
+   - Return **`(True, ""ok"")`** if the ticket passes all checks.
+   - Return **`(False, reason)`** on the **first** failure.
+   - Checks (in this order):
+     1. Every key in **`REQUIRED_KEYS`** must be present in **`data`**.
+     2. **`data[""category""]`** must be in **`ALLOWED_CATEGORIES`**.
+     3. **`data[""priority""]`** must be in **`ALLOWED_PRIORITIES`**.
+
+2. **`validate_or_raise(data: dict) -> dict`**
+   - Call **`validate_ticket(data)`**.
+   - If validation fails, raise **`ValueError(message)`**.
+   - If validation passes, return **`data`**.
+
+3. **`main()`**
+   - Loop over **`TEST_CASES`** (already defined in the starter).
+   - For each raw string:
+     - Call **`safe_parse_model_json(raw)`** then **`validate_or_raise(parsed)`**.
+     - On success, print: **`SUCCESS: <the dict>`**
+     - On **`ValueError`**, print: **`FAILED: <error message>`**
+
+Do **not** change the parsing helpers or the **`TEST_CASES`** values.
+
+### Starter code (copy this into your file)
+
+```python
+import json
+import re
+
+REQUIRED_KEYS = [""category"", ""priority"", ""summary"", ""needs_human"", ""suggested_reply""]
+ALLOWED_CATEGORIES = {""billing"", ""shipping"", ""product"", ""other""}
+ALLOWED_PRIORITIES = {""low"", ""medium"", ""high""}
+
+
+def strip_markdown_fences(text: str) -> str:
+    cleaned = text.strip()
+    match = re.match(r""^```(?:json)?\s*([\s\S]*?)\s*```$"", cleaned, flags=re.IGNORECASE)
+    return match.group(1).strip() if match else cleaned
+
+
+def extract_json_object(text: str) -> str:
+    start, end = text.find(""{""), text.rfind(""}"")
+    if start == -1 or end == -1 or end <= start:
+        raise ValueError(""No JSON object braces found in model output."")
+    return text[start : end + 1]
+
+
+def safe_parse_model_json(raw: str) -> dict:
+    step1 = strip_markdown_fences(raw)
+    step2 = extract_json_object(step1)
+    data = json.loads(step2)
+    if not isinstance(data, dict):
+        raise ValueError(""Top-level JSON must be an object (dict)."")
+    return data
+
+
+# TODO: Implement validate_ticket
+def validate_ticket(data: dict) -> tuple[bool, str]:
+  pass
+
+
+# TODO: Implement validate_or_raise
+def validate_or_raise(data: dict) -> dict:
+  pass
+
+
+TEST_CASES = [
+    # Case 1 — valid ticket (should print SUCCESS)
+    '{""category"": ""shipping"", ""priority"": ""medium"", ""summary"": ""Order 4412 arrived late"", '
+    '""needs_human"": false, ""suggested_reply"": ""We are tracking your parcel.""}',
+    # Case 2 — wrong priority casing (should print FAILED)
+    '{""category"": ""billing"", ""priority"": ""HIGH"", ""summary"": ""Duplicate charge"", '
+    '""needs_human"": false, ""suggested_reply"": ""Refund initiated.""}',
+]
+
+
+# TODO: Implement main
+def main() -> None:
+  pass
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+---
+
+## Expected behaviour
+
+When you run `python shopeasy_ticket_parser.py`:
+
+```text
+SUCCESS: {'category': 'shipping', 'priority': 'medium', 'summary': 'Order 4412 arrived late', 'needs_human': False, 'suggested_reply': 'We are tracking your parcel.'}
+FAILED: Invalid priority: 'HIGH'
+```
+
+- **Case 1** must print **`SUCCESS:`** with the parsed dict.
+- **Case 2** must print **`FAILED: Invalid priority: 'HIGH'`** (use this exact message format for the priority check).
+
+---
+
+## Submission Instructions
+
+- Complete the **`# TODO`** sections in a single `.py` file named `shopeasy_ticket_parser.py` in VS Code.
+- Run the script and verify both output lines match the expected behaviour above.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,,,6a3b7fc06e8d0f08b2ae1df6,0,markdown,"### Walkthrough
+
+1. **`safe_parse_model_json`** (already provided) turns each raw string into a Python **`dict`**.
+2. **`validate_ticket`** is where you enforce the schema rules — required keys plus allowed **`category`** and **`priority`** values.
+3. **Case 2** parses fine as JSON, but **`""HIGH""`** is not in **`ALLOWED_PRIORITIES`** — validation must block it before the dashboard updates.
+4. **`main()`** ties parse → validate → print into a simple loop over **`TEST_CASES`**.
+
+### Reference Solution
+
+```python
+import json
+import re
+
+REQUIRED_KEYS = [""category"", ""priority"", ""summary"", ""needs_human"", ""suggested_reply""]
+ALLOWED_CATEGORIES = {""billing"", ""shipping"", ""product"", ""other""}
+ALLOWED_PRIORITIES = {""low"", ""medium"", ""high""}
+
+
+def strip_markdown_fences(text: str) -> str:
+    cleaned = text.strip()
+    match = re.match(r""^```(?:json)?\s*([\s\S]*?)\s*```$"", cleaned, flags=re.IGNORECASE)
+    return match.group(1).strip() if match else cleaned
+
+
+def extract_json_object(text: str) -> str:
+    start, end = text.find(""{""), text.rfind(""}"")
+    if start == -1 or end == -1 or end <= start:
+        raise ValueError(""No JSON object braces found in model output."")
+    return text[start : end + 1]
+
+
+def safe_parse_model_json(raw: str) -> dict:
+    step1 = strip_markdown_fences(raw)
+    step2 = extract_json_object(step1)
+    data = json.loads(step2)
+    if not isinstance(data, dict):
+        raise ValueError(""Top-level JSON must be an object (dict)."")
+    return data
+
+
+def validate_ticket(data: dict) -> tuple[bool, str]:
+    for key in REQUIRED_KEYS:
+        if key not in data:
+            return False, f""Missing required field: {key}""
+    if data[""category""] not in ALLOWED_CATEGORIES:
+        return False, f""Invalid category: {data['category']!r}""
+    if data[""priority""] not in ALLOWED_PRIORITIES:
+        return False, f""Invalid priority: {data['priority']!r}""
+    return True, ""ok""
+
+
+def validate_or_raise(data: dict) -> dict:
+    ok, message = validate_ticket(data)
+    if not ok:
+        raise ValueError(message)
+    return data
+
+
+TEST_CASES = [
+    '{""category"": ""shipping"", ""priority"": ""medium"", ""summary"": ""Order 4412 arrived late"", '
+    '""needs_human"": false, ""suggested_reply"": ""We are tracking your parcel.""}',
+    '{""category"": ""billing"", ""priority"": ""HIGH"", ""summary"": ""Duplicate charge"", '
+    '""needs_human"": false, ""suggested_reply"": ""Refund initiated.""}',
+]
+
+
+def main() -> None:
+    for raw in TEST_CASES:
+        try:
+            parsed = safe_parse_model_json(raw)
+            validated = validate_or_raise(parsed)
+            print(""SUCCESS:"", validated)
+        except ValueError as exc:
+            print(""FAILED:"", str(exc))
+
+
+if __name__ == ""__main__"":
+    main()
+```"
