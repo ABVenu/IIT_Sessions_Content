@@ -65,3 +65,66 @@
 **Outcome:** QC passed on iteration 3. Notes trimmed to target length.
 
 **Approximate line count:** ~450 lines.
+
+---
+
+# Lecture Notes QC Report — Working with APIs and JSON (Released Alignment)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-06-25  
+**Iteration:** 4 (post-session alignment against transcript + Live Topic Coverage)
+
+---
+
+## Alignment Changes Applied
+
+| Change type | Detail |
+|---|---|
+| **Removed** | `response.ok`; 429 exponential-backoff retry loop; `try`/`except` timeout retry; full PATCH/PUT/DELETE CRUD table (POST brief only) |
+| **Added** | Gemini LLM + external APIs section; `json.load()` file demo; free vs API-key services table; Groq Step 5 in full lab; More API-to-Prompt patterns (Fake Store, Frankfurter, GitHub); Groq rate-limit limits; LLM JSON wire-format note |
+| **Updated** | Lab title and flow now includes two-call pattern (weather GET → Groq); grounding vs endpoint-error distinction; safe GET rules match status-first teaching |
+
+---
+
+## QC Criteria
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics aligned to taught content; extras from Live Topic Coverage integrated (Gemini+APIs, free APIs, additional demos, Groq pipeline, rate limits). Removed untaught retry/`response.ok` patterns. |
+| **Creativity** | **5 / 5** | IRCTC, waiter, news anchor, Gemini photos/search/Gmail, campus Tech Fest, e-commerce and forex use cases retained or added. |
+| **Structural Adherence** | **5 / 5** | Prompt4 structure: context + LO bullets; Official/Simple/Real-life; full Python with per-line comments + "How the code works"; Practice activities; Key Takeaways; Quick Reference; all five session images retained. |
+| **No Logical Mistakes** | **True** | GET read-only; status before `response.json()`; two-call agent pattern matches class demo; city/coords matching rule; weather code → words before prompt. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; professional student-facing tone; no poll/Mentimeter content. |
+| **No Previous Session Number References** | **True** | Uses **previous session** only. |
+| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
+
+---
+
+## Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
+
+**Outcome:** QC passed on iteration 4. `Lecture Notes Released.md` ready for student release.
+
+**Approximate line count:** ~520 lines.
+
+---
+
+# Lecture Notes QC Report — Working with APIs and JSON (Released — Reference Restore)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-06-25  
+**Iteration:** 5 (instructor request — keep helpful reference material)
+
+---
+
+## Changes
+
+Restored student-facing reference content not live-demonstrated in class:
+
+- **`response.ok`** in status habit + Quick Reference
+- **429 exponential-backoff retry** and **`try`/`except`** timeout guidance in Safe GET Rules
+- **Full PATCH / PUT / DELETE CRUD table** alongside GET lab focus
+
+**Outcome:** QC unchanged — all criteria still met. Reference additions do not contradict taught material.
