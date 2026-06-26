@@ -1,0 +1,236 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+"mcsc","markdown","A contact app needs to store one phone number for each contact name. Which Python data structure is most suitable for this?","","","","","","3","","List","String","Dictionary","Integer","","6a3e3018716053c3d382178c","0","markdown","A dictionary is most suitable because it stores data as key-value pairs, such as `""Maa"": ""9876543210""`. Option 1 is incorrect because a list mainly stores values by position, not by meaningful labels. Option 2 is incorrect because a string stores text characters. Option 4 is incorrect because an integer stores only a number, not labelled data."
+"mcsc","markdown","What will be printed by the following code?
+
+```python
+student = {
+    ""name"": ""Amit"",
+    ""age"": 21,
+    ""marks"": 88
+}
+
+print(student[""marks""])
+```","","","","","","3","","`Amit`","`21`","`88`","`marks`","","6a3e3018716053c3d382178c","0","markdown","The expression `student[""marks""]` uses the key `""marks""` to access its mapped value, which is `88`. Option 1 is the value for the key `""name""`. Option 2 is the value for the key `""age""`. Option 4 is the key itself, not the value returned by dictionary access."
+"mcsc","markdown","Which syntax correctly creates an empty dictionary in Python?","","","","","","2","","`student = []`","`student = {}`","`student = ()`","`student = """"`","","6a3e3018716053c3d382178c","0","markdown","`{}` creates an empty dictionary. Option 1 creates an empty list. Option 3 creates an empty tuple. Option 4 creates an empty string."
+"mcsc","markdown","What will be printed by the following code?
+
+```python
+prices = {
+    ""banana"": 20,
+    ""apple"": 40,
+    ""mango"": 50
+}
+
+print(prices.get(""watermelon""))
+```","","","","","","2","","`0`","`None`","`KeyError`","`watermelon`","","6a3e3018716053c3d382178c","0","markdown","`get(""watermelon"")` returns `None` because the key `""watermelon""` does not exist and no default value is provided. Option 1 would be correct only if the code used `get(""watermelon"", 0)`. Option 3 is incorrect because `get()` avoids a `KeyError`. Option 4 is incorrect because `get()` returns the mapped value, not the key."
+"mcsc","markdown","A grocery billing program stores item prices in a dictionary:
+
+```python
+prices = {
+    ""mango"": 20,
+    ""apple"": 30,
+    ""banana"": 10
+}
+```
+
+Which expression returns the values in sorted order?","","","","","","2","","`sorted(prices)`","`sorted(prices.values())`","`prices.keys()`","`prices.items()`","","6a3e3018716053c3d382178c","0.5","markdown","`sorted(prices.values())` returns the dictionary values in sorted order: `[10, 20, 30]`. Option 1 sorts the keys, not the values. Option 3 returns the keys without sorting them. Option 4 returns key-value pairs, not sorted values."
+"mcsc","markdown","What will be printed by the following code?
+
+```python
+student = {
+    ""name"": ""Yash"",
+    ""age"": 29,
+    ""name"": ""Shubham""
+}
+
+print(student)
+```","","","","","","3","","`{'name': 'Yash', 'age': 29, 'name': 'Shubham'}`","`{'name': 'Yash', 'age': 29}`","`{'name': 'Shubham', 'age': 29}`","`KeyError`","","6a3e3018716053c3d382178c","0.5","markdown","Dictionary keys must be unique. When the same key appears again, Python keeps the latest value for that key. So `""name"": ""Shubham""` overwrites `""name"": ""Yash""`. Option 1 is incorrect because Python does not keep duplicate keys in the final dictionary. Option 2 keeps the old value, which is not how Python handles duplicate keys. Option 4 is incorrect because duplicate keys do not raise a `KeyError`."
+"mcmc","markdown","A menu dictionary is created as follows:
+
+```python
+menu = {
+    ""Dosa"": 60,
+    ""Idli"": 40,
+    ""Vada"": 35
+}
+```
+
+Which statements are correct?","","","","","","","","`menu.keys()` returns all dish names.","`menu.values()` returns all prices.","`menu.items()` returns key-value pairs.","`menu.get(""Tea"", 0)` raises a `KeyError`.","1, 2, 3","6a3e3018716053c3d382178c","0.5","markdown","Option 1 is correct because `keys()` returns all keys, which are dish names. Option 2 is correct because `values()` returns all values, which are prices. Option 3 is correct because `items()` returns key-value pairs. Option 4 is incorrect because `get(""Tea"", 0)` returns `0` when `""Tea""` is missing; it does not raise a `KeyError`."
+"mcmc","markdown","A dictionary is used to count characters in a word:
+
+```python
+counts = {}
+char = ""a""
+counts[char] = counts.get(char, 0) + 1
+```
+
+Which statements are correct?","","","","","","","","`counts.get(char, 0)` returns `0` if `char` is not already a key.","After the code runs once, `counts` becomes `{""a"": 1}`.","The key stores the character and the value stores the count.","The code cannot work because dictionary values cannot be numbers.","1, 2, 3","6a3e3018716053c3d382178c","0.5","markdown","Option 1 is correct because `get(char, 0)` uses `0` as the default value for a missing key. Option 2 is correct because the old count `0` becomes `1` and is stored under the key `""a""`. Option 3 is correct because the character is used as the key and its frequency is stored as the value. Option 4 is incorrect because dictionary values can be numbers, strings, lists, and other data types."
+"mcmc","markdown","A delivery app stores delivery charges by city:
+
+```python
+charges = {
+    ""Pune"": 40,
+    ""Delhi"": 60,
+    ""Mumbai"": 50
+}
+```
+
+Which expressions are logically correct for analysing this dictionary?","","","","","","","","`len(charges)` returns `3`.","`sorted(charges)` returns city names in sorted order.","`max(charges.values())` returns `60`.","`sum(charges.keys())` returns `150`.","1, 2, 3","6a3e3018716053c3d382178c","1","markdown","Option 1 is correct because the dictionary has three key-value pairs. Option 2 is correct because `sorted(charges)` sorts dictionary keys, so it returns sorted city names. Option 3 is correct because the highest value among `40`, `60`, and `50` is `60`. Option 4 is incorrect because `charges.keys()` contains strings, and `sum()` cannot add city names."
+"mcmc","markdown","Python dictionaries work like hashmaps for fast key-based lookup. Which statements are correct?","","","","","","","","A dictionary stores data as key-value pairs.","A dictionary lookup is generally fast because Python uses a hash value internally.","A list can be safely used as a dictionary key because lists are flexible.","Strings and integers can commonly be used as dictionary keys.","1, 2, 4","6a3e3018716053c3d382178c","1","markdown","Option 1 is correct because dictionaries store key-value pairs. Option 2 is correct because Python internally uses hashing to locate values efficiently. Option 3 is incorrect because lists are not hashable and cannot be used as dictionary keys. Option 4 is correct because strings and integers are common hashable key types."
+"subjective","markdown","A small text-analysis tool is needed for checking how many times each character appears in a word or short text. Build a Python program that uses a dictionary to count character frequency and then prints a useful report.
+
+### Requirements
+
+Write a Python program that:
+
+1. Takes one string input from the user.
+2. Creates an empty dictionary named `counts`.
+3. Loops through every character in the input string.
+4. Uses `get(character, 0)` to safely update the count of each character.
+5. Prints the final dictionary of character counts.
+6. Prints all unique characters using `keys()`.
+7. Prints all count values using `values()`.
+8. Prints each character and its count using `items()`.
+9. Prints the number of unique characters using `len()`.
+10. Prints the unique characters in sorted order using `sorted()`.
+11. Prints the highest frequency using `max(counts.values())`.
+12. Prints the lowest frequency using `min(counts.values())`.
+13. Prints the total number of counted characters using `sum(counts.values())`.
+
+### Input Format
+
+One line containing a string.
+
+### Example Input
+
+```text
+banana
+```
+
+### Expected Output
+
+```text
+Character counts: {'b': 1, 'a': 3, 'n': 2}
+Unique characters: dict_keys(['b', 'a', 'n'])
+Count values: dict_values([1, 3, 2])
+Character report:
+b appears 1 time(s)
+a appears 3 time(s)
+n appears 2 time(s)
+Number of unique characters: 3
+Sorted unique characters: ['a', 'b', 'n']
+Highest frequency: 3
+Lowest frequency: 1
+Total characters counted: 6
+```
+
+### Constraints
+
+- The input string will contain at least one character.
+- Use only concepts covered here: dictionaries, key-value pairs, `get()`, `keys()`, `values()`, `items()`, `len()`, `sorted()`, `max()`, `min()`, and `sum()`.
+- Do not use external libraries.
+- Treat uppercase and lowercase as different characters. For example, `A` and `a` should be counted separately.
+- Spaces may be counted as characters if they are present in the input.
+- Write your complete program in [OneCompiler Python](https://onecompiler.com/python).
+
+### Submission Instruction
+
+1. Open [https://onecompiler.com/python](https://onecompiler.com/python) and create a new Python file.
+2. Write your complete program in the editor, then click **Run** and verify the output.
+3. Click the **Save** button at the top right.
+4. Enter your **assignment name**, set visibility to **Public**, and save.
+5. Click the **Share** button, copy the link, and submit that link in the answer box on the LMS.
+
+![Step - 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5b930478-03c2-4255-a724-d0990da5e4f4/C0AFXttOJJhW3o1S.png)
+
+![Step-2](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/c817d308-66ca-4b5a-8579-db26951ad1a2/PGcKY2hqUQgysgPo.png)","","","","","","","","","","","","","6a3e3018716053c3d382178c","0.5","markdown","### Ideal Solution Walkthrough
+
+The program should start by taking a string input. Then it should create an empty dictionary because the counts are not known before reading the string.
+
+For every character, the program should use `counts.get(character, 0)` to get the old count. If the character is not present, the default count should be `0`; then the program should add `1` and store the updated value back in the dictionary.
+
+After the dictionary is ready, the program should use dictionary methods and built-in functions to print the complete report.
+
+### Complete Code
+
+```python
+# Take a string input from the user
+text = input(""Enter text: "")
+
+# Create an empty dictionary to store character counts
+counts = {}
+
+# Loop through every character in the input text
+for character in text:
+    # Get the current count of the character, or 0 if it is not present
+    old_count = counts.get(character, 0)
+
+    # Increase the count by 1
+    new_count = old_count + 1
+
+    # Store the updated count in the dictionary
+    counts[character] = new_count
+
+# Print the complete dictionary of character counts
+print(""Character counts:"", counts)
+
+# Print all unique characters using keys()
+print(""Unique characters:"", counts.keys())
+
+# Print all count values using values()
+print(""Count values:"", counts.values())
+
+# Print every character and its count using items()
+print(""Character report:"")
+for character, count in counts.items():
+    # Print one character-count pair
+    print(f""{character} appears {count} time(s)"")
+
+# Print the number of unique characters using len()
+print(""Number of unique characters:"", len(counts))
+
+# Print unique characters in sorted order using sorted()
+print(""Sorted unique characters:"", sorted(counts))
+
+# Print the highest count using max() on values
+print(""Highest frequency:"", max(counts.values()))
+
+# Print the lowest count using min() on values
+print(""Lowest frequency:"", min(counts.values()))
+
+# Print the total number of counted characters using sum()
+print(""Total characters counted:"", sum(counts.values()))
+```
+
+### Why This Code Works
+
+- `counts = {}` creates an empty dictionary.
+- Each character from the input becomes a dictionary key.
+- The value against each key stores how many times that character has appeared.
+- `get(character, 0)` avoids errors when a character appears for the first time.
+- `keys()`, `values()`, and `items()` help inspect the dictionary in different ways.
+- `len(counts)` counts unique characters.
+- `sorted(counts)` sorts the keys.
+- `max(counts.values())`, `min(counts.values())`, and `sum(counts.values())` analyse the numeric count values.
+
+### Alternative Approach
+
+The same counting logic can be written in a shorter form:
+
+```python
+# Take input from the user
+text = input(""Enter text: "")
+
+# Create an empty dictionary
+counts = {}
+
+# Count every character using get() in one line
+for character in text:
+    # Safely increase the count for the current character
+    counts[character] = counts.get(character, 0) + 1
+
+# Print the final result
+print(counts)
+```
+
+This shorter approach is also correct, but the full solution is better for this assignment because it prints the complete dictionary report."

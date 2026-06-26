@@ -46,6 +46,50 @@
 
 ---
 
+## QC Iteration 5 (Released Notes Alignment)
+
+| Criteria | Result |
+|----------|--------|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References in Student Notes | True |
+
+**Verification Summary:**
+- `Lecture Notes Released.md` aligns with the live coverage report: dictionary creation, key-value access/modification, `get()`, `keys()`, `values()`, `items()`, hashmap intuition, hashable keys, and built-in functions are all included.
+- Extra live-covered concepts are included: duplicate-key overwrite behavior, internal hashing intuition, character-frequency counter, and `max()`, `min()`, `sum()` on dictionary values.
+- Non-covered or overly advanced existing-note content was removed or narrowed: deletion with `del`, `in` key-check activity, `lambda` sorting by value, and word-counter focused content.
+- All relevant original images are retained, with alt text adjusted where needed to avoid uncovered examples.
+
+**QC Status: PASSED**
+
+---
+
+## QC Iteration 6 (Released Notes Final Review)
+
+| Criteria | Result |
+|----------|--------|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References in Student Notes | True |
+
+**Verification Summary:**
+- Student-facing structure starts directly with the lecture title and contains no duration, target audience, quiz, feedback, Mentimeter, or internal prompt references.
+- Notes use simple explanations, real-life analogies, code blocks with comments, and "How the code works" sections.
+- Final quick-reference table is present and only includes concepts covered or explicitly discussed in the live session.
+- Search check found no leftover `lambda`, `del`, word-counter, leaderboard, or uncovered `in` key-check examples in `Lecture Notes Released.md`.
+
+**QC Status: PASSED**
+
+---
+
 ## QC Iteration 3 (Fresh Review)
 
 | Criteria | Result |
