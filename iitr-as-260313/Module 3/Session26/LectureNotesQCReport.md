@@ -51,3 +51,39 @@
 **Notes:** Fixed image mismatches identified in review. (1) Replaced `session35-08-lcel-pipeline.png` (ChatOpenAI labels) with `session36-02-lcel-chain-flow.png` (ChatOllama + localhost:11434) in LCEL section; added bridging sentence that demo uses **PromptTemplate** instead of **ChatPromptTemplate**. (2) Moved `session35-10-app1-vs-app2.png` to **Output Parsers** section with alt text describing parser behaviour (not app1/app2 filenames); added mapping to `template_only.py` vs `first_chain.py`. (3) Updated `session35-02` alt text to mention Ollama alongside cloud APIs. All nine image URLs verified HTTP 200. Remaining session35 images are provider-neutral or concept-only (agentic stack, Runnables, six components, PromptTemplate, agents/tools).
 
 **Pass 3 outcome:** PASS — image relevance verified for Ollama cohort.
+
+---
+
+## QC Pass 4 (Released Notes Alignment Against Covered LOs)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Created `Lecture Notes Released.md` from the existing lecture notes and aligned it with `Live Topic Coverage.md`. Removed the dedicated `ChatPromptTemplate` teaching content because it was marked not covered in the live coverage report. Retained covered and partially covered concepts: LangChain definition and purpose, framework justification, stack placement, Runnable model, chains, modular overview, Core vs Community, PromptTemplate, LCEL, output parsers, and the instructor-led PromptTemplate to LLM chain. Added extra concepts that were actually taught: LangChain vs building from scratch, N8N vs LangChain, Ollama CLI/setup troubleshooting, and the Swiggy-style support chatbot example. Mentimeter and post-lecture quiz protocol were not included.
+
+**Pass 4 outcome:** PASS
+
+---
+
+## QC Pass 5 (Released Notes Re-verification)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Re-verified the released notes against the prompt requirements and the live coverage table. Confirmed the notes start directly with the lecture title, contain no metadata/duration/internal instructions, avoid session-number references, retain relevant images, use student-facing professional documentation style, and include full runnable code examples with line-level comments plus "How the code works" explanations. Search checks found no `ChatPromptTemplate`, Mentimeter/quiz protocol text, metadata leakage, duration text, or session-number references in `Lecture Notes Released.md`.
+
+**Pass 5 outcome:** PASS — expected QC result achieved for released notes.
