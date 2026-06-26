@@ -1,0 +1,59 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,text,"A support assistant first searches company documents and then asks an LLM to answer only from the searched content. What is this approach called?",,,,,,2,,Normal chatbot,Retrieval-Augmented Generation,Image classification,Database backup,,6a3e30d505417e18ecfb3450,0,text,"Retrieval-Augmented Generation, or RAG, first retrieves useful document chunks and then generates an answer using those chunks. A normal chatbot may answer from model memory without checking documents. Image classification and database backup are unrelated to this question."
+mcsc,text,"In a RAG application, what is a document corpus?",,,,,,1,,The set of source documents the assistant is allowed to search,The password used for an API key,The final answer given by the LLM,The web page design of the app,,6a3e30d505417e18ecfb3450,0,text,"A document corpus is the collection of documents used as the knowledge source for the RAG app. An API key, final answer, and web page design are different parts of an application, but they are not the corpus."
+mcsc,text,"Why are large documents split into chunks before storing them in a vector database?",,,,,,1,,To make them easier to retrieve in smaller meaningful parts,To delete all useful information,To avoid using embeddings,To convert the document into an image,,6a3e30d505417e18ecfb3450,0,text,"Chunking breaks a large document into smaller parts so the retriever can find the most relevant pieces for a question. It does not delete useful information, avoid embeddings, or convert text into images."
+mcsc,text,"What does grounded generation mean in a RAG system?",,,,,,1,,The model answers only using the retrieved context,The model writes any answer from memory,The model refuses every question,The model stores files on a local computer,,6a3e30d505417e18ecfb3450,0,text,"Grounded generation means the answer must come from the retrieved context. If the answer is not present in the context, the assistant should say that it could not find the answer instead of inventing one."
+mcsc,text,"A user asks, ""Can I pay with UPI?"" The policy documents do not mention UPI. What should a well-designed RAG assistant do?",,,,,,2,,Guess that UPI is allowed,Say that the answer is not found in the provided documents,Search the internet automatically,Give a random payment policy,,6a3e30d505417e18ecfb3450,0.5,text,"A grounded RAG assistant should not invent an answer. If the retrieved context does not contain UPI information, it should clearly say that the answer is not found in the provided documents. Guessing, random answers, or internet search would break the grounding rule."
+mcsc,text,"Which statement best explains why retrieving too many chunks can be a problem?",,,,,,1,,It can increase cost and may send more private data to the LLM,It always improves answer quality,It removes the need for a system message,It stops the vector database from storing embeddings,,6a3e30d505417e18ecfb3450,0.5,text,"Too many retrieved chunks increase the amount of context sent to the LLM. This can increase token cost and may expose more private information than needed. More chunks do not always improve quality, and they do not remove the need for prompts or embeddings."
+mcmc,text,"Which of the following are main stages in a RAG pipeline?",,,,,,,,Select or load documents,Chunk documents and create embeddings,Retrieve relevant chunks for a user question,Ignore the retrieved context and answer from memory,"1, 2, 3",6a3e30d505417e18ecfb3450,0.5,text,"A RAG pipeline starts with documents, chunks them, embeds them, stores them, and retrieves relevant chunks before generation. Option D is wrong because ignoring retrieved context would make the answer ungrounded."
+mcmc,text,"Which checks help test whether a RAG answer is grounded?",,,,,,,,Check whether important claims appear in the retrieved chunks,Check whether the answer cites or uses the correct source information,Ask one question that is not present in the corpus and expect a refusal,Accept every fluent answer as correct,"1, 2, 3",6a3e30d505417e18ecfb3450,0.5,text,"Grounding means the answer should be supported by the retrieved context. Checking claims, sources, and not-in-corpus behavior helps test this. A fluent answer can still be wrong or invented, so option D is incorrect."
+mcmc,text,"Which of the following can be points of failure in a RAG system?",,,,,,,,Poor chunking strategy,Weak embedding model,Stale vector database or missing metadata,Clear grounding rules in the system message,"1, 2, 3",6a3e30d505417e18ecfb3450,1,text,"Poor chunking, weak embeddings, and stale or badly managed vector data can all cause wrong retrieval and wrong answers. Clear grounding rules are helpful, not a failure point. Unclear grounding rules would be the failure."
+mcmc,text,"Which statements about RAG evaluation are correct?",,,,,,,,Groundedness checks whether the answer is supported by the retrieved context,Relevance checks whether the answer is related to the user question,Context relevance checks whether retrieved chunks are useful for the question,RAG evaluation is never needed if the app runs without errors,"1, 2, 3",6a3e30d505417e18ecfb3450,1,text,"Groundedness, relevance, and context relevance are important ways to evaluate a RAG system. Together, they are often discussed as the RAG Triad. Option D is wrong because an app can run without errors and still give incorrect or ungrounded answers."
+subjective,markdown,"A company sells electronic products. It has many product manuals and policy documents. The company wants to build a support assistant where customers can ask questions like:
+
+- ""What should I do if my device shows an error code?""
+- ""Is this repair covered under warranty?""
+- ""How many days will delivery take?""
+
+Write a simple explanation of how a RAG-based support assistant should work for this company.
+
+### What to include in your answer
+
+Write your answer in simple English and cover all the points below:
+
+1. What is the **document corpus** in this example?
+2. Why should the documents be split into **chunks**?
+3. Why are **embeddings** and a **vector database** needed?
+4. How does **retrieval** help before the LLM writes the answer?
+5. What should the assistant do if the answer is **not found** in the documents?
+6. Why is **groundedness** important for this support assistant?
+7. Mention any **two possible failure points** in this RAG system.
+8. Explain how the company can check answer quality using **groundedness** and **relevance**.
+
+### Expected Answer Length
+
+Write around **250 to 350 words**.
+
+### Submission Instruction
+
+- Type the answer in the answer box.",,,,,,,,,,,,,6a3e30d505417e18ecfb3450,0.5,markdown,"### Ideal Solution Walkthrough
+
+A good answer should explain the RAG flow in simple words. It should not describe RAG as a normal chatbot. It should clearly say that the assistant must first search the company's documents and then answer only from the retrieved content.
+
+The answer should mention that product manuals and policy documents form the document corpus. These documents are split into chunks because large documents are difficult to search and use directly. Each chunk is converted into embeddings and stored in a vector database so that similar chunks can be found when a customer asks a question.
+
+The answer should explain that retrieval brings the most relevant chunks before the LLM writes the final answer. If the required information is not in the retrieved documents, the assistant should politely say that it could not find the answer instead of guessing. This is important because customers may use the answer to take real action, such as claiming warranty or fixing a device.
+
+The answer should also mention two failure points, such as poor chunking, weak embeddings, stale vector database, retrieving too few or too many chunks, or unclear system message. For evaluation, groundedness checks whether the answer is supported by the retrieved context, while relevance checks whether the answer actually answers the user's question.
+
+### Sample Answer
+
+For this company, the document corpus is the collection of product manuals, warranty policies, delivery policies, and repair instructions. These are the only documents the support assistant should use to answer customer questions.
+
+The documents should be split into chunks because manuals can be very long. Smaller chunks make it easier to find the exact part that talks about an error code, warranty rule, or delivery timeline. Each chunk is converted into embeddings, which are numbers that represent the meaning of the text. These embeddings are stored in a vector database so that the system can search by meaning, not only by exact words.
+
+When a customer asks a question, the system first retrieves the most relevant chunks from the vector database. Then the LLM uses those chunks as context and writes the answer. This is better than a normal chatbot because the answer is based on company documents.
+
+If the answer is not found in the documents, the assistant should say that it could not find the answer in the provided documents. It should not guess. Groundedness is important because customers may depend on the answer for warranty, repair, or product safety decisions.
+
+Two possible failure points are poor chunking and a stale vector database. Poor chunking may hide the correct information, and a stale database may miss new or updated documents. The company can check quality using groundedness and relevance. Groundedness checks whether the answer is supported by the retrieved chunks. Relevance checks whether the answer is actually related to the customer's question."
