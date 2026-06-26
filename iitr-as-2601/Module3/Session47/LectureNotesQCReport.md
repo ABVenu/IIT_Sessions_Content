@@ -1,69 +1,62 @@
-# Lecture Notes QC Report — Agent Build Workshop
+# Lecture Notes QC Report — Lecture Notes Released.md
 
-**File reviewed:** `Lecture Notes.md`  
-**Review date:** 2026-06-20
+This report covers QC of `Lecture Notes Released.md`, produced by aligning the pre-session `Lecture Notes.md` against the actual session (Transcript + Live Topic Coverage report).
 
----
+## Alignment Summary (what changed vs Lecture Notes.md)
 
-## Iteration 1
-
-| Criterion | Rating / Result | Notes |
-|---|---|---|
-| **Content Coverage** | **5 / 5** | All metadata subtopics covered: corpus selection (reuse + BYO); ingest/chunk; embed/store in Chroma; retrieval config; context assembly; grounded generation; packaged runnable script; peer-review demo. |
-| **Creativity** | **5 / 5** | Railway enquiry display board; hostel PDF shelf; kitchen/dukaan layout; open-book exam; librarian top-k; startup demo day; corpus map on paper; test matrix as quality gate. |
-| **Structural Adherence** | **4 / 5** | `#` title; context + What you will build; Official/Simple/Real-life on new terms; step-by-step code with line comments and "How the code works"; student-facing activities; Key Takeaways; terminology table. Missing one consolidated full-file script block; sectional code only. |
-| **No Logical Mistakes** | **True** | Pipeline order ingest → retrieve → augment → generate correct; same embed model rule; force_reingest guard; grounding refusal path; Ollama/Groq routing consistent. |
-| **No Presentation Mistakes** | **False** | "### Demo script (about 5 minutes)" mentions session-adjacent duration; prompt forbids duration in student notes. |
-| **No Previous Session Number References** | **True** | Grep: no `Session N` / `S39` etc. Uses **previous** and **earlier RAG labs** only. |
-| **No Metadata/internal reference** | **True** | No audience, session duration, or internal instruction leakage. |
-
-**Expected Result:** Not met — Structural Adherence 4/5; Presentation Mistakes False.
-
-**Action:** Added complete `shop_easy_rag_app.py` monolithic script with line comments; removed "about 5 minutes" from demo heading; rephrased startup demo analogy to avoid duration wording.
+- **All 5 detailed subtopics were covered** in the session (per Live Topic Coverage), so no core content was removed.
+- **Extra content taught in the session was added**, following the LectureNotesPrompt4 style (Official Definition / In Simple Words / Real-Life Example, 3-sentence rule, single-student activities):
+  - Choosing a Vector Database (Chroma, Pinecone, FAISS, PG Vector, Qdrant)
+  - Common Points of Failure in a RAG System
+  - Handling Images in Documents — Multimodal RAG (PyMuPDF, OCR)
+  - Turning Your App into a Web Demo with Gradio (+ Streamlit, deployment/scaling awareness)
+  - Evaluating a RAG System — LLM as a Judge (groundedness, relevance, RAG Triad, Ragas)
+  - Smaller inline additions: fixed-size vs semantic chunking, top-k vs similarity threshold, keeping the vector DB updated, real-world large-manual support assistant note.
+- **Retained:** all original covered content, the complete runnable script, tables, and peer-review material. No images were present in the original notes, so none needed retaining.
+- **Excluded:** no Mentimeter / post-lecture quiz content (session protocol, not part of professional notes).
 
 ---
 
-## Iteration 2
+## QC Iteration 1
 
-| Criterion | Rating / Result | Notes |
-|---|---|---|
-| **Content Coverage** | **5 / 5** | Full coverage retained; consolidated script strengthens runnable-app subtopic; peer review checklist and test matrix complete workshop arc. |
-| **Creativity** | **5 / 5** | Analogies unchanged; workshop flow reads as build narrative not slide list. |
-| **Structural Adherence** | **5 / 5** | All prompt rules met; complete end-to-end script; 7 student-facing activities; Key Takeaways + terminology table present. |
-| **No Logical Mistakes** | **True** | Complete script matches sectional functions; corpus fallback; Chroma upsert id stability; without-RAG contrast optional path sound. |
-| **No Presentation Mistakes** | **True** | No duration/audience metadata; paragraphs ≤3 sentences; activities student-facing (no "Ask students to"). |
-| **No Previous Session Number References** | **True** | Verified via grep after edits. |
-| **No Metadata/internal reference** | **True** | "Workshop default" used as lab config label, not internal QC instruction text. |
-
-**Expected Result:** Met — all ratings ≥ 5; all boolean checks True.
-
-**Outcome:** QC passed on iteration 2.
-
----
-
-## Iteration 3 (line-limit revision)
-
-| Criterion | Rating / Result | Notes |
-|---|---|---|
-| **Content Coverage** | **5 / 5** | All metadata subtopics retained after condensing from ~1014 to ≤500 lines. |
-| **Creativity** | **5 / 5** | Analogies preserved; workshop flow tighter. |
-| **Structural Adherence** | **5 / 5** | One complete script; concepts + activities; Key Takeaways + terminology table. |
-| **No Logical Mistakes** | **True** | Pipeline unchanged; full script intact. |
-| **No Presentation Mistakes** | **True** | No duration/session-number leakage. |
-| **No Previous Session Number References** | **True** | Verified via grep. |
-| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
-
-**Expected Result:** Met — condensed to 500-line limit per user request.
-
----
-
-## Coverage Checklist (metadata subtopics)
-
-| Subtopic | Section in notes |
+| Criteria | Rating / Result |
 |---|---|
-| Choose a small document corpus (or reuse from earlier labs) | Step 1 — Choose Your Document Corpus |
-| Apply RAG flow: load and chunk documents | Step 3 — Load, Chunk, and Attach Metadata |
-| Create embeddings; store in a vector database | Step 4 — Embed and Store in Chroma |
-| Configure retrieval and assemble context for the LLM prompt | Step 5 — Configure Retrieval; Step 6 — Assemble Context |
-| Generate grounded answers from retrieved chunks only | Step 7 — Grounded Generation |
-| Package as simple runnable RAG app and demo for peer review | Step 8 — Package the Runnable RAG Application; Complete runnable script; Step 10 — Peer Review Demo |
+| Content Coverage | 5 |
+| Creativity | 5 |
+| Structural Adherence | 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference (e.g. "Keep it lite") in any part | True |
+
+**Notes:**
+- All covered subtopics present; extra-taught concepts integrated with definitions, simple explanations, and real-life examples.
+- New code snippets (Gradio interface, groundedness judge) include line-by-line comments and a "How the code works" list, per guidelines.
+- Activities are single-student and student-facing (no "Ask students to…").
+- References to other sessions use only "previous"/"next" — verified, no session numbers.
+- No Mentimeter/quiz/metadata leakage found.
+
+**Result:** All criteria meet the expected bar (all ratings = 5, all booleans = True).
+
+---
+
+## QC Iteration 2
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 |
+| Creativity | 5 |
+| Structural Adherence | 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference (e.g. "Keep it lite") in any part | True |
+
+**Re-check focus:**
+- Re-verified the document flows smoothly with connecting sentences between original and newly added sections.
+- Confirmed terminology table updated with new terms (vector DB options, PyMuPDF, OCR, Gradio/Streamlit, LLM-as-a-Judge, groundedness, relevance, RAG Triad, Ragas).
+- Confirmed Key Takeaways now reflect evaluation and the extra concepts while staying at 5 bullets.
+- Code blocks are fenced correctly; tables render correctly; headings are direct (no "Part 1/Section A").
+- No paragraph exceeds the 3-sentence rule in the newly added sections.
+
+**Result:** Passed. All ratings = 5, all booleans = True. No further improvisation required.
