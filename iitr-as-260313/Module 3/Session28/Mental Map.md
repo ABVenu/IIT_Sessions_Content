@@ -15,7 +15,6 @@ flowchart TB
   end
 
   subgraph Future["Where This Leads"]
-    F3["<b>Current Module Path</b><br/>Hands-On Single-Agent Development<br/><i>[Agents + RAG]</i><br/>AgentExecutor, memory, retrieval tools, evaluation"]
     F4["<b>Upcoming Module</b><br/>Multi-Agent Collaboration and Deployment Strategy<br/><i>[Automation + Crews]</i><br/>n8n, CrewAI, AutoGen, hosted agents"]
     F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>End-to-end autonomous system"]
   end
@@ -25,8 +24,7 @@ flowchart TB
   CM ==>|&nbsp;Action Layer&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
-  CS ==>|&nbsp;Next Steps&nbsp;| F3
-  F3 ==>|&nbsp;Next Module&nbsp;| F4
+  CS ==>|&nbsp;Next Module&nbsp;| F4
   F4 ==>|&nbsp;Capstone Prep&nbsp;| F5
 
   classDef previous fill:#eef6ff,stroke:#4b83c3,stroke-width:2px,color:#0f2540;
@@ -37,6 +35,6 @@ flowchart TB
   class M1,M2,CM previous;
   class CS current;
   class CV,RV value;
-  class F3,F4,F5 future;
+  class F4,F5 future;
   linkStyle default stroke-width:3px;
 ```
