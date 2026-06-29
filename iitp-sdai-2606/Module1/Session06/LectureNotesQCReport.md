@@ -64,3 +64,49 @@
 **Action Taken:** Trimmed notes from 763 lines to **490 lines** (450–500 target). Removed redundant examples (loan approval, bubble comparison, duplicate 2D scan, verbose Big-O subsections) while retaining all metadata subtopics: nested conditionals, nested loops, 2D data, combinations, best/average/worst case, O(1)/O(n)/O(n²) identification, activities, exercises, takeaways, and reference table.
 
 **QC Status: PASSED**
+
+---
+
+## Post-Session Released Notes QC Iteration 1
+
+| Criteria | Result |
+|----------|--------|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References in Student Notes | True |
+
+**Verification Summary:**
+- Released notes align with the covered learning objectives: nested conditionals, nested loops, 2D data and combinations, best/average/worst case intuition, and O(1)/O(n)/O(n²) identification.
+- Live-covered extras were included professionally: dictionary recap, readability guidance for avoiding unnecessary nesting, `break`/`continue`, `enumerate()`, nested `while` loops, O(n³), and fixed-size inner-loop nuance.
+- Prep-only or protocol content such as Mentimeter/post-lecture quiz details was not included in the released notes.
+- Existing relevant images from the original lecture notes were retained.
+- Notes start directly with the lecture title and do not include duration, target audience, internal instructions, or previous session numbering.
+
+**QC Status: PASSED**
+
+---
+
+## Post-Session Released Notes QC Iteration 2
+
+| Criteria | Result |
+|----------|--------|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References in Student Notes | True |
+
+**Second-Pass Verification:**
+- Rechecked all code blocks for complete runnable structure, simple comments, indentation consistency, and beginner-friendly explanations.
+- Confirmed Big-O logic: direct list access as O(1), single loop sum as O(n), nested multiplication as O(n²), three nested loops as O(n³), and fixed-size inner loop not changing dominant growth.
+- Confirmed all tables render correctly and the final quick-reference table is present.
+- Confirmed no line contains instructor-only phrasing, quiz protocol, metadata, or session number references.
+- Confirmed notes remain student-facing, professional, and aligned to the live transcript rather than unused pre-session examples.
+
+**QC Status: PASSED**
