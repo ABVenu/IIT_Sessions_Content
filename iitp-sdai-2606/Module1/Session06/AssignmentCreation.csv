@@ -1,0 +1,184 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+"mcsc","markdown","A **metro station** checks passengers in two steps: first whether they have a valid ticket, and only then whether they are carrying an oversized bag.
+
+Which term best describes putting one `if` block inside another `if` block?","","","","","","2","","Nested loop","Nested conditional","Dictionary lookup","Constant time access","","6a42134ae269df2259a1b662","0","markdown","When one conditional block is written inside another, it is called a **nested conditional**. The inner check runs only after the outer check passes. Option 1 is incorrect because a nested loop involves loops inside loops, not `if` blocks. Option 3 is incorrect because dictionary lookup is about fetching a value using a key. Option 4 is incorrect because constant time access is a Big-O idea, not a control-structure pattern."
+"mcsc","markdown","In a **school assembly**, the principal calls each class one by one. For every class, the teacher reads every roll number in that class.
+
+What does a **nested loop** mean?","","","","","","1","","One loop is written inside another loop","One `if` is written inside another `if`","A loop can run only once in a program","A loop must always use `while`","","6a42134ae269df2259a1b662","0","markdown","A **nested loop** means a loop is placed inside another loop. For each iteration of the outer loop, the inner loop usually runs completely. Option 2 is incorrect because that describes nested conditionals, not nested loops. Option 3 is incorrect because loops are meant to repeat work; they are not limited to one run. Option 4 is incorrect because nested loops can use `for`, `while`, or a mix of both."
+"mcsc","markdown","A **cinema hall** stores seat data in a 2D list:
+
+```python
+hall = [
+    [""A1"", ""A2"", ""A3""],
+    [""B1"", ""B2"", ""B3""],
+    [""C1"", ""C2"", ""C3""],
+]
+```
+
+What will `hall[2][1]` print?","","","","","","3","","`A2`","`B2`","`C2`","`C3`","","6a42134ae269df2259a1b662","0","markdown","In a 2D list, the first index is the **row** and the second index is the **column**. `hall[2][1]` means row 2, column 1, which is `""C2""`. Option 1 is incorrect because that is row 0, column 1. Option 2 is incorrect because that is row 1, column 1. Option 4 is incorrect because that is row 2, column 2."
+"mcsc","markdown","A **food delivery app** stores dish prices in a dictionary:
+
+```python
+menu = {""dosa"": 60, ""idli"": 40, ""vada"": 30}
+```
+
+Which operation is the best example of **O(1)** time?","","","","","","1","","`menu[""dosa""]`","Loop through every item in `menu`","Two nested loops over all menu items","Add every price in `menu` using one loop","","6a42134ae269df2259a1b662","0","markdown","Direct dictionary lookup using a key is treated as **constant time** on average because the program jumps directly to the required value. Option 2 and Option 4 are incorrect because one full loop over growing data is **O(n)**. Option 3 is incorrect because two nested loops over the same growing data are **O(n²)**."
+"mcsc","markdown","A **coding club** prints all coordinate pairs using:
+
+```python
+for i in range(4):
+    for j in range(5):
+        print(i, j)
+```
+
+Approximately how many lines will be printed?","","","","","","2","","9","20","4","5","","6a42134ae269df2259a1b662","0.5","markdown","The outer loop runs 4 times and the inner loop runs 5 times for each outer value. Total prints are `4 × 5 = 20`. Option 1 is incorrect because `9` would come from `3 × 3`, not `4 × 5`. Option 3 and Option 4 are incorrect because they count only one loop, not both nested loops together."
+"mcsc","markdown","While searching for a contact name in a long phone list, the name is found at the **very last position**.
+
+Which case does this represent?","","","","","","3","","Best case","Average case","Worst case","Constant case","","6a42134ae269df2259a1b662","0.5","markdown","When the target is at the end, the program does the **maximum work** needed for that search. This is the **worst case**. Option 1 is incorrect because best case is when the answer is found immediately. Option 2 is incorrect because average case is a typical middle situation, not the slowest one. Option 4 is incorrect because constant case is not a standard best/average/worst-case label here."
+"mcmc","markdown","A **bank ATM** program checks card validity first, and only then checks whether the balance is enough for withdrawal.
+
+Which statements about **nested conditionals** are correct?","","","","","","","","The inner condition runs only when the outer condition passes","An `elif` block can appear inside an outer `if` block","Python decides block structure using indentation","Nested conditionals mean the inner check must run even when the outer check fails","1, 2, 3","6a42134ae269df2259a1b662","0.5","markdown","Nested conditionals depend on the outer check passing first. Python uses indentation to show which code belongs inside which block, and `elif` can be used inside a nested structure when needed. Option 4 is incorrect because if the outer condition fails, the inner block is skipped."
+"mcmc","markdown","A **billing app** analyses different code patterns to understand performance.
+
+Which patterns are **O(n)** in the usual sense?","","","","","","","","One `for` loop adding every value in a list","`numbers[0]` on a list","One `for` loop with an `if` check inside it","Two nested `for` loops over the same list","1, 3","6a42134ae269df2259a1b662","0.5","markdown","A single loop over `n` items is **O(n)**. An `if` inside that loop does not change the overall loop count, so it remains **O(n)**. Option 2 is incorrect because direct index access is **O(1)**. Option 4 is incorrect because two nested loops over the same growing input are **O(n²)**."
+"mcmc","markdown","A **startup team** compares three programs that process customer data.
+
+Which statements about **Big-O** are correct?","","","","","","","","Two nested loops over the same input size `n` are usually **O(n²)**","Three nested loops over the same input size `n` are usually **O(n³)**","An `if` statement inside one loop automatically makes the code **O(n²)**","In complexity analysis, worst case is often the most important case to consider","1, 2, 4","6a42134ae269df2259a1b662","1","markdown","Two fully nested loops over `n` give `n × n` work, and three give `n × n × n`. Worst case shows the maximum work a program may need. A single `if` inside one loop does not by itself create quadratic growth. Option 3 is incorrect because the number of loops matters more than the presence of an `if` inside one loop."
+"mcmc","markdown","A **clothing store app** generates shirt-and-pant combinations:
+
+```python
+shirts = [""white"", ""black""]
+pants = [""black"", ""khaki"", ""gray""]
+
+for shirt in shirts:
+    for pant in pants:
+        if shirt == ""black"" and pant == ""black"":
+            continue
+        print(shirt, pant)
+```
+
+Which statements are correct?","","","","","","","","The inner loop runs completely for every shirt","`continue` skips only the current unwanted combination","`break` would stop only the inner loop where it is written","This pattern always has **O(1)** time complexity","1, 2, 3","6a42134ae269df2259a1b662","1","markdown","For each shirt, the program checks every pant. `continue` skips one pair and moves to the next pant. `break` exits the loop in which it appears, which here would be the inner loop. Option 4 is incorrect because the work grows with the number of shirts and pants, so it is not constant time."
+"subjective","markdown","**Meera** manages weekend bookings for a **community cinema hall**. The hall seating chart is stored as a **2D list**, where:
+
+- `""O""` means the seat is **open**
+- `""X""` means the seat is **booked**
+
+She wants a small Python program that scans the full hall grid and reports every open seat along with the total number of open seats.
+
+### Problem Statement
+
+Write a Python program that:
+
+1. Uses this hardcoded seating chart:
+
+```python
+seats = [
+    [""O"", ""X"", ""O"", ""O""],
+    [""X"", ""X"", ""O"", ""O""],
+    [""O"", ""O"", ""O"", ""X""],
+]
+```
+
+2. Uses **nested loops** to scan every row and every column.
+3. Uses a **conditional** to check whether a seat is open (`""O""`).
+4. Prints each open seat on its own line in this format:
+
+```text
+Open seat at row 0, col 0
+```
+
+5. Keeps a **counter outside both loops** to count open seats.
+6. Prints the final total in this format:
+
+```text
+Total open seats: 8
+```
+
+### Sample Output
+
+```text
+Open seat at row 0, col 0
+Open seat at row 0, col 2
+Open seat at row 0, col 3
+Open seat at row 1, col 2
+Open seat at row 1, col 3
+Open seat at row 2, col 0
+Open seat at row 2, col 1
+Open seat at row 2, col 2
+Total open seats: 8
+```
+
+### Constraints
+
+- Use nested `for` loops with `range(len(...))` or direct row/column iteration.
+- Do not use external libraries.
+- Place the open-seat counter **outside both loops**.
+- Reset logic is not needed because you are counting the full grid once.
+- Add at least **one comment** (`#`) explaining what your program does.
+- Write your complete program in [OneCompiler Python](https://onecompiler.com/python).
+
+### Submission Instruction
+
+1. Open [https://onecompiler.com/python](https://onecompiler.com/python) and create a new Python file.
+2. Write your complete program in the editor, then click **Run** and verify the output.
+3. Click the **Save** button at the top right.
+4. Enter your **assignment name**, set visibility to **Public**, and save.
+5. Click the **Share** button, copy the link, and submit that link in the answer box on the LMS.
+
+![Step - 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5b930478-03c2-4255-a724-d0990da5e4f4/C0AFXttOJJhW3o1S.png)
+
+![Step-2](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/c817d308-66ca-4b5a-8579-db26951ad1a2/PGcKY2hqUQgysgPo.png)","","","","","","","","","","","","","6a42134ae269df2259a1b662","0.5","markdown","### Step-by-step Walkthrough
+
+1. Store the 2D seating chart in a variable named `seats`.
+2. Create `open_count = 0` before both loops so the counter is not reset incorrectly.
+3. Use an outer loop for rows and an inner loop for columns.
+4. Check whether `seats[row][col] == ""O""`.
+5. If the seat is open, print its position and increase `open_count` by 1.
+6. After both loops finish, print the final total.
+
+### Reference Solution — `cinema_open_seats.py`
+
+```python
+# Scan a cinema hall seating chart and count open seats
+
+# Hardcoded 2D seating chart
+seats = [
+    [""O"", ""X"", ""O"", ""O""],
+    [""X"", ""X"", ""O"", ""O""],
+    [""O"", ""O"", ""O"", ""X""],
+]
+
+# Counter must stay outside both loops
+open_count = 0
+
+# Outer loop scans each row
+for row in range(len(seats)):
+    # Inner loop scans each column in the current row
+    for col in range(len(seats[row])):
+        # Check whether the current seat is open
+        if seats[row][col] == ""O"":
+            # Print the open seat position
+            print(f""Open seat at row {row}, col {col}"")
+
+            # Increase the open-seat counter
+            open_count = open_count + 1
+
+# Print the final total after scanning the full grid
+print(""Total open seats:"", open_count)
+```
+
+### Sample Verification
+
+For the given grid:
+
+- Row 0 has 3 open seats
+- Row 1 has 2 open seats
+- Row 2 has 3 open seats
+
+Total open seats = `3 + 2 + 3 = 8`
+
+### Alternative Approaches
+
+- Loop directly with `for row_index, row in enumerate(seats):` and `for col_index, seat in enumerate(row):` if you want index and value together.
+- Use `open_count += 1` instead of `open_count = open_count + 1` for a shorter update style.
+- Print using comma-separated `print()` instead of an f-string if you prefer the basics-only style."
