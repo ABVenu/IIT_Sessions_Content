@@ -1,0 +1,163 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"**Meera** builds a chatbot that answers **20 FAQs from a single PDF** of company timings. The PDF rarely changes and the bot needs only one retrieval tool plus a reply loop.
+
+Which architecture fits **best** for this use case?",,,,,,1,,**Single-agent** — the workflow is simple and one loop is enough,"Multi-agent with separate research, writer, review, and editing agents",Collaborative workflow with an orchestrator and bidirectional loops,Event-driven microservices with ten independent agents,,6a433dbdb02ffdc283b4ddbb,0,markdown,"A is correct because simple, straightforward use cases where one agent with a few tools meets the need should stay **single-agent**.
+
+B, C, and D are incorrect because they over-engineer a small FAQ bot — unnecessary handoffs, monitoring, and complexity."
+mcsc,markdown,"A startup wants an automated **blog pipeline**: research facts, draft articles, review accuracy, edit tone, and publish. Each step uses **different logic** and the team wants to **change review rules** without retesting the entire system.
+
+What is the **main reason** to prefer a **multi-agent** design here?",,,,,,2,,Multi-agent always runs faster than single-agent for every task,**Specialized agents** let each role change independently — easier testing and safer updates per step,Single-agent systems cannot call HTTP APIs,Multi-agent means you never need an orchestrator,,6a433dbdb02ffdc283b4ddbb,0,markdown,"B is correct because role-based agents follow **Single Responsibility** — update the review agent alone without touching research or writing code, and retest only that agent.
+
+A is incorrect because multi-agent can add latency; speed is not guaranteed. C is incorrect because single agents can call tools over HTTP. D is incorrect because complex multi-agent flows often need an orchestrator."
+mcsc,markdown,"In a content-writing pipeline, the **research agent** finishes and passes a structured packet to the **writer agent**.
+
+What is this transfer called?",,,,,,1,,**Handoff** — output of one agent becomes input of the next,Webhook — external payment gateway calling your server,DELETE request — removing a resource from a database,Parallelization — running all agents at the same time always,,6a433dbdb02ffdc283b4ddbb,0,markdown,"A is correct because a **handoff** (or handoff point) is where one agent passes its **result** forward so the next agent can continue the workflow.
+
+B is incorrect because webhooks are external HTTP callbacks on events — not inter-agent data passing. C is incorrect because DELETE is an HTTP method, unrelated to agent transfers. D is incorrect because parallelization applies only when tasks are independent — research must finish before writing in this chain."
+mcsc,markdown,"An **AI travel agent** needs to check flight prices on MakeMyTrip and send a confirmation email through an email API. Both calls happen over the internet.
+
+Why does the agent rely on **HTTP** for these tool calls?",,,,,,2,,HTTP is only used for writing Python code locally,**HTTP is the standard protocol** for client-server communication over the network — agents act as clients calling external APIs,HTTP replaces the need for any LLM in agentic systems,Agents never communicate with servers — only with users in chat,,6a433dbdb02ffdc283b4ddbb,0,markdown,"B is correct because agents take actions via **tool calls**; network calls to weather APIs, databases, email services, and other agents typically use **HTTP** request/response.
+
+A is incorrect because HTTP is a networking protocol, not a local coding format. C is incorrect because HTTP carries requests; the LLM still reasons and plans. D is incorrect because agents routinely call external systems, not only chat replies."
+mcsc,markdown,"**Arjun** cancels an **Amazon order** from his account history. The order row stays visible with status changed to **""Cancelled""**.
+
+Which CRUD operation and HTTP method **best** describe this action?",,,,,,2,,**Delete (DELETE)** — the order row is removed from the database entirely,**Update (PUT)** — the order status field changes; the record usually remains in history,Create (POST) — a brand-new order is placed,Read (GET) — only viewing the catalog without changes,,6a433dbdb02ffdc283b4ddbb,0.5,markdown,"B is correct because cancel order typically **updates status** to cancelled — the order history remains. That is an **update**, not a true delete.
+
+A is incorrect because most e-commerce systems keep cancelled orders in history. C is incorrect because placing a new order is create/POST, not cancel. D is incorrect because GET reads data without modifying status."
+mcsc,markdown,"**BlogNova** runs agents in fixed order: **Research → Writer → Review → Publish**. Data flows one way unless the product team redesigns the pipeline.
+
+Which workflow pattern is this?",,,,,,1,,**Sequential multi-agent pipeline** — agents run in a defined order with forward handoffs,Collaborative workflow — writer and researcher loop bidirectionally by default,Single-agent with no handoffs,Webhook — Razorpay calling your server after payment,,6a433dbdb02ffdc283b4ddbb,0.5,markdown,"A is correct because a fixed A → B → C → D chain with one-directional flow is a **sequential pipeline**.
+
+B is incorrect because collaborative allows agents to send work **back** for revision — not the default here. C is incorrect because multiple named agents with handoffs is multi-agent, not single. D is incorrect because webhooks are external HTTP callbacks, not internal agent ordering."
+mcmc,markdown,"A team compares **single-agent** vs **multi-agent** architecture for a growing product.
+
+Which statements are **correct**?",,,,,,,,A single agent doing hundreds of responsibilities can become a **bottleneck** and **hard to debug** at scale,Multi-agent should be used **only when** complexity justifies multiple specialists — not for every small use case,Multi-agent always eliminates the need to test any agent after changes,**Parallelization** of agent tasks is possible only when those tasks are **not dependent** on each other's outputs,"1, 2, 4",6a433dbdb02ffdc283b4ddbb,0.5,markdown,"A, B, and D are correct — single-agent limits include bloat and debugging pain; multi-agent is justified by complexity; parallel work requires **independent** tasks.
+
+C is incorrect because you still must test agents when their logic changes — multi-agent reduces **full-system** retesting scope, not all testing."
+mcmc,markdown,"An agent tool sends an **HTTPS POST** request to create a support ticket. The server responds with status **401**.
+
+Which statements about **HTTP requests and responses** are **correct**?",,,,,,,,**POST** typically maps to **Create** in CRUD — adding a new ticket resource,**401 Unauthorized** suggests an **authentication** problem — missing or invalid token/credentials,**Headers** often carry authentication tokens after login,**401** always means the server crashed — same as **500 Internal Server Error**,"1, 2, 3",6a433dbdb02ffdc283b4ddbb,0.5,markdown,"A, B, and C are correct — POST creates resources; 401 = auth failure; headers commonly store **Authorization** tokens.
+
+D is incorrect because **500** indicates server-side failure; **401** is a client auth issue — different fixes."
+mcmc,markdown,"**GreenMobility** publishes EV adoption articles. The **writer agent** receives research output with **confidence: low** and asks the **research agent** to gather more sources before drafting. An **orchestrator** decides when to loop back.
+
+Which statements about **collaborative workflows** are **correct**?",,,,,,,,Agents can **interact bidirectionally** — not only strict one-way pipelines,"The **orchestrator** manages **which agent runs when** — it is a workflow manager, **not** a research/writing agent itself",Collaborative workflows are always faster and cheaper than sequential pipelines,Collaborative patterns can **improve output quality** through feedback loops but may use **more time and resources**,"1, 2, 4",6a433dbdb02ffdc283b4ddbb,1,markdown,"A, B, and D are correct — collaborative flows allow loops (writer → researcher); orchestrator coordinates timing; trade-off is higher quality vs higher cost/latency.
+
+C is incorrect because collaborative workflows are typically **slower and more resource-intensive**, not always faster."
+mcmc,markdown,"**CourseKart** sells online courses with **Razorpay** payments. When payment succeeds or fails, Razorpay should notify CourseKart's backend automatically so agents can update enrollment and send email.
+
+Which statements about **triggers, events, and webhooks** are **correct**?",,,,,,,,A **trigger** is a signal that **starts** a workflow — e.g. payment failure starting a retry-payment chain,An **event** is a **record** that something happened — e.g. `order_created` stored with timestamp,A **webhook** is an **HTTP request** from one system to another when an external event occurs — Razorpay **POSTing** payment status to CourseKart's API URL,A webhook means CourseKart must poll Razorpay every five seconds manually — no HTTP call from Razorpay,"1, 2, 3",6a433dbdb02ffdc283b4ddbb,1,markdown,"A, B, and C are correct — triggers start automation; events are logged occurrences; webhooks push notifications via HTTP — Razorpay calls **your** server.
+
+D is incorrect because polling is the opposite of webhooks — webhooks are **server-initiated callbacks** when events fire."
+subjective,markdown,"Answer **all eight questions** below in your own words. Write in clear English paragraphs or bullet points. **No code, no JSON blocks, and no Google Doc link** is required — type everything directly in the LMS answer box.
+
+Keep each answer between **40 and 120 words** unless a question asks for a specific count.
+
+---
+
+**Q1.** **BlogKart** wants a bot that answers **15 FAQs from one company policy PDF**. The PDF changes once a year.
+
+Explain the **difference between a single-agent architecture and a multi-agent architecture** in your own words. Then state which approach fits **BlogKart's FAQ bot better** and give **two reasons** for your choice.
+
+---
+
+**Q2.** A team builds an automated **content pipeline**: research a topic → write a draft → review facts → edit tone → publish.
+
+List **four problems** that can happen if all five steps are handled by **one single agent** instead of separate specialized agents. Use terms such as **bloat**, **debugging**, **testing**, or **bottleneck** where they apply.
+
+---
+
+**Q3.** What is **multi-agent decomposition**?
+
+Using the **HR recruitment platform** idea (review resumes → email shortlisted candidates → schedule interviews → collect feedback → send offer/rejection), break the workflow into **four sub-tasks**. For each sub-task, write **one agent role name** and **one line** describing what that agent owns.
+
+---
+
+**Q4.** What is a **handoff** (or **handoff point**) in a multi-agent system?
+
+Describe **without writing JSON code** what information the **research agent** should pass to the **writer agent** when the topic is *""EV adoption in India""*. Mention **at least four** useful fields (e.g. task summary, confidence level, sources) and explain why structured handoffs are better than passing one vague sentence.
+
+---
+
+**Q5.** Compare **sequential multi-agent pipeline** and **collaborative multi-agent workflow**.
+
+Your answer must cover:
+- How data flows in a **sequential** pipeline
+- How agents can interact in a **collaborative** workflow
+- **One situation** where sequential is enough
+- **One situation** where collaborative is the better fit
+
+---
+
+**Q6.** What is an **orchestrator** in a multi-agent system?
+
+Explain whether the orchestrator **is or is not** the same as a research agent or writer agent. In **two sentences**, describe what happens when the **writer agent** receives research output with **low confidence** in a collaborative design.
+
+---
+
+**Q7.** An AI agent needs to **read weather data**, **place an order on an e-commerce site**, and **update a Google Sheet**.
+
+1. Why do agents use **HTTP** for these actions?
+2. What is the **difference between HTTP and HTTPS**? Give **one example** where HTTPS is required.
+3. A user **cancels an Amazon order** but the order still appears in history with status **""Cancelled""**. Is this **Create, Read, Update, or Delete**? Which **HTTP method** (GET, POST, PUT, or DELETE) best matches this action? Explain briefly.
+
+---
+
+**Q8.** **CoursePay** sells online courses. Customers pay through a payment gateway (like Razorpay). When payment succeeds or fails, CoursePay's backend must react automatically.
+
+In your own words, explain:
+
+1. What is a **trigger**? Give **one CoursePay example**.
+2. What is an **event**? Give **one example** CoursePay should **store in a database log**.
+3. What is a **webhook**? Who is the HTTP **client** and who is the **server** when the payment gateway notifies CoursePay?
+4. How is a webhook **different from** CoursePay manually refreshing the payment page every few seconds?
+
+---
+
+Type your answers to **all eight questions** in the answer box in the LMS. Label each answer clearly (**Q1**, **Q2**, … **Q8**). Write in English only — **no code** required.",,,,,,,,,,,,,6a433dbdb02ffdc283b4ddbb,0.5,markdown,"**Q1 — Single-agent vs multi-agent**
+
+- **Difference:** **Single-agent** = one agent handles the full workflow end to end. **Multi-agent** = several **specialized agents**, each owning one primary role, passing work forward or collaborating.
+- **BlogKart choice:** **Single-agent** — FAQ from one small PDF is simple; one retrieval tool + reply loop is enough.
+- **Reasons:** (1) Use case is **straightforward** — multi-agent adds unnecessary orchestration. (2) No need to split research/write/review roles for static FAQs.
+
+**Q2 — Single-agent problems at scale**
+
+Any four of: **Bloat** — logic becomes huge; **Debugging pain** — hard to trace failures; **Testing cost** — small change forces retesting entire agent; **Bottleneck / single point of failure**; **Latency** when all steps run in one agent.
+
+**Q3 — Decomposition + HR roles**
+
+**Decomposition:** breaking a complex use case into **smaller, manageable sub-tasks**, each with clear ownership.
+
+Example rows: Resume screening → `screening_agent` → shortlist candidates; Shortlist email → `email_agent` → send congratulations mail; Interview scheduling → `scheduling_agent` → match availability; Final decision → `decision_agent` → offer or rejection.
+
+**Q4 — Handoff**
+
+**Handoff:** passing one agent's **output** as the next agent's **input** at a defined step.
+
+Useful fields: **task/topic**, **factual result/summary**, **sources**, **confidence**, **assumptions**, **missing_information**. Structured handoffs give audit trail and prevent the writer from inventing facts on weak research.
+
+**Q5 — Sequential vs collaborative**
+
+- **Sequential:** Fixed order A → B → C; one-directional handoffs (e.g. research → write → publish).
+- **Collaborative:** Agents interact **bidirectionally** — writer can return work to researcher.
+- **Sequential enough:** Simple HR shortlist → email → schedule in one pass.
+- **Collaborative better:** High accuracy bar — writer rejects **low-confidence** research.
+
+**Q6 — Orchestrator**
+
+**Orchestrator:** workflow manager (not a content agent) that decides **which agent runs when** and handles loops.
+
+**Not** a research or writer agent. When confidence is low, writer signals the flow to return to **research agent** for more sources before drafting continues.
+
+**Q7 — HTTP, HTTPS, CRUD**
+
+1. **HTTP:** standard **client-server protocol** for network tool calls.
+2. **HTTPS:** encrypted HTTP; required for login, payments, personal data.
+3. **Cancel order:** **Update (U)** with **PUT** — status changes; row stays in history.
+
+**Q8 — Trigger, event, webhook**
+
+1. **Trigger:** starts a workflow — e.g. **payment_failed** → retry workflow.
+2. **Event:** stored record — e.g. `payment_success` with user ID and timestamp.
+3. **Webhook:** HTTP request from payment gateway (**client**) to CoursePay API (**server**).
+4. **Vs polling:** Webhook is **push** when event fires; polling repeatedly asks *""done yet?""*"
