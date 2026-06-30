@@ -71,3 +71,54 @@
 | **No Metadata/internal reference** | **True** | Confirmed. |
 
 **Outcome:** QC passed on iteration 2 — expected QC result achieved.
+
+---
+
+# Lecture Notes QC Report — Open-Source LLMs (Released Alignment)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-06-30  
+**Iteration:** 3  
+**Basis:** Live Topic Coverage report + session transcript alignment pass
+
+---
+
+## QC Criteria
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Aligned to what was taught: paid vs open-source models; LLM benchmarks; cloud vs local trade-offs (latency, privacy); Azure Foundry overview; Ollama install/validate; model library sizing; CLI pull/run; Python via **OpenAI-compatible** client (primary in-class pattern); Ollama Cloud + Groq vs Ollama Cloud speed compare; `.env` / `.gitignore` / Groq + Ollama keys. Removed uncovered dual-mode `USE_CLOUD` capstone and identical local-vs-cloud side-by-side script. Native `ollama import chat` kept as optional one paragraph (briefly shown in class). |
+| **Creativity** | **5 / 5** | Netflix vs DVD; board exam mark sheets; Swiggy vs hostel kitchen; Tesla/bank privacy; sticky note vs whiteboard; scooter vs truck retained; timed cloud compare activity added. |
+| **Structural Adherence** | **5 / 5** | `#` title; context + LO bullets; Official/Simple/Real-life on new terms; full Python with per-line comments + "How the code works"; student-facing activities; Key Takeaways; terminology table; four retained diagram images (dual-mode toggle image removed — topic not taught). |
+| **No Logical Mistakes** | **True** | OpenAI client → localhost for local, `https://ollama.com/v1` + key for cloud; model must be pulled; tiny models trade quality for speed; `.env` excluded from Git; Groq/Ollama Cloud compare framed as provider speed demo, not false local-vs-cloud capstone claim. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no Mentimeter/poll content; professional documentation tone; paragraphs scannable. |
+| **No Previous Session Number References** | **True** | Uses **previous session** only; no `Session N` in student text. |
+| **No Metadata/internal reference** | **True** | No internal alignment labels or instructor-only spillover in student text. |
+
+---
+
+## Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
+
+**Outcome:** QC passed on iteration 3 — `Lecture Notes Released.md` ready for student release.
+
+---
+
+## Alignment Changes (vs pre-session `Lecture Notes.md`)
+
+| Item | Action |
+|---|---|
+| Dual-mode `ask_ollama.py` + `USE_CLOUD` | **Removed** — not demonstrated live |
+| Local vs cloud identical-prompt capstone | **Removed** — class compared Groq vs Ollama Cloud instead |
+| Python local calling style | **Updated** — OpenAI-compatible client (in-class preference) |
+| Native `from ollama import chat` as primary | **Demoted** to optional note |
+| Paid vs open-source + benchmarks | **Added** — substantial class time |
+| Azure Foundry enterprise path | **Added** |
+| Ollama model library tour + sizing | **Added** |
+| Groq vs Ollama Cloud speed section | **Added** |
+| Dual-mode diagram (`session37-09`) | **Removed** |
+| Poll / Mentimeter | **Excluded** — session protocol, not notes |
+
+**Approximate line count:** ~430 lines.
