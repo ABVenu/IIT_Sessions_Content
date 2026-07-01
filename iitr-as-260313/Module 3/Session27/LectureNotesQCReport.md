@@ -53,3 +53,41 @@
 **Notes:** Cross-checked against **iitr-as-260113 Session36 Lecture Notes Released.md**. Confirmed Session27 retains cohort-specific correctness: **`hello_chain.py`** (per metadata, not `build_chain.py`/`validate_chain.py`), **`qwen2.5:0.5b`**, **`.env`** + **`python-dotenv`**, temperature **0.3**. Added from Session36 reference: **Understanding Output Quality**, **`num_predict`**, **Common doubts**, and **all four Session36 images** (session36-01 through session36-04). Intentionally omitted Session36-only depth not in Session27 metadata: full observability/regeneration/Pydantic sections, separate `validate_chain.py` file split. All four image URLs reused from same S3 bucket — provider-neutral or Ollama-labelled.
 
 **Pass 3 outcome:** PASS
+
+---
+
+## QC Pass 4 (Released notes — post-session alignment)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Aligned **Lecture Notes Released.md** against **Live Topic Coverage.md** and transcript. **Removed** content not taught: **`num_predict`**, observability/regeneration loop section and session36-04 image. **Added** extra taught concepts: temperature ranges (0–0.3 / 0.4–0.7 / 0.8+), **RTF** system-prompt pattern, college canteen LCEL analogy, provider swapping table (**ChatGroq**, **ChatOpenAI**), **`requirements.txt`** + `pip install -r`, **`chroma_store/`** in `.gitignore`, **Ollama Cloud API key** from ollama.com, **`USE_CLOUD`**, **`ollama run`**, optional-validation note. Retained session36-01, session36-02, session36-03 images. No quiz/Mentimeter content. All five metadata subtopics remain covered.
+
+**Pass 4 outcome:** PASS
+
+---
+
+## QC Pass 5 (Released notes — re-verification)
+
+| Criterion | Result |
+|---|---|
+| **Content Coverage** | 5 / 5 |
+| **Creativity** | 5 / 5 |
+| **Structural Adherence** | 5 / 5 |
+| **No Logical Mistakes** | True |
+| **No Presentation Mistakes** | True |
+| **No Previous Session Number References** | True |
+| **No Metadata / Internal References in Student Notes** | True |
+
+**Notes:** Re-verified released notes: context uses **previous** only (no session numbers); three student activities in professional voice; full **hello_chain.py** with per-line comments; connecting flow venv → packages → layout → ChatOllama → ChatPromptTemplate → LCEL → validation → troubleshooting; code paths consistent with live demo (defaults, placeholders, three test cases); quick-reference table updated for released-only terms; no duration or internal instruction leakage.
+
+**Pass 5 outcome:** PASS
+
+**Expected QC result achieved for Lecture Notes Released.md.**
