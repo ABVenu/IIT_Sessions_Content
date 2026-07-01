@@ -1,0 +1,224 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Rahul is building a LangChain project on his laptop while also maintaining another Python project that needs different package versions. His classmate asks why he created a `venv` instead of installing everything into system Python. What is the best explanation?,,,,,,1,,A virtual environment isolates project-specific packages so different projects do not conflict on the same machine,A virtual environment permanently removes global Python from the laptop,A virtual environment is required only for JavaScript projects,A virtual environment replaces the need for `pip`,,6a44c83cf0eb000cdb434fa2,0,markdown,"A `venv` gives each project its own isolated Python and `site-packages` folder, which prevents version conflicts between projects. Option B is wrong because global Python is not removed. Option C is wrong because `venv` is a Python feature. Option D is wrong because `pip` is still used inside the venv to install packages."
+mcsc,markdown,A team is preparing a LangChain worktree for GitHub. They want teammates to reproduce configuration without leaking private keys. Which file should **not** be committed to the repository?,,,,,,1,,`.env`,`.env.example`,`requirements.txt`,`hello_chain.py`,,6a44c83cf0eb000cdb434fa2,0,markdown,"The `.env` file may contain secrets such as API keys and machine-local settings, so it belongs in `.gitignore`. `.env.example` is a safe committed template with placeholders. `requirements.txt` and `hello_chain.py` are normal project files that should be shared with the team."
+mcsc,markdown,"In a LangChain script, the developer wants configuration values from a `.env` file to be available through `os.environ` before building the chain. Which package provides `load_dotenv()` for this purpose?",,,,,,1,,`python-dotenv`,`langchain-core`,`langchain-ollama`,`venv`,,6a44c83cf0eb000cdb434fa2,0,markdown,"`python-dotenv` loads key-value pairs from a `.env` file into the environment so they can be read with `os.environ.get(...)`. `langchain-core` provides prompts, parsers, and LCEL. `langchain-ollama` provides `ChatOllama`. `venv` creates isolated environments but does not load `.env` files."
+mcsc,markdown,A developer runs `result = chain.invoke({...})` on a chain defined as `prompt | llm`. The printed value looks like an `AIMessage` object instead of readable text. What is the most appropriate fix?,,,,,,1,,Add `StrOutputParser()` at the end of the chain,Remove `ChatOllama` from the chain,Delete the `.env` file,Change `temperature` to `0` only,,6a44c83cf0eb000cdb434fa2,0,markdown,"Without an output parser, the chain returns the raw model response object. `StrOutputParser` extracts plain text so `invoke` returns a Python string. Removing `ChatOllama` would break the chain. Deleting `.env` or changing temperature alone does not convert the response type to a string."
+mcsc,markdown,Meera is building a chat-style prompt with a separate **system** instruction and a **human** question that uses placeholders `{topic}` and `{audience}`. Which approach is correct?,,,,,,1,,"`ChatPromptTemplate.from_messages([(""system"", ""...""), (""human"", ""..."")])`","`ChatPromptTemplate.from_template([(""system"", ""...""), (""human"", ""..."")])`","`StrOutputParser.from_messages([(""system"", ""...""), (""human"", ""..."")])`","`load_dotenv().from_messages([(""system"", ""...""), (""human"", ""..."")])`",,6a44c83cf0eb000cdb434fa2,0.5,markdown,"Role-based chat prompts with system and human messages should be built using `from_messages()`. `from_template()` is for a single string template, not a list of role tuples. `StrOutputParser` parses output; it does not build prompts. `load_dotenv()` only loads environment variables."
+mcsc,markdown,"A script defines:
+
+```python
+chain = prompt | llm | output_parser
+```
+
+and calls:
+
+```python
+chain.invoke({
+    ""topic"": ""virtual environments"",
+    ""audience"": ""beginners"",
+    ""analogy_domain"": ""hostel cupboards"",
+})
+```
+
+What is the correct order of operations inside this LCEL chain?",,,,,,1,,"Placeholders are filled in the prompt, the LLM generates a response, and the output parser returns a plain string","The output parser runs first, then the LLM, then the prompt",The `.env` file is committed to GitHub automatically,`invoke` only works when temperature is set to `1.0`,,6a44c83cf0eb000cdb434fa2,0.5,markdown,"LCEL runs left to right: `ChatPromptTemplate` fills placeholders from the input dict, `ChatOllama` calls the model, and `StrOutputParser` extracts text. Option B reverses the pipe order incorrectly. Options C and D describe behaviour that does not happen during `invoke`."
+mcmc,markdown,"A cohort is setting up a shared LangChain worktree named `langchain_worktree/`. Which practices support safe, reproducible collaboration?",,,,,,,,Add `.env` to `.gitignore`,Commit `.env.example` with the same keys as `.env` but without real secrets,Hardcode the Ollama API key directly inside `hello_chain.py`,List required packages in `requirements.txt` and install them with `pip install -r requirements.txt`,"1, 2, 4",6a44c83cf0eb000cdb434fa2,0.5,markdown,"Ignoring `.env`, sharing `.env.example`, and pinning dependencies in `requirements.txt` are standard collaborative practices. Hardcoding secrets in Python files is unsafe and makes rotation difficult, so option C should not be selected."
+mcmc,markdown,"A learner is building a minimal local chain that uses `ChatPromptTemplate`, `ChatOllama`, `StrOutputParser`, and configuration loaded from `.env`. Which packages are directly required?",,,,,,,,`langchain-core`,`langchain-ollama`,`python-dotenv`,`langchain-openai` — required even when the chain uses only local Ollama,"1, 2, 3",6a44c83cf0eb000cdb434fa2,0.5,markdown,"`langchain-core` supplies prompts, parsers, and LCEL. `langchain-ollama` supplies `ChatOllama`. `python-dotenv` loads `.env` values. `langchain-openai` is only needed when using OpenAI models, not for a local Ollama-only chain, so option D is incorrect."
+mcmc,markdown,"When `chain.invoke(input_dict)` runs on `prompt | llm | output_parser`, which statements about data flow are correct?",,,,,,,,`ChatPromptTemplate` uses keys from `input_dict` to fill placeholders such as `{topic}` and `{audience}`,`ChatOllama` sends the prepared chat messages to the configured Ollama server,`StrOutputParser` converts the model response into a plain Python string,"The pipe operator `|` executes the parser first, then the LLM, then the prompt","1, 2, 3",6a44c83cf0eb000cdb434fa2,1,markdown,"The chain flows prompt → LLM → parser. Placeholders are filled at invoke time, the model generates a response, and the parser extracts text. Option D is wrong because LCEL executes from left to right, not in reverse."
+mcmc,markdown,"A developer is tuning and validating a first LCEL chain that reads `OLLAMA_MODEL`, `OLLAMA_HOST`, and `OLLAMA_TEMPERATURE` from `.env`. Which statements are correct?",,,,,,,,Running `load_dotenv()` before `os.environ.get(...)` ensures `.env` values are available at runtime,A lower temperature such as `0.3` usually produces more focused wording than a higher temperature such as `0.9`,A simple validation check can confirm the chain output is a non-empty string,The standard way to share private API keys with teammates is to commit `.env` to GitHub,"1, 2, 3",6a44c83cf0eb000cdb434fa2,1,markdown,Configuration should be loaded before reading environment variables. Lower temperature reduces randomness; higher temperature increases creativity. Basic validation can check type and non-empty content. Option D is wrong because secrets should stay out of version control; share `.env.example` instead.
+subjective,markdown,"A campus learning app wants a small Python module that explains study topics to different student groups using one reusable LangChain pipeline. Your task is to build a single-file chain that loads Ollama settings from `.env`, uses a chat-style prompt, and returns clean text through LCEL.
+
+### Scenario
+
+The app should explain any study topic to a chosen audience using a real-life analogy domain — for example, explaining **""hash tables""** to **""first-year students""** using an analogy from **""library shelf numbers""**.
+
+### Requirements
+
+Write a Python program named `study_buddy_chain.py` that:
+
+1. Imports `os`, `load_dotenv` from `dotenv`, `ChatPromptTemplate` from `langchain_core.prompts`, `StrOutputParser` from `langchain_core.output_parsers`, and `ChatOllama` from `langchain_ollama`.
+2. Calls `load_dotenv()` before reading any configuration values.
+3. Reads these values from the environment (with the same defaults shown below if a key is missing):
+   - `OLLAMA_MODEL` default `""qwen2.5:0.5b""`
+   - `OLLAMA_HOST` default `""http://localhost:11434""`
+   - `OLLAMA_TEMPERATURE` default `""0.3""` converted to `float`
+4. Creates a `ChatPromptTemplate` using `from_messages()` with:
+   - a **system** message that sets the role as a friendly campus tutor and asks for simple language with short bullet points
+   - a **human** message with placeholders `{topic}`, `{audience}`, and `{analogy_domain}`
+5. Creates a `ChatOllama` instance using the model name, base URL, and temperature from step 3.
+6. Creates a `StrOutputParser`.
+7. Builds an LCEL chain in this exact order:
+
+```python
+chain = prompt | llm | output_parser
+```
+
+8. Defines **two** test input dictionaries inside the program (do not ask the user for input) and runs `chain.invoke(...)` for each one.
+9. For each run, prints:
+   - the input dictionary
+   - the response string
+   - whether the response is valid using a small helper that returns `False` if the response is not a `str` or is empty after `strip()`
+10. After both runs, prints how many of the two validation checks passed.
+
+### Test Inputs to Use
+
+Use exactly these two input dictionaries:
+
+```python
+test_cases = [
+    {
+        ""topic"": ""hash tables"",
+        ""audience"": ""first-year students"",
+        ""analogy_domain"": ""library shelf numbers"",
+    },
+    {
+        ""topic"": ""Git branches"",
+        ""audience"": ""beginners"",
+        ""analogy_domain"": ""parallel notebook drafts"",
+    },
+]
+```
+
+### Example Output Shape
+
+Exact wording will vary because the LLM generates the answer, but your program output should look similar to this:
+
+```text
+Input: {'topic': 'hash tables', 'audience': 'first-year students', 'analogy_domain': 'library shelf numbers'}
+Response: Hash tables help you store and find values quickly using keys. Think of library shelf numbers ...
+Valid: True
+----------------------------------------
+Input: {'topic': 'Git branches', 'audience': 'beginners', 'analogy_domain': 'parallel notebook drafts'}
+Response: Git branches let you work on separate versions of the same project ...
+Valid: True
+----------------------------------------
+Passed 2 of 2 validation checks.
+```
+
+### Constraints
+
+- Use a **single** Python file named `study_buddy_chain.py`.
+- Use only the LangChain components listed in the requirements.
+- Do not use agents, tools, memory, retrievers, or vector databases.
+- Ollama must be installed and running locally.
+- The model name in `.env` (or the default) must match a model available in `ollama list`.
+- If `qwen2.5:0.5b` is not available, pull it using:
+
+```bash
+ollama pull qwen2.5:0.5b
+```
+
+- Create a local `.env` file in the same folder with at least:
+
+```text
+OLLAMA_MODEL=qwen2.5:0.5b
+OLLAMA_HOST=http://localhost:11434
+OLLAMA_TEMPERATURE=0.3
+```
+
+- Install required packages inside your activated virtual environment:
+
+```bash
+pip install langchain-core langchain-ollama python-dotenv
+```
+
+### Submission Instruction
+
+1. Code all the points mentioned above in VS Code in a single `.py` file named `study_buddy_chain.py`.
+2. Run the code and verify that it is working.
+3. Submit the complete code in the code editor/answer box in the LMS.",,,,,,,,,,,,,6a44c83cf0eb000cdb434fa2,0.5,markdown,"```python
+# Standard library — read configuration from the environment
+import os  # Access environment variables after dotenv loads them
+
+# Load .env file into os.environ before reading any settings
+from dotenv import load_dotenv  # Reads key=value pairs from .env on disk
+
+# LangChain Core — prompt template and output parser
+from langchain_core.prompts import ChatPromptTemplate  # Chat messages with {placeholders}
+from langchain_core.output_parsers import StrOutputParser  # Returns plain string from model reply
+
+# Ollama integration — chat model wrapper
+from langchain_ollama import ChatOllama  # Runnable that talks to your Ollama server
+
+# Load .env from the same folder as this script
+load_dotenv()  # Makes OLLAMA_MODEL, OLLAMA_HOST, etc. available via os.environ
+
+# Read model settings from .env — defaults match local teaching setup
+MODEL_NAME = os.environ.get(""OLLAMA_MODEL"", ""qwen2.5:0.5b"")  # Must match ollama list
+BASE_URL = os.environ.get(""OLLAMA_HOST"", ""http://localhost:11434"")  # Local Ollama address
+TEMPERATURE = float(os.environ.get(""OLLAMA_TEMPERATURE"", ""0.3""))  # Lower = more stable demos
+
+
+def is_response_valid(response: str) -> bool:
+    # Return False if output is not a string or is empty after stripping whitespace
+    if not isinstance(response, str):  # Parser should return str — guard anyway
+        return False  # Non-string output fails validation
+    if not response.strip():  # Whitespace-only counts as empty
+        return False  # Empty output fails validation
+    return True  # Passed basic structural checks
+
+
+def build_chain():  # Factory function — returns a reusable LCEL chain
+    # Chat-style prompt with separate system and human roles
+    prompt = ChatPromptTemplate.from_messages([  # Use from_messages for role tuples
+        (""system"", (  # System instruction — how the model should behave
+            ""You are a friendly campus study tutor. ""
+            ""Explain concepts in simple language with short bullet points. ""
+            ""Keep answers practical for college learners.""
+        )),
+        (""human"", (  # User request with placeholders filled at invoke time
+            ""Explain {topic} to {audience} using one analogy from {analogy_domain}.""
+        )),
+    ])
+
+    # ChatOllama Runnable — model settings from .env block above
+    llm = ChatOllama(
+        model=MODEL_NAME,  # Tag from OLLAMA_MODEL — same as ollama list
+        base_url=BASE_URL,  # Host from OLLAMA_HOST — usually localhost:11434
+        temperature=TEMPERATURE,  # Creativity knob from OLLAMA_TEMPERATURE
+    )
+
+    output_parser = StrOutputParser()  # Last step — chain output becomes a str
+
+    # LCEL composition: template → model → parser
+    chain = prompt | llm | output_parser  # Pipe declares left-to-right order
+
+    return chain  # Caller can invoke without rebuilding the pipeline
+
+
+def main():  # Run chain and validation when executed directly
+    chain = build_chain()  # Build once — reuse for every test input
+
+    # Two distinct inputs — proves placeholders drive behaviour, not hard-coded prompts
+    test_cases = [
+        {
+            ""topic"": ""hash tables"",
+            ""audience"": ""first-year students"",
+            ""analogy_domain"": ""library shelf numbers"",
+        },
+        {
+            ""topic"": ""Git branches"",
+            ""audience"": ""beginners"",
+            ""analogy_domain"": ""parallel notebook drafts"",
+        },
+    ]
+
+    passed = 0  # Count how many inputs meet success criteria
+
+    for test_input in test_cases:  # Loop — one invoke per distinct input dict
+        result = chain.invoke(test_input)  # Run full LCEL pipeline
+        valid = is_response_valid(result)  # Check basic success criteria
+
+        print(""Input:"", test_input)  # Show which placeholders were used
+        print(""Response:"", result)  # Plain string thanks to StrOutputParser
+        print(""Valid:"", valid)  # True or False
+        print(""-"" * 40)  # Visual separator between test cases
+
+        if valid:
+            passed += 1  # Track pass rate across inputs
+
+    print(f""Passed {passed} of {len(test_cases)} validation checks."")
+
+
+if __name__ == ""__main__"":  # Standard Python entry point
+    main()  # Only runs when you execute: python study_buddy_chain.py
+```"
