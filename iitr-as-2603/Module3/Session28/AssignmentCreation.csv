@@ -1,0 +1,173 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A learner asks an LLM, ""What is the refund rule for our company's May 2026 training batch?"" The rule exists only in an internal PDF and was updated yesterday.
+
+What is the main risk if the LLM is used without giving it that PDF text?",,,,,,2,,The LLM will automatically search the company's private PDF folder.,The LLM may give a confident answer based on old or general patterns.,The LLM will always refuse to answer any policy-related question.,The LLM will permanently store the company's latest rule after one question.,,,6a45f8ff26fffe5bdfc82990,0,markdown,"The correct answer is **The LLM may give a confident answer based on old or general patterns** because an LLM does not automatically know private documents or very recent changes unless that information is provided in the prompt or retrieved through a system like RAG. It may still produce a fluent answer, but the answer can be outdated or invented.
+
+**Why others are wrong:** The LLM will not automatically search private company folders. It will not always refuse policy questions. Asking one question also does not permanently update the model's training memory."
+mcsc,markdown,"A college helpdesk wants an AI assistant to answer questions from its admission handbook. Before generating an answer, the assistant should first find the relevant handbook paragraph and add it to the prompt.
+
+Which idea best describes this approach?",,,,,,2,,Fine-tuning,Retrieval-Augmented Generation,Random text generation,Image classification,,,6a45f8ff26fffe5bdfc82990,0,markdown,"The correct answer is **Retrieval-Augmented Generation** because RAG means searching an external knowledge source, retrieving relevant context, adding it to the prompt, and then generating the answer.
+
+**Why others are wrong:** Fine-tuning changes model weights using training examples, while RAG keeps the model fixed and supplies fresh context. RAG is not random text generation, and the scenario is not about image classification."
+mcsc,markdown,"A team tries to paste a 300-page policy manual into one prompt, but the model cannot accept the full input.
+
+Which limitation are they most likely hitting?",,,,,,1,,Context window limit,File name conflict,GPU temperature limit,Password length limit,,,6a45f8ff26fffe5bdfc82990,0,markdown,"The correct answer is **Context window limit** because the context window is the maximum amount of input text a model can handle in one prompt. Large documents may exceed that limit, so RAG retrieves only the relevant portions.
+
+**Why others are wrong:** The issue is not a duplicate file name, hardware temperature, or password length problem."
+mcsc,markdown,"An assistant receives this instruction:
+
+```text
+Answer only using the Context below. If the answer is not in the Context, say you could not find it in the documents.
+```
+
+What concept does this instruction mainly support?",,,,,,1,,Grounding,Model compression,Web scraping,Tokenization only,,,6a45f8ff26fffe5bdfc82990,0,markdown,"The correct answer is **Grounding** because grounding means the answer should stay supported by the supplied context instead of inventing facts.
+
+**Why others are wrong:** The instruction does not reduce model size, scrape websites, or only tokenize text. It specifically tells the model how to use context when answering."
+mcsc,markdown,"A small RAG prototype has these actions:
+
+1. Load company FAQs.
+2. Clean and split the FAQs into chunks.
+3. Convert chunks into embeddings and store them in an index.
+4. Find chunks related to a user's question.
+5. Add those chunks to the prompt.
+6. Generate the final answer.
+
+Which option correctly maps the broad RAG flow?",,,,,,2,,Generate -> Ingest -> Retrieve -> Prepare -> Augment,Ingest -> Prepare -> Retrieve -> Augment -> Generate,Prepare -> Generate -> Ingest -> Augment -> Retrieve,Retrieve -> Generate -> Prepare -> Ingest -> Augment,,,6a45f8ff26fffe5bdfc82990,0.5,markdown,"The correct answer is **Ingest -> Prepare -> Retrieve -> Augment -> Generate**. The conceptual RAG flow is to ingest documents, prepare them by cleaning/chunking/embedding, retrieve relevant chunks, augment the prompt with those chunks, and generate the final answer.
+
+**Why others are wrong:** The other sequences put generation or retrieval before the document library has been ingested and prepared. Retrieval can only work after useful document chunks have been prepared and indexed."
+mcsc,markdown,"A product-support assistant gives a wrong warranty answer even though the correct warranty paragraph exists in the company's document library. The model wrote a fluent answer from general knowledge instead of using the retrieved paragraph.
+
+Which part of the system most directly needs improvement?",,,,,,1,,The grounding instruction in the prompt,The spelling of the product name in the final answer only,The color theme of the chat interface,The number of headings in the PDF,,,6a45f8ff26fffe5bdfc82990,0.5,markdown,"The correct answer is **The grounding instruction in the prompt** because if relevant context is available but the model ignores it, the prompt should more strongly instruct the model to answer from the provided context and admit when the answer is not present.
+
+**Why others are wrong:** Spelling alone does not fix unsupported reasoning. UI color has no effect on whether the model follows context. PDF headings may help document structure, but the described failure is mainly about using the supplied context during answer generation."
+mcmc,markdown,"A startup wants to build a company-policy assistant using RAG instead of sending the full policy handbook to the LLM for every question.
+
+Which benefits are reasonable expectations from this design?
+
+*(Select all that apply)*",,,,,,,,It can reduce token usage by sending only relevant chunks.,It can help keep private information more controlled by not pasting every document into every prompt.,It guarantees that the model will never make any mistake.,It makes policy updates easier because the document library can be updated.,It removes the need for retrieval because the LLM already knows all company documents.,"1,2,4",6a45f8ff26fffe5bdfc82990,0.5,markdown,"The correct answers are **It can reduce token usage by sending only relevant chunks**, **It can help keep private information more controlled by not pasting every document into every prompt**, and **It makes policy updates easier because the document library can be updated**. RAG can send only the most relevant chunks instead of the full handbook, expose fewer documents in each prompt, and make document updates easier than retraining a model for every policy change.
+
+**Why others are wrong:** RAG reduces guessing but does not guarantee perfect answers. Retrieval is still the key step that brings relevant company documents into the prompt."
+mcmc,markdown,"A learner creates embeddings for these sentences:
+
+- ""How do I return a product?""
+- ""What is the refund policy?""
+- ""When is the Module 3 capstone viva?""
+
+Which statements are correct?
+
+*(Select all that apply)*",,,,,,,,Each sentence becomes a numeric vector.,Similar meanings should generally be closer in vector space.,The numbers are easy for humans to read one by one as plain English.,These vectors can later be stored in a vector database.,Embeddings are used only for images and never for text.,"1,2,4",6a45f8ff26fffe5bdfc82990,0.5,markdown,"The correct answers are **Each sentence becomes a numeric vector**, **Similar meanings should generally be closer in vector space**, and **These vectors can later be stored in a vector database**. An embedding represents text as a list of numbers, and embeddings are designed so related meanings sit closer in mathematical space. RAG systems can store document or chunk embeddings in a vector database for later search.
+
+**Why others are wrong:** Individual numbers are not directly meaningful as plain English. Embeddings are commonly used for text, not only images."
+mcmc,markdown,"A company is planning the first version of an internal RAG assistant. The team wants to stay within a beginner-friendly scope and avoid building a complete production system immediately.
+
+Which design choices match that scope?
+
+*(Select all that apply)*",,,,,,,,First compare an LLM answer without document access against an answer where relevant document text is supplied in the prompt (paste or upload).,Start with a small embeddings demo that converts a few sentences into vectors.,"Build a full production RAG pipeline with advanced chunk-size tuning, top-k experiments, monitoring, and failure drills on day one.",Explain that vector databases will later store embeddings and retrieve similar chunks.,Claim that fine-tuning is always better than RAG for changing policy documents.,"1,2,4",6a45f8ff26fffe5bdfc82990,1,markdown,"The correct answers are **First compare an LLM answer without document access against an answer where relevant document text is supplied in the prompt (paste or upload)**, **Start with a small embeddings demo that converts a few sentences into vectors**, and **Explain that vector databases will later store embeddings and retrieve similar chunks**. These choices prove the core RAG idea and demonstrate embeddings without building a full production app.
+
+**Why others are wrong:** A full production RAG pipeline with advanced tuning, monitoring, and failure drills goes beyond the beginner conceptual scope. Fine-tuning is not always better than RAG for changing policy documents; RAG is usually a better starting point for changing facts in documents."
+mcmc,markdown,"A support assistant has two components:
+
+- Component X searches the document library and returns two paragraphs related to the user's question.
+- Component Y writes the final answer using those paragraphs.
+
+Which statements correctly describe this setup?
+
+*(Select all that apply)*",,,,,,,,Component X is acting as the retriever.,Component Y is acting as the generator.,Grounding means Component Y should answer from the supplied paragraphs when the fact is present there.,"If the answer is not in the supplied paragraphs, a grounded assistant should confidently invent the most likely answer.",The retrieved paragraphs are added to the prompt during the augment step.,"1,2,3,5",6a45f8ff26fffe5bdfc82990,1,markdown,"The correct answers are **Component X is acting as the retriever**, **Component Y is acting as the generator**, **Grounding means Component Y should answer from the supplied paragraphs when the fact is present there**, and **The retrieved paragraphs are added to the prompt during the augment step**. The retriever finds relevant information, the generator writes the final answer, grounding keeps the answer tied to evidence, and augmenting adds retrieved context to the prompt.
+
+**Why the other option is wrong:** A grounded assistant should not invent missing facts. It should say that the answer could not be found in the provided context or documents."
+subjective,markdown,"A support team wants to understand how text becomes vectors before they connect those vectors to a vector database. Create a single Python file named `embedding_explorer.py` that converts short support-related sentences into embeddings and prints a clean summary.
+
+## Requirements
+
+Your script must:
+
+1. Use the `sentence-transformers` library.
+2. Load the model `sentence-transformers/all-MiniLM-L6-v2`.
+3. Create a list with exactly these four sentences:
+   - `How do I return a product?`
+   - `What is the refund policy?`
+   - `When is the Module 3 capstone viva?`
+   - `Refunds are processed within seven working days.`
+4. Convert all four sentences into embeddings.
+5. For each sentence, print:
+   - The sentence text.
+   - The vector length.
+   - The first 5 numbers of the vector.
+6. Print a final 2-3 line explanation of what a RAG system would do with these vectors later.
+
+## Expected Output Format
+
+Your exact numeric values may differ slightly depending on the environment, but the structure should look like this:
+
+```text
+--- Mini Text Embedding Explorer ---
+Sentence: How do I return a product?
+Vector length: 384
+First 5 numbers: [...]
+
+Sentence: What is the refund policy?
+Vector length: 384
+First 5 numbers: [...]
+
+Sentence: When is the Module 3 capstone viva?
+Vector length: 384
+First 5 numbers: [...]
+
+Sentence: Refunds are processed within seven working days.
+Vector length: 384
+First 5 numbers: [...]
+
+--- RAG Connection ---
+Each sentence can become a document chunk in a RAG library.
+The embeddings can later be stored in a vector database.
+When a user asks a question, similar chunks can be retrieved and added to the prompt.
+```
+
+## Submission Instructions
+
+- Code all the points mentioned in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the code in the code editor/answer box in the LMS.",,,,,,,,,,,,,,6a45f8ff26fffe5bdfc82990,0.5,markdown,"## Ideal Solution Walkthrough
+
+The script loads a ready-made Hugging Face embedding model through the `sentence-transformers` library. It passes four text sentences to the model and receives one numeric vector for each sentence.
+
+The vector length should be 384 because the selected model maps each sentence into a 384-dimensional vector. The first 5 numbers are printed only as a sample because printing all 384 values for every sentence would be hard to read.
+
+In a later RAG system, these sentence vectors would be stored in a vector database. A user question would also be converted into an embedding, and the system would retrieve the closest matching chunks before adding them to the prompt.
+
+## Complete Code
+
+```python
+from sentence_transformers import SentenceTransformer  # Import the class used to load embedding models.
+
+MODEL_NAME = ""sentence-transformers/all-MiniLM-L6-v2""  # Store the model name in one place for easy reuse.
+
+sentences = [  # Create the exact text inputs required for this task.
+    ""How do I return a product?"",  # Sentence about product returns.
+    ""What is the refund policy?"",  # Sentence about a related refund topic.
+    ""When is the Module 3 capstone viva?"",  # Sentence about a different academic topic.
+    ""Refunds are processed within seven working days."",  # Sentence containing a specific refund fact.
+]  # End the sentence list.
+
+model = SentenceTransformer(MODEL_NAME)  # Load the embedding model from the Hugging Face ecosystem.
+embeddings = model.encode(sentences)  # Convert every sentence into one embedding vector.
+
+print(""--- Mini Text Embedding Explorer ---"")  # Print a clear heading for the output.
+
+for sentence, vector in zip(sentences, embeddings):  # Pair each original sentence with its vector.
+    print(""Sentence:"", sentence)  # Print the original text.
+    print(""Vector length:"", len(vector))  # Print how many numbers are inside the vector.
+    print(""First 5 numbers:"", vector[:5])  # Print a small sample instead of the full vector.
+    print()  # Add a blank line after each sentence block.
+
+print(""--- RAG Connection ---"")  # Print a heading for the concept connection.
+print(""Each sentence can become a document chunk in a RAG library."")  # Connect sentences to chunks.
+print(""The embeddings can later be stored in a vector database."")  # Explain where vectors can be stored.
+print(""When a user asks a question, similar chunks can be retrieved and added to the prompt."")  # Explain retrieval and augmentation.
+```
+
+## Alternative Approaches
+
+- The sentences can be stored in a tuple instead of a list, but a list is simpler for beginners.
+- The first 3 or first 10 vector values can be printed for exploration, but the task asks for the first 5.
+- Another embedding model can be used for experimentation, but the required solution must use `sentence-transformers/all-MiniLM-L6-v2` so that the expected vector length is 384."

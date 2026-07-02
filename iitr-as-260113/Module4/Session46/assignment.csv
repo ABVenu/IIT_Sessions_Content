@@ -1,0 +1,126 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Ravi wants to connect **Google Sheets** and **Slack** so that every new row in a sheet sends a message automatically. Which tool description best fits this job?,,,,,,1,,A workflow automation platform where you build connections on a visual canvas,A language model that writes text responses only,A database that stores only application data,A CSS framework for styling web pages,,6a4611d7179257f379bafe94,0,markdown,"A is correct because this is **workflow automation**. A platform like n8n helps you connect apps visually and run steps when conditions or events happen.
+
+B is incorrect because LLMs generate text, but they do not automatically orchestrate integrations across apps by themselves. C is incorrect because databases store data; they do not create multi-step automation flows. D is incorrect because CSS frameworks style UI; they do not implement triggers and nodes."
+mcsc,markdown,An HR team collects onboarding details using an n8n form. The workflow should start automatically when a person submits that form. Which trigger type should be used?,,,,,,4,,Trigger manually,On a schedule,On a webhook call,On form submission,,6a4611d7179257f379bafe94,0,markdown,"D is correct because when a form is submitted, the workflow starts from the **form submission trigger** (form trigger).
+
+A is incorrect because manual trigger runs only when you click execute. B is incorrect because schedule runs on time (daily, hourly, etc.). C is incorrect because webhook starts when an external system calls an HTTP endpoint."
+mcsc,markdown,"In n8n, you draw a canvas with connected blocks. What does a **node** represent?",,,,,,3,,The secret key used to log in to a service,A connector that passes data between nodes,A single step (action or decision) in the workflow,A formula used only for login,,6a4611d7179257f379bafe94,0,markdown,"C is correct because a **node** is one action or one decision step on the canvas, like send email or if condition.
+
+A is incorrect because that is **credentials**, not a node. B is incorrect because that is a **connection**. D is incorrect because login formulas are not the purpose of nodes."
+mcsc,markdown,A workflow needs to assign a grade based on input marks. The marks can change for different students. Which n8n feature is best suited to compute the grade dynamically?,,,,,,2,,Hard-code the grade in the workflow and never change it,Use an **expression** to compute the grade at runtime,Store the grade inside **credentials**,Use OAuth2 to calculate grades,,6a4611d7179257f379bafe94,0.5,markdown,"B is correct because an **expression** computes values dynamically based on the workflow input at runtime.
+
+A is incorrect because hard-coding breaks automation when grades must change per input. C is incorrect because credentials store access permissions, not computed values. D is incorrect because OAuth2 is about authorization, not runtime calculations."
+mcsc,markdown,You are running n8n locally using Docker. You want to use an API key without putting it directly into the workflow. Which statement is most correct?,,,,,,2,,"Docker is only for desktop UI themes, so environment variables do not apply",Environment variables are a common way in self-hosting to provide secrets to the running app,OAuth2 replaces the need for any environment variables in self-hosting,Credentials should be written in plain text inside workflow connections,,6a4611d7179257f379bafe94,0.5,markdown,"B is correct because in self-hosting, secrets can be provided through **environment variables** so the running container reads them at startup or runtime.
+
+A is incorrect because environment variables are a standard mechanism for configuration and secrets. C is incorrect because OAuth2 is for third-party authorization scopes; it does not eliminate secret management patterns. D is incorrect because plain-text secrets in workflows is unsafe."
+mcsc,markdown,The workflow must run every day at 10:00 AM and generate a report from yesterday's data. Which trigger is best?,,,,,,2,,Trigger manually,On a schedule,On webhook call,On app event,,6a4611d7179257f379bafe94,0.5,markdown,"B is correct because time-based execution uses a **schedule trigger**.
+
+A is incorrect because manual execution does not happen automatically every day. C is incorrect because webhook triggers on external HTTP events. D is incorrect because app event triggers on a change in a connected app (like sheet row created)."
+mcmc,markdown,Which statements are correct about why n8n is useful for automation?,,,,,,,,You can build multi-step automations by connecting nodes visually on a canvas,You can use integrations to connect many external apps (like spreadsheets and chat tools),Observability means you can inspect the input/output of nodes during execution,"n8n requires multi-agent architecture for every workflow, even for simple tasks","1, 2, 3",6a4611d7179257f379bafe94,0.5,markdown,"A, B, and C are correct — n8n helps build automations visually, provides many integrations, and provides observability per node.
+
+D is incorrect because n8n can be used for simple single-step or single-flow automations too; multi-agent design is not mandatory for every workflow."
+mcmc,markdown,A workflow connects to Google Sheets. Which statements about **credentials** and **OAuth2** are correct?,,,,,,,,Credentials in n8n store authentication information (like API keys/tokens) securely,OAuth2 is a way for a third-party app to get limited access without sharing your password,Minimum-permission idea applies: OAuth2 scopes should request only what is needed,OAuth2 is only for cloud-hosted n8n; self-hosted setups never use OAuth2,"1, 2, 3",6a4611d7179257f379bafe94,0.5,markdown,"A, B, and C are correct — credentials authorize access securely; OAuth2 grants scoped access without password sharing; minimum permissions is part of secure OAuth design.
+
+D is incorrect because OAuth2 can be used in both cloud and self-hosted setups depending on integrations."
+mcmc,markdown,"In Docker-based self-hosting, which statements correctly describe Docker terms for n8n?",,,,,,,,An image is the packaged installer/bundle that Docker downloads,A container is the running instance of that image on your machine,A volume is used to persist saved data (like workflows) between restarts,An image and a container are always identical and interchangeable,"1, 2, 3",6a4611d7179257f379bafe94,1,markdown,"A, B, and C are correct — Docker uses an **image** as the packaged app, a **container** as the running process, and a **volume** to persist data like workflows.
+
+D is incorrect because an image is not the same as a running container."
+mcmc,markdown,"When debugging a failed workflow execution in n8n, which statements are correct?",,,,,,,,Observability helps by letting you inspect node inputs/outputs to find where data breaks,Logging decisions or steps helps you trace why a workflow failed,Human-in-the-loop is important for high-stakes actions such as refunds or transfers,"Observability guarantees correctness, so you do not need error handling or approvals","1, 2, 3",6a4611d7179257f379bafe94,1,markdown,"A, B, and C are correct — observability lets you inspect node I/O; tracing steps improves debugging; human approval is recommended for critical actions.
+
+D is incorrect because observability does not guarantee correctness; you still need safe design choices, error handling, and approval gates where appropriate."
+subjective,markdown,"Answer **all eight questions** below in your own words. Write in clear English paragraphs or bullet points. **No code** is required — type everything directly in the LMS answer box.
+
+Keep each answer between **40 and 120 words** unless a question asks for a specific count.
+
+---
+
+**Q1.** A college club wants a system where a daily report is generated automatically after new form submissions are received. Explain what **automation** means in this context, and also explain how a **workflow** is different from a **trigger**.
+
+---
+
+**Q2.** Sana is an HR coordinator who is not comfortable with coding. She wants to set up onboarding steps like: collect details, store them, and create a ticket for the IT team. Explain why a **visual workflow tool** like n8n can help non-technical users. Also mention what part still requires careful decision-making (example: order of steps or mapping fields).
+
+---
+
+**Q3.** A university wants to start a process when a student fills a Course Feedback form. After that, it should compute a dynamic result (for example, categorize feedback sentiment) and store it in a spreadsheet. In your answer:
+1. Which **trigger type** starts the process?
+2. What roles do **nodes** and **connections/data flow** play in moving the form data forward?
+
+---
+
+**Q4.** One of your friends claims: To use n8n, Docker is mandatory. Write a clear reply. Your answer must include:
+- What **n8n** is (in simple words)
+- What **Docker** is (in simple words)
+- Why Docker is useful for **self-hosted learning**, even though n8n can also run without Docker in hosted mode
+
+---
+
+**Q5.** Explain the difference between **image**, **container**, and **volume** in Docker, but in the context of running n8n locally. Also state clearly which of these is mainly responsible for keeping workflow data after you stop the server and restart it.
+
+---
+
+**Q6.** An organization integrates n8n with Google Sheets. Explain:
+- What **credentials** do inside n8n
+- What **OAuth2** achieves at a high level (no need for client-id technical steps)
+- One security best practice related to permissions
+
+---
+
+**Q7.** A workflow receives changing input values (like marks or ratings). Explain what **expressions** do, and why they are better than hard-coding values inside the workflow.
+
+Use one short mini-example in plain English (no code) like if marks are in a range, set grade.
+
+---
+
+**Q8.** During testing, a workflow fails at the third step. Describe two practical ways **observability** helps you debug. Then describe one situation where you would add a **human-in-the-loop** approval gate (example: refunds or security escalations) and why.
+
+---
+
+Type your answers to **all eight questions** in the answer box in the LMS. Label each answer clearly (**Q1**, **Q2**, … **Q8**). Write in English only — **no code** required.",,,,,,,,,,,,,6a4611d7179257f379bafe94,0.5,markdown,"**Q1 — Automation vs trigger vs workflow**
+
+- **Automation:** running steps automatically when a condition or event happens, with minimal human effort.
+- **Trigger:** the start signal (e.g., form submission, schedule, webhook call).
+- **Workflow:** the whole connected sequence of nodes that starts from the trigger and produces an outcome.
+
+**Q2 — Why n8n helps non-technical users**
+
+- Visual canvas and drag-and-drop reduce need to code every integration.
+- Node-based steps make the process understandable.
+- Still, someone must map fields correctly and choose the right order of steps (data dependencies).
+
+**Q3 — Trigger + nodes + connections/data flow**
+
+1. Trigger type: **on form submission** (form trigger).
+2. Nodes: each step (compute or categorize, then store). Connections carry output from the form node to the next nodes so the data keeps moving in the correct shape.
+
+**Q4 — n8n vs Docker independence**
+
+- n8n is the workflow automation application (triggers, nodes, integrations, UI).
+- Docker is a packaging/runtime helper to run apps in isolated boxes.
+- Docker is useful for self-hosted learning because it gives a repeatable setup locally.
+- n8n cloud can run in the browser without Docker on the user's machine.
+
+**Q5 — Docker terms for n8n**
+
+- **Image:** packaged n8n software bundle downloaded once.
+- **Container:** running instance of that image.
+- **Volume:** persistent storage for n8n data; keeps workflows and settings across restarts.
+
+**Q6 — Credentials + OAuth2 + permissions best practice**
+
+- Credentials: stored secure authorization data (API keys/tokens) used by nodes.
+- OAuth2: high-level authorization/permission granting without sharing password.
+- Best practice: request only the minimum permissions needed (scopes).
+
+**Q7 — Expressions and dynamic computation**
+
+- Expressions compute values at runtime based on input data.
+- They prevent hard-coded logic from breaking when inputs change.
+- Mini-example: if rating is 5, mark it as high priority; otherwise low or medium.
+
+**Q8 — Observability + human approval**
+
+- Observability: inspect node inputs/outputs and see where data shape mismatched or where the error occurred.
+- Logging or tracing decisions helps understand the failure cause.
+- Human-in-the-loop: needed for high-stakes actions like refunds, transfers, or security escalations to avoid costly mistakes."

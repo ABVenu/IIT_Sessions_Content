@@ -98,3 +98,54 @@
 **Outcome:** QC passed on iteration 3 — Groq embedding update verified.
 
 **Approximate line count:** ~505 lines.
+
+---
+
+# Lecture Notes QC Report — RAG Foundations (Released Alignment)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-07-02  
+**Iteration:** 4 (post-session alignment vs `Live Topic Coverage.md` + transcript)
+
+---
+
+## Alignment changes (vs pre-session `Lecture Notes.md`)
+
+| Item | Action |
+|---|---|
+| `simple_rag_demo.py` (Groq embed + Ollama generate) | **Removed** — not taught live |
+| Ollama manual without/with context compare | **Removed** — not taught live |
+| Groq playground FIFA 2026 + Siemens HR limitation demo | **Added** — matches transcript |
+| ChatGPT Tesla PDF no-code RAG demo | **Added** — matches minimal RAG LO |
+| `embedding_demo.py` (Sentence Transformers / all-MiniLM-L6-v2) | **Added** — matches live code demo |
+| ChatGPT in-memory vs persisted vector DB | **Added** |
+| Privacy / local vs cloud LLM architecture | **Added / expanded** |
+| Google semantic search analogy | **Added** |
+| Legal domain / Harvey / hallucinated citations | **Added** |
+| LangChain + later-work roadmap | **Retained / updated** |
+| All seven session38/session37 diagram images | **Retained** |
+
+---
+
+## QC Criteria
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics aligned to live session: RAG definition + external knowledge (Groq demos); retrieve-then-generate pipeline (diagrams + five-step table); chunking/embedding placement (100-page PDF, prepare vs query time); minimal RAG demo (ChatGPT Tesla PDF + embedding script). Extra taught topics (grounding rule, in-memory RAG, privacy architecture, Google analogy, Harvey) included. |
+| **Creativity** | **5 / 5** | Open-book exam, DU photocopy, railway display, Google search, co-working vs land purchase, Tesla investor use case; Groq and ChatGPT demos tied to student-facing activities. |
+| **Structural Adherence** | **5 / 5** | `#` title; previous-session bridge; Official/Simple/Real-life pattern; full `embedding_demo.py` with per-line comments + "How the code works"; student-facing `[ Student Activity ]` blocks; Key Takeaways; terminology table; no Part/Section labels. |
+| **No Logical Mistakes** | **True** | Pipeline offline/online split correct; vectors not sent to LLM; ChatGPT session index vs production DB distinguished; same embedding model rule stated; Tesla revenue example matches transcript. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no Mentimeter/poll content; professional documentation tone; paragraphs ≤3 sentences. |
+| **No Previous Session Number References** | **True** | Uses **previous session** and **later work** only — no `Session N` in student prose. |
+| **No Metadata/internal reference** | **True** | No internal spillover, line-count targets, or instructor-only instructions in student text. |
+
+---
+
+## Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
+
+**Outcome:** QC passed on iteration 4 — `Lecture Notes Released.md` ready for student release.
+
+**Approximate line count:** ~395 lines.
