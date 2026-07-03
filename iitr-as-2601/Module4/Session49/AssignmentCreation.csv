@@ -1,0 +1,318 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A **hospital helpdesk bot** is asked about MRI safety rules. Instead of guessing, it searches stored manual chunks and then writes an answer from those chunks.
+
+What approach is this?",,,,,,1,,Retrieval-Augmented Generation (RAG),Model fine-tuning only,Random token sampling,Database backup scheduling,,,6a47605d65bfd30c48fc0293,0,markdown,"RAG first **retrieves** useful documents or chunks, then the model **generates** an answer using that retrieved context. Fine-tuning, random sampling, and backups are different activities."
+mcsc,markdown,"A support bot retrieves this policy line:
+
+> ""Refunds take 7 working days.""
+
+It answers:
+
+> ""Refunds take 7 working days.""
+
+How should this answer be classified?",,,,,,1,,Grounded,Not grounded,Prompt injection,Metadata filter error,,,6a47605d65bfd30c48fc0293,0,markdown,"The answer matches the retrieved source text, so it is **grounded**. It is not inventing facts outside the context."
+mcsc,markdown,"An **equipment manual** has 400 pages. A technician asks for one fault-code explanation, but search keeps returning the whole PDF instead of the exact section.
+
+What is the most direct reason to split documents into **chunks**?",,,,,,1,,To make smaller searchable pieces so the right section can be retrieved,To remove the need for a vector database,To stop users from asking follow-up questions,To avoid storing metadata,,,6a47605d65bfd30c48fc0293,0,markdown,"Chunking breaks large documents into smaller searchable units so retrieval can return the **exact useful section**, not the entire file."
+mcsc,markdown,"A **shopping support bot** has chunks labelled with `product`, `status`, and `doc_type`. Before similarity search, the engineer applies:
+
+```text
+product = ""laptop""
+status = ""active""
+```
+
+What is this step called?",,,,,,1,,Metadata filter,Embedding training,Output sanitization,Prompt injection,,,6a47605d65bfd30c48fc0293,0,markdown,A **metadata filter** restricts retrieval to chunks whose labels match selected conditions — like searching only one shelf before picking the best book.
+mcsc,markdown,"A company is preparing its policy PDFs for a RAG system. Chunking, embedding, and storing vectors in the vector database happen once during setup. A user question is answered later when someone opens the chat app.
+
+When does **chunking** mainly happen in this workflow?",,,,,,1,,At indexing time,At inference time only,Only when the user gives thumbs down,Only during human evaluation,,,6a47605d65bfd30c48fc0293,0.5,markdown,"Chunking is part of **indexing time** — the offline preparation phase. At **inference time**, the system retrieves already-chunked content and generates an answer."
+mcsc,markdown,"A team is building a RAG bot for a **technical equipment manual**. Retrieval quality is weak with 512-character recursive chunks because answers are getting cut mid-procedure.
+
+Which chunking choice best matches the notes for improving meaning-focused retrieval, even though indexing takes longer?",,,,,,1,,Semantic chunking,Removing all metadata,Storing one full PDF as a single chunk always,Disabling the vector database,,,6a47605d65bfd30c48fc0293,0.5,markdown,"**Semantic chunking** groups related ideas by meaning, which often improves retrieval for manuals and technical docs. It is slower during indexing but can return better chunks at answer time."
+mcmc,markdown,"A **product support team** is designing chunk metadata so retrieval can narrow the corpus before similarity search.
+
+Which of the following are common metadata fields discussed for RAG chunks?",,,,,,,,`doc_type`,`product`,`status`,`batch_normalization_rate`,,"1, 2, 3",6a47605d65bfd30c48fc0293,0.5,markdown,"`doc_type`, `product`, and `status` are standard metadata examples used for filtering policies, products, and active versus archived content. `batch_normalization_rate` is not a RAG metadata field from this lesson."
+mcmc,markdown,"A **banking FAQ bot** must follow grounding rules when answering from retrieved policy chunks.
+
+Which statements about **grounding** are correct?",,,,,,,,"If the answer is not visible in retrieved context, the bot should not invent it","When context says ""return within 10 days,"" answering ""10 days"" is grounded","When no relevant context is found, answering ""usually 10 days"" from general guesswork is grounded",Grounding means making the model output depend on verified retrieved context,,"1, 2, 4",6a47605d65bfd30c48fc0293,0.5,markdown,"Grounded answers must come from retrieved source material. Matching retrieved text is grounded, and outputs should depend on verified context. Guessing when no context is found is **not grounded**."
+mcmc,markdown,"After a RAG demo, the engineering lead asks which quality checks failed for a bad answer about **Tesla 2022 revenue**.
+
+Which items belong to the **RAG triad**?",,,,,,,,Context relevance — did retrieval bring the right chunks for the question?,Groundedness — is the answer supported by the retrieved chunks?,Answer relevance — is the answer on-topic for what was asked?,Git commit hash — is the repository clean?,,"1, 2, 3",6a47605d65bfd30c48fc0293,1,markdown,"The **RAG triad** evaluates context relevance, groundedness, and answer relevance as separate checks. A Git commit hash is unrelated to RAG answer quality."
+mcmc,markdown,"A **field technician bot** gives slow, confusing, or outdated answers. The team is debugging retrieval before changing prompts.
+
+Which symptom-and-fix pairs are correct according to the debugging guidance?",,,,,,,,Wrong product information → likely missing `product` metadata filter,Slow answers from searching the full corpus → add metadata filters before similarity search,No citation shown to the user → likely missing source tags such as `source_file`,Old policy answer → first fix should always be retraining the LLM from scratch,,"1, 2, 3",6a47605d65bfd30c48fc0293,1,markdown,"Wrong-product answers, slow full-corpus search, and missing citations map to missing product filters, missing pre-filters, and missing source metadata. For stale content, the notes recommend **re-indexing** outdated chunks — not jumping straight to full LLM retraining."
+subjective,markdown,"**ShopSphere** runs a product-support knowledge base for mobiles, laptops, and manuals. Before adding vector similarity search, the team wants a **metadata-first retrieval layer** that filters chunks safely and prints traceable citations — the same pattern used in the class demo.
+
+Your task is to build a **single Python file** named `policy_retrieval.py` that simulates filter-first retrieval **without** calling any LLM or vector database API.
+
+### Knowledge base to use
+
+Start with this exact `chunks` list in your file:
+
+```python
+chunks = [
+    {
+        ""text"": ""Mobiles can be returned within 7 days if damaged."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""mobile"",
+            ""status"": ""active"",
+            ""source_file"": ""mobile_policy.md"",
+            ""section_title"": ""Return Rules"",
+        },
+    },
+    {
+        ""text"": ""Laptops can be returned within 10 days for manufacturing defects."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""laptop"",
+            ""status"": ""active"",
+            ""source_file"": ""laptop_policy.md"",
+            ""section_title"": ""Return Rules"",
+        },
+    },
+    {
+        ""text"": ""Laptops were earlier returnable within 30 days."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""laptop"",
+            ""status"": ""archived"",
+            ""source_file"": ""old_laptop_policy.md"",
+            ""section_title"": ""Old Return Rules"",
+        },
+    },
+    {
+        ""text"": ""For laptop battery drain, run diagnostics mode before replacing parts."",
+        ""metadata"": {
+            ""doc_type"": ""manual"",
+            ""product"": ""laptop"",
+            ""status"": ""active"",
+            ""source_file"": ""laptop_service_manual.pdf"",
+            ""section_title"": ""Battery Diagnostics"",
+        },
+    },
+    {
+        ""text"": ""Premium users get billing support within 24 hours."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""billing"",
+            ""status"": ""active"",
+            ""source_file"": ""billing_policy.md"",
+            ""section_title"": ""Premium Support"",
+        },
+    },
+]
+```
+
+### What you must implement
+
+Create these functions in `policy_retrieval.py`:
+
+#### 1. `matches_filters(metadata: dict, filters: dict) -> bool`
+
+- Return `True` only when **every** key in `filters` matches the same key in `metadata`.
+- Use `metadata.get(key)` for comparison.
+- Return `False` if any filter condition fails.
+
+#### 2. `retrieve(filters: dict) -> list`
+
+- Loop through `chunks`.
+- Return a list of chunks whose metadata passes `matches_filters`.
+- Preserve the original chunk dictionaries.
+
+#### 3. `format_citation(chunk: dict) -> str`
+
+Return a citation string in this exact format:
+
+```text
+Source: <source_file> - <section_title>
+```
+
+Example:
+
+```text
+Source: laptop_policy.md - Return Rules
+```
+
+Read `source_file` and `section_title` from `chunk[""metadata""]`.
+
+#### 4. `print_retrieval_results(filters: dict) -> None`
+
+For every chunk returned by `retrieve(filters)`:
+
+1. Print the chunk `text` on one line
+2. Print the citation from `format_citation(chunk)` on the next line
+3. Print one blank line after each chunk
+
+If no chunk matches, print exactly:
+
+```text
+No matching chunks found.
+```
+
+#### 5. Demo block
+
+At the bottom of the file, add:
+
+```python
+if __name__ == ""__main__"":
+    ...
+```
+
+Run **exactly these three filter tests** in order by calling `print_retrieval_results(...)`:
+
+| Test | Filters |
+|---|---|
+| 1 | `{""doc_type"": ""policy"", ""product"": ""laptop"", ""status"": ""active""}` |
+| 2 | `{""doc_type"": ""policy"", ""product"": ""mobile"", ""status"": ""active""}` |
+| 3 | `{""doc_type"": ""manual"", ""product"": ""laptop"", ""status"": ""active""}` |
+
+### Expected sample output
+
+```text
+Laptops can be returned within 10 days for manufacturing defects.
+Source: laptop_policy.md - Return Rules
+
+Mobiles can be returned within 7 days if damaged.
+Source: mobile_policy.md - Return Rules
+
+For laptop battery drain, run diagnostics mode before replacing parts.
+Source: laptop_service_manual.pdf - Battery Diagnostics
+
+```
+
+### Constraints
+
+- **One file only:** `policy_retrieval.py`
+- **No LLM API calls** and **no vector database libraries**
+- Use only Python standard library
+- Code must run with: `python policy_retrieval.py`
+- The archived laptop policy must **not** appear in Test 1 because `status` must be `active`
+
+### Submission Instruction
+
+- Code all the points mentioned in VS Code in a single `.py` file
+- Run the code and verify it is working
+- Then submit the code in the code editor / answer box in the LMS",,,,,,,,,,,,,,6a47605d65bfd30c48fc0293,0.5,markdown,"### Ideal Solution Walkthrough
+
+A complete solution mirrors the class **metadata filter first** pattern:
+
+1. Store chunks with both `text` and `metadata`.
+2. Use `matches_filters()` to apply every filter condition.
+3. Use `retrieve()` to collect only matching chunks.
+4. Print grounded context plus a citation built only from stored metadata — never invented by the model.
+
+Test 1 should return only the active laptop policy. The archived 30-day laptop policy is excluded because its `status` is `archived`. Test 2 returns the mobile policy. Test 3 returns the laptop manual chunk.
+
+### Complete Reference Solution
+
+```python
+# policy_retrieval.py — metadata-first retrieval demo (offline)
+
+chunks = [
+    {
+        ""text"": ""Mobiles can be returned within 7 days if damaged."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""mobile"",
+            ""status"": ""active"",
+            ""source_file"": ""mobile_policy.md"",
+            ""section_title"": ""Return Rules"",
+        },
+    },
+    {
+        ""text"": ""Laptops can be returned within 10 days for manufacturing defects."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""laptop"",
+            ""status"": ""active"",
+            ""source_file"": ""laptop_policy.md"",
+            ""section_title"": ""Return Rules"",
+        },
+    },
+    {
+        ""text"": ""Laptops were earlier returnable within 30 days."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""laptop"",
+            ""status"": ""archived"",
+            ""source_file"": ""old_laptop_policy.md"",
+            ""section_title"": ""Old Return Rules"",
+        },
+    },
+    {
+        ""text"": ""For laptop battery drain, run diagnostics mode before replacing parts."",
+        ""metadata"": {
+            ""doc_type"": ""manual"",
+            ""product"": ""laptop"",
+            ""status"": ""active"",
+            ""source_file"": ""laptop_service_manual.pdf"",
+            ""section_title"": ""Battery Diagnostics"",
+        },
+    },
+    {
+        ""text"": ""Premium users get billing support within 24 hours."",
+        ""metadata"": {
+            ""doc_type"": ""policy"",
+            ""product"": ""billing"",
+            ""status"": ""active"",
+            ""source_file"": ""billing_policy.md"",
+            ""section_title"": ""Premium Support"",
+        },
+    },
+]
+
+
+def matches_filters(metadata: dict, filters: dict) -> bool:
+    # Return True only when every filter key matches metadata
+    for key, value in filters.items():
+        if metadata.get(key) != value:
+            return False
+    return True
+
+
+def retrieve(filters: dict) -> list:
+    # Collect chunks that pass all metadata filters
+    results = []
+    for chunk in chunks:
+        if matches_filters(chunk[""metadata""], filters):
+            results.append(chunk)
+    return results
+
+
+def format_citation(chunk: dict) -> str:
+    # Build a traceable citation from stored metadata only
+    source_file = chunk[""metadata""][""source_file""]
+    section_title = chunk[""metadata""][""section_title""]
+    return f""Source: {source_file} - {section_title}""
+
+
+def print_retrieval_results(filters: dict) -> None:
+    # Print filtered chunk text plus citation for each match
+    results = retrieve(filters)
+    if not results:
+        print(""No matching chunks found."")
+        return
+
+    for chunk in results:
+        print(chunk[""text""])
+        print(format_citation(chunk))
+        print()
+
+
+if __name__ == ""__main__"":
+    print_retrieval_results(
+        {""doc_type"": ""policy"", ""product"": ""laptop"", ""status"": ""active""}
+    )
+    print_retrieval_results(
+        {""doc_type"": ""policy"", ""product"": ""mobile"", ""status"": ""active""}
+    )
+    print_retrieval_results(
+        {""doc_type"": ""manual"", ""product"": ""laptop"", ""status"": ""active""}
+    )
+```
+
+### Alternative Approaches
+
+- **List comprehension in `retrieve`:** `[chunk for chunk in chunks if matches_filters(chunk[""metadata""], filters)]` — shorter and equally valid.
+- **Helper for empty checks:** Raise a custom message per test case if you later add logging, but keep the required exact no-match string for grading.
+- **Next step after this task:** Add a simple keyword ranking function as a second layer before generation — that would extend the two-layer retrieval idea from the notes."

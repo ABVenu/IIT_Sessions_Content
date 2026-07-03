@@ -74,3 +74,24 @@
 - Confirmed no FastAPI or SQLAlchemy usage anywhere in the notes.
 - Removed the Pydantic-specific diagram; six remaining diagrams stay valid.
 - QC status: Passed.
+
+## QC Iteration 5 (Lecture Notes Released — post-session alignment)
+
+| Criteria | Result |
+| --- | --- |
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal Reference Mentioned | True |
+
+### Notes
+
+- Aligned `Lecture Notes Released.md` against `Live Topic Coverage.md` and session transcript.
+- **Removed** (not covered live): recoverable error-handling section (`try/except`, structured error JSON, `divide_budget` demo), `max_steps` bounded-loop subsection, building-blocks error-handling intro, and manual-vs-automatic agent comparison.
+- **Added** (taught live): prior direct `tools=[...]` vs LangChain `@tool` + `bind_tools` bridge, third-party/RAG/MCP ecosystem note, temperature and model-choice guidance, Ollama demo setup steps.
+- **Updated** controlled query set and trace-printing example to include `get_ticket_status` (T101/T999) as demonstrated in class.
+- Retained five session diagrams; removed only the safe-execution image tied to uncovered error-containment content.
+- QC status: Passed.
