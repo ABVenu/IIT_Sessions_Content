@@ -1,0 +1,196 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"An online course platform receives this parent message: *""The course fee is ₹40,000 and we have a 15% discount. What is the exact amount to pay?""* The product team wants reliable fee answers that follow the company's discount rules every time. Why should the app expose a `calculate_final_fee` tool instead of letting the LLM calculate from memory alone?",,,,,,1,,A tool applies exact business rules in code; the LLM may guess or round incorrectly,The LLM cannot read Python function names,Tools remove the need for any chat model in the application,The `@tool` decorator automatically transfers money to the bank,,6a4760b547567d189db92b75,0,markdown,"Fee calculation with fixed rules is safer through a Python tool that runs deterministic logic. The LLM is strong at language but should not be blindly trusted for exact arithmetic or policy. Option B is unrelated to the business need. Option C is wrong because tools work *with* the model, not instead of it. Option D describes behaviour that `@tool` does not provide."
+mcsc,markdown,Ravi has a plain Python function that checks whether a learner has a laptop and enough weekly study hours. He adds `@tool` above the function definition. What is the main purpose of that decorator?,,,,,,1,,"It wraps the function so LangChain can expose its name, description, and input schema to the model",It runs the function automatically every time the Python file is saved,It converts the function into a downloadable Ollama model,It hides the function docstring from the model for security,,6a4760b547567d189db92b75,0,markdown,"`@tool` registers a Python function as a LangChain-compatible tool by reading its name, docstring, type hints, and return type. It does not auto-run on save (B), download models (C), or hide docstrings — docstrings actually help the model choose the tool (D)."
+mcsc,markdown,"After defining a list of tools, a developer writes:
+
+```python
+model_with_tools = model.bind_tools(tools)
+```
+
+What happens at this step?",,,,,,1,,The model becomes aware of the available tools; no tool is executed yet,Every tool runs once immediately with empty arguments,The model converts all tools into `ToolMessage` objects automatically,`tool_calls` are replaced by the final polished answer,,6a4760b547567d189db92b75,0,markdown,"`bind_tools` attaches the tool menu to the model for upcoming invocations. Execution happens only when your application reads `tool_calls` and invokes the matching function. Options B, C, and D describe steps that occur later in the loop or not at all."
+mcsc,markdown,"In the restaurant analogy used for tool calling, the customer gives an order, the waiter writes a slip, and the kitchen prepares the food. In software terms, who actually runs the Python tool function?",,,,,,1,,Your Python application,The LLM inside the model weights,The `HumanMessage` class before the model replies,The user's browser without any backend code,,6a4760b547567d189db92b75,0,markdown,The model only emits a structured request (`tool_calls`). Your application is responsible for executing the matching Python function and returning the result. The LLM does not directly run arbitrary Python (B). `HumanMessage` carries the user query (C). The browser does not execute backend tools by itself (D).
+mcsc,markdown,"During a manual tool loop, the model returns an `AIMessage` with a non-empty `tool_calls` list. What must the developer do before asking the model for the final user-facing answer?",,,,,,1,,"Run each requested tool, wrap results in `ToolMessage` with matching `tool_call_id`, append them to `messages`, and invoke the model again",Delete the `AIMessage` from history and restart the conversation from scratch,Return `tool_calls` directly to the user without executing any function,Call `bind_tools` again after every individual tool execution,,6a4760b547567d189db92b75,0.5,markdown,"The manual loop pattern is: model request → execute tools → send `ToolMessage` results back → model produces a final natural-language answer. Deleting history (B) loses context. Returning raw `tool_calls` (C) skips execution. Re-binding tools after every call (D) is unnecessary; bind once, then loop over messages."
+mcsc,markdown,"A developer inspects this model-emitted tool call during debugging:
+
+```python
+{
+    ""name"": ""calculate_final_fee"",
+    ""args"": {
+        ""fee"": 50000,
+        ""discount"": ""twenty""
+    },
+    ""id"": ""call_123"",
+    ""type"": ""tool_call""
+}
+```
+
+The function signature expects `base_fee: int` and `discount_percent: int`. What are the main faults?",,,,,,1,,Wrong argument names and a string used where a numeric discount percentage is expected,The `id` field must always be omitted for fee tools,The tool `name` should be `ToolMessage` instead of `calculate_final_fee`,"The `type` field must be `""human_message""` for all calculator tools",,6a4760b547567d189db92b75,0.5,markdown,"The model passed `fee` and `discount` instead of `base_fee` and `discount_percent`, and used the string `""twenty""` instead of an integer like `20`. The `id` field is required to link results back (B is wrong). `ToolMessage` is for returning results, not naming tools (C). `type` identifies a tool call request, not a human message (D)."
+mcmc,markdown,"When you decorate a Python function with `@tool`, which pieces of information does LangChain typically expose to the model?",,,,,,,,The function name,The docstring as the tool description,Argument names and type hints from the function signature,The developer's private `.env` file contents,"1, 2, 3",6a4760b547567d189db92b75,0.5,markdown,"`@tool` reads the callable's name, docstring, typed parameters, and return information to build a structured tool definition. Environment secrets are never auto-exposed through `@tool`, so option D must not be selected."
+mcmc,markdown,An intern is building tools for a learner support chatbot. Which choices follow good tool design practices?,,,,,,,,Use a clear name like `get_ticket_status` instead of `process_data`,"Add type hints such as `int`, `bool`, and `str` on tool arguments",Write a docstring that explains when the model should call the tool,"Combine fee calculation, email sending, and ticket lookup inside one large `@tool` function","1, 2, 3",6a4760b547567d189db92b75,0.5,markdown,"Clear names, type hints, and specific docstrings help reliable model-driven tool selection. One tool should do one clear job; a giant mixed tool (D) makes selection and debugging harder."
+mcmc,markdown,"A developer implements a manual tool-feedback loop using `HumanMessage`, `bind_tools`, and a `tool_map` dictionary. Which statements about the flow are correct?",,,,,,,,`HumanMessage` stores the user's query in LangChain message format,"The model returns an `AIMessage` that may contain `tool_calls`, but Python still executes the actual tool functions","`tool_map[tool_call[""name""]]` helps locate the correct callable tool by name",`bind_tools` executes every registered tool before the first `invoke` finishes,"1, 2, 3",6a4760b547567d189db92b75,1,markdown,"The loop starts with a human message, the model requests tools via `AIMessage.tool_calls`, and the app maps names to functions through `tool_map`. `bind_tools` only registers availability; it does not execute tools upfront, so D is incorrect."
+mcmc,markdown,"After running a controlled query set, Meera notices that a fee-related question returns empty `tool_calls` when using a small local model at `temperature=0.8`. Her `@tool` definitions look correct. Which debugging actions align with reliable tool-calling practice?",,,,,,,,Re-run the same queries with a lower temperature such as `0` or `0.3`,"Try a model that supports tool calling more reliably, such as `llama3.1` if available locally",Print `response.tool_calls` for each test query before assuming the Python tool code is wrong,Remove all docstrings because they always prevent tool calling,"1, 2, 3",6a4760b547567d189db92b75,1,markdown,"Temperature and model choice strongly affect whether structured `tool_calls` appear. A controlled query set with printed traces helps separate model behaviour from code bugs. Docstrings help tool selection; removing them (D) would make behaviour worse, not better."
+subjective,markdown,"A night-shift learner support desk for an online coding bootcamp wants a small Python assistant that can answer structured questions about fees, eligibility, and ticket status using LangChain tool calling. Your task is to build a **single-file** program that registers custom tools, binds them to a local chat model, and completes one manual tool-feedback loop.
+
+### Scenario
+
+A learner sends this message to the support bot:
+
+*""I have a laptop and can study 12 hours every week. Please also calculate my final fee after a 10% discount on ₹45,000.""*
+
+The bot should let the model decide which tools to call, execute those tools in Python, return results through `ToolMessage`, and then produce one final natural-language reply.
+
+### Requirements
+
+Write a Python program named `learner_support_agent.py` that:
+
+1. Imports `ChatOllama` from `langchain_ollama`, `tool` from `langchain_core.tools`, and `HumanMessage`, `ToolMessage` from `langchain_core.messages`.
+2. Defines these three `@tool` functions with the exact logic below:
+   - **`calculate_final_fee(base_fee: int, discount_percent: int) -> int`**  
+     Docstring: *""Calculate the final course fee after applying a discount percentage.""*  
+     Logic: `discount_amount = base_fee * discount_percent // 100`, return `base_fee - discount_amount`.
+   - **`check_course_eligibility(has_laptop: bool, weekly_hours: int) -> str`**  
+     Docstring: *""Check if a learner is eligible for a coding-heavy online course.""*  
+     Logic: if no laptop → `""Not eligible yet: a laptop is required for hands-on practice.""`; elif `weekly_hours < 10` → `""Not eligible yet: at least 10 hours per week are needed.""`; else → `""Eligible: the learner has the basic setup and time commitment.""`
+   - **`get_ticket_status(ticket_id: str) -> str`**  
+     Docstring: *""Get the current status of a learner support ticket by ticket ID.""*  
+     Use this in-memory dictionary:
+     ```python
+     {
+         ""T101"": ""Open: waiting for mentor review."",
+         ""T102"": ""Resolved: refund confirmation sent."",
+         ""T103"": ""In progress: technical team is checking the issue."",
+     }
+     ```
+     Return `""Ticket not found.""` when the ID is missing.
+3. Stores all three tools in a list named `tools`.
+4. Builds `tool_map = {current_tool.name: current_tool for current_tool in tools}`.
+5. Creates `model = ChatOllama(model=""llama3.1"", temperature=0.3)`.  
+   If `llama3.1` is not available on your machine, replace the model string with any tool-capable model from `ollama list` (for example `qwen2.5:0.5b`) and mention the model name in a comment at the top of the file.
+6. Creates `model_with_tools = model.bind_tools(tools)`.
+7. Starts the conversation with exactly this user message wrapped as a `HumanMessage`:
+
+```python
+messages = [
+    HumanMessage(
+        content=(
+            ""I have a laptop and can study 12 hours every week. ""
+            ""Please also calculate my final fee after a 10% discount on 45000 rupees.""
+        )
+    )
+]
+```
+
+8. Calls `first_response = model_with_tools.invoke(messages)` and appends `first_response` to `messages`.
+9. Loops through every item in `first_response.tool_calls`:
+   - finds the tool using `tool_map`
+   - runs `selected_tool.invoke(tool_call[""args""])`
+   - appends a `ToolMessage(content=str(tool_result), tool_call_id=tool_call[""id""])` to `messages`
+10. Calls `final_response = model_with_tools.invoke(messages)`.
+11. Prints:
+    - a heading `FIRST TOOL CALLS:` followed by `first_response.tool_calls`
+    - a heading `FINAL ANSWER:` followed by `final_response.content`
+
+### Example Output Shape
+
+Exact tool-call count and final wording may vary by model, but your program output should look similar to this:
+
+```text
+FIRST TOOL CALLS:
+[{'name': 'check_course_eligibility', 'args': {'has_laptop': True, 'weekly_hours': 12}, 'id': '...', 'type': 'tool_call'},
+ {'name': 'calculate_final_fee', 'args': {'base_fee': 45000, 'discount_percent': 10}, 'id': '...', 'type': 'tool_call'}]
+FINAL ANSWER:
+You are eligible for the course. After a 10% discount on ₹45,000, your final fee is ₹40,500.
+```
+
+### Constraints
+
+- Use a **single** Python file named `learner_support_agent.py`.
+- Use only the LangChain tool-calling pieces listed in the requirements.
+- Do not use agents, retrievers, vector databases, or memory modules.
+- Ollama must be installed and running locally.
+- Install required packages inside your activated virtual environment:
+
+```bash
+pip install langchain-core langchain-ollama
+```
+
+- Pull a compatible model if needed, for example:
+
+```bash
+ollama pull llama3.1
+```
+
+### Submission Instruction
+
+1. Code all the points mentioned above in VS Code in a single `.py` file named `learner_support_agent.py`.
+2. Run the code and verify that it is working.
+3. Submit the complete code in the code editor/answer box in the LMS.",,,,,,,,,,,,,6a4760b547567d189db92b75,0.5,markdown,"```python
+from langchain_ollama import ChatOllama  # Local chat model integration
+from langchain_core.tools import tool  # Decorator that registers Python functions as tools
+from langchain_core.messages import HumanMessage, ToolMessage  # Conversation message types
+
+
+@tool  # Expose this function as a LangChain tool
+def calculate_final_fee(base_fee: int, discount_percent: int) -> int:
+    """"""Calculate the final course fee after applying a discount percentage.""""""
+    discount_amount = base_fee * discount_percent // 100  # Integer discount amount
+    final_fee = base_fee - discount_amount  # Payable fee after discount
+    return final_fee  # Return exact fee for ToolMessage
+
+
+@tool  # Expose eligibility checker as a tool
+def check_course_eligibility(has_laptop: bool, weekly_hours: int) -> str:
+    """"""Check if a learner is eligible for a coding-heavy online course.""""""
+    if not has_laptop:  # Laptop is required for hands-on practice
+        return ""Not eligible yet: a laptop is required for hands-on practice.""
+    if weekly_hours < 10:  # Minimum weekly study time rule
+        return ""Not eligible yet: at least 10 hours per week are needed.""
+    return ""Eligible: the learner has the basic setup and time commitment.""
+
+
+@tool  # Expose ticket lookup as a tool
+def get_ticket_status(ticket_id: str) -> str:
+    """"""Get the current status of a learner support ticket by ticket ID.""""""
+    ticket_database = {  # Simulated support ticket store
+        ""T101"": ""Open: waiting for mentor review."",
+        ""T102"": ""Resolved: refund confirmation sent."",
+        ""T103"": ""In progress: technical team is checking the issue."",
+    }
+    return ticket_database.get(ticket_id, ""Ticket not found."")  # Safe fallback
+
+
+tools = [calculate_final_fee, check_course_eligibility, get_ticket_status]  # All registered tools
+tool_map = {current_tool.name: current_tool for current_tool in tools}  # Name → callable lookup
+
+# Use any tool-capable model available in `ollama list`
+model = ChatOllama(model=""llama3.1"", temperature=0.3)  # Slightly stable but not fully random
+model_with_tools = model.bind_tools(tools)  # Attach tool menu to the model
+
+messages = [  # Start conversation with the learner support query
+    HumanMessage(
+        content=(
+            ""I have a laptop and can study 12 hours every week. ""
+            ""Please also calculate my final fee after a 10% discount on 45000 rupees.""
+        )
+    )
+]
+
+first_response = model_with_tools.invoke(messages)  # Model decides which tools to request
+messages.append(first_response)  # Keep AI message in history
+
+for tool_call in first_response.tool_calls:  # Handle zero, one, or many tool calls
+    selected_tool = tool_map[tool_call[""name""]]  # Resolve tool by model-provided name
+    tool_result = selected_tool.invoke(tool_call[""args""])  # Run Python business logic
+    tool_message = ToolMessage(
+        content=str(tool_result),  # Model reads tool output as text
+        tool_call_id=tool_call[""id""],  # Must match the originating tool call
+    )
+    messages.append(tool_message)  # Add tool result to conversation history
+
+final_response = model_with_tools.invoke(messages)  # Model writes final user-facing answer
+
+print(""FIRST TOOL CALLS:"")  # Debug trace — what the model requested
+print(first_response.tool_calls)
+print(""FINAL ANSWER:"")  # Polished reply after tools ran
+print(final_response.content)
+```"

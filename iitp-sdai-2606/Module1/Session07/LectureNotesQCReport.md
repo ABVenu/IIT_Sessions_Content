@@ -152,3 +152,55 @@ The notes were expanded with stronger coverage of parameters/arguments, default 
 ### Action Taken
 
 - QC passed. Final notes meet all expected criteria.
+
+---
+
+## QC Iteration 7 (Lecture Notes Released — Post-Session Alignment)
+
+`Lecture Notes Released.md` created by aligning instructor notes against transcript coverage (`Live Topic Coverage.md`). Final length: **394 lines**.
+
+| Criteria | Result |
+|---|---|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal Reference Leakage | True |
+
+### Observations
+
+- Removed sections not taught in session: delivery-fee/train-fare default examples, local-variables section, GST/coupon shopping pipeline, `square`/`double` nested calls, modular student-result program, and all three standalone activities (mobile recharge, food order, check_pass_fail).
+- Retained all four session images.
+- Added session-taught content: DRY principle, tea-making analogy, predefined vs user-defined functions, define-before-call rule, Python main/execution flow, sum-of-natural-numbers return example, and restaurant billing capstone (3 items, 10% tax, function chaining).
+- Examples aligned to live demos: `greet_user`, `add_two_numbers`, default `b=0`, and `total_for_item` → `calculate_total` → `final_amount`.
+- No Mentimeter/quiz content; no session numbers or duration metadata.
+
+### Action Taken
+
+- Post-session alignment complete. QC passed.
+
+---
+
+## QC Iteration 8 (Lecture Notes Released — Confirmation)
+
+| Criteria | Result |
+|---|---|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal Reference Leakage | True |
+
+### Observations
+
+- Second review confirms smooth flow from function definition through parameters, return, defaults, chaining, and modular design.
+- All five detailed subtopics represented; modular programming covered via restaurant billing refactor and DRY principle.
+- Key takeaways and terminology table updated to match released content.
+
+### Action Taken
+
+- QC passed. `Lecture Notes Released.md` is ready for student release.

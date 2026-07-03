@@ -1,0 +1,270 @@
+"questionType","contentType","contentBody","intAnswer","prepTime(in_seconds)","floatAnswer.max","floatAnswer.min","fitbAnswer","mcscAnswer","subjectiveAnswer","option.1","option.2","option.3","option.4","mcmcAnswer","tagRelationships","difficultyLevel","answerExplanationType","answerExplanation"
+"mcsc","markdown","**Anita** writes a greeting function for her college club website:
+
+```python
+def welcome():
+    print(""Welcome to the Coding Club"")
+
+welcome
+```
+
+She runs the program but sees **no message** on the screen.
+
+What is the most likely reason?","","","","","","2","","Python does not allow functions without parameters","She referred to the function name without calling it","The function must be called before it is defined","`print()` cannot be used inside a function","","6a4761641bd83eb6f24f2b94","0","markdown","Writing `welcome` only creates a reference to the function object. To run the function body, Python needs a **function call** with parentheses: `welcome()`.
+
+Option 1 is incorrect because functions without parameters are valid in Python. Option 3 is incorrect because the function is defined before the reference line; the issue is missing `()`. Option 4 is incorrect because `print()` works normally inside functions."
+"mcsc","markdown","A **food delivery app** asks for a delivery address when you place an order. In function terms, `""Flat 302, Pune""` is the actual value sent during the call, while `address` in `def deliver(address):` is the placeholder that receives it.
+
+Which pair correctly matches the terms?","","","","","","2","","`""Flat 302, Pune""` is the parameter; `address` is the argument","`address` is the parameter; `""Flat 302, Pune""` is the argument","Both are parameters","Both are arguments","","6a4761641bd83eb6f24f2b94","0","markdown","A **parameter** is written in the function definition (`address`). An **argument** is the actual value passed during the function call (`""Flat 302, Pune""`).
+
+Option 1 is incorrect because the terms are reversed. Options 3 and 4 are incorrect because one belongs to the definition and the other to the call; they are not the same role."
+"mcsc","markdown","**Ravi** wants to create a reusable block of code named `calculate_bill` so the same logic is not copied again and again in his program.
+
+Which keyword should he use to define this block?","","","","","","3","","`call`","`func`","`def`","`return`","","6a4761641bd83eb6f24f2b94","0","markdown","In Python, the **`def`** keyword is used to define a user-defined function.
+
+Option 1 is incorrect because `call` is not a Python keyword for defining functions. Option 2 is incorrect because `func` is not used to define functions in Python. Option 4 is incorrect because `return` sends a value back from a function, but it does not create the function itself."
+"mcsc","markdown","A **billing helper** must calculate a total and also use that total later for tax calculation in the same program.
+
+Which approach is better for storing and reusing the calculated value?","","","","","","2","","Use only `print()` inside the function","Use `return` to send the value back to the caller","Define the function after calling it","Pass the function name without parentheses","","6a4761641bd83eb6f24f2b94","0","markdown","`print()` only displays output on screen. **`return`** sends the result back so it can be stored in a variable or passed to another function.
+
+Option 1 is incorrect because a printed value is not directly reusable as data in later calculations. Option 3 is incorrect because a function must be defined before it is called. Option 4 is incorrect because a name without `()` does not execute the function."
+"mcsc","markdown","A **wallet app** uses this function:
+
+```python
+def add_money(amount, bonus=0):
+    return amount + bonus
+
+result = add_money(500)
+```
+
+What will `result` contain?","","","","","","2","","`0`","`500`","`None`","Python will raise an error because `bonus` was not passed","","6a4761641bd83eb6f24f2b94","0.5","markdown","`bonus=0` is a **default parameter**. When only `500` is passed, `amount` becomes `500` and `bonus` uses its default value `0`, so the returned value is `500 + 0 = 500`.
+
+Option 1 is incorrect because `0` would happen only if `amount` were `0`. Option 3 is incorrect because the function explicitly returns a number, not `None`. Option 4 is incorrect because missing arguments are allowed when a default value exists."
+"mcsc","markdown","A **quiz app** uses this code:
+
+```python
+def add_numbers(a, b):
+    return a + b
+
+n = add_numbers(1, 2)
+sum_of_natural = n * (n + 1) // 2
+print(""Sum of first"", n, ""natural numbers:"", sum_of_natural)
+```
+
+What will be printed?","","","","","","3","","`Sum of first 1 natural numbers: 1`","`Sum of first 2 natural numbers: 3`","`Sum of first 3 natural numbers: 6`","`Sum of first 3 natural numbers: 9`","","6a4761641bd83eb6f24f2b94","0.5","markdown","`add_numbers(1, 2)` returns `3`, so `n = 3`. Then `sum_of_natural = 3 * (3 + 1) // 2 = 12 // 2 = 6`. The printed line is `Sum of first 3 natural numbers: 6`.
+
+Options 1 and 2 are incorrect because they use the wrong value of `n`. Option 4 is incorrect because `9` would come from a different formula or wrong `n`."
+"mcmc","markdown","A **parcel booking desk** uses positional arguments when staff enter package details in a fixed order.
+
+```python
+def book_parcel(weight_kg, destination):
+    return weight_kg, destination
+
+book_parcel(2, ""Delhi"")
+```
+
+Which statements are correct?","","","","","","","","`weight_kg` and `destination` are parameters","`2` and `""Delhi""` are arguments","Arguments are matched to parameters by position","`book_parcel(""Delhi"")` will work correctly for a 2 kg parcel","1, 2, 3","6a4761641bd83eb6f24f2b94","0.5","markdown","Parameters appear in the function definition, arguments are the actual values passed during the call, and multiple arguments are matched **by position** — first to first, second to second.
+
+Option 4 is incorrect because the function needs two positional arguments. Passing only one causes a missing-argument error."
+"mcmc","markdown","A **student marks helper** compares two ways of sharing results:
+
+```python
+def show_total(a, b):
+    print(a + b)
+
+def get_total(a, b):
+    return a + b
+```
+
+Which statements are correct?","","","","","","","","`show_total(4, 5)` displays `9` on screen","`x = get_total(4, 5)` stores `9` in `x`","`y = show_total(4, 5)` stores `9` in `y`","A returned value can be passed directly into another function call","1, 2, 4","6a4761641bd83eb6f24f2b94","0.5","markdown","`print()` displays output, while `return` gives a value back to the caller. Because `get_total` returns `9`, it can be stored or passed onward. `show_total` prints but does not return the sum.
+
+Option 3 is incorrect because `show_total` has no `return`, so `y` becomes `None`, not `9`."
+"mcmc","markdown","A **startup team** refactors a long billing script into smaller reusable functions so each function has one clear job and repeated price logic is written only once.
+
+Which statements about this modular approach are correct?","","","","","","","","It follows the DRY principle by avoiding repeated code","The output of one function can become the input of another function","A function should ideally perform one clear task","Modular programming means all logic must stay in one large block","1, 2, 3","6a4761641bd83eb6f24f2b94","1","markdown","Modular programming splits work into smaller reusable functions. **DRY** means writing logic once and reusing it. Function chaining uses one function's return value as another function's argument. Good modular design gives each function one responsibility.
+
+Option 4 is incorrect because modular programming is the opposite of keeping everything in one large block."
+"mcmc","markdown","A **shop billing program** uses these functions:
+
+```python
+def multiply(a, b=2):
+    return a * b
+
+def add_tax(amount, rate=0.10):
+    return amount + amount * rate
+
+x = multiply(5)
+y = multiply(3, 4)
+bill = add_tax(add_tax(x))
+```
+
+Which statements are correct?","","","","","","","","`x` is `10`","`y` is `12`","Calling `multiply()` with no arguments will raise an error","`bill` is `11`","1, 2, 3","6a4761641bd83eb6f24f2b94","1","markdown","- `multiply(5)` uses default `b=2`, so `x = 10`.
+- `multiply(3, 4)` returns `12`, so `y = 12`.
+- `multiply()` fails because required parameter `a` is missing.
+- `add_tax(10)` returns `11`, then `add_tax(11)` returns `12.1`, so `bill` is `12.1`, not `11`.
+
+Option 4 is incorrect because `bill` is `12.1` after tax is applied twice with the default rate."
+"subjective","markdown","**Neha** manages a **campus stationery counter** that sells three fixed-price items:
+
+- Notebook — ₹50 each
+- Pen — ₹20 each
+- Folder — ₹80 each
+
+Instead of calculating every bill manually, she wants a small Python program built from **reusable functions** so each step has one clear job and the final bill is produced by chaining function outputs.
+
+### Problem Statement
+
+Write a Python program that:
+
+1. Defines a function `total_for_item(item, quantity)` that returns the line total for one item:
+   - `""notebook""` → `quantity * 50`
+   - `""pen""` → `quantity * 20`
+   - `""folder""` → `quantity * 80`
+2. Defines a function `calculate_subtotal(n1, n2, n3)` that returns the sum of three item totals.
+3. Defines a function `apply_discount(subtotal, rate=0.05)` that:
+   - returns `subtotal` unchanged when `subtotal < 500`
+   - otherwise returns `subtotal - subtotal * rate`
+4. Defines a function `final_bill(amount)` that adds **10% tax** to `amount` and returns the final payable amount.
+5. Reads three integer quantities from the user in this order:
+   - notebooks
+   - pens
+   - folders
+6. Uses function chaining so that:
+   - the three `total_for_item(...)` results become arguments to `calculate_subtotal(...)`
+   - the subtotal becomes input to `apply_discount(...)`
+   - the discounted amount becomes input to `final_bill(...)`
+7. Prints only the final line in this exact format:
+
+```text
+Final amount to be collected: <value>
+```
+
+### Sample Input
+
+```text
+5
+2
+3
+```
+
+### Sample Output
+
+```text
+Final amount to be collected: 553.85
+```
+
+### How the Sample Output Is Calculated
+
+- Notebook total: `5 × 50 = 250`
+- Pen total: `2 × 20 = 40`
+- Folder total: `3 × 80 = 240`
+- Subtotal: `250 + 40 + 240 = 530`
+- Discount at 5% because subtotal ≥ 500: `530 - 26.5 = 503.5`
+- Tax at 10%: `503.5 + 50.35 = 553.85`
+
+### Second Sample Input
+
+```text
+2
+1
+1
+```
+
+### Second Sample Output
+
+```text
+Final amount to be collected: 220.0
+```
+
+### How the Second Sample Output Is Calculated
+
+- Notebook total: `100`
+- Pen total: `20`
+- Folder total: `80`
+- Subtotal: `200`
+- No discount because subtotal `< 500`
+- Tax at 10%: `200 + 20 = 220.0`
+
+### Constraints
+
+- Use `def`, parameters, arguments, `return`, and at least one default parameter value.
+- Do not put all billing logic in one long block; each function must do one clear job.
+- Do not use external libraries.
+- Assume all quantities are whole numbers `≥ 0`.
+- Write your complete program in a single `.py` file.
+
+### Submission Instruction
+
+- Code all the points mentioned above in a single `.py` file in VS Code.
+- Run the code and verify it with both sample inputs.
+- Then submit the code in the code editor/answer box in the LMS.","","","","","","","","","","","","","6a4761641bd83eb6f24f2b94","0.5","markdown","### Step-by-step Walkthrough
+
+1. Create `total_for_item(item, quantity)` to handle one item's price logic using `if` / `elif` / `else`.
+2. Create `calculate_subtotal(n1, n2, n3)` to add the three returned totals.
+3. Create `apply_discount(subtotal, rate=0.05)` with a default discount rate and a conditional check for `subtotal >= 500`.
+4. Create `final_bill(amount)` to add 10% tax and return the payable amount.
+5. Read notebook, pen, and folder quantities from the user.
+6. Chain the functions in order and print the final bill.
+
+### Reference Solution — `stationery_bill.py`
+
+```python
+def total_for_item(item, quantity):
+    if item == ""notebook"":
+        return quantity * 50
+    elif item == ""pen"":
+        return quantity * 20
+    else:
+        return quantity * 80
+
+
+def calculate_subtotal(n1, n2, n3):
+    return n1 + n2 + n3
+
+
+def apply_discount(subtotal, rate=0.05):
+    if subtotal < 500:
+        return subtotal
+    return subtotal - subtotal * rate
+
+
+def final_bill(amount):
+    return amount + amount * 0.10
+
+
+notebook_qty = int(input(""Enter quantity of notebooks: ""))
+pen_qty = int(input(""Enter quantity of pens: ""))
+folder_qty = int(input(""Enter quantity of folders: ""))
+
+n1 = total_for_item(""notebook"", notebook_qty)
+n2 = total_for_item(""pen"", pen_qty)
+n3 = total_for_item(""folder"", folder_qty)
+
+subtotal = calculate_subtotal(n1, n2, n3)
+discounted = apply_discount(subtotal)
+bill = final_bill(discounted)
+
+print(""Final amount to be collected:"", bill)
+```
+
+### Sample Verification
+
+**Input:** `5`, `2`, `3`
+
+- `n1 = 250`, `n2 = 40`, `n3 = 240`
+- `subtotal = 530`
+- `discounted = 530 - 26.5 = 503.5`
+- `bill = 503.5 + 50.35 = 553.85`
+
+**Input:** `2`, `1`, `1`
+
+- `n1 = 100`, `n2 = 20`, `n3 = 80`
+- `subtotal = 200`
+- `discounted = 200`
+- `bill = 220.0`
+
+### Alternative Approaches
+
+- Chain directly in one line: `bill = final_bill(apply_discount(calculate_subtotal(n1, n2, n3)))` after computing `n1`, `n2`, and `n3`.
+- Store item prices in a dictionary and look up rates inside `total_for_item`, if you want easier future updates.
+- Round the final amount with `round(bill, 2)` if you want exactly two decimal places in display."

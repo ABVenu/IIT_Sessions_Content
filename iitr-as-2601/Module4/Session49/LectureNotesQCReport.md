@@ -45,3 +45,48 @@ Passed.
 ### QC Outcome
 
 Passed.
+
+---
+
+## QC Iteration 3 (post-session alignment — Lecture Notes Released.md)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 |
+| Creativity | 5 |
+| Structural Adherence | 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference (e.g. "Keep it lite") in any part | True |
+
+**Notes:**
+- Aligned to Live Topic Coverage and transcript: removed **Re-Chunking and Re-Indexing** detail, **Consistent Chunk IDs**, **chunk_refresh_demo.py**, and **Grounding Checklist Before Release** (not taught).
+- Retained **metadata filters** (two-layer retrieval, SQL WHERE analogy, Amazon laptop and Tesla 2022 examples), **source tagging**, and **metadata_filter_demo.py**.
+- Added taught extras: **RAG architecture recap**, **recursive 512-char splitter**, **semantic chunking** (cost/latency), **ABB/Siemens latency use cases**, **indexing vs inference time**, **Gradio** mention, **LLM-as-judge**, **groundedness/relevance judges**, **RAG triad**, **human evaluation workflow**, **vector DB maintenance** (brief admin note), **`.gitignore`** for persisted DB.
+- Retained images `session49-01`, `session49-02`, `session49-03`; omitted `session49-04` (grounding-checklist visual — subtopic not covered).
+- No Mentimeter/quiz content; no session numbers; student-facing activities only.
+
+**Result:** Passed. All ratings = 5, all booleans = True.
+
+---
+
+## QC Iteration 4 (re-check — Lecture Notes Released.md)
+
+| Criteria | Rating / Result |
+|---|---|
+| Content Coverage | 5 |
+| Creativity | 5 |
+| Structural Adherence | 5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/internal reference (e.g. "Keep it lite") in any part | True |
+
+**Notes:**
+- Rechecked structure: direct headings, scannable layout, definitions with simple words and real-life examples, activities, key takeaways, terminology table.
+- Rechecked code: `metadata_filter_demo.py` is complete with line comments; removed uncovered `chunk_refresh_demo.py`.
+- Rechecked flow: chunking → indexing/inference → industry latency → metadata → evaluation reads as one story.
+- Rechecked restrictions: no duration, no target-audience block, no internal prompt wording, no numbered session references.
+
+**Result:** Passed. All ratings = 5, all booleans = True.
