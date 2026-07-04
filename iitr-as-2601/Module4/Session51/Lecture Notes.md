@@ -27,6 +27,8 @@ Most agent labs so far used **text in** and **text out**. Real products also use
 - **In Simple Words:** The agent can work with more than typed words.
 - **Real-Life Example:** WhatsApp lets you send text, voice notes, and photos in one chat. A multimodal pipeline does a similar mix, step by step.
 
+![Multimodal overview showing text questions, voice notes, and campus notice photos as three input types that can produce written answers, spoken summaries, or short image descriptions](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session51/session51-01-multimodal-overview.png)
+
 | Modality | Input example | Output example |
 |---|---|---|
 | Text | Typed question | Written answer |
@@ -58,6 +60,8 @@ Sample audio file (voice note)
 [3] Text-to-Speech (TTS)  -->  audio file (spoken summary)
 ```
 
+![Speech pipeline flow from campus voice note through Speech-to-Text, summarization, and Text-to-Speech to a spoken summary the student can listen to](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session51/session51-02-speech-pipeline-flow.png)
+
 ### Where Vision Fits
 
 Vision is a **parallel input path**, not a replacement for speech.
@@ -68,6 +72,8 @@ Sample image file (photo / screenshot)
         v
 [Vision] Image --> short description (cloud vision model)
 ```
+
+![Vision as a parallel input path where a campus notice photo is sent to a cloud vision model and returns a short text description alongside the main speech pipeline](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session51/session51-03-vision-parallel-path.png)
 
 ### Provider Choice (Read Once)
 
@@ -80,6 +86,8 @@ Sample image file (photo / screenshot)
 | API key for the lab | **Only** `GROQ_API_KEY` | If you switch provider: **only** `OLLAMA_API_KEY` |
 
 **Important:** You are **not** required to run Groq and Ollama Cloud together. Pick **one** cloud LLM provider for the session.
+
+![Cloud lab setup showing a light laptop downloading sample files while heavy speech and vision models run in the cloud with one API key and gTTS as a separate speech service](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session51/session51-04-cloud-laptop-one-key.png)
 
 ### Activity — Label the Pipeline
 
@@ -205,6 +213,8 @@ After STT, compare your model transcript with `sample_transcript.txt`.
 | Names / numbers | Times and IDs look right | Garbled numbers |
 | Meaning | Same message as sample text | Different meaning |
 | Noise | Clean sentences | Random extra words |
+
+![Transcript quality checklist comparing Speech-to-Text output against expected campus update text for completeness, numbers, meaning, and noise](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session51/session51-05-transcript-quality-check.png)
 
 **Common mistake:** Starting with a long, noisy recording.
 
