@@ -1,8 +1,8 @@
 # Lecture Notes QC Report
 
-## QC Iteration 1
+## QC Iteration 1 (Lecture Notes Released — Post-Session Alignment)
 
-Final notes length: **466 lines**.
+`Lecture Notes Released.md` created by aligning instructor notes against transcript coverage (`Live Topic Coverage.md`). Final length: **~390 lines**.
 
 | Criteria | Result |
 |---|---|
@@ -16,22 +16,20 @@ Final notes length: **466 lines**.
 
 ### Observations
 
-- The notes cover all required topics: Bubble Sort, Selection Sort, tracing, Python implementation, O(n^2) time complexity, and O(1) space complexity.
-- Bubble Sort includes intuition, step-by-step trace, full Python implementation, and trace-printing implementation.
-- Selection Sort includes intuition, step-by-step trace, and full Python implementation.
-- Activities are student-facing and include tracing Bubble Sort, tracing Selection Sort, comparing both algorithms in code, and manually counting comparisons.
-- The notes start directly with the lecture title and do not include duration, target audience, or internal prompt instructions.
-- No previous session number is mentioned; the bridge to previous learning is written generically.
+- All four detailed subtopics covered: explain bubble/selection sort, Python implementation, manual tracing, and O(n²) complexity analysis.
+- Removed sections not taught in session: `Bubble Sort With Trace Printing` standalone section, `Simple Growth Table`, `Activity: Compare Both Algorithms in Code`, `Activity: Count Comparisons Manually`, and `.copy()` common-mistake note.
+- Retained all four session images.
+- Added session-taught content: why learn elementary sorts (coding intuition), algorithm definition, sorting requires a list (not a single value), sorting on strings, in-place selection sort constraint (cards analogy), bubble sort optimization hints, nearly sorted data comparison, nested-loop O(n²) caution, merge sort/heapsort mention, and function reuse for sorting.
+- Trace examples aligned to live session array `[5, 1, 4, 2, 8]` for both algorithms.
+- No Mentimeter/quiz content; no session numbers or duration metadata.
 
 ### Action Taken
 
-- QC passed. No corrective changes required after this iteration.
+- Post-session alignment complete. QC passed.
 
 ---
 
-## QC Iteration 2
-
-Final notes length confirmed: **466 lines**.
+## QC Iteration 2 (Lecture Notes Released — Confirmation)
 
 | Criteria | Result |
 |---|---|
@@ -45,11 +43,11 @@ Final notes length confirmed: **466 lines**.
 
 ### Observations
 
-- The second review confirms smooth progression from sorting basics to Bubble Sort, Selection Sort, tracing, comparison, and complexity analysis.
-- Code examples are complete and include simple comments on each code line.
-- The complexity explanation correctly connects nested loops with O(n^2) growth and explains O(1) extra space.
-- The ending includes key takeaways and an important commands, libraries, and terminologies reference table.
+- Second review confirms smooth flow from sorting basics through bubble sort, selection sort, tracing, complexity, and comparison.
+- Code examples use full functions with line-by-line comments and "How the code works" explanations.
+- Student-facing tracing activities retained; no instructor-facing phrasing.
+- Key takeaways and terminology table updated to match released content.
 
 ### Action Taken
 
-- QC passed again. Final notes meet the expected QC result.
+- QC passed. `Lecture Notes Released.md` is ready for student release.
