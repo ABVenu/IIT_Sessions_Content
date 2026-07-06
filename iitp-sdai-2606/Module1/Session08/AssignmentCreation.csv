@@ -1,0 +1,230 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"**Rahul** helps his college library team arrange returned books on a shelf by **call number** from smallest to largest before the next shift.
+
+What is the **best description** of what he is doing?",,,,,,2,,Encrypting book titles so only librarians can read them,"Arranging data in a specific order, usually ascending or descending",Deleting duplicate books from the database,Converting every book title into a single integer,,6a4b5e1756d5d6a4de423942,0,markdown,"**Sorting** means arranging items in a chosen order — such as ascending call numbers or descending popularity scores.
+
+**Why other options are wrong:**
+- A: Sorting is about order, not encryption.
+- C: Removing duplicates is a different operation.
+- D: Sorting rearranges existing values; it does not force every title to become one integer."
+mcsc,markdown,"During **sports day**, volunteers line up students by height using a method where each volunteer compares **two neighbours** and swaps them if the taller student is standing on the left.
+
+Which sorting algorithm matches this idea most closely?",,,,,,2,,Selection Sort,Bubble Sort,Printing the list without changing the order of values,Using Python's built-in `sorted()` function,,6a4b5e1756d5d6a4de423942,0,markdown,"**Bubble Sort** repeatedly compares **adjacent** values and swaps them when they are out of order, pushing larger values toward the end over multiple passes.
+
+**Why other options are wrong:**
+- A: Selection Sort finds the smallest remaining value and places it at the next position — it does not focus on neighbour swaps.
+- C: Printing displays values but does not rearrange them into sorted order.
+- D: The scenario describes the step-by-step logic of Bubble Sort, not calling a built-in sorting function."
+mcsc,markdown,"A coding club stores member roll numbers in this list:
+
+```python
+rolls = [1042, 1015, 1088]
+```
+
+What is the **index** of the value `1015`?",,,,,,2,,`0`,`1`,`2`,`1015`,,6a4b5e1756d5d6a4de423942,0,markdown,"Python list indices start at `0`. In `[1042, 1015, 1088]`, index `0` is `1042`, index `1` is `1015`, and index `2` is `1088`.
+
+**Why other options are wrong:**
+- A: Index `0` holds `1042`, not `1015`.
+- C: Index `2` holds `1088`.
+- D: `1015` is the value itself, not its index position."
+mcsc,markdown,"**Anita** writes this line in her notebook:
+
+```python
+single_score = 87
+```
+
+She asks: ""Can I sort this one score into ascending order?""
+
+What is the **correct answer**?",,,,,,3,,"Yes, Bubble Sort works on a single number","Yes, but only Selection Sort works on a single number","No, sorting needs multiple items in a list or collection","No, because Python cannot store numbers in variables",,6a4b5e1756d5d6a4de423942,0,markdown,"Sorting rearranges **multiple** values relative to one another. A single value like `87` has nothing to compare or reorder.
+
+**Why other options are wrong:**
+- A and B: Neither algorithm applies meaningfully to one isolated value.
+- D: Python can store numbers in variables; the issue is that one value cannot be sorted."
+mcsc,markdown,"**Karan** runs **Bubble Sort** in ascending order on this list:
+
+```python
+scores = [5, 1, 4, 2, 8]
+```
+
+After **Pass 1** is complete, what will the list look like?",,,,,,2,,"`[1, 2, 4, 5, 8]`","`[1, 4, 2, 5, 8]`","`[5, 1, 4, 2, 8]`","`[1, 5, 4, 2, 8]`",,6a4b5e1756d5d6a4de423942,0.5,markdown,"In Pass 1, adjacent comparisons bubble the largest value `8` to the last position:
+
+- `5` and `1` → swap → `[1, 5, 4, 2, 8]`
+- `5` and `4` → swap → `[1, 4, 5, 2, 8]`
+- `5` and `2` → swap → `[1, 4, 2, 5, 8]`
+- `5` and `8` → no swap → `[1, 4, 2, 5, 8]`
+
+**Why other options are wrong:**
+- A: The list is fully sorted only after all passes, not after Pass 1.
+- C: This is the starting list before any swaps.
+- D: This is the list after only the first comparison, not after the full pass."
+mcsc,markdown,"**Priya** is arranging playing cards from smallest to largest. On each round, she scans the remaining unsorted cards, finds the **smallest** card, and places it in the next correct position on the left.
+
+Which algorithm follows this idea?",,,,,,2,,Bubble Sort,Selection Sort,Sorting a single integer,Printing the list without changing it,,6a4b5e1756d5d6a4de423942,0.5,markdown,"**Selection Sort** repeatedly selects the smallest value from the unsorted portion and swaps it into the current position on the left.
+
+**Why other options are wrong:**
+- A: Bubble Sort focuses on adjacent comparisons and bubbling larger values to the right.
+- C: A single integer cannot be sorted.
+- D: Printing does not rearrange values."
+mcmc,markdown,"A hackathon leaderboard tool uses **Bubble Sort** to arrange scores in ascending order.
+
+Which statements about Bubble Sort are **correct**?",,,,,,,,It compares adjacent elements in each pass,"After one complete pass, the largest value moves toward the end",Its typical worst-case time complexity is O(n^2),It always finishes in exactly one pass for every input list,"1, 2, 3",6a4b5e1756d5d6a4de423942,0.5,markdown,"Bubble Sort compares neighbours, bubbles the largest value rightward each pass, and uses nested loops that lead to **O(n^2)** worst-case time.
+
+**Why other options are wrong:**
+- D: Most lists need multiple passes — one pass is not enough in general."
+mcmc,markdown,"**Vikram** analyses why both **Bubble Sort** and **Selection Sort** are called **O(n^2)** algorithms for a list of size `n`.
+
+Which statements are **correct**?",,,,,,,,The outer loop runs roughly `n` times,The inner loop also runs roughly `n` times in the worst case,Two nested loops always guarantee O(n^2) in every Python program,The total work grows roughly like `n × n` in the worst case,"1, 2, 4",6a4b5e1756d5d6a4de423942,0.5,markdown,"For both elementary sorting algorithms, each loop runs about `n` times, so worst-case work scales as **n × n**, giving **O(n^2)**.
+
+**Why other options are wrong:**
+- C: Nested loops alone do not automatically mean O(n^2) — you must check how many times each loop actually runs."
+mcmc,markdown,"**Meera** compares **Bubble Sort** and **Selection Sort** while preparing a report for her programming lab.
+
+Which statements are **correct**?",,,,,,,,Both algorithms can sort inside the same list using O(1) extra space,Both have worst-case time complexity O(n^2),Selection Sort usually performs more swaps inside a single pass than Bubble Sort,"On nearly sorted data, Bubble Sort may finish earlier than Selection Sort","1, 2, 4",6a4b5e1756d5d6a4de423942,1,markdown,"Both sort in place with constant extra variables (**O(1)** space) and **O(n^2)** worst-case time. Bubble Sort can stop early when few swaps are needed on nearly sorted data; Selection Sort still scans for the minimum each pass.
+
+**Why other options are wrong:**
+- C: Bubble Sort can swap many times in one pass; Selection Sort usually swaps once per pass after finding the minimum."
+mcmc,markdown,"**Arjun** reviews this **Selection Sort** function:
+
+```python
+def selection_sort(nums):
+    n = len(nums)
+    for i in range(n - 1):
+        min_index = i
+        for j in range(i + 1, n):
+            if nums[j] < nums[min_index]:
+                min_index = j
+        nums[i], nums[min_index] = nums[min_index], nums[i]
+    return nums
+```
+
+Which statements about this code are **correct**?",,,,,,,,`min_index = i` starts by assuming the current position holds the smallest value so far,"`range(i + 1, n)` searches only the unsorted part of the list","After each outer-loop iteration, the sorted region on the left grows by one position",This function has O(n) time complexity because Python has only two loops,"1, 2, 3",6a4b5e1756d5d6a4de423942,1,markdown,"Selection Sort assumes the current index is the minimum, scans the rest of the list, updates `min_index`, swaps once, and grows the sorted left side each pass.
+
+**Why other options are wrong:**
+- D: Two nested loops that each run about `n` times give **O(n^2)** time, not O(n)."
+subjective,markdown,"**Meera** is a volunteer at her college **Sports Day leaderboard desk**. Each athlete is given a **rank score** (lower score means better rank). At the end of the morning heats, she receives the scores in random order and must publish the leaderboard in **ascending order** (best rank first).
+
+She wants a small Python program with **two reusable sorting functions** so she can cross-check the result using both **Bubble Sort** and **Selection Sort**.
+
+### Problem Statement
+
+Write a Python program that:
+
+1. Defines a function `bubble_sort(scores)` that:
+   - receives a list of numbers
+   - sorts the list in **ascending order** using the Bubble Sort logic (nested loops, adjacent comparisons, swaps)
+   - returns the sorted list
+2. Defines a function `selection_sort(scores)` that:
+   - receives a list of numbers
+   - sorts the list in **ascending order** using the Selection Sort logic (find minimum in unsorted part, swap into position)
+   - returns the sorted list
+3. Uses these three lists in your program:
+   ```python
+   original = [42, 15, 28, 9, 35]
+   bubble_data = [42, 15, 28, 9, 35]
+   selection_data = [42, 15, 28, 9, 35]
+   ```
+4. Calls `bubble_sort(bubble_data)` and `selection_sort(selection_data)` and stores the returned lists.
+5. Prints the output in **exactly** this format:
+
+```text
+Original: [42, 15, 28, 9, 35]
+Bubble Sort: [9, 15, 28, 35, 42]
+Selection Sort: [9, 15, 28, 35, 42]
+Both results match: Yes
+```
+
+### Expected Output
+
+```text
+Original: [42, 15, 28, 9, 35]
+Bubble Sort: [9, 15, 28, 35, 42]
+Selection Sort: [9, 15, 28, 35, 42]
+Both results match: Yes
+```
+
+### Constraints
+
+- Use `def`, nested loops, `len()`, `range()`, comparisons, and swaps as needed.
+- Do **not** use Python's built-in `sorted()` or `list.sort()`.
+- Keep both sorting functions in the **same file**.
+- Add at least **one comment** (`#`) explaining what your program does.
+- Write your complete program in [OneCompiler Python](https://onecompiler.com/python).
+
+### Submission Instruction
+
+1. Open [https://onecompiler.com/python](https://onecompiler.com/python) and create a new Python file.
+2. Write your complete program in the editor, then click **Run** and verify the output.
+3. Click the **Save** button at the top right.
+4. Enter your **assignment name**, set visibility to **Public**, and save.
+5. Click the **Share** button, copy the link, and submit that link in the answer box on the LMS.
+
+![Step - 1](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/5b930478-03c2-4255-a724-d0990da5e4f4/C0AFXttOJJhW3o1S.png)
+
+![Step-2](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/c817d308-66ca-4b5a-8579-db26951ad1a2/PGcKY2hqUQgysgPo.png)",,,,,,,,,,,,,6a4b5e1756d5d6a4de423942,0.5,markdown,"### Step-by-step Walkthrough
+
+1. Create `bubble_sort(scores)` with an outer loop for passes and an inner loop for adjacent comparisons.
+2. Swap neighbouring values when the left value is greater than the right value.
+3. Create `selection_sort(scores)` with an outer loop for each position and an inner loop to find the minimum index in the unsorted part.
+4. Swap the minimum value into the current position after the inner search completes.
+5. Use separate copies of the same starting list so each function sorts independently.
+6. Print the original list, both sorted results, and whether they match.
+
+### Reference Solution — `sports_leaderboard_sort.py`
+
+```python
+# Sports Day leaderboard sorter using Bubble Sort and Selection Sort
+
+def bubble_sort(scores):
+    n = len(scores)
+    for pass_index in range(n - 1):
+        for i in range(n - 1 - pass_index):
+            if scores[i] > scores[i + 1]:
+                temp = scores[i]
+                scores[i] = scores[i + 1]
+                scores[i + 1] = temp
+    return scores
+
+
+def selection_sort(scores):
+    n = len(scores)
+    for current_index in range(n - 1):
+        min_index = current_index
+        for i in range(current_index + 1, n):
+            if scores[i] < scores[min_index]:
+                min_index = i
+        temp = scores[current_index]
+        scores[current_index] = scores[min_index]
+        scores[min_index] = temp
+    return scores
+
+
+original = [42, 15, 28, 9, 35]
+bubble_data = [42, 15, 28, 9, 35]
+selection_data = [42, 15, 28, 9, 35]
+
+bubble_result = bubble_sort(bubble_data)
+selection_result = selection_sort(selection_data)
+
+print(""Original:"", original)
+print(""Bubble Sort:"", bubble_result)
+print(""Selection Sort:"", selection_result)
+
+if bubble_result == selection_result:
+    print(""Both results match: Yes"")
+else:
+    print(""Both results match: No"")
+```
+
+### Sample Verification
+
+Starting list: `[42, 15, 28, 9, 35]`
+
+- **Bubble Sort** bubbles larger values rightward over multiple passes until the list becomes `[9, 15, 28, 35, 42]`.
+- **Selection Sort** repeatedly places the smallest remaining value on the left until the list becomes `[9, 15, 28, 35, 42]`.
+- Both methods produce the same final order, so the program prints `Both results match: Yes`.
+
+### Alternative Approaches
+
+- Use Python's one-line swap: `scores[i], scores[i + 1] = scores[i + 1], scores[i]` inside Bubble Sort.
+- Store `min_index` as `min_assume` or any clear variable name — the logic stays the same.
+- Print the match line with a boolean converted to text if you prefer: `print(""Both results match:"", ""Yes"" if bubble_result == selection_result else ""No"")`."
