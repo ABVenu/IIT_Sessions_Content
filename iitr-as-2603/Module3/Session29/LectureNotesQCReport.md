@@ -53,6 +53,60 @@
 
 ---
 
+# Lecture Notes QC Report — Embeddings & Vector Search (Released Alignment)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-07-07  
+**Iteration:** 4 (post-session alignment vs `Live Topic Coverage.md` + transcript)
+
+---
+
+## Alignment changes (vs pre-session `Lecture Notes.md`)
+
+| Item | Action |
+|---|---|
+| Music-app fingerprint analogy | **Removed** — not taught live |
+| Word2Vec (Google 2013) + king−man+woman≈queen | **Added** — matches transcript digression |
+| TensorFlow Projector / word-vector intuition | **Added** in Word2Vec subsection |
+| RAG retriever pipeline recap (steps 1–6) | **Added** — matches extended session opening recap |
+| Coordinate map demo (C1/C2 close, C3 far) | **Added** — matches 2D plotting explanation |
+| Non-interpretable embedding dimensions | **Added** — matches instructor clarification |
+| Euclidean vs cosine distance (cosine preferred) | **Added** — matches theory segment |
+| Google AI Overviews + Perplexity semantic search | **Added** — matches keyword vs semantic section expansion |
+| Pinecone / PGvector mention | **Added** — matches brief vector DB ecosystem context |
+| Metadata filtering for search efficiency | **Added** — matches live metadata discussion |
+| Vector DB never says "I don't know" + grounding tie-in | **Added** — matches UPI edge-case and grounding mention |
+| Full Chroma lab (upsert, peek, query, top-k, get vs query) | **Retained** — all taught live |
+| UPI wrong-match edge case + predict-top-match activity | **Retained** — taught in session |
+| All five diagram images | **Retained** |
+
+---
+
+## QC Criteria
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics aligned to live session plus extra taught topics (Word2Vec, distance metrics, Google/Perplexity, metadata filtering, grounding limits). Full Chroma lab path retained. |
+| **Creativity** | **5 / 5** | Word2Vec math analogy, e-commerce FAQ lab, SQL vs vector tables, Google/Perplexity real-world links, UPI missing-chunk teaching moment, predict-then-check activities. |
+| **Structural Adherence** | **5 / 5** | `#` title; Context + RAG recap bridge; Official/Simple/Real-life pattern; full code with per-line comments + "How the code works"; student-facing activities; Key Takeaways; terminology table; five diagram images. |
+| **No Logical Mistakes** | **True** | Same-model rule consistent; cosine/lower-distance reading correct; get vs query distinction correct; embedding_function=None workflow correct; grounding vs vector DB behaviour distinguished. |
+| **No Presentation Mistakes** | **True** | No duration/audience metadata; no Mentimeter/poll content; professional documentation tone; paragraphs scannable. |
+| **No Previous Session Number References** | **True** | Uses **previous session** and **later work** only — no `Session N` in student prose. |
+| **No Metadata/internal reference** | **True** | No internal spillover, line-count targets, or instructor-only instructions in student text. |
+
+---
+
+## Expected Result
+
+- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
+- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
+
+**Outcome:** QC passed on iteration 4 — `Lecture Notes Released.md` ready for student release.
+
+**Approximate line count:** ~465 lines.
+
+---
+
 ## Iteration 3 (Fresh QC — 2026-07-04)
 
 **File reviewed:** `Lecture Notes.md`  
@@ -71,3 +125,4 @@
 **Expected result:** Content Coverage, Creativity, Structural Adherence all **5 / 5**; all True/False checks **True** — **QC passed**.
 
 **Outcome:** No improvisation required. Notes remain release-ready.
+
