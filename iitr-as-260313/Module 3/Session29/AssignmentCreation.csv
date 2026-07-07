@@ -1,0 +1,213 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"You are building a tool-calling chatbot. Which component is responsible for running the agent loop, calling tools, and returning the final response?",,,,,,2,,`ChatPromptTemplate`,`AgentExecutor`,`MessagesPlaceholder`,`@tool`,,6a4c9f806d6e3a5537a8eeb6,0,markdown,"`AgentExecutor` is the runtime layer that executes the agent, invokes tools, and manages the loop until a final answer is produced.
+
+**Why other options are wrong:**
+- A: `ChatPromptTemplate` defines prompt structure only.
+- C: `MessagesPlaceholder` stores interim messages in prompt flow.
+- D: `@tool` registers functions as tools; it does not run loops."
+mcsc,markdown,What is the main purpose of setting `max_iterations` in an agent executor?,,,,,,2,,To increase model creativity,To limit repeated agent action loops,To force tool usage in every query,To hide intermediate steps,,6a4c9f806d6e3a5537a8eeb6,0,markdown,"`max_iterations` puts an upper bound on action loops, preventing runaway retries or infinite loops.
+
+**Why other options are wrong:**
+- A: Creativity is controlled by model temperature, not iteration caps.
+- C: It does not force tool usage.
+- D: It does not control trace visibility."
+mcsc,markdown,What does `return_intermediate_steps=True` help you do?,,,,,,3,,Encrypt tool outputs,Disable tool calls,Inspect which tools were called and what they returned,Improve internet speed for API calls,,6a4c9f806d6e3a5537a8eeb6,0,markdown,"This setting returns action-observation traces so you can debug tool selection and behavior.
+
+**Why other options are wrong:**
+- A: No encryption behavior is provided by this flag.
+- B: It does not disable tools.
+- D: It has nothing to do with network performance."
+mcsc,markdown,What is the primary role of `create_tool_calling_agent` in a LangChain agent setup?,,,,,,1,,It builds the decision layer that chooses when and which tools to call,It permanently stores all user chat history across sessions,It downloads Ollama models automatically,It replaces the need for any prompt template,,6a4c9f806d6e3a5537a8eeb6,0,markdown,"`create_tool_calling_agent` wires the LLM, tools, and prompt into an agent that can reason about tool use. The executor then runs that agent.
+
+**Why other options are wrong:**
+- B: Persistent memory is a separate concern; this function does not store history.
+- C: Model download is handled by Ollama CLI, not this function.
+- D: A prompt template is still required when creating the agent."
+mcsc,markdown,Your agent occasionally returns malformed structured outputs from the model and crashes during parsing. Which executor configuration directly improves resilience in this case?,,,,,,3,,`verbose=True`,`return_intermediate_steps=True`,`handle_parsing_errors=True`,`max_iterations=1`,,6a4c9f806d6e3a5537a8eeb6,0.5,markdown,"`handle_parsing_errors=True` allows safer recovery from parse issues instead of immediate hard failure.
+
+**Why other options are wrong:**
+- A: Verbose mode only prints logs.
+- B: This helps observation, not recovery.
+- D: Lowering iterations may reduce loops but does not solve parse handling."
+mcsc,markdown,"A user asks: ""Tell me order status, ETA, and refund for ORD102."" Which behavior best indicates a correctly functioning tool-calling agent?",,,,,,3,,It always responds without tools to save cost,It calls exactly one random tool and fabricates the rest,"It calls relevant tools, aggregates observations, then returns one final user-friendly response",It asks the user to provide source code before answering,,6a4c9f806d6e3a5537a8eeb6,0.5,markdown,"A proper agent decides required tools, executes them, uses tool outputs, and synthesizes a final response.
+
+**Why other options are wrong:**
+- A: Avoiding tools can lead to incorrect or fabricated answers.
+- B: Random single-tool behavior is unreliable.
+- D: Source code is not required for this use case."
+mcmc,markdown,Which settings directly contribute to safer and debuggable runtime behavior in a production-style tool-calling workflow?,,,,,,,,`max_iterations`,`handle_parsing_errors`,`return_intermediate_steps`,`temperature=1.5`,"1, 2, 3",6a4c9f806d6e3a5537a8eeb6,0.5,markdown,"- `max_iterations` prevents runaway loops.
+- `handle_parsing_errors` improves fault tolerance.
+- `return_intermediate_steps` enables traceability and debugging.
+
+**Why option D is wrong:** High temperature increases randomness; it is not a core safety or debug control."
+mcmc,markdown,You are validating an agent with a test pack. Which checks should be included to assess decision-path quality (not just final text quality)?,,,,,,,,Compare expected tools vs actual tools used in intermediate steps,Ensure at least one test where no tool should be called,Ignore tool inputs because outputs are enough,Include a case with missing or invalid order ID,"1, 2, 4",6a4c9f806d6e3a5537a8eeb6,0.5,markdown,"Decision-path validation requires checking tool-routing correctness, including no-tool and invalid-input scenarios.
+
+**Why option C is wrong:** Tool inputs are crucial to catch argument-level mistakes."
+mcmc,markdown,You notice an agent repeatedly retries tool calls with no progress and eventually times out. Which interventions are valid and aligned with robust design?,,,,,,,,Lower or cap `max_iterations`,Add fallback messaging for repeated failures,Remove all tool descriptions to reduce prompt length,Use intermediate-step logs to identify failure stage,"1, 2, 4",6a4c9f806d6e3a5537a8eeb6,1,markdown,"Runaway behavior is addressed by iteration limits, robust fallback behavior, and observability for root-cause analysis.
+
+**Why option C is wrong:** Removing tool descriptions usually worsens tool selection quality."
+mcmc,markdown,"For multi-step agent behavior, which statements about the scratchpad (`MessagesPlaceholder`) are correct?",,,,,,,,It helps preserve current-run reasoning and tool traces across steps,It is useful for tool chaining in a single invocation,It permanently stores all user history across sessions by default,"Without it, multi-step context handling can degrade","1, 2, 4",6a4c9f806d6e3a5537a8eeb6,1,markdown,"Scratchpad is temporary working memory for the current run and supports coherent multi-step action flow.
+
+**Why option C is wrong:** Persistent cross-session memory is not provided by scratchpad alone."
+subjective,markdown,"You are building a mini support assistant for an online store. Implement a Python program that uses a tool-calling agent runtime to handle user support queries for order operations.
+
+### Problem Statement
+Create an assistant that can:
+1. Fetch order status for an order ID.
+2. Estimate delivery timeline for an order ID.
+3. Provide refund-related response based on order status.
+
+The program must:
+- Define an in-memory `orders_db` with at least 3 orders covering `shipped`, `cancelled`, and `delivered`.
+- Create 3 tools using `@tool`:
+  - `get_order_status(order_id: str) -> str`
+  - `estimate_delivery_timeline(order_id: str) -> str`
+  - `calculate_refund_amount(order_id: str) -> str`
+- Use `ChatOllama` from `langchain_ollama` as the chat model (any locally available Ollama model with tool-calling support, for example `llama3.1`).
+- Import `create_tool_calling_agent` and `AgentExecutor` from `langchain_classic.agents`.
+- Build an agent using `create_tool_calling_agent` with a prompt that includes `MessagesPlaceholder(""agent_scratchpad"")`.
+- Execute it using `AgentExecutor` with:
+  - `max_iterations=3`
+  - `handle_parsing_errors=True`
+  - `return_intermediate_steps=True`
+- Run at least 4 test queries:
+  1. Single-tool query (order status only)
+  2. Multi-tool query (status + delivery + refund for one order)
+  3. No-tool query (request outside available tools, for example flight booking)
+  4. Invalid order ID query
+- Print:
+  - Final output
+  - Intermediate steps (tool selected, tool input, tool observation)
+
+### Expected Outcome
+Your output should demonstrate:
+- Correct tool routing for each test case
+- Stable handling of invalid IDs or unsupported requests
+- Clear traceability through intermediate steps
+
+### Submission Instruction
+- code all the points mentioned in the VS Code in single `.py` file
+- run the code and verify its working
+- then submit the code in the code editor/answer box in the LMS",,,,,,,,,,,,,6a4c9f806d6e3a5537a8eeb6,0.5,markdown,"### Step-by-step Walkthrough
+1. Install dependencies: `pip install langchain-classic langchain-ollama langchain-core`.
+2. Create a mock `orders_db` with shipped, cancelled, and delivered samples.
+3. Define three tools with `@tool` and clear response logic for valid and invalid order IDs.
+4. Build prompt with system instruction, human input placeholder, and `MessagesPlaceholder(""agent_scratchpad"")`.
+5. Create the tool-calling agent using `create_tool_calling_agent` with `ChatOllama`.
+6. Wrap it in `AgentExecutor` with safe runtime settings.
+7. Run four test cases (single-tool, multi-tool, no-tool, invalid-ID).
+8. Print final output and each intermediate step (tool, input, observation).
+
+### Complete Reference Code (Single File)
+```python
+from langchain_ollama import ChatOllama
+from langchain_core.tools import tool
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+
+
+orders_db = {
+    ""ORD101"": {""status"": ""shipped"", ""city"": ""Delhi"", ""amount"": 2500, ""delivery_days"": 2},
+    ""ORD102"": {""status"": ""cancelled"", ""city"": ""Bangalore"", ""amount"": 1800, ""delivery_days"": 0},
+    ""ORD103"": {""status"": ""delivered"", ""city"": ""Mumbai"", ""amount"": 3200, ""delivery_days"": 0},
+}
+
+
+@tool
+def get_order_status(order_id: str) -> str:
+    """"""Get the current status for a given order ID.""""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""No order found for order ID {order_id}.""
+    return (
+        f""Order {order_id} is {order['status']} in {order['city']}. ""
+        f""Order amount is {order['amount']}.""
+    )
+
+
+@tool
+def estimate_delivery_timeline(order_id: str) -> str:
+    """"""Estimate delivery timeline for a given order ID.""""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""No order found for order ID {order_id}.""
+    status = order[""status""]
+    if status == ""shipped"":
+        return f""Order {order_id} is shipped and expected in {order['delivery_days']} days.""
+    if status == ""delivered"":
+        return f""Order {order_id} has already been delivered.""
+    if status == ""cancelled"":
+        return f""Order {order_id} is cancelled, so no delivery timeline exists.""
+    return f""Delivery timeline for order {order_id} is currently unavailable.""
+
+
+@tool
+def calculate_refund_amount(order_id: str) -> str:
+    """"""Return refund-related response for a given order ID.""""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""No order found for order ID {order_id}.""
+    status = order[""status""]
+    if status == ""cancelled"":
+        return f""Refund amount for order {order_id} is {order['amount']}.""
+    if status == ""delivered"":
+        return (
+            f""Order {order_id} is delivered. Refund eligibility depends on return policy ""
+            f""and product category.""
+        )
+    if status == ""shipped"":
+        return (
+            f""Order {order_id} is shipped. Refund cannot be finalized until cancellation ""
+            f""or return is initiated.""
+        )
+    return f""Refund details for order {order_id} are currently unavailable.""
+
+
+def print_trace(result: dict) -> None:
+    print(""Final Output:"")
+    print(result[""output""])
+    print(""\nIntermediate Steps:"")
+    for idx, (action, observation) in enumerate(result[""intermediate_steps""], start=1):
+        print(f""\nStep {idx}"")
+        print(""Tool Selected:"", action.tool)
+        print(""Tool Input:"", action.tool_input)
+        print(""Tool Observation:"", observation)
+
+
+def main() -> None:
+    tools = [get_order_status, estimate_delivery_timeline, calculate_refund_amount]
+    llm = ChatOllama(model=""llama3.1"", temperature=0)
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            (
+                ""system"",
+                ""You are an e-commerce support assistant. Use tools whenever required ""
+                ""to provide accurate responses."",
+            ),
+            (""human"", ""{input}""),
+            MessagesPlaceholder(variable_name=""agent_scratchpad""),
+        ]
+    )
+    agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
+    agent_executor = AgentExecutor(
+        agent=agent,
+        tools=tools,
+        verbose=True,
+        max_iterations=3,
+        handle_parsing_errors=True,
+        return_intermediate_steps=True,
+    )
+    test_cases = [
+        {""name"": ""Single-tool query"", ""query"": ""What is the status of order ORD101?""},
+        {""name"": ""Multi-tool query"", ""query"": ""For ORD102, check status, delivery timeline, and refund details.""},
+        {""name"": ""No-tool query"", ""query"": ""Can you book a flight from Delhi to Mumbai?""},
+        {""name"": ""Invalid order ID query"", ""query"": ""Get status and refund info for order ORD999.""},
+    ]
+    for case in test_cases:
+        result = agent_executor.invoke({""input"": case[""query""]})
+        print_trace(result)
+
+
+if __name__ == ""__main__"":
+    main()
+```"
