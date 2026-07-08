@@ -36,3 +36,26 @@
 | **No Metadata/internal reference in student notes** | **True** | Student-facing professional documentation only. |
 
 **Iteration 2 decision:** **Passed** — all required ratings are 5 and all True/False checks are True.
+
+---
+
+## QC Iteration 3 (Post-Session Alignment — `Lecture Notes Released.md`)
+
+| Criteria | Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Aligned to `Live Topic Coverage.md`: eval set with expected docs (full); hit rate and ranked-list scoring (conceptual); top-k/chunk knobs (conceptual); failure diagnosis via RAG triad (partial → conceptual); Q2/Q4 misses and fixes (strategies, not live before/after demo). Added taught extras: RAG recap, LLM-as-judge, semantic chunking, fixed-size limits, GTE-large, agentic RAG, multimodal preview. |
+| **Creativity** | **5 / 5** | CampusHelp corpus, class demo trace (60% hit rate), retrieval-vs-generation decision path, semantic chunking trade-off table, e-commerce agentic RAG architecture, tuning card activity. |
+| **Structural Adherence** | **5 / 5** | Clean title; previous-session context without numbers; Official Definition / In Simple Words / Real-Life Example pattern; corpus + eval-set code with “How the code works”; Key Takeaways; terminology table. No Mentimeter content. |
+| **No Logical Mistakes** | **True** | Hit-rate math (3/5), Q2/Q4 miss descriptions, and RAG triad fix mapping are consistent with transcript and coverage report. |
+| **No Presentation Mistakes** | **True** | Student-facing professional notes; no “hands-on lab completed in class” claims for experiments not run live. |
+| **No Previous Session Number References** | **True** | Uses “previous lesson” / “upcoming lesson” only. |
+| **No Metadata/internal reference in student notes** | **True** | No duration, audience, or internal instruction language. |
+
+### Alignment changes from instructor `Lecture Notes.md`
+
+- **Removed:** Full keyword-retriever lab, `compare_k_values` / `compare_chunk_settings` scripts, `classify_failure` code, `grounded_answer` lab generator, full before/after `evaluate_config` script, and activities requiring live parameter sweeps (not covered in session).
+- **Reframed:** Top-k and chunk tuning as conceptual knobs; improvement on Q2/Q4 as diagnosis + fix strategies (semantic chunking, embedding, k) without claiming live measurable before/after demo.
+- **Retained:** Fixed eval set, corpus, hit-rate concept, class trace table, failure-type decision path (introduced level).
+- **Added:** RAG pipeline recap, LLM-as-judge / RAG triad, ranked-list eval, semantic chunking, fixed-size limitations, GTE-large, agentic RAG (SQL + Chroma), multimodal preview.
+
+**Iteration 3 decision:** **Passed** — ready for student release.
