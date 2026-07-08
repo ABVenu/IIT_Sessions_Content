@@ -1,0 +1,154 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Priya is tuning a CampusHelp policy bot. She changes chunk size, top-k, and the answer prompt on the same day, then claims retrieval improved. Why is her conclusion unreliable?",,,,,,2,,Prompt changes never affect answers,She did not use a **fixed eval set** with the same questions before and after each change,Vector databases cannot store hostel policies,Hit rate only applies to SQL agents,,6a4df2da09b00f5bf4c27c91,0,markdown,"Without a **frozen eval set**, you cannot compare scores fairly across changes. You may fix one question and break another without noticing.
+
+**Why other options are wrong:**
+- A: Prompts do affect answers, but that is not why her comparison is unreliable.
+- C: Vector DBs can store policy text; the issue is evaluation method.
+- D: Hit rate is a retrieval metric for RAG eval sets, not SQL-only agents."
+mcsc,markdown,A retrieval eval run has **5 answerable questions**. Expected documents appear in top-k for **3** of them. What is the informal hit rate?,,,,,,3,,20%,40%,60%,100%,,6a4df2da09b00f5bf4c27c91,0,markdown,"Hit rate = hits ÷ answerable questions = 3 ÷ 5 = **0.60 (60%)**.
+
+**Why other options are wrong:**
+- A and B: Under-count hits or over-count questions.
+- D: Two questions still missed retrieval support."
+mcsc,markdown,"In the **RAG triad**, which dimension most directly tells you whether the **right chunks** were retrieved for the user question?",,,,,,3,,Groundedness,Answer relevance,Context relevance,Git commit cleanliness,,6a4df2da09b00f5bf4c27c91,0,markdown,"**Context relevance** judges retrieval quality — did the retriever bring the right evidence?
+
+**Why other options are wrong:**
+- A: Groundedness checks if the answer is supported by retrieved text.
+- B: Answer relevance checks if the reply addresses the question.
+- D: Unrelated to RAG evaluation."
+mcsc,markdown,"In a fixed eval item, what is an **expected supporting document**?",,,,,,2,,The final polished answer shown to the user,The gold source (for example `doc_id`) that should appear in retrieval for a hit,The embedding model name used at indexing time,The SQL table that stores order rows,,6a4df2da09b00f5bf4c27c91,0,markdown,"Expected supporting documents are **gold retrieval labels** — which policy or chunk should be in top-k for the question to count as a retrieval success.
+
+**Why other options are wrong:**
+- A: Final answers are evaluated separately from retrieval labels.
+- C: Model choice is a tuning knob, not an eval label.
+- D: SQL tables are structured data paths, not RAG chunk labels."
+mcsc,markdown,"CampusHelp eval question: *""Can I submit an assignment 1 day late?""* Expected doc: **`D2`**. Retrieved top-k: **`D5`, `D3`, `D1`**. The final answer still mentions a late penalty. What is the best **first** failure classification and fix direction?",,,,,,2,,Generation failure — rewrite the prompt only,"Retrieval failure — tune retrieval (chunking, embedding, or `k`) before blaming the prompt",Database failure — rebuild the SQL schema,No failure — any answer about penalties is acceptable,,6a4df2da09b00f5bf4c27c91,0.5,markdown,"Expected **`D2`** never appeared in retrieval, so the model lacked the right evidence. That is a **retrieval failure**; prompt-only edits are a weak first fix.
+
+**Why other options are wrong:**
+- A: Prompt edits do not replace missing evidence.
+- C: This scenario is policy retrieval, not SQL schema design.
+- D: Wrong evidence path means retrieval did not meet the eval label."
+mcsc,markdown,Your team uses **LLM-as-judge** to score RAG answers. Which setup best reduces bias?,,,,,,2,,Use the **same** model that generated the answer as the judge,"Use a **separate**, usually stronger, model as the judge",Disable all retrieval and judge only the user question,Let end users vote once and skip structured scores,,6a4df2da09b00f5bf4c27c91,0.5,markdown,"A different judge model improves objectivity. The same model judging itself tends to be lenient.
+
+**Why other options are wrong:**
+- A: Same-model judging is biased.
+- C: Judges need the response (and often context) to score quality.
+- D: Informal votes do not replace triad-style checks."
+mcmc,markdown,Which practices belong in a **well-designed fixed eval set** for RAG retrieval tuning?,,,,,,,,Write **expected `doc_id`s** before running retrieval,Include at least one **no-answer** question (no supporting doc in corpus),Change the question list after every experiment so results feel fresh,Keep the set small enough to score hits and misses by hand,"1, 2, 4",6a4df2da09b00f5bf4c27c91,0.5,markdown,"Gold labels upfront, no-answer cases, and a small scorable set are core eval habits. Freezing questions enables fair before/after comparison.
+
+**Why option C is wrong:** Changing questions between runs breaks comparability."
+mcmc,markdown,Hit rate stays low and **context relevance** judge scores are weak. Which are sensible **retrieval-side** experiments on the **same** frozen eval set?,,,,,,,,Try **semantic chunking** instead of naive fixed-size splits,Swap or upgrade the **embedding model** (for example a stronger model than your baseline),Increase **top-k** when the right chunk may be ranked low,Only increase temperature on the answer model,"1, 2, 3",6a4df2da09b00f5bf4c27c91,0.5,markdown,"Chunker type, embeddings, and `k` directly affect which chunks enter context. These are standard retrieval fixes when evidence is missing or wrong.
+
+**Why option D is wrong:** Temperature affects generation randomness, not which chunks are retrieved."
+mcmc,markdown,Which scenarios are best classified as a **retrieval failure** (expected supporting document **missing** from top-k)?,,,,,,,,"Expected **`D4`** for a mess-refund question, but top-k returns only `D2`, `D5`, `D1`","Expected **`D3`** is in top-k, but the answer says the library is open 24/7 on Sunday","Expected **`D2`** for a late-submission question, but top-k returns `D5`, `D3`, `D1`",Expected **`D5`** is in top-k and the answer correctly explains guest Wi-Fi pass rules,"1, 3",6a4df2da09b00f5bf4c27c91,1,markdown,"Retrieval failure means the **gold document never entered top-k**. Cases A and C match that pattern.
+
+**Why options B and D are wrong:**
+- B: Expected doc was retrieved — that is a **generation** misread, not retrieval miss.
+- D: Retrieval succeeded; this is a pass case, not a failure."
+mcmc,markdown,An **agentic RAG** e-commerce support bot routes between tools. Which statements are correct?,,,,,,,,**SQL agent tool** fits live order status from a structured database,**RAG retriever tool** fits return or shipping policy questions from embedded documents,A **top-level agent** chooses which tool to call per user question,Agentic RAG means retrieval replaces all SQL queries permanently,"1, 2, 3",6a4df2da09b00f5bf4c27c91,1,markdown,"Agentic RAG combines structured SQL tools and unstructured policy retrieval under one routing agent.
+
+**Why option D is wrong:** SQL and RAG serve different data types; one does not permanently replace the other."
+subjective,markdown,"Build a small **CampusHelp retrieval evaluator** in Python. You will define a fixed policy corpus, a frozen eval set with expected documents, run a simple **keyword retriever** at **top-k = 3**, and print an **informal hit rate**.
+
+### Problem Statement
+
+Create a single program that:
+
+1. Defines the **CampusHelp `CORPUS`** with five documents (`D1`–`D5`): Attendance, Late Submission, Library Hours, Hostel Mess Refund, and Wi-Fi Access (use the policy text from the course notes).
+2. Defines a frozen **`EVAL_SET`** with six items (`Q1`–`Q6`), each with:
+   - `qid`
+   - `question`
+   - `expected_docs` (empty list for `Q6` — hostel room rent is not in the corpus)
+3. Implements a simple **keyword retriever**:
+   - `tokenize(text)` — lowercase word tokens
+   - `score_doc(query, doc_text)` — count of shared query words
+   - `retrieve_top_k(query, corpus, k)` — return top-k docs by score
+4. Implements scoring helpers:
+   - `is_hit(retrieved_doc_ids, expected_docs)` — `True` if any expected doc is in the retrieved list; return `None` when `expected_docs` is empty
+   - `retrieval_hit_rate(rows)` — hits ÷ answerable questions only
+5. Runs retrieval for every eval question with **`k = 3`** and prints:
+   - `qid`, question, expected docs, retrieved doc IDs, hit/miss (or `N/A` for `Q6`)
+   - overall **hit rate** for `Q1`–`Q5` as a decimal and percentage
+
+### Submission Instruction
+- code all the points mentioned in the VS Code in single `.py` file
+- run the code and verify its working
+- then submit the code in the code editor/answer box in the LMS",,,,,,,,,,,,,6a4df2da09b00f5bf4c27c91,0.5,markdown,"### Step-by-step Walkthrough
+1. Copy the five-policy `CORPUS` and six-item `EVAL_SET` from the lesson material.
+2. Implement keyword overlap scoring — no vector DB or LLM required.
+3. For each eval item, call `retrieve_top_k` with `k=3`.
+4. Mark a **hit** when any `expected_docs` entry appears in the retrieved ID list.
+5. Compute hit rate on answerable questions (`Q1`–`Q5`) only; skip `Q6` from the denominator.
+6. Print a readable trace plus the final hit rate.
+
+### Complete Reference Code (Single File)
+```python
+import re
+
+CORPUS = [
+    {""doc_id"": ""D1"", ""title"": ""Attendance Policy"", ""text"": ""Students must maintain at least 75% attendance. Below 75%, the student cannot sit for the end-term exam unless a medical certificate is approved by the dean.""},
+    {""doc_id"": ""D2"", ""title"": ""Late Submission Policy"", ""text"": ""Assignments submitted up to 2 days late receive a 10% penalty per day. Submissions after 2 days are not accepted.""},
+    {""doc_id"": ""D3"", ""title"": ""Library Hours"", ""text"": ""The main library is open Monday to Saturday from 8 AM to 10 PM. It is closed on Sundays and public holidays.""},
+    {""doc_id"": ""D4"", ""title"": ""Hostel Mess Refund"", ""text"": ""Mess fees are refundable only if a student applies at least 7 days before leaving the hostel. Same-day refunds are not allowed.""},
+    {""doc_id"": ""D5"", ""title"": ""Wi-Fi Access"", ""text"": ""Campus Wi-Fi is available to enrolled students using college email login. Guests need a temporary pass from the IT desk.""},
+]
+
+EVAL_SET = [
+    {""qid"": ""Q1"", ""question"": ""What is the minimum attendance required?"", ""expected_docs"": [""D1""]},
+    {""qid"": ""Q2"", ""question"": ""Can I submit an assignment 1 day late?"", ""expected_docs"": [""D2""]},
+    {""qid"": ""Q3"", ""question"": ""Is the library open on Sunday?"", ""expected_docs"": [""D3""]},
+    {""qid"": ""Q4"", ""question"": ""How do I get a mess fee refund?"", ""expected_docs"": [""D4""]},
+    {""qid"": ""Q5"", ""question"": ""Can a guest use campus Wi-Fi?"", ""expected_docs"": [""D5""]},
+    {""qid"": ""Q6"", ""question"": ""What is the hostel room rent?"", ""expected_docs"": []},
+]
+
+def tokenize(text):
+    return re.findall(r""[a-z0-9]+"", text.lower())
+
+def score_doc(query, doc_text):
+    query_tokens = set(tokenize(query))
+    doc_tokens = set(tokenize(doc_text))
+    return len(query_tokens & doc_tokens)
+
+def retrieve_top_k(query, corpus, k=3):
+    ranked = []
+    for doc in corpus:
+        ranked.append({""doc_id"": doc[""doc_id""], ""title"": doc[""title""], ""text"": doc[""text""], ""score"": score_doc(query, doc[""text""])})
+    ranked.sort(key=lambda item: (-item[""score""], item[""doc_id""]))
+    return ranked[:k]
+
+def is_hit(retrieved_doc_ids, expected_docs):
+    if not expected_docs:
+        return None
+    return any(doc_id in retrieved_doc_ids for doc_id in expected_docs)
+
+def retrieval_hit_rate(rows):
+    answerable = [row for row in rows if row[""expected_docs""]]
+    if not answerable:
+        return 0.0
+    hits = sum(1 for row in answerable if row[""hit""])
+    return hits / len(answerable)
+
+def run_retrieval_eval(eval_set, corpus, k=3):
+    rows = []
+    for item in eval_set:
+        retrieved = retrieve_top_k(item[""question""], corpus, k=k)
+        retrieved_ids = [doc[""doc_id""] for doc in retrieved]
+        rows.append({""qid"": item[""qid""], ""question"": item[""question""], ""expected_docs"": item[""expected_docs""], ""retrieved_doc_ids"": retrieved_ids, ""hit"": is_hit(retrieved_ids, item[""expected_docs""])})
+    return rows
+
+def main():
+    rows = run_retrieval_eval(EVAL_SET, CORPUS, k=3)
+    for row in rows:
+        hit_label = ""N/A"" if row[""hit""] is None else row[""hit""]
+        print(f""{row['qid']} hit={hit_label}"")
+        print(f""  question: {row['question']}"")
+        print(f""  expected: {row['expected_docs']}"")
+        print(f""  retrieved: {row['retrieved_doc_ids']}"")
+        print()
+    rate = retrieval_hit_rate(rows)
+    print(f""Hit rate: {rate:.2f} ({int(rate * 100)}%)"")
+
+if __name__ == ""__main__"":
+    main()
+```"
