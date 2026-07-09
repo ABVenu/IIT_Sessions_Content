@@ -1,0 +1,12 @@
+| topic/sub topic | status | remarks |
+| --- | --- | --- |
+| Connect an LLM provider to n8n and configure prompts for structured workflow inputs. | not covered | Instructor explicitly deferred LLM/AI nodes (“we will not go with LLM for now”); only briefly listed available AI options (OpenAI, Anthropic, Gemini, Ollama, AI Agent, guardrails) without connecting a provider or configuring prompts. |
+| Chain multiple nodes so AI output becomes input to downstream automation actions. | not covered | No AI node was used, so AI output was not chained. A non-AI chain was built: Form Trigger → Google Sheets (append row) → IF condition on feedback. Instructor said end-to-end AI/agent workflow is planned for the next class. |
+| Handle common LLM node failures with branching retry or fallback paths. | not covered | No LLM failure handling, retry, or fallback paths. An IF/branch node was added for feedback (positive/negative/neutral) only—not for LLM errors. |
+| Evaluate AI step outputs against simple quality criteria before downstream delivery. | not covered | No AI output quality checks or evaluation criteria before downstream delivery. |
+| Extra: Run n8n locally (Docker) and create a basic workflow | covered | Hands-on setup of local n8n (Docker/localhost:5678), create workflow, naming, and canvas walkthrough. |
+| Extra: Triggers (form / manual / webhook / schedule concepts) | covered | Explained trigger as first node; demoed form trigger (Product Feedback Form with name, email, feedback fields); also discussed manual, app-event, schedule, and webhook triggers. |
+| Extra: Google Sheets node + OAuth2 credentials (Google Cloud) | covered | Major portion of class: Google Cloud project, enable Sheets/Drive APIs, OAuth consent screen, Client ID/Secret, connect credentials in n8n, append form data to spreadsheet; later demo of disabling credentials → Forbidden error. |
+| Extra: HTTP Request node (mentioned only) | covered | Mentioned as an action option (call DB/API after form submit) with a short example; not configured or executed in the live workflow. |
+| Extra: Flow control (IF / branch) and human-in-the-loop concepts | covered | Added IF condition on feedback values; briefly explained human-in-the-loop / conditional human review (e.g. refund amount) as next-class material. |
+| Extra: Code node / LangChain–LangGraph integration Q&A | covered | End-of-class: n8n supports code (e.g. Python) as well as no-code; confirmed integration with LangChain/LangGraph is possible. |

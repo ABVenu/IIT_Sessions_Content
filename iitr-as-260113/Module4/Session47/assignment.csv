@@ -1,0 +1,346 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Ananya is running n8n locally using Docker on her laptop. She wants to open the workflow editor in her browser. Which URL should she use?,,,,,,1,,`http://localhost:5678`,`http://localhost:3000`,`https://console.cloud.google.com`,`http://localhost:8080`,,6a4f16baf91319cf8969db90,0,markdown,"A is correct because self-hosted n8n is exposed on port **5678**, so the editor opens at **`http://localhost:5678`**.
+
+B and D are incorrect because these are common dev ports, but n8n's default local port is **5678**. C is incorrect because Google Cloud Console is for OAuth/API setup, not the n8n canvas."
+mcsc,markdown,GreenMart wants a workflow that starts only when a customer submits an online feedback form inside n8n. Which trigger type fits best?,,,,,,3,,Trigger manually,On a schedule,On form submission,On webhook call only,,6a4f16baf91319cf8969db90,0,markdown,"C is correct because when a user submits an n8n-hosted form, the workflow should start with an **on form submission** trigger.
+
+A is incorrect because manual trigger runs only when someone clicks **Execute workflow**. B is incorrect because schedule runs on a timer, not on each form submit. D is incorrect because webhook starts on an external HTTP call, not on the built-in n8n form UI."
+mcsc,markdown,Every n8n automation must begin with one specific kind of node. What is that first node called?,,,,,,2,,Credential,Trigger,Expression,Volume,,6a4f16baf91319cf8969db90,0,markdown,"B is correct because the **trigger** is always the starting node — the event that kicks off the workflow (form submit, schedule, webhook, manual execute, etc.).
+
+A is incorrect because credentials store authentication, they are not the workflow start. C is incorrect because expressions compute dynamic values inside nodes. D is incorrect because volume is a Docker storage concept for persisting n8n data."
+mcsc,markdown,"When n8n connects to Google Sheets using OAuth2, what is the main benefit for the user?",,,,,,2,,n8n gets your Gmail password so it never expires,"n8n gets limited, consent-based access without you sharing your Google password",OAuth2 removes the need to enable any Google APIs,OAuth2 hard-codes customer emails into the spreadsheet,,6a4f16baf91319cf8969db90,0,markdown,"B is correct because **OAuth2** lets a third-party app like n8n access Google services with **scoped permissions** after you approve a consent screen — without sharing your password.
+
+A is incorrect because OAuth2 is designed to avoid password sharing. C is incorrect because you still must enable required APIs (Sheets, Drive) in Google Cloud. D is incorrect because customer emails come from form data via expressions, not OAuth2."
+mcsc,markdown,"Rahul enabled **Google Sheets API** in his Google Cloud project, but the n8n Sheets node still cannot access spreadsheets reliably. Which additional API is commonly required?",,,,,,1,,Google Drive API,Google Maps API,YouTube Data API,Google Photos API,,6a4f16baf91319cf8969db90,0.5,markdown,"A is correct because spreadsheet files are stored in **Google Drive**. For Sheets integrations, **Google Drive API** is usually required alongside **Google Sheets API**.
+
+B, C, and D are incorrect because Maps, YouTube, and Photos are unrelated to reading/writing spreadsheet rows."
+mcsc,markdown,"During testing, Kavya clicks **Execute workflow**, but the form does not open and the same customer row is appended repeatedly. What is the most likely cause?",,,,,,2,,The IF node is connected to the wrong branch,Sample data is **pinned** on the form trigger node,She selected **External** audience on the OAuth consent screen,The spreadsheet tab name is too long,,6a4f16baf91319cf8969db90,0.5,markdown,"B is correct because **pinned data** freezes sample output on a node. While pinned, the workflow may reuse cached form values instead of opening a fresh form for each full run.
+
+A is incorrect because wrong IF wiring would affect branching, not duplicate the same row on every run without showing the form. C is incorrect because External audience is normal for personal Gmail learning. D is incorrect because tab name length does not cause this pin-related behaviour."
+mcmc,markdown,Which of the following are valid ways to **start** an n8n workflow?,,,,,,,,Trigger manually (click Execute workflow),"On a schedule (e.g., every day at 9 a.m.)","On a webhook call (e.g., payment confirmed)",Only by adding an LLM node first,"1, 2, 3",6a4f16baf91319cf8969db90,0.5,markdown,"A, B, and C are correct — workflows can start manually, on a timer, or when an external system hits a webhook. Form and app-event triggers are also valid starters.
+
+D is incorrect because an LLM node is optional for AI steps; it is not required to start every workflow."
+mcmc,markdown,A team is setting up Google OAuth credentials so n8n can append rows to a spreadsheet. Which statements are correct?,,,,,,,,They need a **Client ID** and **Client Secret** from Google Cloud,They should enable both **Google Sheets API** and **Google Drive API**,"For an unverified External app, adding a **test user** can fix Access blocked during sign-in",They should paste the Google password directly into the n8n workflow canvas,"1, 2, 3",6a4f16baf91319cf8969db90,0.5,markdown,"A, B, and C are correct — OAuth setup needs Client ID/Secret, both Sheets and Drive APIs, and often a test user for External testing mode.
+
+D is incorrect because passwords must never be pasted into workflows; OAuth2 exists to avoid that."
+mcmc,markdown,A feedback workflow is built as: **Form → Append row in Google Sheets → IF (feedback equals Positive) → Update Send voucher (Yes/No)**. Which statements are correct?,,,,,,,,"Form fields should be mapped to sheet columns using **expressions**, not hard-coded customer names","The **Append row** step should write `email`, `name`, and `feedback` from the form output","On the update step, **email** is a sensible **column to match on** when writing Send voucher Yes/No",Matching only on the **feedback** column is best because every customer always has unique feedback text,"1, 2, 3",6a4f16baf91319cf8969db90,1,markdown,"A, B, and C are correct — dynamic mapping uses expressions; the first Sheets action stores the three form fields; updates should key on **email** because it identifies the person.
+
+D is incorrect because many customers can share the same feedback label (Positive/Negative/Neutral), so feedback alone is not a reliable unique key."
+mcmc,markdown,"While debugging a Google Sheets workflow in n8n, which statements are correct?",,,,,,,,"If credentials or API access is revoked, the workflow may fail with **Forbidden — check your credentials**",The form trigger must be **connected** to the Sheets node so output becomes input,Enabling APIs in the **wrong Google Cloud project** is a common setup mistake,Hard-coding one test customer's email in the Sheets node is the recommended production approach,"1, 2, 3",6a4f16baf91319cf8969db90,1,markdown,"A, B, and C are correct — revoked access causes Forbidden errors; nodes must be linked for data flow; wrong-project API enablement breaks OAuth.
+
+D is incorrect because production workflows should use expressions from live form data, not hard-coded values."
+subjective,markdown,"**GreenMart** is a grocery delivery startup. Customers place orders for **three products**. Each product's orders must be stored in a **separate tab** inside one Google Spreadsheet. The store manager also wants a **Get Order Status** action that shows **total orders**, **pending orders**, and **total order value** — using simple counting and addition only (**no LLM**).
+
+Build everything in your **local n8n** instance (Docker on `localhost:5678`).
+
+---
+
+## Big picture (read this first)
+
+You will create **two workflows** and **one Google Spreadsheet**.
+
+| Workflow | Name (suggested) | Trigger | Purpose | Total nodes |
+|---|---|---|---|---|
+| **Workflow 1** | `GreenMart Place Order` | **On form submission** | Route order to the correct product tab | **5 nodes** |
+| **Workflow 2** | `GreenMart Get Order Status` | **Trigger manually** | Read all tabs → compute totals → write summary | **6 nodes** |
+
+**Grand total: 11 nodes** across both workflows (same Google OAuth credential for all Sheets nodes).
+
+![GreenMart assignment big picture — Workflow 1 Place Order routes form submissions via Switch to Rice, Dal, and Oil tabs; Workflow 2 Get Order Status reads all tabs, Python Code computes totals, writes Order Summary](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module4/session47/session47-06-greenmart-assignment-big-picture.png)
+
+### Visual map — Workflow 1
+
+```text
+[1] Form: Place Order
+        |
+        v
+[2] Switch: route by product (3 rules)
+    |           |           |
+    v           v           v
+[3] Append    [4] Append    [5] Append
+  Rice tab      Dal tab       Oil tab
+```
+
+### Visual map — Workflow 2
+
+```text
+[1] Manual Trigger
+        |
+   +----+----+----+
+   v    v    v    |
+[2] Get [3] Get [4] Get rows (one node per product tab)
+ rows   rows   rows
+   |    |    |
+   +----+----+
+        v
+[5] Code: count + sum (copy template below)
+        |
+        v
+[6] Append row → Order Summary tab
+```
+
+---
+
+## Part A — Google Spreadsheet setup (do this before n8n)
+
+Create one spreadsheet named **`GreenMart Orders`**.
+
+### Tab 1: `Rice Orders`
+
+| email | name | product | quantity | unit_price | order_value | status |
+|---|---|---|---|---|---|---|
+
+### Tab 2: `Dal Orders`
+
+Same column headers as above.
+
+### Tab 3: `Oil Orders`
+
+Same column headers as above.
+
+### Tab 4: `Order Summary`
+
+| last_updated | total_orders | pending_orders | total_order_value |
+|---|---|---|---|
+
+Leave all tabs empty except the header row.
+
+**Product names (use exactly — spelling matters for Switch rules):**
+
+| Product | Tab name |
+|---|---|
+| Basmati Rice | Rice Orders |
+| Toor Dal | Dal Orders |
+| Sunflower Oil | Oil Orders |
+
+---
+
+## Part B — Google OAuth (one time)
+
+If you already connected Google Sheets in practice, reuse the same credential.
+
+1. Google Cloud project → enable **Google Sheets API** + **Google Drive API**
+2. OAuth consent screen (External) → add yourself as **test user** if needed
+3. Create **Web application** OAuth client → paste n8n redirect URI
+4. In n8n: **Credentials → Google Sheets OAuth2** → Client ID + Secret → **Sign in with Google**
+
+---
+
+## Part C — Workflow 1: Place Order (5 nodes)
+
+### Node 1 — On form submission (trigger)
+
+| Setting | Value |
+|---|---|
+| Workflow name | `GreenMart Place Order` |
+| Form title | GreenMart Place Order |
+| Authentication | None |
+| Respond when | Form is submitted |
+
+**Form fields (create exactly):**
+
+| Field label | Type | Required | Notes |
+|---|---|---|---|
+| Email | Text (email) | Yes | |
+| Name | Text | Yes | |
+| Product | Dropdown | Yes | Options: `Basmati Rice`, `Toor Dal`, `Sunflower Oil` |
+| Quantity | Number | Yes | Whole number ≥ 1 |
+| Unit price | Number | Yes | Price per unit in ₹ |
+| Status | Dropdown | Yes | Options: `Pending`, `Completed` |
+
+### Node 2 — Switch (route by product)
+
+1. Click **+** after the form → **Flow** → **Switch**
+2. Connect: **Form → Switch**
+3. Mode: **Rules**
+4. Add **3 rules**:
+
+| Rule | Field | Condition | Value | Output |
+|---|---|---|---|---|
+| 1 | `product` | equals | `Basmati Rice` | Output 0 |
+| 2 | `product` | equals | `Toor Dal` | Output 1 |
+| 3 | `product` | equals | `Sunflower Oil` | Output 2 |
+
+> If your n8n version does not show Switch, use **two IF nodes** instead (see Plan B at the end of this question).
+
+### Nodes 3, 4, 5 — Google Sheets → Append row (one per product tab)
+
+Create **three** Append row nodes. Connect each Switch output to its own Append node:
+
+| Node name (suggested) | Switch output | Sheet tab |
+|---|---|---|
+| Append Rice Order | Output 0 | `Rice Orders` |
+| Append Dal Order | Output 1 | `Dal Orders` |
+| Append Oil Order | Output 2 | `Oil Orders` |
+
+**For every Append node, map columns using expressions (do not hard-code names):**
+
+| Sheet column | Map from |
+|---|---|
+| `email` | Form → Email |
+| `name` | Form → Name |
+| `product` | Form → Product |
+| `quantity` | Form → Quantity |
+| `unit_price` | Form → Unit price |
+| `order_value` | Expression: `={{ $json.quantity * $json.unit_price }}` |
+| `status` | Form → Status |
+
+### Workflow 1 — Test data (run after unpinning form data)
+
+**Unpin** any pinned sample data on the form trigger before final tests.
+
+Execute the **full workflow** three times:
+
+| Run | Email | Name | Product | Qty | Unit price | Status | Expected tab | order_value |
+|---|---|---|---|---|---|---|---|---|
+| 1 | `ananya@gmail.com` | Ananya | Basmati Rice | 2 | 80 | Pending | Rice Orders | 160 |
+| 2 | `rahul@gmail.com` | Rahul | Toor Dal | 1 | 120 | Completed | Dal Orders | 120 |
+| 3 | `kavya@gmail.com` | Kavya | Sunflower Oil | 3 | 150 | Pending | Oil Orders | 450 |
+
+---
+
+## Part D — Workflow 2: Get Order Status (6 nodes)
+
+Create a **new workflow** named `GreenMart Get Order Status`.
+
+### Node 1 — Trigger manually
+
+Add **Trigger manually** (Manual Trigger). Click **Execute workflow** to refresh totals.
+
+### Nodes 2, 3, 4 — Google Sheets → Get row(s) in sheet
+
+Add **three** separate **Get row(s) in sheet** nodes connected from the Manual Trigger:
+
+| Node name (suggested) | Sheet tab | Settings |
+|---|---|---|
+| Get Rice Rows | `Rice Orders` | Return all rows |
+| Get Dal Rows | `Dal Orders` | Return all rows |
+| Get Oil Rows | `Oil Orders` | Return all rows |
+
+### Node 5 — Code (Python) — compute totals
+
+1. Add a **Code** node after the three Get nodes
+2. Connect **all three Get nodes → Code node**
+3. Set language to **Python**
+4. Paste the Python template provided in the answer explanation on the platform (or build equivalent logic)
+
+### Node 6 — Google Sheets → Append row (Order Summary)
+
+Map `last_updated`, `total_orders`, `pending_orders`, `total_order_value` from Code node output to the **Order Summary** tab.
+
+### Expected result (after Part C test data)
+
+| last_updated | total_orders | pending_orders | total_order_value |
+|---|---|---|---|
+| (timestamp) | **3** | **2** | **730** |
+
+---
+
+## Part E — What to submit (Google Doc)
+
+Create a Google Doc with:
+
+1. **Workflow 1 canvas screenshot** — all 5 nodes visible (Form → Switch → 3 Append nodes)
+2. **Workflow 2 canvas screenshot** — all 6 nodes visible (Manual → 3 Get → Code → Append)
+3. **Spreadsheet screenshot** — all four tabs showing one order row per product tab and Order Summary with `3`, `2`, `730`
+4. **Execution screenshot** — Switch node highlighting the correct branch for one product
+5. Short write-up (**100–150 words**) on separate tabs, Switch routing, and how total_order_value is calculated
+
+### Submission Instruction
+
+- create a google doc in your google drive - suggested folder (for your ref) is module name in that session name in that the submission file
+- write properly and neatly after reasearching duly - do add images wherever needed
+- once the doc is ready - submit the doc link (click share button and copy the link)
+- make sure the sharing settings is `View anyone with the link` (sharing should be public)
+
+---
+
+## Plan B — If Switch node is not available
+
+Replace Switch with **two IF nodes**: Form → IF (Basmati Rice) → Append Rice; false → IF (Toor Dal) → Append Dal; false → Append Oil. Workflow 1 becomes **6 nodes** (1 Form + 2 IF + 3 Append).",,,,,,,,,,,,,6a4f16baf91319cf8969db90,0.5,markdown,"### Node checklist
+
+| Workflow | # | Node type | Purpose |
+|---|---|---|---|
+| 1 | 1 | On form submission | Collect order details |
+| 1 | 2 | Switch (or 2× IF) | Route by product |
+| 1 | 3–5 | Google Sheets Append ×3 | Write to Rice / Dal / Oil tab |
+| 2 | 1 | Trigger manually | Run Get Order Status on demand |
+| 2 | 2–4 | Google Sheets Get rows ×3 | Read all product tabs |
+| 2 | 5 | Code (Python) | Count orders, count pending, sum values |
+| 2 | 6 | Google Sheets Append | Write summary row |
+
+### Step-by-step walkthrough
+
+**Workflow 1 — Place Order**
+
+1. Create spreadsheet `GreenMart Orders` with four tabs and headers as specified.
+2. Build form trigger with six fields; product dropdown must exactly match Switch rules.
+3. Add Switch with three equals rules for Basmati Rice, Toor Dal, Sunflower Oil.
+4. Add three Append row nodes — one per Switch output — mapping all columns via expressions.
+5. Use `={{ $json.quantity * $json.unit_price }}` for order_value.
+6. Unpin form data; run three test orders; verify each lands in the correct tab.
+
+**Workflow 2 — Get Order Status**
+
+1. Manual trigger fans out to three Get row(s) nodes (Rice, Dal, Oil tabs).
+2. Code node (Python) merges all rows and computes totals.
+3. Append summary row to Order Summary tab.
+
+### Python Code template (Node 5)
+
+```python
+from datetime import datetime, timezone
+
+# Collect every order row from all three sheet reads
+all_rows = [item.json for item in _input.all()]
+
+# Count total orders
+total_orders = len(all_rows)
+
+# Count only rows where status is Pending
+pending_orders = sum(
+    1 for row in all_rows
+    if str(row.get(""status"", """")).strip() == ""Pending""
+)
+
+# Sum the order_value column (convert text to number safely)
+total_order_value = sum(
+    float(row.get(""order_value"") or 0) for row in all_rows
+)
+
+# Return one summary item for the next node
+return [
+    {
+        ""json"": {
+            ""last_updated"": datetime.now(timezone.utc).isoformat(),
+            ""total_orders"": total_orders,
+            ""pending_orders"": pending_orders,
+            ""total_order_value"": total_order_value,
+        }
+    }
+]
+```
+
+### Expected sheet result after standard test data
+
+| email | name | product | quantity | unit_price | order_value | status |
+|---|---|---|---|---|---|---|
+| ananya@gmail.com | Ananya | Basmati Rice | 2 | 80 | 160 | Pending |
+| rahul@gmail.com | Rahul | Toor Dal | 1 | 120 | 120 | Completed |
+| kavya@gmail.com | Kavya | Sunflower Oil | 3 | 150 | 450 | Pending |
+
+**Order Summary:** total_orders = **3**, pending_orders = **2** (Ananya + Kavya), total_order_value = **730** (160 + 120 + 450).
+
+### Common mistakes to avoid
+
+- Product spelling mismatch in Switch rules
+- All orders landing in one tab (Switch outputs not wired to separate Append nodes)
+- Hard-coded values instead of expressions
+- Pinned form data causing duplicate rows
+- Code node not connected to all three Get nodes
+- Only Sheets API enabled (Drive API also required)
+
+### Alternative approaches
+
+- **Plan B:** Two IF nodes instead of Switch — fully acceptable.
+- **Separate spreadsheets per product** instead of tabs — acceptable if routing is correct, but tabs in one sheet is preferred."
