@@ -29,3 +29,35 @@
 | **No Metadata/internal reference in student notes** | **True** | No internal instruction language. |
 
 **Iteration 2 decision:** **Passed** — all required ratings are 5 and all True/False checks are True.
+
+---
+
+## QC Iteration 3 — Lecture Notes Released (post-session alignment)
+
+| Criteria | Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Aligned to Live Topic Coverage: full speech pipeline retained; vision reframed as Hugging Face lite step (Groq has no image models); multimodal RAG/LlamaParse, Masai–Zoom STT+RAG, NotebookLM, YouTube summarization, benchmarks, ChatGPT voice, and Colab vs local IDE added from extra taught content. |
+| **Creativity** | **5 / 5** | Real-world application section connects lab to products students use; provider table corrected; parallel vision path preserved with honest self-try guidance. |
+| **Structural Adherence** | **5 / 5** | Documentation layout, definitions pattern, full code with comments, activities, Key Takeaways, and terminology table retained; all five session images kept. |
+| **No Logical Mistakes** | **True** | Groq limited to STT + summary; gTTS separate; vision uses Hugging Face; Ollama optional for summary only. |
+| **No Presentation Mistakes** | **True** | No Mentimeter/quiz content; no Groq vision code contradicting class delivery. |
+| **No Previous Session Number References** | **True** | Uses “previous session” only. |
+| **No Metadata/internal reference in student notes** | **True** | Professional student-facing released notes. |
+
+**Iteration 3 decision:** **Passed** on alignment scope; proceeding to final QC pass.
+
+---
+
+## QC Iteration 4 — Lecture Notes Released (final pass)
+
+| Criteria | Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | Re-checked all four metadata subtopics and extra taught items against transcript and Live Topic Coverage report. |
+| **Creativity** | **5 / 5** | Pipeline activities, quality checklist image, and application examples support self-study after class. |
+| **Structural Adherence** | **5 / 5** | Smooth flow: multimodal RAG bridge → pipeline map → setup → STT → summary → TTS → full run → vision → applications → benchmarks → troubleshooting. |
+| **No Logical Mistakes** | **True** | `spoken_summary.mp3` matches class demo naming; sample S3 links unchanged. |
+| **No Presentation Mistakes** | **True** | Consistent one-key messaging for main lab path. |
+| **No Previous Session Number References** | **True** | No session numbers. |
+| **No Metadata/internal reference in student notes** | **True** | No internal instruction language. |
+
+**Iteration 4 decision:** **Passed** — `Lecture Notes Released.md` is ready for student release.
