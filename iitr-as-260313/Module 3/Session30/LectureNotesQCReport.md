@@ -48,3 +48,29 @@
 ### Result
 
 - Pass
+
+---
+
+## Iteration 3
+
+- File reviewed: `Lecture Notes Released.md`
+- Content Coverage: 5/5
+- Creativity: 5/5
+- Structural Adherence: 5/5
+- No Logical Mistakes: True
+- No Presentation Mistakes: True
+- No Previous Session Number References: True
+- No Metadata/internal reference like Keep is light etc, mentioned in the headings and any part of the students: True
+
+### Findings
+
+- Aligned to `Live Topic Coverage.md`: all four metadata subtopics retained; Mentimeter quiz excluded per protocol.
+- Removed **Rolling Conversation History (`n_messages`)** section and related self-practice activity — not taught live.
+- Added live-taught extras: agent three-component recap, LangChain Classic setup, `input_messages_key` wiring defect, and `RunnableWithMessageHistory` deprecation note.
+- Updated code and imports to match session stack: `ChatOllama`, `langchain_classic.agents`, `pip install langchain-classic`.
+- Retained all seven session images; repointed session-isolation image caption without rolling-history claims.
+- Student-facing voice throughout; no session numbers or internal instruction text.
+
+### Result
+
+- Pass

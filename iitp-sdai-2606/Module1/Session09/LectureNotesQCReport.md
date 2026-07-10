@@ -1,8 +1,8 @@
 # Lecture Notes QC Report
 
-## QC Iteration 1
+## QC Iteration 1 (Lecture Notes Released — Post-Session Alignment)
 
-Final notes length: **630 lines**.
+`Lecture Notes Released.md` created by aligning instructor notes against transcript coverage (`Live Topic Coverage.md`). Final length: **~430 lines**.
 
 | Criteria | Result |
 |---|---|
@@ -16,23 +16,20 @@ Final notes length: **630 lines**.
 
 ### Observations
 
-- The notes cover all required topics: Python/VS Code/Terminal setup, local execution workflow, logic building, and beginner DSA problems with lists, strings, and dictionaries.
-- Full code examples include line-by-line comments and "How the code works" explanations.
-- Student-facing practice activities are included for logic building and local execution.
-- The notes end with a **Typical LeetCode Questions — Solve Yourself** section grouped by list, string, dictionary, and mixed patterns, with clear instruction to solve independently.
-- The notes start directly with the lecture title and do not include duration, target audience, or internal prompt instructions.
-- No previous session number is mentioned; the bridge to previous learning is written generically.
+- All four detailed subtopics covered: Python/VS Code/Terminal setup, write/save/run locally, logic-building framework, and beginner DSA problems with lists/strings/dictionaries.
+- Removed sections not taught in session: count even numbers, list of squares, vowel count, palindrome check, word count in sentence, most frequent mark, Two Sum, practice activity (names starting with A), practice activity (even numbers 1–20), and entire LeetCode practice tables section.
+- Retained all four session images.
+- Added session-taught content: IDE vs online compiler preference, Homebrew install note, Python interactive shell, VS Code play-button troubleshooting (enable extension, open folder, select interpreter), Python Extension Pack, `mkdir` command, DSA definition, four live-session problems (find max without `max()`, character frequency with `.get()`, duplicate elements with `.items()`, merge two sorted lists with two-pointer approach), dry-run technique, merge edge-case practice challenge, and `sorted(a+b)` vs two-pointer time-complexity note.
+- Replaced `sum_numbers.py` input example with `hello_local.py` print example matching the live demo.
+- No Mentimeter/quiz content; no session numbers or duration metadata.
 
 ### Action Taken
 
-- Corrected terminal command blocks from Python fences to `bash` fences for presentation accuracy.
-- QC passed after this minor fix.
+- Post-session alignment complete. QC passed.
 
 ---
 
-## QC Iteration 2
-
-Final notes length confirmed: **630 lines**.
+## QC Iteration 2 (Lecture Notes Released — Confirmation)
 
 | Criteria | Result |
 |---|---|
@@ -46,12 +43,12 @@ Final notes length confirmed: **630 lines**.
 
 ### Observations
 
-- The second review confirms smooth progression from local setup to logic building to list/string/dictionary problem solving.
-- LeetCode practice lists align with session skills and are placed at the end with explicit **solve yourself** guidance.
-- Key Takeaways and Important Commands table are present before the LeetCode section, keeping the practice list as the final revision resource.
-- Code logic for frequency counting, palindrome checking, and Two Sum pattern is correct for beginner level.
-- No metadata leakage or session-number references found on re-check.
+- Second review confirms smooth flow from local setup through logic building to four DSA problems and dry-run debugging.
+- Code examples use full programs with line-by-line comments and "How the code works" explanations.
+- Problem order matches live session sequence: max in list → character frequency → duplicates → merge sorted lists.
+- Key takeaways and terminology table updated to match released content only.
+- Student-facing tone maintained throughout; no instructor-facing phrasing.
 
 ### Action Taken
 
-- QC passed. No further corrective changes required.
+- QC passed. `Lecture Notes Released.md` is ready for student release.

@@ -1,0 +1,182 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"**Rahul** used an online compiler for quick Python practice during his first week. Now he wants to save many programs as separate files, organize them in folders, and run them from his laptop like developers do in companies.
+
+What is the **best term** for this way of working?",,,,,,2,,Cloud-only compilation,Local development,Browser debugging only,Database migration,,6a50962149a3582e9a072e67,0,markdown,"**Local development** means writing, saving, and running code directly on your own computer using tools like Python, VS Code, and the Terminal.
+
+**Why other options are wrong:**
+- A: Cloud-only compilation keeps work inside a browser tool, not on the laptop as files and folders.
+- C: Browser debugging alone does not describe saving and managing many programs locally.
+- D: Database migration is unrelated to setting up a coding workspace on a laptop."
+mcsc,markdown,"**Anita** opens Terminal on her laptop and wants to confirm that **Python 3** is installed before her first local coding session.
+
+Which command should she run?",,,,,,2,,`python --help`,`python3 --version`,`install python3`,`code --version`,,6a50962149a3582e9a072e67,0,markdown,"`python3 --version` checks which Python 3 version is available on the system. If installation is successful, it prints something like `Python 3.12.1`.
+
+**Why other options are wrong:**
+- A: `python` alone may not always refer to Python 3 on every machine.
+- C: `install python3` is not the standard verification command after installation.
+- D: `code --version` checks VS Code, not Python."
+mcsc,markdown,"**Vikram** creates a new program file in VS Code and saves it as `practice.txt` instead of `practice.py`.
+
+Why is this a **mistake** for a Python program?",,,,,,2,,VS Code cannot open `.txt` files,The `.py` extension tells the system the file contains Python code,Terminal commands only work on Sundays,Python files must always be named `hello.py`,,6a50962149a3582e9a072e67,0,markdown,"A file ending with `.py` is recognized as a Python source file. Without the correct extension, your workflow and tooling may not treat the file as Python code.
+
+**Why other options are wrong:**
+- A: VS Code can open `.txt` files, but that does not make them Python programs.
+- C: Terminal works any day; this is not a real technical rule.
+- D: Python files can have many valid names — only the `.py` extension matters."
+mcsc,markdown,"**Meera** has already saved her file as `hello_local.py` inside a folder called `dsa_practice`. She opens Terminal inside VS Code and wants to run the program.
+
+Which command should she use?",,,,,,2,,`run hello_local`,`python3 hello_local.py`,`print hello_local.py`,`open hello_local.py`,,6a50962149a3582e9a072e67,0,markdown,"`python3 hello_local.py` tells the Python 3 interpreter to execute the saved file. This is the standard way to run a local Python program from Terminal.
+
+**Why other options are wrong:**
+- A: `run hello_local` is not a standard Python execution command.
+- C: `print` is a Python keyword used inside code, not a Terminal command to run a file.
+- D: `open` may launch a file with another app, but it does not execute Python code as a program."
+mcsc,markdown,"**Karan** is solving a beginner coding problem. Before writing code, he breaks the task into four planning parts on paper.
+
+Which option correctly lists the **four parts of logic building** taught for beginner DSA problems?",,,,,,2,,"Input, Output, Compiler, Debugger","Input, Output, Conditions, Steps","Loop, Function, Class, Module","Print, Return, Import, Export",,6a50962149a3582e9a072e67,0.5,markdown,"Logic building breaks a problem into **Input** (what data you receive), **Output** (what answer you must produce), **Conditions** (rules that decide the answer), and **Steps** (actions in order).
+
+**Why other options are wrong:**
+- A: Compiler and Debugger are tools, not the four planning parts of a problem.
+- C: Loop, Function, Class, and Module are coding concepts, not the planning framework.
+- D: Print, Return, Import, and Export are not the four-part logic template."
+mcsc,markdown,"**Priya** is counting how many times each character appears in the string `""banana""` using a dictionary. She writes this line inside her loop:
+
+```python
+frequency[character] = frequency.get(character, 0) + 1
+```
+
+What does `frequency.get(character, 0)` do when `character` is **not yet** in the dictionary?",,,,,,2,,It crashes the program immediately,It returns `0` as the default value,It returns `1` automatically,It deletes the dictionary,,6a50962149a3582e9a072e67,0.5,markdown,"`.get(key, default)` safely looks up a key. If the key is missing, it returns the default value — here `0` — so you can add `1` and store the first occurrence cleanly.
+
+**Why other options are wrong:**
+- A: `.get()` is designed to avoid crashes on missing keys.
+- C: The default is `0`, not `1`; you add `1` separately in the same line.
+- D: `.get()` reads from the dictionary; it does not delete it."
+mcmc,markdown,"**Arjun** installed VS Code and Python, but the **play button** to run his `.py` file is not visible.
+
+Which actions can **correctly** help fix this issue?",,,,,,,,Install and enable the Python extension published by Microsoft,Open the project folder in VS Code instead of opening only a single loose file,Save the file with a `.txt` extension to make Python detect it faster,Restart VS Code after installing a new extension,"1, 2, 4",6a50962149a3582e9a072e67,0.5,markdown,"The play button usually appears when the Python extension is active, the project folder is opened properly, and VS Code has been restarted after setup changes if needed.
+
+**Why other options are wrong:**
+- C: Python files should use the `.py` extension, not `.txt`."
+mcmc,markdown,"**Sneha** is preparing a quick reference sheet about **DSA** and local coding tools.
+
+Which statements are **correct**?",,,,,,,,DSA stands for Data Structures and Algorithms,A dictionary stores data as key-value pairs,`mkdir folder_name` creates a new folder in Terminal,A dry run means executing code only on a cloud server without reading the logic,"1, 2, 3",6a50962149a3582e9a072e67,0.5,markdown,"DSA is Data Structures and Algorithms; dictionaries map keys to values; and `mkdir` creates folders in Terminal.
+
+**Why other options are wrong:**
+- D: A **dry run** is a manual step-by-step trace of code logic on paper or in your head — not cloud-only execution."
+mcmc,markdown,"**Ravi** builds a frequency dictionary for this list:
+
+```python
+nums = [1, 2, 3, 2, 4, 1]
+```
+
+He uses:
+
+```python
+counts[n] = counts.get(n, 0) + 1
+```
+
+Then he loops with `for key, value in counts.items():` to find duplicates.
+
+Which statements are **correct**?",,,,,,,,"After building `counts`, the value for key `1` is `2`","After building `counts`, the value for key `3` is `1`",A number is a duplicate if its count is greater than `1`,`.items()` gives only the keys and hides the count values,"1, 2, 3",6a50962149a3582e9a072e67,1,markdown,"`1` appears twice and `3` appears once, so `counts[1] == 2` and `counts[3] == 1`. Duplicates are numbers with count greater than `1`. The `.items()` method returns both keys and values.
+
+**Why other options are wrong:**
+- D: `.items()` returns key-value pairs, not keys alone."
+mcmc,markdown,"**Neha** merges two sorted lists using the **two-pointer** approach:
+
+```python
+a = [1, 3, 5]
+b = [2, 4, 6]
+```
+
+Which statements about this approach are **correct**?",,,,,,,,Two pointers `i` and `j` usually start at index `0` in their respective lists,"At each step, compare `a[i]` and `b[j]` and append the smaller value to the merged list",`sorted(a + b)` is the only correct way to merge two sorted lists,"After the main `while` loop, leftover elements from the longer list may still need to be added","1, 2, 4",6a50962149a3582e9a072e67,1,markdown,"The two-pointer method starts both indexes at `0`, compares current values, moves the pointer of the list from which the smaller value was taken, and may still need to append remaining elements after one list is exhausted.
+
+**Why other options are wrong:**
+- C: `sorted(a + b)` can work as a shortcut, but it is not the only correct method — the two-pointer approach is the step-by-step merge technique taught for better control and efficiency understanding."
+subjective,markdown,"**Priya** volunteers at her college **Coding Club Hackathon** help desk. After the morning round, she receives the team scores below and must prepare a quick report for the organizers.
+
+```python
+scores = [67, 89, 45, 89, 72, 45, 91]
+```
+
+She needs a small Python program that:
+
+1. Finds the **highest score** in the list **without using** the built-in `max()` function.
+2. Finds all **duplicate scores** — scores that appear **more than once** in the list.
+3. Uses a **dictionary** with `.get()` to build the frequency map.
+4. Uses `.items()` to check which scores have a count greater than `1`.
+5. Stores duplicate scores in a list and prints the final report.
+
+### Expected Output
+
+Your program must print the output in **exactly** this format:
+
+```text
+Scores: [67, 89, 45, 89, 72, 45, 91]
+Highest score: 91
+Duplicate scores: [89, 45]
+```
+
+### Constraints
+
+- Use `for` loops and `if` conditions only — no built-in `max()`, `sorted()`, or `Counter`.
+- Build the frequency dictionary using `counts[score] = counts.get(score, 0) + 1`.
+- Find duplicates using `for key, value in counts.items()`.
+- Add duplicate scores to a result list using `append()`.
+- Keep the entire solution in **one `.py` file**.
+- Add at least **one comment** (`#`) explaining what your program does.
+
+### Submission Instruction
+
+1. Write your complete program in **VS Code** as a single `.py` file.
+2. Save the file, open the integrated **Terminal**, and run it using `python3 your_file_name.py`.
+3. Verify that your Terminal output matches the expected format exactly.
+4. Copy your **complete code** and paste it in the **answer box** on the LMS.
+5. Also paste the **Terminal output** below your code in the same answer box.",,,,,,,,,,,,,6a50962149a3582e9a072e67,0.5,markdown,"### Step-by-step Walkthrough
+
+1. Store the given score list in a variable.
+2. Assume the first score is the highest, then loop through all scores and update the highest when a bigger value is found.
+3. Build a frequency dictionary using `.get(score, 0) + 1` for each score.
+4. Loop through `counts.items()` and append any score whose count is greater than `1` to a duplicates list.
+5. Print the original list, highest score, and duplicate scores in the required format.
+
+### Reference Solution — `hackathon_score_report.py`
+
+```python
+# Hackathon score report: highest score and duplicate score finder
+
+scores = [67, 89, 45, 89, 72, 45, 91]
+highest = scores[0]  # Start by assuming the first score is the highest
+
+for score in scores:  # Check every score in the list
+    if score > highest:  # If current score is bigger, update the highest
+        highest = score
+
+counts = {}  # Dictionary to store how many times each score appears
+duplicates = []  # List to store scores that appear more than once
+
+for score in scores:  # Build frequency map for each score
+    counts[score] = counts.get(score, 0) + 1
+
+for key, value in counts.items():  # Check each score and its count
+    if value > 1:  # If count is greater than 1, it is a duplicate
+        duplicates.append(key)
+
+print(""Scores:"", scores)
+print(""Highest score:"", highest)
+print(""Duplicate scores:"", duplicates)
+```
+
+### Sample Verification
+
+Starting list: `[67, 89, 45, 89, 72, 45, 91]`
+
+- **Highest score:** `91` — found by comparing each value without using `max()`.
+- **Frequency map:** `{67: 1, 89: 2, 45: 2, 72: 1, 91: 1}`.
+- **Duplicates:** `89` and `45` both appear twice, so output is `[89, 45]`.
+- Final Terminal output matches the required three-line format.
+
+### Alternative Approaches
+
+- You may use `i = i + 1` style increments or `i += 1` — both are valid.
+- Duplicate order follows dictionary insertion order in Python 3.7+, which gives `[89, 45]` for this input.
+- You can add `print()` statements while developing to dry-run how `counts` grows after each loop step."
