@@ -1,0 +1,206 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Ankit's college app lets students send **text messages**, **voice notes**, and **photos** in one chat. The backend can process each type differently. What does **multimodal** mean in this product context?",,,,,,2,,The app only accepts typed English text,"The system can accept or produce **more than one type of data** (such as text, audio, or images)",Every input must be converted to SQL tables first,The app can only output spoken audio,,6a5095fe25bb8c6d24078e29,0,markdown,"**Multimodal** systems work with multiple data types — text, audio, images, and more — not just typed words.
+
+**Why other options are wrong:**
+- A: That describes text-only systems, not multimodal.
+- C: SQL is one structured-data path; multimodal is broader than SQL conversion.
+- D: Multimodal outputs can be text or audio; speech-only output is too narrow."
+mcsc,markdown,Meera receives a 90-second **voice note** from the hostel office. Her agent must produce a short written summary. Which pipeline stage must run **first**?,,,,,,2,,Text-to-Speech,Speech-to-Text,Image captioning,Vector retrieval,,6a5095fe25bb8c6d24078e29,0,markdown,"Audio must become **text (a transcript)** before an LLM can summarize it. **Speech-to-Text** is stage 1 in the speech pipeline.
+
+**Why other options are wrong:**
+- A: TTS converts text **to** audio — it runs at the end, not the start.
+- C: Image captioning applies to photos, not voice notes.
+- D: Retrieval may come later in RAG products; it is not the first step for raw audio."
+mcsc,markdown,YouTube plays a lecture video and shows **auto-captions** beneath it while the professor speaks. Which technology is doing the real-time conversion from speech to on-screen text?,,,,,,2,,Text-to-Speech,Speech-to-Text,Semantic chunking,SQL agent routing,,6a5095fe25bb8c6d24078e29,0,markdown,"Auto-captions are a real-world **Speech-to-Text** use case: spoken audio → written transcript.
+
+**Why other options are wrong:**
+- A: TTS goes from text to speech, the opposite direction.
+- C: Chunking splits documents for RAG; it does not transcribe live audio.
+- D: SQL agents query structured databases, not video speech tracks."
+mcsc,markdown,"For the main speech + summary lab, Divya uses **Groq** for Whisper STT and chat summarization, and **gTTS** for the spoken `.mp3` output. How many **LLM cloud API keys** does she need for the Groq STT + Groq summary path?",,,,,,2,,Zero,One (`GROQ_API_KEY`),Two (Groq + gTTS),Three (Groq + Ollama + Hugging Face),,6a5095fe25bb8c6d24078e29,0,markdown,"One **`GROQ_API_KEY`** powers both Groq Whisper and Groq chat summarization. **gTTS** is a separate network TTS service and is **not** an LLM API key.
+
+**Why other options are wrong:**
+- A: Groq cloud calls require an API key.
+- C: gTTS does not count as an LLM key.
+- D: Ollama and Hugging Face are optional alternate paths, not required together for the main lab."
+mcsc,markdown,Rohan built `audio → transcript → summary → spoken_summary.mp3`. He also wants a **one-sentence description** of a canteen **menu photo** that was never spoken aloud. Where should the vision step sit architecturally?,,,,,,2,,Replace Speech-to-Text entirely for all inputs,Run as a **parallel input path** (image → short description) alongside the speech pipeline,Insert vision only between summarization and Text-to-Speech,Use the same Groq Whisper model on the JPEG file,,6a5095fe25bb8c6d24078e29,0.5,markdown,"Vision is a **parallel path**: image in → text description out. It does not replace the speech pipeline.
+
+**Why other options are wrong:**
+- A: Speech and vision serve different input types; one does not replace the other.
+- C: Vision is not a mandatory middle step between summary and TTS.
+- D: Whisper is for audio; images need a captioning/vision model."
+mcsc,markdown,"Sneha indexes a fan datasheet **PDF** that contains logos, wiring diagrams, and spec tables. Her current **PyPDF-style loader** only reads selectable text and skips pictures. What is the best **next step** before chunking for multimodal RAG?",,,,,,2,,Increase top-k only,Use a **multimodal document parser** (for example LlamaParse or PyMuPDF) to extract text and images,Delete all images from the PDF manually,Abandon RAG and use only keyword search on filenames,,6a5095fe25bb8c6d24078e29,0.5,markdown,"When pictures carry facts, you need **document parsing** that extracts images and text **before** chunking and embedding.
+
+**Why other options are wrong:**
+- A: top-k tuning does not recover skipped image content.
+- C: Deleting images loses information the RAG system needs.
+- D: Filename search ignores document content entirely."
+mcmc,markdown,"After running Groq Whisper on `sample_voice_note.mp3`, Kavya compares the model transcript with `sample_transcript.txt`. Which checks belong on a **transcript quality checklist**?",,,,,,,,**Completeness** — main points are present,**Names / numbers** — times and IDs look correct,Summary must contain exactly 10 bullet points,**Meaning** — same message as the expected sample text,"1, 2, 4",6a5095fe25bb8c6d24078e29,0.5,markdown,"Quality checks focus on whether the transcript is **complete**, **accurate on facts/numbers**, and **faithful in meaning** before summarization.
+
+**Why option C is wrong:** Bullet count is a **summarization** format rule, not an STT quality checklist item."
+mcmc,markdown,Which statements are **true** for the **main speech pipeline lab** (Groq STT + Groq summary + gTTS)?,,,,,,,,Groq hosts **Whisper** for Speech-to-Text,**gTTS** requires `GROQ_API_KEY` to generate speech,The **same Groq client** can be reused for STT and chat summarization,Groq provides ready-to-use **image captioning** models for the lite vision step,"1, 3",6a5095fe25bb8c6d24078e29,0.5,markdown,"Groq runs Whisper and chat models under one key. One `Groq` client handles both STT and summary calls.
+
+**Why options B and D are wrong:**
+- B: gTTS is a separate TTS service with **no** Groq LLM key.
+- D: **Groq does not host image models**; vision uses Hugging Face or another vision API."
+mcmc,markdown,Which real-world product flows correctly map to **Speech-to-Text → text processing → optional Text-to-Speech**?,,,,,,,,**YouTube auto-captions** on a lecture video,**NotebookLM audio overview** after ingesting a video transcript,Describing a hostel notice **photo** using only the Whisper model,"A **voice customer-support agent** that listens, reasons, and speaks a reply","1, 2, 4",6a5095fe25bb8c6d24078e29,1,markdown,"YouTube captions, NotebookLM audio overviews, and voice support agents all use STT and often TTS around text/LLM steps.
+
+**Why option C is wrong:** A **photo** needs an **image-captioning / vision** path, not Whisper (audio STT)."
+mcmc,markdown,Which statements about **multimodal RAG** and document parsing are correct?,,,,,,,,"After parsing, the RAG flow is still **chunk → embed → store → retrieve → generate**",Each **extracted image** can become its own chunk with embeddings,A plain text-only PDF loader always extracts **diagrams** as searchable text automatically,Text-only loaders **skip images** in PDFs that may carry important facts,"1, 2, 4",6a5095fe25bb8c6d24078e29,1,markdown,"Parsing improves the **input** step; downstream RAG stages stay the same. Images can be separate chunks; plain loaders miss image content.
+
+**Why option C is wrong:** Diagrams embedded as pictures are often **skipped** by text-only loaders — that is exactly why multimodal parsing is needed."
+subjective,markdown,"Build a **Campus Voice Bulletin Processor** in Python. The hostel office sends short voice updates; your script should turn each bulletin into a **spoken summary** a student can listen to on the way to class.
+
+### Problem Statement
+
+Create a single program that runs the full **Speech-to-Text → Summarize → Text-to-Speech** pipeline on the course sample audio.
+
+Your program must:
+
+1. Load **`GROQ_API_KEY`** from a `.env` file (use `python-dotenv`).
+2. Read the local audio file **`sample_voice_note.mp3`** (download it first from the course link if needed):
+   `https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session51/sample_voice_note.mp3`
+3. Implement **`speech_to_text(audio_path)`** using Groq Whisper (`whisper-large-v3`, `response_format=""text""`).
+4. Implement **`summarize(transcript)`** using Groq chat with a prompt that asks for **exactly 3 short bullet points** and says **do not invent details**.
+5. Implement **`text_to_speech(summary, out_path)`** using **gTTS** and save **`spoken_summary.mp3`**.
+6. In **`main()`**, run all three stages in order and print:
+   - the **transcript**
+   - the **summary**
+   - the resolved path to **`spoken_summary.mp3`**
+7. Load **`sample_transcript.txt`** (same S3 folder as the audio) and print two simple quality flags:
+   - `library_hours_captured`: `True` if the model transcript mentions library hours (e.g. contains `""10""` or `""ten""` and `""library""`, case-insensitive)
+   - `student_id_captured`: `True` if the transcript mentions student ID (e.g. contains `""student""` and `""id""`, case-insensitive)
+
+Use model **`llama-3.1-8b-instant`** for summarization (or the current equivalent fast Groq text model).
+
+### Expected Output (sample shape)
+
+Your run should print labeled sections similar to:
+
+```
+=== TRANSCRIPT ===
+Hello. This is a short campus update. The library is open until 10 PM. Please carry your student ID.
+
+=== SUMMARY ===
+- Library open until 10 PM
+- Carry student ID
+- Short campus update
+
+=== SPOKEN SUMMARY FILE ===
+/path/to/spoken_summary.mp3
+
+=== QUALITY FLAGS ===
+library_hours_captured: True
+student_id_captured: True
+```
+
+Exact transcript and bullet wording may vary slightly; quality flags should be `True` when main facts are captured.
+
+### Submission Instruction
+- code all the points mentioned in the VS Code in single `.py` file
+- run the code and verify its working
+- then submit the code in the code editor/answer box in the LMS",,,,,,,,,,,,,6a5095fe25bb8c6d24078e29,0.5,markdown,"### Step-by-step Walkthrough
+1. Place `sample_voice_note.mp3` and `sample_transcript.txt` in the same folder as your script (download from the course S3 links).
+2. Create `.env` with `GROQ_API_KEY=your_key_here`.
+3. Build three functions — `speech_to_text`, `summarize`, `text_to_speech` — and call them in order from `main()`.
+4. Reuse **one** `Groq` client for STT and summary.
+5. Clean summary text for gTTS (replace bullets/newlines with speakable sentences).
+6. Run simple string checks on the transcript for library hours and student ID before printing quality flags.
+
+### Complete Reference Code (Single File)
+```python
+import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+from groq import Groq
+from gtts import gTTS
+
+
+AUDIO_FILE = Path(""""sample_voice_note.mp3"""")
+TRANSCRIPT_FILE = Path(""""sample_transcript.txt"""")
+SPOKEN_OUTPUT = Path(""""spoken_summary.mp3"""")
+WHISPER_MODEL = """"whisper-large-v3""""
+CHAT_MODEL = """"llama-3.1-8b-instant""""
+
+
+def get_groq_client():
+    load_dotenv()
+    api_key = os.getenv(""""GROQ_API_KEY"""")
+    if not api_key:
+        raise ValueError(""""Set GROQ_API_KEY in your .env file."""")
+    return Groq(api_key=api_key)
+
+
+def speech_to_text(client, audio_path):
+    if not audio_path.exists():
+        raise FileNotFoundError(f""""Missing audio file: {audio_path}"""")
+    with audio_path.open(""""rb"""") as audio_file:
+        result = client.audio.transcriptions.create(
+            file=audio_file,
+            model=WHISPER_MODEL,
+            response_format=""""text"""",
+        )
+    return result.strip() if isinstance(result, str) else str(result).strip()
+
+
+def summarize(client, transcript):
+    prompt = (
+        """"Summarize in exactly 3 short bullet points. """"
+        """"Keep only useful facts. Do not invent details.\n\n""""
+        f""""Transcript:\n{transcript}""""
+    )
+    response = client.chat.completions.create(
+        model=CHAT_MODEL,
+        messages=[{""""role"""": """"user"""", """"content"""": prompt}],
+        temperature=0.2,
+    )
+    return response.choices[0].message.content.strip()
+
+
+def text_to_speech(summary, out_path):
+    speakable = summary.replace(""""-"""", """" """").replace(""""\n"""", """". """")
+    tts = gTTS(text=speakable, lang=""""en"""")
+    tts.save(str(out_path))
+    return out_path.resolve()
+
+
+def quality_flags(transcript):
+    text = transcript.lower()
+    library_hours = (""""library"""" in text) and ((""""10"""" in text) or (""""ten"""" in text))
+    student_id = (""""student"""" in text) and (""""id"""" in text)
+    return {
+        """"library_hours_captured"""": library_hours,
+        """"student_id_captured"""": student_id,
+    }
+
+
+def main():
+    client = get_groq_client()
+
+    transcript = speech_to_text(client, AUDIO_FILE)
+    print(""""=== TRANSCRIPT ==="""")
+    print(transcript)
+
+    summary = summarize(client, transcript)
+    print(""""\n=== SUMMARY ==="""")
+    print(summary)
+
+    spoken_path = text_to_speech(summary, SPOKEN_OUTPUT)
+    print(""""\n=== SPOKEN SUMMARY FILE ==="""")
+    print(spoken_path)
+
+    flags = quality_flags(transcript)
+    print(""""\n=== QUALITY FLAGS ==="""")
+    print(f""""library_hours_captured: {flags['library_hours_captured']}"""")
+    print(f""""student_id_captured: {flags['student_id_captured']}"""")
+
+    if TRANSCRIPT_FILE.exists():
+        expected = TRANSCRIPT_FILE.read_text(encoding=""""utf-8"""").strip()
+        print(""""\n=== EXPECTED SAMPLE TEXT ==="""")
+        print(expected)
+
+
+if __name__ == """"__main__"""":
+    main()
+```"
