@@ -1,0 +1,187 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Riya uses a plain LLM API wrapper with no history passed between calls. In turn 1 she says: *""My order ID is ORD102.""* In turn 2 she asks: *""What is the refund status of it?""* What is the most likely behavior?",,,,,,2,,The model automatically remembers ORD102 from turn 1,Turn 2 behaves like a fresh request unless prior messages are sent again,The API stores all chats permanently in the model weights,Turn 2 always calls the correct tool without any context wiring,,6a5097119ff4faa8f873d90b,0,markdown,"Default LLM API calls are stateless. Without explicitly attaching prior messages (or a memory layer), turn 2 cannot rely on turn 1 facts.
+
+**Why other options are wrong:**
+- A: Stateless calls do not retain prior turns by default.
+- C: Model weights are not updated per user chat at inference time.
+- D: Tool use still needs context; it will not magically recall ORD102."
+mcsc,markdown,"In a `ChatPromptTemplate`, you add:
+
+```python
+MessagesPlaceholder(variable_name=""chat_history"", optional=True)
+```
+
+What does `MessagesPlaceholder` do by itself?",,,,,,2,,Automatically saves every user and AI message into a database,Reserves a slot in the prompt where a message list can be injected at runtime,Replaces the need for `AgentExecutor`,Stores tool intermediate steps across different user sessions,,6a5097119ff4faa8f873d90b,0,markdown,"`MessagesPlaceholder` only defines where history will appear in the prompt. Your application (or `RunnableWithMessageHistory`) must supply and update the actual messages.
+
+**Why other options are wrong:**
+- A: No automatic persistence is provided by the placeholder alone.
+- C: Executor is still required to run the agent loop.
+- D: Cross-session tool storage is not the placeholder's role; scratchpad handles current-run tool steps."
+mcsc,markdown,Why is `optional=True` commonly set on the `chat_history` placeholder?,,,,,,2,,To disable tool calling on the first turn,To allow the first turn to run when history is still empty,To force the model to invent fake prior messages,To merge all users into one shared conversation,,6a5097119ff4faa8f873d90b,0,markdown,"On the first message, `chat_history` is often `[]`. `optional=True` prevents errors when that list is empty.
+
+**Why other options are wrong:**
+- A: Tool calling is unrelated to this flag.
+- C: It does not fabricate history.
+- D: Session isolation is a separate design concern."
+mcsc,markdown,"In a tool-calling agent prompt, what is the primary role of `MessagesPlaceholder(variable_name=""agent_scratchpad"")`?",,,,,,2,,Store all customer chats from the last 30 days,Hold intermediate tool-call steps for the current agent run,"Replace `chat_history` for follow-up questions like *""track it""*",Persist order IDs in a SQL database,,6a5097119ff4faa8f873d90b,0,markdown,"`agent_scratchpad` is working memory for the active invocation (tool chosen, inputs, observations), not long-term dialogue memory.
+
+**Why other options are wrong:**
+- A/C: Long-term / cross-turn recall is handled by `chat_history`, not scratchpad.
+- D: Database persistence is an application-level choice, not scratchpad's default job."
+mcsc,markdown,"Arjun's agent has `MessagesPlaceholder(""chat_history"")`, passes `chat_history=[]` on every `invoke`, and never appends messages after responses. Turn 1 shares an order ID; turn 2 asks *""What is the status of it?""* The app runs without errors but fails to recall the ID. What is the most likely root cause?",,,,,,2,,`max_iterations` is too high,"History slot exists in the prompt, but the list is never updated after each turn","`agent_scratchpad` is missing, so tools cannot run",`optional=True` prevents any memory from ever working,,6a5097119ff4faa8f873d90b,0.5,markdown,"This is the classic wiring bug: the placeholder reserves space, but without post-invoke `append` of `HumanMessage` and `AIMessage`, later turns still see empty history.
+
+**Why other options are wrong:**
+- A: Iteration limits do not cause ID amnesia across turns.
+- C: Tools can still run; context for follow-ups is missing.
+- D: `optional=True` allows empty first turn; it does not block updates you add manually."
+mcsc,markdown,"A food-delivery bot receives:
+Turn 1 — *""Deliver to Flat 12B, Green Park.""*
+Turn 2 — *""How far is the rider from here?""*
+
+Which design choice most directly enables correct turn 2 behavior?",,,,,,1,,Pass rolling `chat_history` (prior human/AI turns) into each new `invoke`,Increase model temperature to 1.0,Remove `agent_scratchpad` to save tokens,Call `invoke` with only turn 2 text and `chat_history=[]` every time,,6a5097119ff4faa8f873d90b,0.5,markdown,"Follow-ups with pronouns (*here*, *it*) need prior turns in `chat_history` so the model can resolve references.
+
+**Why other options are wrong:**
+- B: Temperature affects randomness, not memory.
+- C: Scratchpad helps tool loops within a turn; removing it does not add dialogue memory.
+- D: Stateless invocation repeats the turn 2 failure pattern."
+mcmc,markdown,You are building a manual-memory tool-calling agent (no `RunnableWithMessageHistory` yet). Which practices are correct?,,,,,,,,"Use the same variable name in the placeholder and in `invoke` (e.g., `chat_history`)","After each `invoke`, append `HumanMessage` then `AIMessage` to the same list",Append only `AIMessage` and skip the user line to save tokens,Set `optional=True` on the `chat_history` placeholder when the first turn may be empty,"1, 2, 4",6a5097119ff4faa8f873d90b,0.5,markdown,"Correct manual wiring requires key/name alignment, post-turn append in conversational order, and optional empty history on turn one.
+
+**Why option C is wrong:**
+Skipping the human line breaks turn pairing and confuses the model about what the user actually asked."
+mcmc,markdown,A startup runs a support bot for 500 concurrent users. Which statements about session-scoped memory are correct?,,,,,,,,"Each user/conversation should map to its own history bucket (e.g., `session_id`)",One global `chat_history` list shared by all users is a serious design mistake,"`config={""configurable"": {""session_id"": ""...""}}` helps select the right bucket in auto-memory setups",`InMemoryChatMessageHistory` automatically writes to PostgreSQL on every message,"1, 2, 3",6a5097119ff4faa8f873d90b,0.5,markdown,"Per-session stores prevent cross-user leakage. Configurable `session_id` routes requests in `RunnableWithMessageHistory` patterns. In-memory stores live in RAM unless you add persistence.
+
+**Why option D is wrong:**
+In-memory history does not imply database persistence by default."
+mcmc,markdown,"Regarding `chat_history` versus `agent_scratchpad` in LangChain tool-calling agents, which statements are correct?",,,,,,,,`chat_history` carries prior user/assistant turns across separate invocations,`agent_scratchpad` supports tool-step continuity within the current run,"`agent_scratchpad` alone is enough for turn 2 to resolve *""status of it""* without `chat_history`",Agents that handle follow-up questions after tool use typically need both placeholders,"1, 2, 4",6a5097119ff4faa8f873d90b,1,markdown,"Dialogue memory and per-run tool traces solve different problems; follow-up pronouns need `chat_history`, while multi-step tool chains need scratchpad.
+
+**Why option C is wrong:**
+Scratchpad resets per invocation and does not store prior user turns for pronoun resolution."
+mcmc,markdown,Your team is comparing stateless and memory-enabled agent designs before production rollout. Which statements are correct?,,,,,,,,The same `AgentExecutor` can demonstrate both patterns by changing only how `chat_history` is passed,Turn 2 follow-ups with pronouns typically fail when `chat_history` is always passed as an empty list,In-memory session history survives application restart without any external database,`input_messages_key` in `RunnableWithMessageHistory` must match the user-input key used in the prompt template,"1, 2, 4",6a5097119ff4faa8f873d90b,1,markdown,"Stateless vs memory-enabled behavior is mainly a wiring difference in history passing. Empty history on every call reproduces stateless failure on follow-ups. Auto-memory wrappers require aligned input keys between config and prompt.
+
+**Why option C is wrong:**
+In-memory stores are ephemeral; restart clears RAM unless history is persisted externally (for example, in a database)."
+subjective,markdown,"You are improving a small e-commerce support desk bot. Customers often share an order ID in one message and ask a vague follow-up in the next (*""Where is it now?""*). Your task is to implement a **tool-calling agent with conversational memory** so turn 2 can resolve the order ID without asking again.
+
+### Problem Statement
+Build a Python program that:
+
+1. Defines an in-memory `orders_db` with at least:
+   - `ORD101` → status `""shipped""`
+   - `ORD102` → status `""cancelled""`
+2. Implements one tool with `@tool`:
+   - `get_order_status(order_id: str) -> str`
+   (return a clear message for valid/invalid IDs)
+3. Uses `ChatOllama` from `langchain_ollama` as the chat model (any locally available Ollama model with tool-calling support, for example `llama3.1`).
+4. Imports `create_tool_calling_agent` and `AgentExecutor` from `langchain_classic.agents`.
+5. Builds a `ChatPromptTemplate` that includes:
+   - A system message telling the agent to remember order IDs for follow-ups
+   - `MessagesPlaceholder(variable_name=""chat_history"", optional=True)`
+   - Human input placeholder `{input}`
+   - `MessagesPlaceholder(variable_name=""agent_scratchpad"")`
+6. Creates a tool-calling agent with `create_tool_calling_agent` and runs it via `AgentExecutor` (`verbose=True` is enough).
+7. Maintains a module-level `chat_history = []` list and an `ask_agent(user_input: str) -> str` function that:
+   - Calls `agent_executor.invoke` with `input` and `chat_history`
+   - Appends `HumanMessage` (user text) then `AIMessage` (final output) **after** each successful run
+   - Returns the AI text
+8. Runs this **two-turn demo** and prints labeled output:
+   - **Turn 1 user:** `Hi, my order ID is ORD102.`
+   - **Turn 2 user:** `What is the status of it?`
+9. After Turn 2, print `len(chat_history)` (expected: **4** message objects if both turns completed once).
+
+### Expected Outcome
+- Turn 1: agent acknowledges or responds about ORD102.
+- Turn 2: agent should use context (and ideally the tool) to answer about **ORD102** without the user repeating the ID.
+- `len(chat_history)` after turn 2 should be **4** (two human + two AI messages).
+
+### Submission Instruction
+- code all the points mentioned in the VS Code in single `.py` file
+- run the code and verify its working
+- then submit the code in the code editor/answer box in the LMS",,,,,,,,,,,,,6a5097119ff4faa8f873d90b,0.5,markdown,"### Step-by-step Walkthrough
+1. Create `orders_db` with ORD101 and ORD102 statuses.
+2. Define `get_order_status` with `@tool` and lookup logic.
+3. Build prompt with **both** `chat_history` and `agent_scratchpad` placeholders.
+4. Create agent + executor (pass `tools` as a **list**).
+5. Keep one shared `chat_history` list across turns.
+6. In `ask_agent`, invoke with current history, then append human and AI messages in order.
+7. Run Turn 1 and Turn 2 queries; print outputs and final `len(chat_history)`.
+
+### Complete Reference Code (Single File)
+```python
+from langchain_ollama import ChatOllama
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.tools import tool
+from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+
+orders_db = {
+    ""ORD101"": {""status"": ""shipped""},
+    ""ORD102"": {""status"": ""cancelled""},
+}
+
+
+@tool
+def get_order_status(order_id: str) -> str:
+    """"""Use when the user asks for order status or tracking.""""""
+    order = orders_db.get(order_id)
+    if not order:
+        return f""Order with ID {order_id} not found.""
+    return f""Order status for {order_id} is {order['status']}.""
+
+
+tools = [get_order_status]
+
+llm = ChatOllama(model=""llama3.1"", temperature=0)
+
+prompt = ChatPromptTemplate.from_messages([
+    (
+        ""system"",
+        ""You are a helpful customer support agent. ""
+        ""If the user gives an order ID, remember it for this conversation. ""
+        ""For follow-ups like 'what is the status of it', use the order ID from chat history. ""
+        ""Use tools when order status is required."",
+    ),
+    MessagesPlaceholder(variable_name=""chat_history"", optional=True),
+    (""human"", ""{input}""),
+    MessagesPlaceholder(variable_name=""agent_scratchpad""),
+])
+
+agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
+
+agent_executor = AgentExecutor(
+    agent=agent,
+    tools=tools,
+    verbose=True,
+)
+
+chat_history = []
+
+
+def ask_agent(user_input: str) -> str:
+    response = agent_executor.invoke({
+        ""input"": user_input,
+        ""chat_history"": chat_history,
+    })
+    ai_text = response[""output""]
+    chat_history.append(HumanMessage(content=user_input))
+    chat_history.append(AIMessage(content=ai_text))
+    return ai_text
+
+
+def main() -> None:
+    turn1 = ""Hi, my order ID is ORD102.""
+    turn2 = ""What is the status of it?""
+
+    print(""Turn 1 - User:"", turn1)
+    print(""Turn 1 - AI:"", ask_agent(turn1))
+    print()
+
+    print(""Turn 2 - User:"", turn2)
+    print(""Turn 2 - AI:"", ask_agent(turn2))
+    print()
+
+    print(""chat_history length:"", len(chat_history))
+
+
+if __name__ == ""__main__"":
+    main()
+```"
