@@ -1,0 +1,308 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,Priya runs n8n locally with Docker. She wants to build the Gmail → LLM → Gmail pipeline on her laptop. Which URL opens the n8n editor?,,,,,,1,,`http://localhost:5678`,`http://localhost:5000`,`https://mail.google.com`,`http://localhost:3000`,,6a51e3ee9ff4faa8f8777dea,0,markdown,"A is correct because local self-hosted n8n exposes the workflow canvas at **`http://localhost:5678`**.
+
+B and D are incorrect because these are common dev ports, but n8n's default local UI port is **5678**. C is incorrect because Gmail webmail is where emails are read/sent, not where you design n8n workflows."
+mcsc,markdown,**CodeBridge Solutions** wants a workflow that starts automatically when a new email arrives from an approved contractor — without anyone clicking **Execute workflow**. Which trigger fits best?,,,,,,2,,Trigger manually,Gmail → On message received,On form submission,On a schedule only,,6a51e3ee9ff4faa8f8777dea,0,markdown,"B is correct because an **on app event** Gmail trigger with **On message received** polls the inbox and starts the workflow when matching mail arrives.
+
+A is incorrect because manual trigger needs a human to start each run. C is incorrect because form submission starts on an n8n-hosted form, not on incoming Gmail. D is incorrect because schedule runs on a timer, not when a specific email lands."
+mcsc,markdown,"In a **Basic LLM chain** node, what is the main job of the **system prompt**?",,,,,,2,,Store Gmail OAuth Client ID and Client Secret,Set standing rules and role for the model before the user task,Replace the need for an OpenAI API key,Merge outputs from two parallel LLM branches,,6a51e3ee9ff4faa8f8777dea,0,markdown,"B is correct because the **system prompt** defines the model's role and boundaries. The **user prompt** carries the actual task plus dynamic input.
+
+A is incorrect because OAuth secrets live in n8n **Credentials**, not in prompts. C is incorrect because API keys are still required in the OpenAI credential. D is incorrect because **Merge** combines parallel LLM outputs, not the system prompt."
+mcsc,markdown,"While building LLM nodes, Arjun pins sample output on the Gmail trigger so he does not re-fetch mail on every test. What is the best practice before a final end-to-end demo?",,,,,,2,,Keep all nodes pinned forever,Unpin trigger and downstream pinned data so the workflow reads a fresh email,Delete the Gmail credential,Change poll time to every second,,6a51e3ee9ff4faa8f8777dea,0,markdown,"B is correct because **pin data** speeds up building, but **unpinning** before a realistic full run ensures the pipeline processes a new email instead of frozen sample data.
+
+A is incorrect because pinned data can cause repeated runs on the same cached payload. C is incorrect because deleting credentials breaks the pipeline. D is incorrect because polling every second creates unnecessary API load."
+mcsc,markdown,Meera connected Gmail OAuth but the trigger still cannot read messages. She enabled APIs in Google Cloud. Which API must be enabled for this Gmail integration?,,,,,,1,,Gmail API,Google Maps API,Google Photos API,YouTube Data API,,6a51e3ee9ff4faa8f8777dea,0.5,markdown,"A is correct because reading and sending mail through n8n's Gmail nodes requires the **Gmail API** to be enabled in the correct Google Cloud project.
+
+B, C, and D are incorrect because Maps, Photos, and YouTube are unrelated to inbox access."
+mcsc,markdown,"A pipeline runs **code summarizer** and **code commentator** in parallel from the same Gmail trigger. Before sending the reply email, both outputs must be ready. Which node waits until both branches finish?",,,,,,2,,Aggregate,Merge,IF,Edit Fields,,6a51e3ee9ff4faa8f8777dea,0.5,markdown,"B is correct because the **Merge** node combines multiple streams and waits until data from **both** parallel LLM branches is available.
+
+A is incorrect because **Aggregate** combines fields after merge. C is incorrect because **IF** branches on a condition. D is incorrect because **Edit Fields** remaps fields optionally."
+mcmc,markdown,Which settings help restrict a Gmail trigger so it does not process every message in the inbox?,,,,,,,,**Sender** filter set to an approved email address,**Event** set to message received,Hard-coding one customer name inside the OpenAI API key field,**Poll time** chosen based on how quickly new mail must be detected,"1, 2, 4",6a51e3ee9ff4faa8f8777dea,0.5,markdown,"A, B, and D are correct — sender filter limits which From address can trigger the flow; message received is the correct event type; poll time controls check frequency.
+
+C is incorrect because API keys authenticate OpenAI; they do not filter Gmail senders."
+mcmc,markdown,A team is wiring **Basic LLM chain** nodes after a Gmail trigger. Which steps are correct?,,,,,,,,Choose **Define below** so email `text` can be dragged into the user prompt,Attach an **OpenAI Chat Model** sub-node with a valid API key credential,Map the full email body by typing a fixed sample string instead of expressions,"Rename nodes (for example, **code summarizer**) to keep the canvas readable","1, 2, 4",6a51e3ee9ff4faa8f8777dea,0.5,markdown,"A, B, and D are correct — Define below connects prior node data; OpenAI credential powers the chain; clear node names aid maintenance.
+
+C is incorrect because hard-coded sample text breaks the pipeline for new emails; use expressions from trigger output."
+mcmc,markdown,**CodeBridge** built: **Gmail trigger → parallel summarizer + commentator → Merge → Aggregate → Gmail Send message**. Which statements are correct?,,,,,,,,Both LLM chains can connect directly from the same Gmail trigger for parallel execution,**Merge** should receive one input from summarizer and one from commentator,**Aggregate** helps combine `text` fields (for example `text0` and `text1`) before mapping the email body,The Gmail send node should map **text0** and **text1** from aggregate output into the outgoing message,"1, 2, 3, 4",6a51e3ee9ff4faa8f8777dea,1,markdown,"A, B, C, and D are all correct — parallel branches share the same trigger input; Merge takes two streams; Aggregate rolls up text fields; Send maps aggregated fields into the reply."
+mcmc,markdown,"While testing and handing off an n8n AI email pipeline, which statements are correct?",,,,,,,,**Fetch test event** on the Gmail trigger helps verify ingestion before wiring LLM nodes,Exporting workflow **JSON** shares node wiring; teammates still reconnect their own credentials locally,"If OpenAI credentials are invalid, the LLM sub-node may fail until a valid API key and model are saved","Sharing Client ID, Client Secret, and API keys in a public chat is the recommended handoff method","1, 2, 3",6a51e3ee9ff4faa8f8777dea,1,markdown,"A, B, and C are correct — Fetch test event validates trigger output; JSON export transfers structure not secrets; bad OpenAI setup causes LLM errors.
+
+D is incorrect because credentials must be treated like passwords and never shared publicly."
+subjective,markdown,"**CodeBridge Solutions** is a remote software consultancy. Contractors email **Python scripts** to a shared inbox when they need a quick review. The operations lead wants an **automatic** n8n pipeline that:
+
+1. Detects a new email from an **approved sender**
+2. Reads the Python code from the email body
+3. Runs **two AI steps in parallel** — a plain-English **summary** and **inline comments** on the code
+4. Waits for **both** AI results, packages them together, and **emails the reply** back to the same inbox
+
+Build everything in your **local n8n** instance (Docker on `localhost:5678`).
+
+---
+
+## Big picture (read this first)
+
+You will create **one workflow**, **one test email**, and **two credential types** (Gmail OAuth + OpenAI API key).
+
+| Item | Name (suggested) | Purpose |
+|---|---|---|
+| **Workflow** | `CodeBridge Code Review Pipeline` | Gmail in → parallel LLM → merge → aggregate → Gmail out |
+| **Sticky note** | On canvas | Document trigger rules, credentials, and assumptions |
+| **Test email** | Subject: `Python code` | Body contains the sample script below |
+
+**Total main nodes on canvas: 6** (same Gmail OAuth credential for trigger + send; same OpenAI credential for both LLM chains).
+
+![End-to-end n8n AI automation pipeline — Gmail trigger ingests email, parallel code summarizer and code commentator LLM chains, merge and aggregate nodes combine outputs, Gmail send message delivers summary and commented code](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module4/session48/session48-01-end-to-end-pipeline-overview.png)
+
+### Visual map — full workflow
+
+```text
+[Sticky note: plan + assumptions]
+
+[1] Gmail: On message received
+        |---------------------------+
+        v                           v
+[2] Code Summarizer          [3] Code Commentator
+    (Basic LLM Chain)            (Basic LLM Chain)
+        |                           |
+        +-------------+-------------+
+                      v
+              [4] Merge (Append)
+                      v
+              [5] Aggregate (text fields)
+                      v
+              [6] Gmail: Send message
+```
+
+---
+
+## Part A — Sticky note and test email (do this first)
+
+### A1 — Sticky note on canvas
+
+Add a **sticky note** with at least these four bullets:
+
+| Bullet | What to write |
+|---|---|
+| **Trigger** | Gmail on message received; approved sender only |
+| **AI step 1** | Code summarizer — beginner-friendly summary |
+| **AI step 2** | Code commentator — inline comments, no code edits |
+| **Delivery** | Gmail send message with summary + commented code |
+
+Also list credentials needed (**Gmail OAuth**, **OpenAI API key**) and one operational assumption.
+
+### A2 — Send yourself a test email
+
+From your **approved sender Gmail**, send an email **to yourself** with subject **`Python code`** and paste the sample Python script from Part B in the body.
+
+---
+
+## Part B — Sample Python script (paste into test email body)
+
+Use the LangChain memory-agent style script provided in the answer explanation on the platform (or equivalent length — do not send an empty body).
+
+---
+
+## Part C — Credentials (one time)
+
+**Gmail OAuth2:** Google Cloud project → enable **Gmail API** → OAuth consent (External) + test user → Web OAuth client → sign in from n8n.
+
+**OpenAI API key:** Create OpenAI credential in n8n and attach to both LLM sub-nodes.
+
+---
+
+## Part D — Build the workflow (6 nodes)
+
+### Node 1 — Gmail: On message received
+
+Event: message received. Set **sender** filter to your approved Gmail. **Fetch test event** → confirm **`text`** contains Python code → **pin** output while building.
+
+### Node 2 — Code Summarizer (Basic LLM chain)
+
+**Define below** → drag Gmail **`text`** into user prompt. Attach OpenAI Chat Model. Use system and user prompts from the answer explanation.
+
+### Node 3 — Code Commentator (parallel)
+
+Duplicate node 2, rename to **code commentator**, connect **from Gmail trigger** (not after summarizer). Change user prompt to comment-only instructions (see answer explanation).
+
+### Node 4 — Merge (Append)
+
+Connect summarizer → input 1, commentator → input 2.
+
+### Node 5 — Aggregate
+
+Aggregate **`text`** from merge output → expect **`text0`** (summary) and **`text1`** (commented code).
+
+### Node 6 — Gmail: Send message
+
+Map **`text1`** and **`text0`** into body. Subject: `CodeBridge review — summary and comments`.
+
+---
+
+## Part E — Testing checklist (required)
+
+| Test | What to do | Pass criteria |
+|---|---|---|
+| **T1 Happy path** | Unpin all nodes → fresh test email → full workflow | Reply has summary + commented code |
+| **T2 Failure path** | Break OpenAI key temporarily → restore | LLM error then recovery |
+| **T3 Edge case** | Email from sender **not** in filter | Workflow does not process it |
+
+---
+
+## Part F — Optional bonus (HTML email)
+
+Add HTML output instruction to both LLM prompts; change send node message type to **HTML**.
+
+---
+
+## Part G — Export and handoff
+
+Download workflow **JSON**. Note on sticky note which credentials teammates must recreate after import.
+
+---
+
+## Part H — What to submit (Google Doc)
+
+Create a Google Doc with:
+
+1. Canvas screenshot — all **6 nodes** + sticky note
+2. Gmail trigger screenshot — Fetch test event showing `text`
+3. Parallel LLM screenshot — both chains from Gmail trigger
+4. Merge + Aggregate screenshot — `text0` and `text1`
+5. Inbox screenshot — reply email with summary + comments
+6. Testing table for T1, T2, T3
+7. Short write-up (**100–150 words**) on parallel LLM, Merge role, and why you unpin before final test
+
+### Submission Instruction
+
+- create a google doc in your google drive - suggested folder (for your ref) is module name in that session name in that the submission file
+- write properly and neatly after reasearching duly - do add images wherever needed
+- once the doc is ready - submit the doc link (click share button and copy the link)
+- make sure the sharing settings is `View anyone with the link` (sharing should be public)",,,,,,,,,,,,,6a51e3ee9ff4faa8f8777dea,0.5,markdown,"### Node checklist
+
+| # | Node type | Purpose |
+|---|---|---|
+| 1 | Gmail On message received | Ingest email; filter by sender |
+| 2 | Basic LLM chain (summarizer) | Plain-English code summary |
+| 3 | Basic LLM chain (commentator) | Inline comments on same code |
+| 4 | Merge (Append) | Wait for both LLM outputs |
+| 5 | Aggregate | Combine `text0` + `text1` for send node |
+| 6 | Gmail Send message | Deliver summary + commented code |
+
+### Step-by-step walkthrough
+
+**Setup**
+
+1. Add sticky note documenting trigger, two AI steps, delivery, credentials, and sender assumption.
+2. Send test email with subject `Python code` and sample Python script in body.
+3. Configure Gmail OAuth (Gmail API enabled) and OpenAI API key in n8n credentials.
+
+**Node 1 — Gmail trigger**
+
+- On message received, sender filter = approved Gmail, poll time = every minute or hour.
+- Fetch test event → verify `text` field has code → pin data.
+
+**Node 2 — Code summarizer**
+
+- Basic LLM chain, Define below, drag `text` into user prompt.
+- System prompt:
+
+```text
+You are a helpful coding assistant who is very good at Python.
+```
+
+- User prompt:
+
+```text
+Given the Python code, please summarize this code in a beginner friendly manner.
+Make sure to include all the technical details about the code and what we can do.
+Just provide a proper summary of the code. Do not edit it.
+```
+
+**Node 3 — Code commentator (parallel)**
+
+- Duplicate summarizer; connect Gmail trigger → commentator directly.
+- User prompt:
+
+```text
+Given the Python code, please provide proper comments in this code in a beginner friendly manner.
+Make sure to include all the technical details about the code in the comments.
+Comments should not be very long.
+Do not make changes in the code.
+```
+
+**Node 4 — Merge**
+
+- Summarizer → input 1; commentator → input 2; mode Append.
+
+**Node 5 — Aggregate**
+
+- Aggregate `text` field from both merge items → `text0` (summary), `text1` (comments).
+
+**Node 6 — Gmail send**
+
+- To: your inbox; subject: `CodeBridge review — summary and comments`.
+- Body: map `text1` then `text0` from aggregate output.
+
+**Testing**
+
+- T1: Unpin all → fresh email → full run → inbox receives both summary and comments.
+- T2: Invalid OpenAI key → LLM error → restore key → succeeds.
+- T3: Email from unlisted sender → not processed.
+
+### Sample Python script (test email body)
+
+```python
+from langchain_openai import ChatOpenAI
+from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain_core.messages import HumanMessage, AIMessage
+from langchain_core.tools import tool
+from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+
+ORDERS = {
+    ""ORD101"": {""status"": ""out for delivery""},
+    ""ORD102"": {""status"": ""cancelled""},
+}
+
+@tool
+def get_order_status(order_id: str) -> str:
+    # Use when the user asks for order status or tracking.
+    order = ORDERS.get(order_id)
+    if not order:
+        return f""Order with ID {order_id} not found.""
+    return f""Order status for {order_id} is {order['status']}.""
+
+tools = [get_order_status]
+llm = ChatOpenAI(model=""gpt-4o-mini"", temperature=0)
+
+prompt = ChatPromptTemplate.from_messages([
+    (""system"", ""You are a helpful customer support agent.""),
+    MessagesPlaceholder(variable_name=""chat_history"", optional=True),
+    (""human"", ""{input}""),
+    MessagesPlaceholder(variable_name=""agent_scratchpad""),
+])
+
+agent = create_tool_calling_agent(llm=llm, tools=tools, prompt=prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+chat_history = []
+
+def ask_agent(user_input: str) -> str:
+    response = agent_executor.invoke({""input"": user_input, ""chat_history"": chat_history})
+    ai_text = response[""output""]
+    chat_history.append(HumanMessage(content=user_input))
+    chat_history.append(AIMessage(content=ai_text))
+    return ai_text
+```
+
+### Common mistakes to avoid
+
+- Commentator chained after summarizer instead of parallel from Gmail trigger
+- Hard-coded code in prompt instead of dragging `text` expression
+- Skipping Merge before Aggregate
+- Pinned data during final demo causing repeated processing of same email
+- Sender filter mismatch with test email From address
+- Gmail API not enabled in Google Cloud project
+
+### Alternative approaches
+
+- **HTML message type** after prompt tweak — acceptable bonus.
+- **Edit Fields** node before send — acceptable if mapping is correct.
+- **Single LLM node** for summary + comments in one prompt — does not meet parallel-branch requirement."
