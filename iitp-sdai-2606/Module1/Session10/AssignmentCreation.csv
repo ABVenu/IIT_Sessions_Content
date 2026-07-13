@@ -1,0 +1,183 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"Meera joins two batch WhatsApp groups. Group A roll numbers are `[101, 204, 305, 410]`. Group B roll numbers are `[204, 410, 512]`.
+
+She wants the rolls that appear in **both** groups.
+
+What should her program return?",,,,,,1,,"`[204, 410]`","`[101, 204, 305, 410, 512]`","`[101, 305, 512]`",`[512]`,,,6a549204e268c63cc3a0aa90,0,markdown,"A is correct because common elements are values present in both lists — only `204` and `410`.
+
+B is incorrect because that merges both lists instead of finding intersection. C is incorrect because those rolls appear in only one group. D is incorrect because `512` is only in Group B."
+mcsc,markdown,"Arjun writes nested loops to check every unique pair of scores in a list. He starts the outer loop at index `i` and wants the inner loop to avoid comparing a score with itself and avoid checking the same pair twice.
+
+Where should the inner loop start?",,,,,,1,,"`range(i + 1, n)`","`range(0, n)`","`range(i, n)`","`range(n, i, -1)`",,,6a549204e268c63cc3a0aa90,0,markdown,"A is correct because starting at `i + 1` compares each index only with later indexes, so pairs are unique and self-pairs are skipped.
+
+B is incorrect because it rechecks earlier indexes and self-pairs. C is incorrect because `j = i` compares an item with itself. D is incorrect and does not match the standard unique-pair pattern."
+mcsc,markdown,"Priya needs the second largest value from `[12, 45, 30, 45, 18]`. She creates an ascending sorted list and reads one index.
+
+Which index gives the second-last value in that sorted list?",,,,,,1,,`size - 2`,`size - 1`,`0`,`size`,,,6a549204e268c63cc3a0aa90,0,markdown,"A is correct because after ascending sort, `size - 1` is the last (largest) and `size - 2` is the second-last value.
+
+B is incorrect because that is the largest. C is incorrect because that is the smallest. D is incorrect because `size` is out of range for zero-based indexes."
+mcsc,markdown,"Kabir wants every dish-price pair whose product is even. He finds the first valid pair and immediately `return`s from the function.
+
+What is the **main problem** with that approach for this requirement?",,,,,,1,,Early return stops after one pair and can miss other valid pairs,Python cannot multiply two integers,Nested loops are illegal in Python,Even products never exist for positive numbers,,,6a549204e268c63cc3a0aa90,0,markdown,"A is correct because ""all even-product pairs"" needs collecting matches and returning at the end; early return keeps only the first match.
+
+B is incorrect because integer multiplication works in Python. C is incorrect because nested loops are valid. D is incorrect because even products are common (any even factor makes an even product)."
+mcsc,markdown,"Neha solves ""find any two numbers that add to target `10`"" with nested index loops on `[2, 4, 6, 8]`.
+
+She uses early return when a valid pair is found.
+
+Which statement is **most accurate**?",,,,,,1,,"Early return is appropriate because the problem asks for one valid pair, not every pair",She must never return early; she must always print every possible pair,She should sort first; otherwise nested loops cannot check sums,She must use a value-based `for x in nums` inner loop starting after `i`,,,6a549204e268c63cc3a0aa90,0.5,markdown,"A is correct because pair-with-sum often needs any one match, so early return is valid.
+
+B is incorrect for a one-pair requirement. C is incorrect because nested loops can check sums without sorting. D is incorrect because value-based loops do not give a clean `i + 1` start the way index-based `range` does."
+mcsc,markdown,"Rohan finds the second largest using `sorted(nums)` and then reads an index. A friend says this approach costs about the same as a single `O(n)` pass that tracks largest and second largest in one loop.
+
+Which statement is **most accurate**?",,,,,,1,,"`sorted()` is typically about **O(n log n)**, while a careful single pass can be **O(n)**",`sorted()` is always **O(1)** because reading an index is instant,Nested pair loops are always faster than `sorted()` for every list size,`sorted()` has the same cost as printing one number,,,6a549204e268c63cc3a0aa90,0.5,markdown,"A is correct because built-in sort is commonly O(n log n), while one linear scan is O(n).
+
+B is incorrect — index read is O(1), but sorting itself is not. C is incorrect because nested pair checks are O(n²) and are not always faster. D is incorrect because sorting does real work proportional to n log n."
+mcmc,markdown,"Sana is planning a list problem before coding.
+
+Which planning steps are **useful**?",,,,,,,,"Write down input, output, and special cases before opening the editor",Decide whether she needs one matching pair or all matching pairs,Skip planning and type nested loops immediately to save time,Dry-run a small example on paper before coding,Ask whether the list can be empty or too short,"1, 2, 4, 5",6a549204e268c63cc3a0aa90,0.5,markdown,"A, B, D, and E match good problem analysis: clarify I/O, one-vs-all output rule, dry-run, and edge cases.
+
+C is incorrect because skipping planning often causes wrong early-return vs collect-all choices and longer debugging."
+mcmc,markdown,"Vikram writes a function that can return pairs with **even** product or **odd** product based on a flag `is_even`.
+
+Which statements are correct?",,,,,,,,`product % 2 == 0` identifies an even product,Collecting pairs in a list and returning after both loops is needed when all matches matter,Setting `is_even=False` should keep only odd-product pairs,Hard-coding only the even rule means he must copy-paste a second function for odd products,Using `return` inside the inner loop as soon as one even pair is found still returns every odd pair later automatically,"1, 2, 3, 4",6a549204e268c63cc3a0aa90,0.5,markdown,"A–D match the even/odd product design: modulus check, collect-all behaviour, flag switching, and avoiding duplicated nested-loop code via a parameter.
+
+E is incorrect because an early `return` exits the function immediately and does not continue collecting later pairs."
+mcmc,markdown,"Ananya compares three approaches on a list of size `n`.
+
+Which statements are correct?",,,,,,,,Checking all unique pairs with nested `i` / `j` loops is roughly **O(n²)**,`sorted(nums)` then reading `size - 2` is roughly **O(n log n)** overall,A single loop that updates largest and second largest can be **O(n)**,Nested unique-pair loops are **O(1)** because each pair is checked only once,Starting the inner loop at `i + 1` avoids self-pairs and repeated pair orderings,"1, 2, 3, 5",6a549204e268c63cc3a0aa90,1,markdown,"A, B, C, and E match the complexity and indexing ideas from the lesson.
+
+D is incorrect — ""each pair once"" still means about n²/2 checks, which is O(n²), not O(1)."
+mcmc,markdown,"Farhan debugs a pair-with-sum function on `nums = [1, 2, 3, 4, 5]` and `target = 7`.
+
+Which observations are correct for an index-based nested solution with early return?",,,,,,,,"A valid pair such as `[2, 5]` or `[3, 4]` can be returned depending on loop order","If no pair sums to the target, returning `[]` is a sensible empty result",Using `for value in nums` for both loops makes it easy to start the inner loop at `i + 1`,Comparing `nums[i] + nums[j]` only when `j > i` avoids using the same index twice,Early return is wrong here because pair-with-sum must always return every valid pair,"1, 2, 4",6a549204e268c63cc3a0aa90,1,markdown,"A, B, and D match the taught pair-with-sum behaviour: one valid pair is enough, empty result when none, and `j` after `i` prevents self-use.
+
+C is incorrect because value-based loops do not naturally expose the outer index for `range(i + 1, n)`. E is incorrect for the common ""find one pair"" version that uses early return."
+subjective,markdown,"A campus fest team stores booth ratings in Python lists. They need two helpers:
+
+1. Find **all** booth-id pairs whose **product is even**.
+2. Find the **second largest** rating after sorting.
+
+Build both helpers in one file and print the required sample outputs.
+
+Create a single Python file named `fest_list_practice.py`.
+
+### Part A — Pair with even product
+
+Write a function:
+
+```python
+def pair_with_even_product(nums):
+    ...
+```
+
+**Rules:**
+
+- Use nested loops with indexes.
+- Inner loop must start at `i + 1`.
+- Collect **all** pairs `[nums[i], nums[j]]` whose product is even.
+- Do **not** return early on the first match.
+- If no pair qualifies, return an empty list `[]`.
+
+**Sample call:**
+
+```python
+print(pair_with_even_product([8, 3, 5]))
+```
+
+**Expected output:**
+
+```text
+[[8, 3], [8, 5]]
+```
+
+(Order of pairs should match nested-loop order: outer `i` ascending, inner `j` ascending.)
+
+### Part B — Second largest using sorting
+
+Write a function:
+
+```python
+def second_largest_using_sorting(nums):
+    ...
+```
+
+**Rules:**
+
+- Create an ascending sorted list with `sorted(nums)`.
+- Return the value at index `size - 2`.
+- You may assume the input has at least 2 elements for this task.
+
+**Sample call:**
+
+```python
+print(second_largest_using_sorting([12, 45, 30, 18, 40]))
+```
+
+**Expected output:**
+
+```text
+40
+```
+
+### Part C — Local checks
+
+At the bottom of the same file, also print:
+
+```python
+print(pair_with_even_product([1, 3, 5]))  # no even factor → empty list
+print(second_largest_using_sorting([10, 20, 30, 40, 50, 15]))
+```
+
+**Expected output for these two prints:**
+
+```text
+[]
+40
+```
+
+Add **one short comment** near the even-product function explaining why early `return` would be wrong for Part A.
+
+### Submission Instruction
+
+1. Code all steps in VS Code in a single `.py` file.
+2. Run the code and verify it is working.
+3. Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,,6a549204e268c63cc3a0aa90,0.5,markdown,"### Walkthrough
+
+1. For Part A, nest `i` and `j = i + 1 ...`, compute product, append when `product % 2 == 0`, return the list after both loops.
+2. For Part B, `sorted(nums)` then return `new_array[len(new_array) - 2]`.
+3. Run the sample prints to confirm `[[8, 3], [8, 5]]`, `40`, `[]`, and `40`.
+
+### Complete Code
+
+```python
+def pair_with_even_product(nums):
+    # Early return would miss later valid pairs; collect all matches instead.
+    n = len(nums)
+    pair_output = []
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            product = nums[i] * nums[j]
+            if product % 2 == 0:
+                pair_output.append([nums[i], nums[j]])
+
+    return pair_output
+
+
+def second_largest_using_sorting(nums):
+    new_array = sorted(nums)
+    size = len(new_array)
+    return new_array[size - 2]
+
+
+print(pair_with_even_product([8, 3, 5]))
+print(second_largest_using_sorting([12, 45, 30, 18, 40]))
+print(pair_with_even_product([1, 3, 5]))
+print(second_largest_using_sorting([10, 20, 30, 40, 50, 15]))
+```
+
+### Alternative approaches
+
+- Part A can later be extended with an `is_even` flag for odd products (optional; not required here).
+- Part B can also be solved with a single O(n) pass tracking largest and second largest; this task specifically asks for the `sorted()` + `size - 2` method."
