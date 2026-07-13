@@ -85,3 +85,64 @@
 | Session 29 forward links | What Comes Next / Key Takeaways / Preread point to chunking + richer metadata |
 
 **Expected result:** All criteria met — **QC passed**.
+
+---
+
+## Iteration 4 — Align Released Notes to Live Topic Coverage (2026-07-13)
+
+**File reviewed:** `Lecture Notes Released.md`  
+**Sources:** `Transcript.md`, `Live Topic Coverage.md`, `Lecture Notes.md`, `metadata.md`
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **4 / 5** | Core LOs present, but released draft still needed cuts/fixes vs live teach: HNSW/IVF section not taught; chat-upload framing not taught (Siemens proprietary RAG was); Tesla notes wrongly said MiniLM + metadata omitted; GTE Large, LangChain auto-metadata, and Groq answer preview were taught but missing/wrong. |
+| **Creativity** | **5 / 5** | Siemens manuals, samosa size, newspaper overlap, ShopEasy policies retained/strengthened. |
+| **Structural Adherence** | **5 / 5** | Context → concepts → code → activities → takeaways → terminology table; Official / Simple / Real-life pattern kept. |
+| **No Logical Mistakes** | **False** | Tesla demo incorrectly listed MiniLM and claimed metadata was omitted; live teach used GTE Large and showed `source` + `page` (e.g. page 125). |
+| **No Presentation Mistakes** | **True** | No Mentimeter/quiz; images retained; student-facing activities only. |
+| **No Previous Session Number References** | **True** | Uses previous / upcoming / later only. |
+| **No Metadata/Internal References** | **True** | No audience, duration, or keep-it-lite language. |
+
+**Expected result:** Not met — improvise and re-QC.
+
+### Fixes applied in iteration 4
+
+| Change | Reason |
+|---|---|
+| Removed **Vector Stores and Similarity Indexes (HNSW/IVF)** | Not covered in transcript |
+| Replaced chat-upload section with **Normal Generation vs RAG for Proprietary Data** (Siemens) | Matches live opening |
+| Removed **sentence-aware** strategy; kept page-as-chunk as concept-only | Matches live “strategy 3 is concept only” |
+| Shortened **semantic chunking** to brief look-ahead | Introduced only as future advanced topic |
+| Corrected Tesla demo: **GTE Large**, auto metadata, `persist_directory`, retriever, Groq preview | Matches Live Topic Coverage extras |
+| Added top-k too-few / too-many note; LangChain one-call helpers | Taught extras |
+| Trimmed Key Takeaways to 5 bullets; added terminology rows for GTE Large / Groq preview | Prompt + coverage alignment |
+
+---
+
+## Iteration 5 (Re-QC after alignment fixes)
+
+| Criterion | Rating / Result | Notes |
+|---|---|---|
+| **Content Coverage** | **5 / 5** | All four metadata subtopics + taught extras (RAG recap, LangChain, semantic verify, Tesla end-to-end preview, GTE Large, semantic-chunking look-ahead). Untaught HNSW/IVF and chat-upload framing removed. |
+| **Creativity** | **5 / 5** | Siemens proprietary manuals, ShopEasy policies, samosa/newspaper analogies, Rank-1 tuning table. |
+| **Structural Adherence** | **5 / 5** | Matches LectureNotesPrompt4; full code with comments + “How the code works”; student activities; Key Takeaways; terminology table; all prior images retained. |
+| **No Logical Mistakes** | **True** | Manual lab = MiniLM + `policy_chunks`; Tesla demo = GTE Large + LangChain metadata; overlap < chunk_size; metadata not embedded. |
+| **No Presentation Mistakes** | **True** | Softened “live demo” phrasing; no quiz/Mentimeter; professional student document. |
+| **No Previous Session Number References** | **True** | Confirmed — previous / upcoming / later only. |
+| **No Metadata/Internal References** | **True** | Confirmed — no internal dial/audience/duration language. |
+
+**Expected result:** All criteria met — **QC passed**.
+
+### Coverage checklist (released notes vs live)
+
+| Subtopic / taught extra | Status in `Lecture Notes Released.md` |
+|---|---|
+| Load plain-text or PDF into a corpus | Covered — sample corpus + `PyPDFDirectoryLoader` |
+| Apply chunking with justified size and overlap | Covered — 500/75 manual, 512/16 Tesla |
+| Attach metadata (`source_id`, `page`) | Covered — manual tags + LangChain auto metadata |
+| Persist into Chroma | Covered — `upsert` + `Chroma.from_documents` |
+| LangChain / GTE Large / RAG answer preview | Covered — Tesla section |
+| Semantic chunking (introduced only) | Kept brief look-ahead |
+| HNSW/IVF, chat-upload framing, sentence-aware strategy | Removed |
+
+**Outcome:** `Lecture Notes Released.md` ready for student release.

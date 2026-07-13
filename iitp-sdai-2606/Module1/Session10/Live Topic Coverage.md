@@ -1,0 +1,10 @@
+| topic/sub topic | status | remarks |
+| --- | --- | --- |
+| Analyse problem constraints and convert the solution into an algorithm | covered | Problems were broken down with examples, approach discussion, then coded (common elements, pair-with-sum, even-product pairs). Formal constraint analysis (edge cases, input size limits) was light; focus was more on approach-to-algorithm conversion. |
+| Solve moderately complex problems involving lists, strings, dictionaries, and nested loops | covered | Lists + nested loops covered in depth: find common elements, pair with sum (index-based nested loops), pair with even product. Dictionaries only mentioned as a post-class hint for O(n) two-sum (not implemented). Strings not covered. |
+| Implement Bubble Sort and Selection Sort step by step | not covered | Neither Bubble Sort nor Selection Sort was taught or coded. Only Python’s built-in `sorted()` was used (second-largest via sorting). |
+| Apply sorting to solve problems such as duplicate handling, second largest element, and ordered comparisons | covered | Second largest via sorting covered (sort array, return index `size - 2`; time complexity discussed as O(n log n)). Duplicate handling via sorting and ordered-comparison problems were not covered. |
+| Extra: Time complexity analysis (O(n), O(n²), O(n log n)) | covered | Spent time comparing O(n) vs sorting-based second largest, and O(n²) for nested-loop solutions; mentioned merge/quick sort behind `sorted()`. |
+| Extra: Pair with sum (two-sum) with nested loops and early return | covered | Full dry run + implementation using `range(i+1, n)`; discussed returning on first match vs empty result; O(n) dictionary approach left as homework. |
+| Extra: Pair with even product + even/odd flag parameterization | covered | Nested loops, modulus check, collect all pairs (why not early return); then added `is_even` argument to switch between even and odd product pairs. |
+| Extra: Index-based vs value-based iteration in Python | covered | Contrasted iterating values directly vs using indexes with `range` / `len` when inner loop must start at `i+1`. |
