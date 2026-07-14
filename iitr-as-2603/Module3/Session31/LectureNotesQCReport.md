@@ -1,10 +1,27 @@
 # Lecture Notes QC Report — Session 31 (RAG: Retrieval & Grounded Generation)
 
-**File reviewed:** `Lecture Notes.md`  
-**Course batch:** iitr-as-2603  
-**Review date:** 2026-07-12  
+**File reviewed:** `Lecture Notes Released.md`  
+**Review date:** 2026-07-14  
+**Basis:** `Live Topic Coverage.md` + `Transcript.md` + `metadata.md` + `LectureNotesPrompt4.md` / `LectureNotesQC.md`
 
-**Reuse note:** Adapted from `iitr-as-2601/Module3/Session41/Lecture Notes.md` (policy_chunks / ShopEasy path). Not using `Lecture Notes Released.md` (Tesla / LangChain / Gradio live-aligned version) because Session 30 on this batch prepares `policy_chunks`, matching the pre-release Session 41 notes.
+---
+
+## Alignment summary (pre-QC)
+
+Original `Lecture Notes.md` assumed a **ShopEasy / `policy_chunks` / Ollama-or-Groq** manual Chroma path that was **not** the live teaching path.
+
+Released notes were rewritten to match what was taught:
+
+| Covered LO / extra (from Live Topic Coverage) | Released notes treatment |
+|---|---|
+| Configure top-k retrieval on prepared index | LangChain `as_retriever` / `get_relevant_documents`, **k = 5**, GTE-large + Chroma |
+| Assemble context with delimiters | `##context` / `##question` + join of retrieved docs |
+| Informal grounding check | Retrieval trace + claim ↔ page checklist (no Mentimeter) |
+| End-to-end RAG script | Tesla + HR/Nestlé-style reuse of same template |
+| Extras: failure points, MTEB, latency, Rufus, manuals, image embeddings, indexing vs retrieval | Added |
+| Mentimeter quiz | **Omitted** (session protocol, not student notes) |
+
+All relevant concept images from the original notes were **retained**.
 
 ---
 
@@ -12,55 +29,53 @@
 
 | Criterion | Rating / Result | Notes |
 |---|---|---|
-| **Content Coverage** | **5 / 5** | All metadata subtopics covered: top-k on `policy_chunks` (`TOP_K`, `retrieve_chunks`, tune-k activity); context assembly with `===` delimiters + `source_id`/`page` labels (`build_rag_prompt`); grounded generation via Ollama or Groq + informal grounding checklist/audit; end-to-end script (ingest if empty → retrieve → augment → generate). Topics: top-k retrieval, context assembly, grounded generation, mini RAG app. |
-| **Creativity** | **5 / 5** | Railway enquiry clerk, court brief exhibits, news fact-check desk, WhatsApp policy forwards; without-RAG vs with-RAG contrast; dual-backend same-RAG activity; retrieval-trace helper for manual audit. |
-| **Structural Adherence** | **5 / 5** | `#` title only; context bridges previous chunking + embeddings labs without session numbers; Official/Simple/Real-life on new terms; full code with line comments and "How the code works"; student-facing activities; Key Takeaways + terminology table. |
-| **No Logical Mistakes** | **True** | Uses `policy_chunks` + `all-MiniLM-L6-v2` aligned with Session 30; same-model rule; ingest skips if index populated; metadata in prompt matches Chroma fields; Ollama/Groq for generate only. Metadata "from S28" treated as internal — notes correctly point to previous chunking lab index. |
-| **No Presentation Mistakes** | **False** | Image alt text still said **"Session 40"** (copied from 2601). |
-| **No Previous Session Number References** | **False** | Same alt-text hit: `Session 40`. |
-| **No Metadata/internal reference** | **True** | No "Keep it lite", duration, audience, or instructor-only phrasing in student notes. |
+| **Content Coverage** | **4 / 5** | Core LOs and most extras present; **instructor-facing phrases** (“in class”, “live demo”, “summarised in class”) weakened professional student tone; product-manual / image-embedding extras needed clearer student wording. |
+| **Creativity** | **5 / 5** | Railway counter, court exhibits, librarian folders, Amazon Rufus, product-manual support bot. |
+| **Structural Adherence** | **4 / 5** | Title, context, Official/Simple/Real-life pattern, activities, Key Takeaways, terminology table present; residual class-facing wording violated student-docs style. |
+| **No Logical Mistakes** | **True** | Same-model rule (GTE-large), k extremes, delimiters, Groq `temperature=0`, HR reuse with smaller chunk size — consistent with transcript. |
+| **No Presentation Mistakes** | **False** | Multiple “in class” / “live demo” / “class emphasis” phrases; Mentimeter correctly absent. |
+| **No Previous Session Number References** | **True** | Uses “previous work” / “later work” only. |
+| **No Metadata/Internal References** | **True** | No duration, audience, or “keep it lite” language. |
 
-**Outcome:** QC failed — presentation / previous-session-number criteria.
+**Expected result:** Not met — presentation / structural issues → revise.
 
-**Fixes applied:**
+### Fixes applied in iteration 1
 
-1. Alt text: `Session 40` → `the previous session`.
-2. `SAMPLE_CORPUS` shipping text aligned with Session 30 ShopEasy wording (standard delivery + free shipping above 499).
+| Issue | Resolution |
+|---|---|
+| “discussed in class” / “shown in class” / “in class” / “live demo” | Rewrote as student-facing lab language |
+| “summarised in class (not live-coded…)” | Softened to notebook practice guidance |
+| Missing image-embedding / indexing-layer / product-manual extras clarity | Expanded **Latency and Production Mindset** section |
+| Terminology table “used in class demos” | Neutral lab wording |
+| Mentimeter | Kept out of released notes |
 
 ---
 
-## Iteration 2
+## Iteration 2 (Re-QC)
 
 | Criterion | Rating / Result | Notes |
 |---|---|---|
-| **Content Coverage** | **5 / 5** | Unchanged — all four metadata subtopics + objective (wire retrieval into prompts; grounded answers) still covered. |
-| **Creativity** | **5 / 5** | Unchanged. |
-| **Structural Adherence** | **5 / 5** | Unchanged; context matches this batch’s previous session (`policy_chunks` prepare lab). |
-| **No Logical Mistakes** | **True** | Corpus text now matches Session 30 sample policies; retrieval/embed path unchanged. |
-| **No Presentation Mistakes** | **True** | No duration/audience metadata; student-facing activities; no "Ask students to". |
-| **No Previous Session Number References** | **True** | Grep: no `Session N` / `session N` / `S28` in student notes. Uses **previous**, **earlier**, **later** only. |
-| **No Metadata/internal reference** | **True** | No internal instruction leakage. |
+| **Content Coverage** | **5 / 5** | All four detailed subtopics covered; taught extras included; Mentimeter excluded; ShopEasy/Ollama-only material not reintroduced as the lab path. |
+| **Creativity** | **5 / 5** | Analogies and real-world RAG examples remain clear for non-tech readers. |
+| **Structural Adherence** | **5 / 5** | Matches LectureNotesPrompt4: context → concepts → full code + How the code works → activities → takeaways → terminology table. |
+| **No Logical Mistakes** | **True** | Pipeline order ingest → retrieve → augment → generate correct; grounding rules and informal audit match live teaching. |
+| **No Presentation Mistakes** | **True** | No remaining instructor/class protocol phrasing; activities are student-facing. |
+| **No Previous Session Number References** | **True** | Confirmed — no numbered session refs. |
+| **No Metadata/Internal References** | **True** | Confirmed — professional student document only. |
 
-**Outcome:** QC passed on iteration 2.
+**Expected result:** All criteria met — **QC passed**. No further revision required.
 
 ---
 
-## Coverage Checklist (metadata subtopics)
+## Coverage checklist (metadata detailed subtopics)
 
-| Subtopic | Section in notes |
+| Subtopic | Section in released notes |
 |---|---|
-| Configure top-k retrieval against prepared vector index | Top-k Retrieval; `retrieve_chunks`; `TOP_K` tuning activity |
-| Assemble chunks into prompt context with clear delimiters | Context Assembly; `build_rag_prompt` |
-| Generate answers citing supporting chunks (informal grounding) | Grounded Generation; Informal Grounding Check; Sources used instruction |
-| Complete end-to-end RAG script (ingest; retrieve; answer) | Mini End-to-End RAG Script — `ingest_sample_policies`, `rag_answer`, `main()` |
+| Configure top-k retrieval against prepared vector index | Top-k Retrieval; Retriever instantiation; activity |
+| Assemble retrieved chunks into prompt with delimiters | Context Assembly; User Message Template |
+| Generate answers with informal grounding check | Grounded Generation; Informal Grounding Check; Without vs With RAG |
+| Complete small end-to-end RAG script | End-to-End RAG Function; Tesla + HR reuse notes |
 
-**Line count:** ~650 lines.
+**Images retained:** session41-01 through session41-04, session41-06, session41-07, session41-08 (concept diagrams from original notes).
 
----
-
-## Expected Result (final)
-
-- Content Coverage, Creativity, Structural Adherence: all **≥ 5** — **Met**
-- No Logical Mistakes, No Presentation Mistakes, No Previous Session Number References, No Metadata/internal reference: **True** — **Met**
-
-**Outcome:** Ready for student use on the ShopEasy / `policy_chunks` path for this batch.
+**Line count:** ~483. **Outcome:** Ready for student release as `Lecture Notes Released.md`.
