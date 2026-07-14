@@ -1,0 +1,301 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"In the five-step RAG loop (ingest → prepare → retrieve → augment → generate), what happens during the **Retrieve** step?",,,,,,1,,Top-k semantic search fetches the nearest stored chunks from the vector index for the user question,The LLM writes the final natural-language answer from memory alone,PDFs are split into fixed-size character windows with overlap,Delimiter tokens are written only inside the Groq API key file,,,6a55d98be268c63cc3a27834,0,markdown,"A is correct because retrieval embeds the query and runs similarity search to pull the top-k chunk neighbours from Chroma.
+
+B is incorrect because generation happens later, after context is assembled. C is incorrect because chunking belongs to the prepare stage. D is incorrect because delimiters live in prompt messages, not API key storage."
+mcsc,markdown,"A developer queries a Chroma index with `HuggingFaceEmbeddings(model_name=""sentence-transformers/all-MiniLM-L6-v2"")`, but the index was originally built with `thenlper/gte-large`. Results look unrelated.
+
+What is the **most likely** root cause?",,,,,,1,,Different embedding models at index time vs query time make distance scores meaningless,Chroma cannot store vector indexes for annual-report PDFs,"`search_kwargs={""k"": 5}` only works on numeric CSV columns",LangChain retrievers cannot wrap a Chroma vector store,,,6a55d98be268c63cc3a27834,0,markdown,"A is correct because the same-model rule requires one encoder for every stored chunk and every query.
+
+B is incorrect because Chroma routinely stores PDF chunk embeddings. C is incorrect because similarity search runs on text embeddings, not CSV schemas. D is incorrect because `as_retriever()` is the standard LangChain pattern on Chroma."
+mcsc,markdown,"A grounded annual-report bot must return the **same factual answer** every time for the same question and retrieved context.
+
+Which Groq API setting best supports that goal?",,,,,,1,,`temperature=0`,`temperature=1.5`,`top_p=0.9` with no temperature field,"`search_kwargs={""k"": 50}` on the retriever only",,,6a55d98be268c63cc3a27834,0,markdown,"A is correct because temperature 0 reduces randomness so token choices stay deterministic for factual Q&A.
+
+B is incorrect because high temperature increases creative variation. C is incorrect because sampling randomness still matters for repeatability in RAG facts. D is incorrect because k controls retrieval breadth, not generation randomness."
+mcsc,markdown,"A user message is assembled like this:
+
+```
+##context
+[retrieved chunk 1]
+[retrieved chunk 2]
+##question
+What is the annual revenue in 2022?
+```
+
+What is the main purpose of the `##context` and `##question` tokens?",,,,,,1,,They act as delimiter labels so the LLM can separate evidence from the user question,They encrypt chunk text before the Groq API call,They replace the need for a system message with grounding rules,They tell Chroma which collection name to open,,,6a55d98be268c63cc3a27834,0,markdown,"A is correct because labelled sections help the model parse where context ends and the question begins.
+
+B is incorrect because delimiters are plain text markers, not encryption. C is incorrect because grounding rules such as ""answer only from context"" still belong in the system message. D is incorrect because collection selection is configured on the vector store, not in the user message tokens."
+mcsc,markdown,"A Tesla annual-report retriever uses `search_kwargs={""k"": 1}`. Users report that answers miss revenue figures mentioned in a **second** section of the report.
+
+What is the **most reasonable first tuning step**?",,,,,,1,,Increase k modestly (for example 3–5) so more relevant passages enter the prompt,Remove the system message to free tokens for more chunk text,Switch only the query embedding to a different model while keeping old document vectors,Set `temperature=1.0` so the model explores more wording options,,,6a55d98be268c63cc3a27834,0.5,markdown,"A is correct because low k is fast but can drop a second relevant passage; modestly raising k is the direct retrieval fix.
+
+B is incorrect because removing grounding rules increases hallucination risk. C is incorrect because mixed encoders break semantic distance. D is incorrect because temperature affects generation style, not how many chunks are retrieved."
+mcsc,markdown,"A user asks a Tesla report bot: *""How many casual leaves do I get in a year?""* The retriever returns weakly related chunks with no leave-policy data.
+
+What should a **properly grounded** RAG system do?",,,,,,1,,"Reply that the answer is not in the provided context (for example ""I don't know"") as instructed in the system message",Use the LLM's general world knowledge to invent a typical leave policy,Delete the vector database and rebuild it from scratch,Return the top retrieved chunk verbatim and skip forming an answer,,,6a55d98be268c63cc3a27834,0.5,markdown,"A is correct because grounding rules require refusal when evidence is missing, even if retrieval returns noisy chunks.
+
+B is incorrect because that bypasses the RAG evidence constraint. C is incorrect because the index is not the problem for an out-of-corpus question. D is incorrect because users need a grounded answer or explicit refusal, not a raw chunk dump alone."
+mcmc,markdown,"A team builds a LangChain retriever on a Chroma store for annual-report chunks.
+
+Which statements are **correct**?
+
+*(Select all that apply)*",,,,,,,,"`vectorstore.as_retriever(search_kwargs={""k"": TOP_K})` configures top-k nearest-neighbour search on embeddings",`retriever.get_relevant_documents(query)` returns top-k `Document` objects with `page_content` and `metadata`,"`search_kwargs={""k"": TOP_K}` sets how many chunks are retrieved per query",The retriever automatically fine-tunes the Groq LLM on the PDFs each time it is called,Retrieved documents can expose **source** and **page** metadata useful for an informal grounding check,"1,2,3,5",6a55d98be268c63cc3a27834,0.5,markdown,"A, B, C, and E match the LangChain + Chroma retrieval pattern used for grounded Q&A.
+
+D is incorrect because retrieval does not fine-tune the generator model; it only fetches chunks."
+mcmc,markdown,"After a RAG demo answers *""What is the annual revenue in 2022?""*, an engineer runs an **informal grounding check**.
+
+Which audit steps are **appropriate**?
+
+*(Select all that apply)*",,,,,,,,Map each factual claim in the answer to a supporting retrieved chunk,Record page or other metadata from chunks used as evidence,Ask an off-topic question and confirm the model says **I don't know** when context lacks the fact,Trust fluent wording alone without reading the retrieval trace,Compare the retrieval trace printed **before** generation with the final answer,"1,2,3,5",6a55d98be268c63cc3a27834,0.5,markdown,"A, B, C, and E are correct informal grounding practices for manual verification.
+
+D is incorrect because fluent answers can still be grounding illusions unsupported by chunk text."
+mcmc,markdown,"A RAG answer sounds polished and mentions a 2022 revenue figure, but that exact number does **not** appear in any retrieved chunk.
+
+Which responses are **reasonable**?
+
+*(Select all that apply)*",,,,,,,,Re-read the retrieval trace and flag claims not supported by chunk text,Strengthen the system message to answer only from the `##context` block,Assume fluent tone proves the retrieval layer is always correct,Check whether noisy retrieval pulled irrelevant chunks and consider tuning k,Skip retrieval and call Groq with only the raw user question to save latency,"1,2,4",6a55d98be268c63cc3a27834,1,markdown,"A, B, and D are correct responses to a grounding illusion: audit evidence, tighten rules, and tune retrieval noise.
+
+C is incorrect because fluency does not prove factual grounding. E is incorrect because skipping retrieval removes the core RAG safety step."
+mcmc,markdown,"A product team is tuning **k** for a customer-support RAG bot over appliance manuals.
+
+Which statements are **accurate**?
+
+*(Select all that apply)*",,,,,,,,Very low k (for example 1) can miss a second page needed for a complete answer,"Very high k (for example 100) can add noise, more tokens, and higher latency",Latency matters because end users wait for retrieval plus generation,Raising temperature above 0 is the best first fix when retrieval misses relevant pages,"The indexing pipeline (chunk + embed + store) can run ahead of time, while retrieval runs at question time","1,2,3,5",6a55d98be268c63cc3a27834,1,markdown,"A, B, C, and E match the k extremes, latency trade-off, and indexing-vs-retrieval ideas from the lab.
+
+D is incorrect because missing pages are a retrieval / k problem first; temperature controls generation randomness, not which chunks are fetched."
+subjective,markdown,"**FinSight Analytics** helps analysts query a small set of annual-report excerpts. The excerpts are already prepared as text snippets (no PDF loading required). Your job is to wire the **retrieve → augment → generate** path: build a tiny Chroma index, retrieve top-k chunks with LangChain, assemble a `##context` / `##question` user message, and answer with **Groq** at **`temperature=0`**.
+
+You do **not** need Gradio or a full Tesla PDF for this task.
+
+Create a single Python file named `mini_grounded_rag.py`.
+
+### Step 1 — Build a mini vector index
+
+1. Convert each `CORPUS` record into a LangChain `Document` (`page_content` + `metadata`).
+2. Use `HuggingFaceEmbeddings(model_name=""sentence-transformers/all-MiniLM-L6-v2"")` for this small corpus (keep the **same** model for indexing and querying).
+3. Build the store with `Chroma.from_documents(...)`.
+4. Print total documents stored.
+
+### Step 2 — Configure retrieval
+
+1. Create a retriever with `vectorstore.as_retriever(...)`.
+2. Use `search_kwargs={""k"": 3}` (you may also pass `search_type=""similarity""` if your LangChain version supports it).
+3. Retrieve with `retriever.get_relevant_documents(user_query)`.
+
+### Step 3 — Prompt assembly
+
+Implement:
+
+- `SYSTEM_MESSAGE` that states the assistant answers from annual-report context only, explains `##context` and `##question` delimiter tokens, and instructs the model to say **""I don't know""** if the answer is not in context
+- `build_user_message(user_query, retrieved_docs)` that joins `page_content` and returns:
+
+```
+##context
+<joined chunk texts>
+
+##question
+<user query>
+```
+
+### Step 4 — Grounded generation
+
+Implement `generate_grounded_answer(system_message, user_message)` using **Groq** with model `llama-3.3-70b-versatile`, `temperature=0`, and `GROQ_API_KEY` from the environment.
+
+Implement `rag_answer(user_query, retriever)` returning a dict with keys: `answer`, `retrieved_docs`, `user_message`.
+
+### Step 5 — Run two test queries in `main()`
+
+**Query A (in corpus):** *What was NovaTech's total revenue in 2022?*
+
+**Query B (out of corpus):** *What is the weather in Mumbai tomorrow?*
+
+For **each** query, print a short retrieval trace (chunk index + `metadata` + first 120 characters of chunk text) and the generated answer.
+
+**Expected behaviour:** Query A should mention **48.2 billion dollars**; Query B should refuse or say **I don't know**.
+
+```python
+CORPUS = [
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2022 — Financial Highlights. ""
+            ""Total revenue for fiscal year 2022 was 48.2 billion dollars, ""
+            ""representing 19 percent year-over-year growth.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2022.pdf"", ""page"": 12},
+    },
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2022 — Operating Income. ""
+            ""Operating income reached 6.1 billion dollars in 2022. ""
+            ""Cloud services contributed the largest share of margin improvement.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2022.pdf"", ""page"": 18},
+    },
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2023 — Outlook. ""
+            ""Management expects continued investment in AI infrastructure through 2024. ""
+            ""No weather or macro-forecast data is included in this document.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2023.pdf"", ""page"": 4},
+    },
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2022 — Employee Count. ""
+            ""NovaTech employed 124000 people worldwide at the end of 2022.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2022.pdf"", ""page"": 31},
+    },
+]
+```
+
+### Submission Instructions
+
+- Code all steps in VS Code in a single `.py` file.
+- Run the code and verify it is working.
+- Submit the complete code in the LMS code editor/answer box.",,,,,,,,,,,,,,6a55d98be268c63cc3a27834,0.5,markdown,"### Walkthrough
+
+1. Build `Document` objects from `CORPUS` and create a small Chroma index with the same embedding model used at query time.
+2. Configure a similarity retriever with `k=3` and call `get_relevant_documents`.
+3. Assemble system + user messages using `##context` / `##question` delimiters and grounding rules.
+4. Call Groq at `temperature=0` inside `rag_answer`.
+5. Print retrieval traces and answers for one in-corpus and one out-of-corpus query to demonstrate grounding and refusal.
+
+### Complete Code
+
+```python
+import os
+from groq import Groq
+from langchain.schema import Document
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma
+
+CORPUS = [
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2022 — Financial Highlights. ""
+            ""Total revenue for fiscal year 2022 was 48.2 billion dollars, ""
+            ""representing 19 percent year-over-year growth.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2022.pdf"", ""page"": 12},
+    },
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2022 — Operating Income. ""
+            ""Operating income reached 6.1 billion dollars in 2022. ""
+            ""Cloud services contributed the largest share of margin improvement.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2022.pdf"", ""page"": 18},
+    },
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2023 — Outlook. ""
+            ""Management expects continued investment in AI infrastructure through 2024. ""
+            ""No weather or macro-forecast data is included in this document.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2023.pdf"", ""page"": 4},
+    },
+    {
+        ""text"": (
+            ""NovaTech Annual Report 2022 — Employee Count. ""
+            ""NovaTech employed 124000 people worldwide at the end of 2022.""
+        ),
+        ""metadata"": {""source_id"": ""novatech_2022.pdf"", ""page"": 31},
+    },
+]
+
+EMBED_MODEL_NAME = ""sentence-transformers/all-MiniLM-L6-v2""
+TOP_K = 3
+GROQ_MODEL = ""llama-3.3-70b-versatile""
+
+SYSTEM_MESSAGE = """"""
+You are an assistant that answers user queries on annual report excerpts.
+User input will contain the context required to answer the question.
+The context will begin with the token ##context.
+The question will begin with the token ##question.
+Answer ONLY using the provided context.
+If the answer is not found in the context, say: I don't know.
+"""""".strip()
+
+
+def build_documents(corpus):
+    return [
+        Document(page_content=item[""text""], metadata=item[""metadata""])
+        for item in corpus
+    ]
+
+
+def build_user_message(user_query, retrieved_docs):
+    context_text = ""\n\n"".join(doc.page_content for doc in retrieved_docs)
+    return f""##context\n{context_text}\n\n##question\n{user_query}""
+
+
+def print_retrieval_trace(user_query, retrieved_docs):
+    print(""\n--- Retrieval trace ---"")
+    print(""Query:"", user_query)
+    for i, doc in enumerate(retrieved_docs, start=1):
+        print(f""Chunk {i} | metadata: {doc.metadata}"")
+        print(f""  preview: {doc.page_content[:120]}..."")
+
+
+def generate_grounded_answer(system_message, user_message):
+    client = Groq(api_key=os.environ.get(""GROQ_API_KEY""))
+    response = client.chat.completions.create(
+        model=GROQ_MODEL,
+        messages=[
+            {""role"": ""system"", ""content"": system_message},
+            {""role"": ""user"", ""content"": user_message},
+        ],
+        temperature=0,
+    )
+    return response.choices[0].message.content
+
+
+def rag_answer(user_query, retriever):
+    retrieved_docs = retriever.get_relevant_documents(user_query)
+    user_message = build_user_message(user_query, retrieved_docs)
+    answer = generate_grounded_answer(SYSTEM_MESSAGE, user_message)
+    return {
+        ""answer"": answer,
+        ""retrieved_docs"": retrieved_docs,
+        ""user_message"": user_message,
+    }
+
+
+def run_query(label, question, retriever):
+    print(f""\n===== {label} ====="")
+    result = rag_answer(question, retriever)
+    print_retrieval_trace(question, result[""retrieved_docs""])
+    print(""\n--- Generated answer ---"")
+    print(result[""answer""])
+
+
+def main():
+    embeddings = HuggingFaceEmbeddings(model_name=EMBED_MODEL_NAME)
+    documents = build_documents(CORPUS)
+
+    vectorstore = Chroma.from_documents(
+        documents=documents,
+        embedding=embeddings,
+    )
+    print(""Documents stored:"", len(documents))
+
+    retriever = vectorstore.as_retriever(
+        search_kwargs={""k"": TOP_K},
+    )
+
+    run_query(
+        ""Query A — in corpus"",
+        ""What was NovaTech's total revenue in 2022?"",
+        retriever,
+    )
+    run_query(
+        ""Query B — out of corpus"",
+        ""What is the weather in Mumbai tomorrow?"",
+        retriever,
+    )
+
+
+if __name__ == ""__main__"":
+    main()
+```"

@@ -76,3 +76,44 @@
 **Length:** Notes trimmed from ~669 lines to **485 lines** (target ≤550, prefer ~500). Kept all four LOs; removed optional standalone retriever script; merged LCEL + grounding into one step; corpus reduced to three policies; condensed reference table.
 
 **Final verdict after trim:** **PASS**.
+
+---
+
+## QC Iteration 4 — `Lecture Notes Released.md` (post-session alignment)
+
+**Source inputs:** Transcript, `Live Topic Coverage.md`, original `Lecture Notes.md`, `metadata.md`.
+
+**Alignment actions:**
+
+| Original content | Action |
+|---|---|
+| Handbook corpus (`handbook_create_corpus.py`, `.md` files) | **Removed** — live demo used Tesla + Nestle/HR PDFs |
+| `DirectoryLoader` / `TextLoader` / OpenAI embeddings | **Replaced** with `PyPDFDirectoryLoader` + GTE-large + Chroma |
+| LCEL `rag_chain` / `no_retrieval_chain` / `RunnablePassthrough` | **Removed** — session used imperative retrieve → prompt → Groq |
+| Formal grounding comparison grid (3 scripted queries) | **Replaced** with informal grounding checklist + without-RAG concept |
+| `persist_directory` reload workflow | **De-emphasised** — Chroma creation covered; cross-run persist not demoed live |
+| Top-k / latency trade-offs, delimiters, failure modes, real-world use cases, temperature=0, multimodal brief | **Added** from live extras |
+| All five session31 images | **Retained** in relevant sections |
+
+| Criteria | Result |
+|---|---|
+| **Content Coverage** | **5 / 5** |
+| **Creativity** | **5 / 5** |
+| **Structural Adherence** | **5 / 5** |
+| **No Logical Mistakes** | **True** |
+| **No Presentation Mistakes** | **True** |
+| **No Previous Session Number References** | **True** |
+| **No Metadata / Internal References in Student Text** | **True** |
+
+**Coverage check against live session:**
+
+| Subtopic | Reflected in Released notes? |
+|---|---|
+| Ingest and segment with LangChain loaders and chunking | Yes — `PyPDFDirectoryLoader`, splitter, Tesla + HR demos |
+| Embed and store in Chroma | Yes — GTE-large + `Chroma.from_documents` |
+| LCEL retrieval-augmented answering chain | No (correctly omitted; noted as later work) |
+| Grounding critique with vs without retrieval | Yes — informal check + without-RAG vs with-RAG section |
+
+**Re-check notes:** No Mentimeter/quiz content; no session numbers; LCEL referenced only as upcoming track work; full code with per-line comments and activities present; all five S3 images retained.
+
+**Final verdict:** **PASS** — `Lecture Notes Released.md` ready for student release.

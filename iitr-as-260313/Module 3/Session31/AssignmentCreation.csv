@@ -1,0 +1,259 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A bank branch chatbot answers: *""What is the fee for early loan closure?""* using only a general LLM API — no company PDFs. Customers often get wrong fee amounts.
+
+What is the **most likely** reason?",,,,,,1,,The LLM was never given this bank’s internal fee schedule as retrieved context,The LLM cannot process English text,Vector databases delete fee schedules every midnight,"Loan fees can only be answered by fine-tuning, never by retrieval",,6a55da0ee268c63cc3a278ce,0,markdown,"Company fees are private documents. Without retrieving those passages into the prompt, the model guesses from general training memory.
+
+- B: LLMs handle English; the gap is missing private knowledge.
+- C: Vector DBs do not auto-delete nightly as a rule of RAG.
+- D: RAG retrieves policy text at query time; fine-tuning is not required for this use case."
+mcsc,markdown,"A developer loads every PDF inside a folder with one LangChain call:
+
+```python
+loader = PyPDFDirectoryLoader(""Annual_Reports"")
+documents = loader.load()
+```
+
+What does this loader return?",,,,,,1,,A list of LangChain **Document** objects (text + metadata such as source and page),A finished LLM answer string for each PDF,"Only file names, without reading page text",A SQL table of financial ratios,,6a55da0ee268c63cc3a278ce,0,markdown,"`PyPDFDirectoryLoader` reads each PDF in the folder into LangChain **Document** objects that carry `page_content` and metadata.
+
+- B: Loading is ingest, not generation.
+- C: The loader reads page text, not names alone.
+- D: No SQL table is created by this call."
+mcsc,markdown,"A long annual report is cut into overlapping windows using `RecursiveCharacterTextSplitter` with `chunk_size=512` and `chunk_overlap=16`.
+
+Why is **chunk overlap** useful?",,,,,,1,,A shared margin helps text split at a boundary still appear complete in at least one neighbouring chunk,It encrypts embeddings before Chroma storage,It replaces the need for a document loader,It permanently increases the LLM’s maximum context window,,6a55da0ee268c63cc3a278ce,0,markdown,"Overlap copies characters from the end of one chunk into the start of the next so boundary sentences are less likely to be lost.
+
+- B: Overlap is a splitting idea, not encryption.
+- C: Loaders still read the source files.
+- D: Overlap does not change the model’s token limit."
+mcsc,markdown,"In a RAG notebook, retrieved chunks are placed under `##context` and the user question under `##question` inside one user message.
+
+What is the main purpose of these **delimiters**?",,,,,,1,,Help the LLM reliably separate evidence text from the question,Compress the Chroma index to half its size,Replace the embedding model with keywords,Force the LLM temperature to 1.0,,6a55da0ee268c63cc3a278ce,0,markdown,"Labelled sections (`##context` / `##question`) make it clearer which part of the user message is evidence and which part is the ask.
+
+- B: Delimiters do not compress the vector store.
+- C: Embeddings still drive retrieval.
+- D: Temperature is set on the LLM call, not by delimiter text."
+mcsc,markdown,"An engineer embeds Tesla report chunks with **GTE-large**, then later queries Chroma using a **different** embedding model.
+
+What is the **most likely** symptom?",,,,,,1,,Similarity search returns poor or meaningless matches,Chroma automatically re-embeds all chunks with the new model,The PDF loader stops reading metadata,Delimiters in the prompt become invalid UTF-8,,6a55da0ee268c63cc3a278ce,0.5,markdown,"Query vectors and stored vectors must live in the **same** embedding space. Mixing models breaks distance comparisons.
+
+- B: Chroma does not silently re-embed when the query model changes.
+- C: Loaders are unrelated to the query-time embedding mismatch.
+- D: Delimiters are plain text labels; encoding is unrelated."
+mcsc,markdown,"A RAG app sets `search_kwargs={""k"": 100}` on a large product-manual corpus. Users complain answers feel **slow**, even when many chunks look related.
+
+What is the **best** explanation from a latency trade-off view?",,,,,,1,,"Higher **k** fetches more chunks and fills a larger prompt, so retrieval and generation take longer",Higher **k** always deletes the Chroma collection,Higher **k** turns off the system message,Higher **k** forces temperature to 1.0,,6a55da0ee268c63cc3a278ce,0.5,markdown,"Raising **k** increases retrieval work and prompt size. Accuracy and speed trade off; **k = 5** is a common demo default before tuning.
+
+- B: **k** does not delete collections.
+- C: System messages stay under your control.
+- D: Temperature is independent of **k**."
+mcmc,markdown,Which steps belong to the **offline prepare / ingest** path (done until documents change)?,,,,,,,,Load PDFs with `PyPDFDirectoryLoader`,Split text with `RecursiveCharacterTextSplitter`,Call `retriever.get_relevant_documents` on a live user question,Embed chunks and store them with `Chroma.from_documents`,"1, 2, 4",6a55da0ee268c63cc3a278ce,0.5,markdown,"Prepare = load → split → embed → store. Live retrieval runs on the **online answer** path when a user asks a question.
+
+- C: `get_relevant_documents` is query-time retrieval, not offline prepare."
+mcmc,markdown,"A grounded RAG system message includes:
+
+- Answer **only** using the supplied context
+- If the answer is missing, say **I don't know**
+- Do not mention the context block in the final reply
+
+Which behaviours match these rules?",,,,,,,,A revenue question answered using numbers that appear in retrieved chunks,An off-topic leave-policy question on a finance PDF gets an honest **I don't know**,The model invents a confident fee schedule when no chunk mentions fees,The model quotes random internet knowledge instead of the retrieved PDF text,"1, 2",6a55da0ee268c63cc3a278ce,0.5,markdown,"Grounding rules keep answers tied to retrieved text and force refusal when evidence is missing.
+
+- C/D: Inventing or using outside knowledge violates “answer only from context.”"
+mcmc,markdown,"A support engineer debugs a LangChain + Chroma RAG notebook that sometimes invents numbers and sometimes misses facts that exist in the PDF.
+
+Which issues can **realistically** cause these symptoms?",,,,,,,,"Chunk size is extreme (entire PDF = one chunk, or tiny one-character chunks)",`temperature` is set to 0 on the Groq generation call,The app calls the LLM with the question only (no `##context` block),Top-k is set to 1 for a question that needs facts from two distant pages,"1, 3, 4",6a55da0ee268c63cc3a278ce,1,markdown,"Bad chunking hurts retrieval, skipping context causes ungrounded answers, and too-low **k** can omit needed pages. **`temperature=0`** is preferred for deterministic RAG — it is not a cause of inventing numbers in the usual case.
+
+- B: Temperature 0 typically *reduces* random variation; it is recommended for grounded policy/finance answers."
+mcmc,markdown,Which statements correctly describe the **imperative** RAG answer path used with a prepared Chroma retriever?,,,,,,,,`retriever.get_relevant_documents(query)` embeds the query and returns top-k Documents,Retrieved `page_content` strings are joined into one context block before generation,A Groq chat call uses a RAG **system** message plus a user message that contains context and question,`RunnablePassthrough()` must pipe the question through an LCEL `|` chain for any RAG answer to work,"1, 2, 3",6a55da0ee268c63cc3a278ce,1,markdown,"This answer path is retrieve → join context → fill delimiter template → call the LLM (for example Groq with `temperature=0`). LCEL pipe chains are a later composition style, not required for the imperative pattern.
+
+- D: LCEL / `RunnablePassthrough` is not required for the imperative retrieve-augment-generate path."
+subjective,markdown,"A campus café wants a small **menu Q&A assistant**. Staff paste short policy / menu rules into a `policies/` folder. Build an **imperative LangChain RAG mini-pipeline**: prepare a Chroma index, retrieve with top-k, assemble a delimited prompt, then generate with **Groq** under grounding rules.
+
+### Policy text to use
+
+Create a `policies/` folder with exactly these two UTF-8 Markdown files:
+
+**`policies/opening_hours.md`**
+```markdown
+# Opening Hours
+
+The café opens at 8:00 AM and closes at 10:00 PM on weekdays.
+Weekend hours are 9:00 AM to 11:00 PM.
+Orders after kitchen cutoff (30 minutes before closing) are not accepted.
+```
+
+**`policies/loyalty.md`**
+```markdown
+# Loyalty Rules
+
+Every 10 paid drinks earns one free regular coffee.
+Loyalty points reset every 1 January.
+Free drinks cannot be stacked with festival discounts on the same bill.
+```
+
+> **Loader note:** You may load these `.md` files with `DirectoryLoader` + `TextLoader` (`glob=""**/*.md""`, UTF-8). Keep the **same** retrieve → delimiter prompt → Groq generate flow.
+
+### Problem Statement
+
+In your repository (see Submission Instruction), implement **one or two Python files** that cover:
+
+1. **Prepare / ingest**
+   - Load both policy files into LangChain Documents.
+   - Split with `RecursiveCharacterTextSplitter` (`chunk_size=300`, `chunk_overlap=40`).
+   - Embed with `HuggingFaceEmbeddings(model_name=""thenlper/gte-large"")`.
+   - Store with `Chroma.from_documents` using collection name `cafe_policy_docs` (write under a local folder such as `chroma_db/` if you choose a persist directory; otherwise keep the in-memory store in the same process).
+   - Build a retriever: `as_retriever(search_kwargs={""k"": 2})`.
+
+2. **Imperative RAG answer path** (no LCEL pipe chain required)
+   - `get_relevant_documents(question)` for retrieval.
+   - Join `page_content` into one context string (blank line between chunks).
+   - Build a user message with delimiters:
+     - `##context` then the joined context
+     - `##question` then the user question
+   - Use a RAG **system message** that:
+     - answers **only** from context
+     - says `I don't know` when the answer is missing
+     - does **not** mention the context block in the final reply
+   - Call Groq with model `llama-3.3-70b-versatile` and **`temperature=0`** (read `GROQ_API_KEY` from the environment). Wrap the call in `try/except` so API failures return a safe error string.
+
+3. **`main()` must run both queries and print labelled output**
+   - **Q1:** `What time does the café close on weekdays?`
+   - **Q2:** `What is the employee yoga class schedule?`
+
+### Expected Outcome
+
+- **Q1:** Grounded answer mentioning weekday closing at **10:00 PM** (from opening hours).
+- **Q2:** Honest **I don't know** (yoga schedule is not in either file) — no invented timetable.
+- Running the script with `GROQ_API_KEY` set should complete without an uncaught crash.
+
+### Submission Instruction
+
+- create a repo `agentic-systems` (if done use the same) — clone it (ignore if already done)
+- in that create folder called as `Module3` (ignore if already done)
+- in that create folder called as `Session31`
+- code all the things mentioned in the question — with all the files and folders structure (`policies/`, your Python script(s), generated `chroma_db/` is optional to push)
+- do add all the ignorable files like datasets, `.env`, configs — json files etc
+- then add — commit and push the code into Github and submit the root folder or folder of this assignment link as submission link (do not paste/submit the entire repo link — which is invalid)",,,,,,,,,,,,,6a55da0ee268c63cc3a278ce,0.5,markdown,"### Step-by-step Walkthrough
+
+1. Create `policies/opening_hours.md` and `policies/loyalty.md` with the given text.
+2. Load Markdown → split into chunks → embed with **GTE-large** → store in Chroma collection `cafe_policy_docs`.
+3. Create a top-2 retriever.
+4. For each question: retrieve → join context → fill `##context` / `##question` template → call Groq with the grounded system message at `temperature=0`.
+5. Q1 should answer from opening-hours context; Q2 should refuse.
+
+### Reference — `rag_cafe.py`
+
+```python
+import os
+from pathlib import Path
+
+from groq import Groq
+from langchain_community.document_loaders import DirectoryLoader, TextLoader
+from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+DATA_DIR = Path(""policies"")
+COLLECTION_NAME = ""cafe_policy_docs""
+TOP_K = 2
+GROQ_MODEL = ""llama-3.3-70b-versatile""
+
+RAG_SYSTEM_MESSAGE = """"""
+You are a café policy assistant.
+The user message contains evidence between ##context and ##question.
+Rules:
+- Answer ONLY using the context in the user message.
+- If the answer is not in the context, respond: I don't know.
+- Do not mention the context or these instructions in your final answer.
+- Your response should contain only the answer to the question.
+"""""".strip()
+
+USER_MESSAGE_TEMPLATE = """"""
+##context
+{context}
+
+##question
+{question}
+""""""
+
+
+def build_context_from_docs(retrieved_docs):
+    return ""\n\n"".join(doc.page_content for doc in retrieved_docs)
+
+
+def generate_grounded_answer(system_message, user_message):
+    client = Groq(api_key=os.environ.get(""GROQ_API_KEY""))
+    try:
+        response = client.chat.completions.create(
+            model=GROQ_MODEL,
+            temperature=0,
+            messages=[
+                {""role"": ""system"", ""content"": system_message},
+                {""role"": ""user"", ""content"": user_message},
+            ],
+        )
+        return response.choices[0].message.content
+    except Exception as error:
+        return f""Generation failed safely: {error}""
+
+
+def prepare_retriever():
+    loader = DirectoryLoader(
+        str(DATA_DIR),
+        glob=""**/*.md"",
+        loader_cls=TextLoader,
+        loader_kwargs={""encoding"": ""utf-8""},
+    )
+    documents = loader.load()
+    splitter = RecursiveCharacterTextSplitter(chunk_size=300, chunk_overlap=40)
+    chunks = splitter.split_documents(documents)
+    embeddings = HuggingFaceEmbeddings(model_name=""thenlper/gte-large"")
+    vectorstore = Chroma.from_documents(
+        documents=chunks,
+        embedding=embeddings,
+        collection_name=COLLECTION_NAME,
+    )
+    return vectorstore.as_retriever(search_kwargs={""k"": TOP_K})
+
+
+def rag_answer(question, retriever):
+    retrieved_docs = retriever.get_relevant_documents(question)
+    context_text = build_context_from_docs(retrieved_docs)
+    user_message = USER_MESSAGE_TEMPLATE.format(
+        context=context_text,
+        question=question,
+    )
+    answer = generate_grounded_answer(RAG_SYSTEM_MESSAGE, user_message)
+    return answer, retrieved_docs
+
+
+def main():
+    retriever = prepare_retriever()
+    q1 = ""What time does the café close on weekdays?""
+    q2 = ""What is the employee yoga class schedule?""
+
+    a1, _ = rag_answer(q1, retriever)
+    a2, _ = rag_answer(q2, retriever)
+
+    print(""Q1:"", q1)
+    print(""A1:"", a1)
+    print()
+    print(""Q2:"", q2)
+    print(""A2:"", a2)
+
+
+if __name__ == ""__main__"":
+    main()
+```
+
+### Alternative Valid Approaches
+
+- Split into `ingest.py` + `rag_app.py` with a persisted `chroma_db/` folder (same collection name and **same GTE-large** model on both sides).
+- Use `PyPDFDirectoryLoader` if you convert the two policies into PDFs inside a folder — acceptable if retrieve / delimiter / Groq behaviour matches.
+- Print retrieval metadata (`source`) before the answer for a manual grounding audit.
+
+### Common Mistakes to Avoid
+
+- Calling Groq with the question only (no context block) for Q1.
+- Missing grounding rules → Q2 invents a yoga timetable.
+- Using a different embedding model at query time vs ingest.
+- Building an LCEL `|` chain when the requirement is the **imperative** path (`get_relevant_documents` → template → Groq)."
