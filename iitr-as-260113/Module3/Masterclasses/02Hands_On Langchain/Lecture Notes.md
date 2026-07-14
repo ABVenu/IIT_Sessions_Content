@@ -2,7 +2,7 @@
 
 ## Module 3 Recap — Same Stack, New Product
 
-This masterclass is a **second guided practice**. You already built a **T20 Rules & Match Inquiry Assistant**. Today you rebuild the **same Module 3 LangChain stack** in a **new domain** — a **UPI Payment Dispute Desk** — with more focus on **evaluation logging** and **controlled debug patches**.
+This masterclass is a **second guided practice**. If you completed the earlier **T20 Rules & Match Inquiry Assistant** hands-on, treat today as a **domain port**. If you did not, treat it as your full Module 3 rebuild. Either way, you ship the **same LangChain stack** as a **UPI Payment Dispute Desk**, with more focus on **evaluation logging** and **controlled debug patches**.
 
 You are not learning a new framework. You are proving you can **port the pattern**.
 
@@ -90,16 +90,16 @@ Create **`upi_dispute_assistant.py`**, paste the file below, then run phases in 
 # One file | Three phases: warm-up → build → eval & debug
 # =============================================================================
 
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.documents import Document
-from langchain_core.messages import HumanMessage, AIMessage
-from langchain_core.tools import tool
-from langchain_ollama import ChatOllama, OllamaEmbeddings
-from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langchain_chroma import Chroma
-from langchain.tools.retriever import create_retriever_tool
-from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder  # prompt + history / scratchpad slots
+from langchain_core.output_parsers import StrOutputParser  # plain text for Phase 1 LCEL
+from langchain_core.documents import Document  # wrap FAQ paragraphs for RAG
+from langchain_core.messages import HumanMessage, AIMessage  # append turns to chat_history
+from langchain_core.tools import tool  # register get_transaction_status
+from langchain_ollama import ChatOllama, OllamaEmbeddings  # local chat + embeddings
+from langchain_text_splitters import RecursiveCharacterTextSplitter  # chunk FAQ text
+from langchain_chroma import Chroma  # vector store for FAQ search
+from langchain.tools.retriever import create_retriever_tool  # expose retriever as agent tool
+from langchain_classic.agents import AgentExecutor, create_tool_calling_agent  # managed tool loop
 
 
 # =============================================================================
@@ -285,8 +285,15 @@ def run_eval() -> list[dict]:
         print("\n=== EVAL:", case["name"], "===")
         output = ask(case["input"])
         print("Output:", output)
-        missing = [kw for kw in case["expect_keywords"] if kw.lower() not in output.lower()]
-        keywords_ok = len(missing) == 0
+        # Empty expect_keywords = keyword check N/A (e.g. refusal); student verifies tool/refusal in verbose log
+        if not case["expect_keywords"]:
+            keywords_ok = True
+            missing = []
+            print("Keywords: N/A (check verbose log — expect no tool / polite refusal)")
+        else:
+            missing = [kw for kw in case["expect_keywords"] if kw.lower() not in output.lower()]
+            keywords_ok = len(missing) == 0
+            print("Keywords:", "PASS" if keywords_ok else f"FAIL missing={missing}")
         row = {
             "name": case["name"],
             "keywords_pass": keywords_ok,
@@ -295,7 +302,6 @@ def run_eval() -> list[dict]:
             "hint_failure_class": case["failure_if_miss"] if not keywords_ok else None,
         }
         results.append(row)
-        print("Keywords:", "PASS" if keywords_ok else f"FAIL missing={missing}")
         print("Expected tool (check verbose log):", case["expect_tool"])
         if not keywords_ok:
             print("First fix hint:", case["failure_if_miss"])
