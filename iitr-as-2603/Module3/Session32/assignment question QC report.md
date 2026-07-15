@@ -14,6 +14,7 @@
 | Format | In-class MCQ only (surface level) | 10 single-correct MCQs |
 | Coverage | All LOs from lecture “What you will learn” | 5 LOs × 2 questions each |
 | Depth | Surface recall / light apply — no deep methodology | No multi-step planning, summarization deep-dive, or tool-planning asked |
+| Framing | Generalised concept stems (no product/brand scenarios) | ShopEasy / shopper / policy-folder framing removed |
 
 ### LOs covered
 
