@@ -2,7 +2,7 @@
 
 **Instructions:** Each question has **one correct option**. Choose the best answer.
 
----
+================================================================================
 
 ## LO 1 — Define an AI agent
 
@@ -40,7 +40,7 @@ A is correct — memory plus a controlled loop moves from one-shot tool use towa
 
 B, C, and D work against safe, coherent agent control.
 
----
+================================================================================
 
 ## LO 2 — Distinguish short-term memory from long-term memory
 
@@ -78,7 +78,7 @@ B is correct — short-term memory is the running chat history for the current s
 
 A is for facts kept across sessions. It is specifically short-term, not both or none.
 
----
+================================================================================
 
 ## LO 3 — Persist and reload conversation history
 
@@ -116,7 +116,7 @@ A is correct — treat missing file as a fresh start and return an empty list.
 
 B is unsafe for first run. C and D are not valid history structures.
 
----
+================================================================================
 
 ## LO 4 — Implement loop termination
 
@@ -154,7 +154,7 @@ B is correct — `MAX_STEPS` is a non-negotiable max on loop iterations.
 
 A alone is unsafe. C is about persist timing. D is about memory storage, not loop stop.
 
----
+================================================================================
 
 ## LO 5 — Handle predictable errors with user-visible messages
 
@@ -192,7 +192,7 @@ A is correct — blank input should ask the user to type a question.
 
 B is not user-friendly. C is the wrong error for this case. D is unsafe.
 
----
+================================================================================
 
 ## Answer Key (quick)
 
