@@ -8,37 +8,37 @@
 
 ### Question 1
 
-Which definition best matches an **AI agent**?
+Which of the following best describes an **AI agent**?
 
-A. A one-shot answer machine that ignores tools and prior messages  
-B. A system that perceives input, reasons about the next step, acts with tools, and can remember prior steps  
-C. A database that only stores static records  
-D. A spreadsheet that only performs calculations
+A. A system that only stores data in a database  
+B. A system that perceives input, reasons, acts using tools, and can use memory  
+C. A Python variable that holds a single number  
+D. A CSV file used for logging
 
 **Correct Answer:** B
 
 **Answer Explanation:**  
-B is correct — an AI agent perceives, reasons, acts (often with tools), and can remember so later turns stay coherent.
+B is correct — an AI agent perceives, reasons, acts (often with tools), and can remember.
 
-A is incorrect because that describes a one-shot call without agent behaviour. C is incorrect because storing records alone is not perceiving/reasoning/acting. D is incorrect because calculation alone is not agent behaviour.
+A, C, and D describe storage or simple data — not an agent.
 
 ---
 
 ### Question 2
 
-Which of the following is the clearest **beginner step** from a single tool call toward agent-like behaviour?
+A one-shot tool call (ask once, get one answer, forget the turn) is mainly **tool use**. What is a beginner step toward **agent-like** behaviour?
 
-A. Adding memory and a controlled loop on top of tool use  
-B. Turning off the model entirely  
-C. Deleting the chat history after every word  
-D. Showing only raw error codes to the user
+A. Adding memory and a controlled loop  
+B. Deleting all stop rules  
+C. Never saving history  
+D. Always showing raw error logs to the user
 
 **Correct Answer:** A
 
 **Answer Explanation:**  
-A is correct — a single tool call is tool use; adding memory plus a controlled loop is the beginner step toward agent behaviour.
+A is correct — memory plus a controlled loop moves from one-shot tool use toward agent behaviour.
 
-B is incorrect because the model is still needed to reply. C is incorrect because deleting history removes memory. D is incorrect because raw errors are poor UX, not agent design.
+B, C, and D work against safe, coherent agent control.
 
 ---
 
@@ -46,37 +46,37 @@ B is incorrect because the model is still needed to reply. C is incorrect becaus
 
 ### Question 3
 
-What is **short-term memory** in a chat-based system?
+Which of the following is an example of **long-term memory**?
 
-A. Facts stored about a user for weeks or months across many chats  
-B. Hardware RAM of the user’s phone only, with no message list  
-C. The running chat history for the **current session**  
-D. Only images uploaded in a future session
+A. Storing facts in a database across many sessions (days, weeks, months)  
+B. Storing chat messages only in a Python list variable for the current run  
+C. Printing a traceback to the console  
+D. Setting `MAX_STEPS = 5`
 
-**Correct Answer:** C
+**Correct Answer:** A
 
 **Answer Explanation:**  
-C is correct — short-term memory is the running chat history for the current session.
+A is correct — long-term memory keeps information across sessions, typically in durable stores like a database or user profile.
 
-A describes long-term memory. B confuses the concept with device hardware. D is unrelated to the current session’s message history.
+B is short-term (current session / current run). C and D are error handling and loop control, not memory types.
 
 ---
 
 ### Question 4
 
-Which statement correctly contrasts short-term and long-term memory?
+If a **chat history** is kept for the current open chat / current session, which type of memory is that?
 
-A. Short-term lasts days/weeks; long-term lasts only one message  
-B. Both are identical and must always use a vector database  
-C. Long-term memory is required for a short multi-message demo  
-D. Short-term is this session’s chat history; long-term stores facts across sessions (days, weeks, months)
+A. Long-term memory  
+B. Short-term memory  
+C. Both  
+D. None
 
-**Correct Answer:** D
+**Correct Answer:** B
 
 **Answer Explanation:**  
-D is correct — short-term is this chat/session; long-term persists across sessions.
+B is correct — short-term memory is the running chat history for the current session.
 
-A reverses the durations. B is incorrect because short-term memory can be a simple list or JSON file. C is incorrect — a short demo can rely on short-term (session) memory alone.
+A is for facts kept across sessions. It is specifically short-term, not both or none.
 
 ---
 
@@ -84,41 +84,37 @@ A reverses the durations. B is incorrect because short-term memory can be a simp
 
 ### Question 5
 
-An in-memory `history` list is lost when a notebook kernel restarts.
+What does it mean to **persist** conversation history?
 
-What does **persist** mean in this context?
-
-A. Delete all messages after every reply  
+A. Keep messages only in a temporary Python list and never write a file  
 B. Write the history to durable storage (for example a JSON file) so it can be loaded later  
-C. Print the traceback of every API call  
-D. Raise `MAX_STEPS` with no upper bound
+C. Increase `MAX_STEPS` without any limit  
+D. Delete history after every message
 
 **Correct Answer:** B
 
 **Answer Explanation:**  
-B is correct — persist writes history to durable storage; reload reads it back.
+B is correct — persist means save to durable storage so the history can be reloaded.
 
-A is the opposite of saving. C is logging, not persistence of chat history. D relates to loop limits, not saving history.
+A is only in-memory. C is loop control. D removes history instead of saving it.
 
 ---
 
 ### Question 6
 
-A `load_history` function is called, but the history file does not exist yet (first run).
-
-What should a safe `load_history` return?
+On first run, the history JSON file does not exist. What should a safe load function return?
 
 A. An empty list `[]`  
-B. A crash with no fallback  
-C. The word `"error"` as a string only  
-D. A random assistant reply
+B. A hard crash with no fallback  
+C. The word `"error"` only  
+D. A random assistant message
 
 **Correct Answer:** A
 
 **Answer Explanation:**  
-A is correct — on `FileNotFoundError` (first run), return an empty list so the chat can start fresh.
+A is correct — treat missing file as a fresh start and return an empty list.
 
-B is incorrect because first run should be handled safely. C and D do not restore a message list.
+B is unsafe for first run. C and D are not valid history structures.
 
 ---
 
@@ -126,37 +122,37 @@ B is incorrect because first run should be handled safely. C and D do not restor
 
 ### Question 7
 
-An agent loop may repeat internal steps (search, draft, check). Without a stop rule, what is a likely risk?
+Without a **stop rule**, what can go wrong in an agent loop?
 
-A. The history file becomes permanently read-only  
-B. Short-term memory turns into long-term memory automatically  
-C. The loop might run forever and API cost can rise  
-D. The user’s keyboard locks forever
+A. The loop may run forever and API cost can rise  
+B. Short-term memory automatically becomes long-term memory  
+C. The history file becomes permanently read-only  
+D. Python lists can no longer append messages
 
-**Correct Answer:** C
+**Correct Answer:** A
 
 **Answer Explanation:**  
-C is correct — without loop termination, iterations can continue endlessly and increase API usage.
+A is correct — missing termination can cause runaway iterations and higher API cost.
 
-A, B, and D are not consequences described for missing stop rules.
+B, C, and D are not effects of missing stop rules.
 
 ---
 
 ### Question 8
 
-Which stop rule is a **non-negotiable hard ceiling** on how many times a loop may iterate?
+Which option is a **hard ceiling** that stops a loop after a fixed number of steps?
 
-A. Hoping the model always says “I’m done” with no step limit  
-B. Never checking for user words like `quit`, `exit`, or `stop`  
-C. Saving history only at the end of the week  
-D. `MAX_STEPS` — stop when the step count reaches the maximum
+A. Hoping the model says “I’m done”  
+B. `MAX_STEPS`  
+C. Saving history once a week  
+D. Using a Python list for messages
 
-**Correct Answer:** D
+**Correct Answer:** B
 
 **Answer Explanation:**  
-D is correct — max steps (`MAX_STEPS`) is a hard ceiling even if the model wants to keep trying.
+B is correct — `MAX_STEPS` is a non-negotiable max on loop iterations.
 
-A is a common mistake (trusting the model with no step limit). B removes a useful user-stop rule; it is not the hard ceiling. C is about persistence timing, not loop termination.
+A alone is unsafe. C is about persist timing. D is about memory storage, not loop stop.
 
 ---
 
@@ -164,39 +160,37 @@ A is a common mistake (trusting the model with no step limit). B removes a usefu
 
 ### Question 9
 
-An API or tool call fails. What should the **end user** see?
+When an API call fails, what should the **user** see?
 
-A. A full red traceback with internal file paths  
-B. A short friendly message such as “Search is unavailable. Please try again in a minute.”  
-C. The exact raw `str(exception)` text from the library  
-D. An empty string with no reply at all
+A. A short friendly message (for example, try again in a minute)  
+B. The full raw traceback with internal file paths  
+C. The exact `str(exception)` text only  
+D. No message at all
 
-**Correct Answer:** B
+**Correct Answer:** A
 
 **Answer Explanation:**  
-B is correct — user-visible error handling returns a clear, friendly message.
+A is correct — user-visible error handling shows a clear, friendly message.
 
-A and C expose messy internals. D leaves the user with silence instead of guidance.
+B and C expose internal details. D leaves the user with no guidance.
 
 ---
 
 ### Question 10
 
-Before calling a helper function, the code finds that the user typed only spaces.
-
-Which user-visible response is appropriate?
+The user typed only spaces (blank input). Which response is appropriate?
 
 A. `"Please type a question."`  
 B. A long stack trace  
-C. `"Document index is empty. Please run setup first."` even though the index is fine  
-D. Starting a new infinite loop with no max steps
+C. `"Index is empty"` even when the index is fine  
+D. Start an infinite loop
 
 **Correct Answer:** A
 
 **Answer Explanation:**  
-A is correct — blank input should get a simple prompt like “Please type a question.”
+A is correct — blank input should ask the user to type a question.
 
-B is not user-friendly. C mismatches the blank-input case (that message is for an empty index). D is unsafe and unrelated to blank input.
+B is not user-friendly. C is the wrong error for this case. D is unsafe.
 
 ---
 
@@ -206,11 +200,11 @@ B is not user-friendly. C mismatches the blank-input case (that message is for a
 |---|---|---|
 | 1 | Define an AI agent | B |
 | 2 | Define an AI agent | A |
-| 3 | Short-term vs long-term | C |
-| 4 | Short-term vs long-term | D |
+| 3 | Short-term vs long-term | A |
+| 4 | Short-term vs long-term | B |
 | 5 | Persist and reload | B |
 | 6 | Persist and reload | A |
-| 7 | Loop termination | C |
-| 8 | Loop termination | D |
-| 9 | User-visible errors | B |
+| 7 | Loop termination | A |
+| 8 | Loop termination | B |
+| 9 | User-visible errors | A |
 | 10 | User-visible errors | A |
