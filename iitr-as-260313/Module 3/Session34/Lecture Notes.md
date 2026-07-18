@@ -13,7 +13,7 @@ That harness answers: *what broke, and what path did the agent take?* This sessi
 - Track **quality metrics**, **token usage**, and **latency**, including the **cost–latency trade-off**
 - See how **chunk size** and **overlap** change the answer on the same RAG query
 
-![From evaluation harness to iteration loop — eval JSON and traces identify failure classes; prompt, tool, and retrieval patches improve quality metrics before ship](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session43/session43-01-eval-to-iteration-loop.png)
+![From evaluation harness to iteration loop — eval JSON and traces identify failure classes; prompt, tool, and retrieval patches improve quality metrics before ship](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module3/session34/session34-01-eval-to-iteration-loop.png)
 
 ---
 
@@ -55,7 +55,7 @@ You cannot debug this with input–output alone. You must inspect **which step**
 
 Each box in the workflow diagram is a place where debugging can start.
 
-![Simple input-output apps vs multi-step agent workflows — many failure points across prompt, tool choice, arguments, retrieval, and final text](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session43/session43-02-simple-io-vs-agent-workflow.png)
+![Simple input-output apps vs multi-step agent workflows — many failure points across prompt, tool choice, arguments, retrieval, and final text](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module3/session34/session34-02-simple-io-vs-agent-workflow.png)
 
 ### Activity — Spot the Failure Layer
 
@@ -162,7 +162,7 @@ Answer is correct but too slow. Measure start/end time per tool and per request;
 
 Your **evaluation harness** from the **previous** class is built for trajectory thinking.
 
-![Final answer debugging vs trajectory debugging — compare only the last sentence or inspect tools, retrievals, and refusals step by step](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session43/session43-03-trajectory-vs-final-answer.png)
+![Final answer debugging vs trajectory debugging — compare only the last sentence or inspect tools, retrievals, and refusals step by step](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module3/session34/session34-03-trajectory-vs-final-answer.png)
 
 ---
 
@@ -185,7 +185,7 @@ Once you label a **failure class**, apply a **targeted fix** — not a random fu
 - **One change at a time** — otherwise nobody knows what helped.
 - **Regression risk:** fix one case, break three others — re-run the **full** evaluation set.
 
-![Failure class to remediation map — wrong tool, missing call, weak retrieval, hallucination, loops, and latency each have a targeted patch strategy](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session43/session43-04-failure-class-remediation.png)
+![Failure class to remediation map — wrong tool, missing call, weak retrieval, hallucination, loops, and latency each have a targeted patch strategy](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module3/session34/session34-04-failure-class-remediation.png)
 
 ### Activity — Pick the First Fix
 
@@ -285,7 +285,7 @@ With **`chunk_size=50`**, **`chunk_overlap=10`**: many tiny chunks; search match
 
 With **`chunk_size=150`**, **`chunk_overlap=20`**: richer chunks contain **both** category and policy → correct answer. **Same files, same app code**, only ingest parameters changed.
 
-![Chunk tuning demo — chunk_size 50 retrieved electronics but missed the 7-day rule; chunk_size 150 returned the correct answer on the same query](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260113/module3/session43/session43-05-chunk-tuning-electronics-demo.png)
+![Chunk tuning demo — chunk_size 50 retrieved electronics but missed the 7-day rule; chunk_size 150 returned the correct answer on the same query](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module3/session34/session34-05-chunk-tuning-electronics-demo.png)
 
 Retriever knobs in the app (no re-ingest needed for `k` / `search_type`):
 
