@@ -27,6 +27,8 @@ Imagine a campus office workflow: understand request → check rules → prepare
 - **In Simple Words:** A save-game for your agent workflow.
 - **Real-Life Example:** Saving a Google Form draft before you submit. You can close the browser and continue later from the same answers.
 
+![Campus seva kendra clerk restarting from scratch after a laptop sleep versus reopening the same numbered case file and continuing the appointment workflow](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session54/session54-01-checkpoint-save-game.png)
+
 Without checkpoints:
 
 - A crash forces a full restart
@@ -46,6 +48,8 @@ This session stays focused on save / list / resume / inspect. It does **not** co
 ## Checkpoint Building Blocks
 
 Three ideas work together.
+
+![Three checkpoint building blocks — a filing cabinet as checkpointer storage, a ticket stub as thread ID case number, and a ring-binder snapshot as a saved checkpoint on the workflow path](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session54/session54-02-checkpoint-building-blocks.png)
 
 ### Checkpointer
 
@@ -117,6 +121,8 @@ You will see two checkpointer styles in this session:
 
 Disk persistence is the skill that matches real interruptions. Memory is only a warm-up.
 
+![Side-by-side comparison of in-memory saves fading when the process closes versus SQLite disk persistence keeping the case file safe across restarts](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session54/session54-04-memory-vs-disk-persistence.png)
+
 ---
 
 ## Pause on Purpose with interrupt_before
@@ -128,6 +134,8 @@ To practise resume safely in class, you can ask LangGraph to pause before a name
 - **Real-Life Example:** A bank form that saves after “verify OTP” and waits before “submit final application.”
 
 You will use this in the disk example below to simulate failure or restart without crashing your laptop on purpose.
+
+![Metro-style workflow with a planned pause gate before the confirm station, then the train resuming from the saved checkpoint to finish the journey](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session54/session54-03-interrupt-pause-resume.png)
 
 ---
 
@@ -526,6 +534,8 @@ Saving is not enough. You must **read** payloads when a run looks stuck.
 - **Official Definition:** A **checkpoint payload** is the saved bundle of state values, next nodes, and metadata for one save point.
 - **In Simple Words:** The contents of one save-file page.
 - **Real-Life Example:** Opening a courier tracking event list — scanned at hub, out for delivery, delayed — not only the final “delivered” stamp.
+
+![Detective-style checkpoint history timeline for one thread, magnifying the snapshot just before confirm outcome to read values, next node, and checkpoint identity](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session54/session54-05-inspect-checkpoint-payload.png)
 
 ### What to read on each snapshot
 

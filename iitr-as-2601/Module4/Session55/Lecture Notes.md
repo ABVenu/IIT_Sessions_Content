@@ -27,6 +27,8 @@ A node that calls an outside service can fail for two common reasons:
 | Temporary glitch | Network blip at a ticket counter | One failure, then success if asked again |
 | Hard failure after many tries | Counter permanently closed | Need a clear “please try later” message |
 
+![Three messy failure modes at a campus help desk — endless spinning wait, temporary glitch retried successfully, and a permanently closed counter with a clear user message](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session55/session55-01-messy-failure-modes.png)
+
 - **Official Definition:** A **timeout** is a maximum time allowed for an operation before it is cancelled as too slow.
 - **In Simple Words:** A kitchen timer for one step. When it rings, stop waiting.
 - **Real-Life Example:** A UPI app that stops waiting after a few seconds instead of spinning forever.
@@ -45,6 +47,8 @@ A node that calls an outside service can fail for two common reasons:
 |---|---|---|
 | Transient | Temporary problem (network blip, brief 503) | Yes, within limits |
 | Permanent | Clear hard error (bad input, forbidden) | No — fail clearly |
+
+![Split comparison of transient network blip worth retrying versus permanent bad input that should fail fast with clear guidance](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session55/session55-02-transient-vs-permanent.png)
 
 ### Activity — Classify the Failure
 
@@ -80,6 +84,8 @@ LangGraph nodes are ordinary functions. For an API-backed step, wrap the slow wo
 - **Official Definition:** A **per-node timeout** limits how long one node may wait before failing that step.
 - **In Simple Words:** Each station has its own kitchen timer.
 - **Real-Life Example:** Document verification desk: if the scanner does not respond in 10 seconds, the clerk stops and reports a scanner delay — they do not block the whole office endlessly.
+
+![Metro-style workflow showing per-node kitchen timers at each station versus one large clock limiting the entire journey from start to finish](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session55/session55-03-per-node-vs-global-timeout.png)
 
 ### Full code — per-node timeout wrapper
 
@@ -291,6 +297,8 @@ LangGraph supports a **`RetryPolicy`** on a node.
 - **In Simple Words:** House rules for “try again” — count, pause, and stop.
 - **Real-Life Example:** Calling a customer-care line: try up to 3 times, wait longer between calls, then give a reference number and stop.
 
+![Campus ticket counter retrying a flaky service with bounded attempts and growing pause gaps between tries until success on the third attempt](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session55/session55-04-retry-backoff-policy.png)
+
 ### Full code — RetryPolicy on a flaky node
 
 ```python
@@ -411,6 +419,8 @@ Retries must end. When the budget is finished, talk to the user like a professio
 - **Official Definition:** A **user-facing error** is a short, actionable message meant for humans when the system cannot complete the task.
 - **In Simple Words:** A polite explanation, not a stack trace.
 - **Real-Life Example:** “Payment could not be completed after 3 attempts. Please try again in 10 minutes or visit the accounts desk.” 
+
+![Contrast between showing a scary technical stack trace to a student versus a calm professional help-desk message with clear next steps after retries are exhausted](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module4/session55/session55-05-user-facing-error.png)
 
 ### Full code — catch exhausted retries and write a calm message
 

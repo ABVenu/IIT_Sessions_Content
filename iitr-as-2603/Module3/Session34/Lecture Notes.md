@@ -13,7 +13,7 @@ Those demos still kept prompts **inline in notebook cells**. Today shifts to **m
 - **Explain** **HTTP rate limits** and implement **exponential backoff** on API errors
 - **Log** retry events so failures are visible while you build and debug
 
-![Prompt versioning and API rate limits — named prompt files, registry bundles, backoff, and retry logs for safe development](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-01-prompt-versioning-overview.png)
+![Prompt versioning and API rate limits — ShopEasy support workspace with named prompt files v1 and v2, safe cloud API habits, and retry logs](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session34/session34-prompt-versioning-overview.png)
 
 ---
 
@@ -34,7 +34,7 @@ A prompt is not a one-time sticky note — it is **living product logic**. When 
 - **Common mistake:** Editing the system prompt **inline in a notebook cell** without saving the old text.
 - **Design habit:** Every meaningful change gets a **new version label** (`v1`, `v2`) — same idea as **Git** for code.
 
-![Why prompt versioning — without it no proof or rollback; with it v1 and v2 files plus same eval questions; recipe notebook and menu card analogies](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-02-why-versioning.png)
+![Why prompt versioning — family recipe notebook v1 vs v2 and restaurant menu cards kept side by side for fair comparison](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session34/session34-why-version-v1-v2.png)
 
 ---
 
@@ -69,7 +69,7 @@ project/
 - **Why separate config from prompt text:** Wording changes often; model name or temperature changes less often. Mixing both in one giant string makes diffs hard to read.
 - **Common doubt:** *"Is a `.txt` file enough?"* — Yes for learning and small teams. A **registry** (next section) wraps files when you have many prompts.
 
-![Versioned folder layout — prompts, config, and logs folders with one file per version; prose separate from model settings](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-03-versioned-folder-layout.png)
+![Versioned folder layout and registry — prompts, config, and logs folders plus a central lookup board bundling prompt, settings, and tools](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session34/session34-versioned-files-registry.png)
 
 ### Loading a Versioned Prompt in Python
 
@@ -132,8 +132,6 @@ When one project holds **many agents** (support, summarizer, email drafter), a f
 | Tools + max steps | `["serper_search", "python_repl"]`, `max_tool_steps=3` |
 
 - Always register **prompt + config + tools** as one bundle — never pair a **v2** prompt with a leftover **v1** config.
-
-![Registry pattern — central lookup from agent name and version to prompt path, config, tools, and max steps](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-04-registry-pattern.png)
 
 ### Full Registry Example
 
@@ -202,7 +200,7 @@ Before you ship **v2**, run the **same questions** through **v1** and **v2** and
 
 - Start with **5–10 questions**; same context for both versions; change **one knob per version**.
 
-![Qualitative eval — same eval question and shared context run through v1 and v2; checklist before promoting v2](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-05-qualitative-eval.png)
+![Qualitative eval — same ShopEasy customer question run through v1 and v2 with a human checklist before promoting v2](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session34/session34-qualitative-eval.png)
 
 ### Eval Questions File
 
@@ -311,7 +309,7 @@ Cloud LLM APIs protect shared infrastructure with **rate limits** — caps on ho
 - **Agent multiplier:** One user message can become **5–15 API calls** in a tool / ReAct loop — rate limits bite faster than in single-turn chat.
 - **Common mistake:** Hammering the API in a **`for` loop** with **no delay**. Show users a **friendly wait message**, not a raw *"429"* string.
 
-![HTTP rate limits — RPM, TPM, and daily quota; RTO token counter analogy; one user message can trigger many agent API calls](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-06-http-rate-limits.png)
+![HTTP rate limits, exponential backoff, and retry logs — RTO token counter patience, growing waits after 429, and a visible shop ledger audit trail](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session34/session34-rate-limits-backoff-logs.png)
 
 ---
 
@@ -326,8 +324,6 @@ When a call fails with a **retryable** error like **HTTP 429**, wait before tryi
 - **Retry only retryable errors:** **429** and transient timeouts — not **401** or **400**. Cap with **`stop_after_attempt(4)`**. Typical waits: **1s → 2s → 4s → 8s**.
 - **Jitter:** small random extra delay so many clients do not retry in perfect sync (**thundering herd**).
 - **Tenacity:** community-standard Python retry package — cleaner than hand-written **`while`** + **`time.sleep`**.
-
-![Exponential backoff — wait grows 1s, 2s, 4s, 8s with jitter; retry 429 only; cap max attempts at 4](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-07-exponential-backoff.png)
 
 ### Simulated Retry Demo (No Real API Calls)
 
@@ -467,8 +463,6 @@ Retries that happen silently feel like **random slowness**. During development, 
 | **Promote** | Set winning version as registry default |
 
 - **Discipline:** Version bump → eval → log review → promote. Space eval loops with **`time.sleep(1)`** on shared keys.
-
-![Resilient prompt pipeline — design, register, evaluate, operate with backoff logs, then promote; sample api_retries.log lines](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session45/session45-08-retry-logs-pipeline.png)
 
 ---
 
