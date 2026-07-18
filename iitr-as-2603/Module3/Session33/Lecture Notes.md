@@ -15,7 +15,7 @@ Real support or analyst questions often need **more than text search** — live 
 - **Trace** how tool outputs flow back into the loop before the final answer
 - **Control** agent loops with **`max_iterations`**, read **verbose** traces, and spot when built-in products already use agents
 
-![From memory loop to ReAct agent — previous ShopEasy RAG with JSON history; today LangChain Thought Action Observation with Python REPL and Serper](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-01-tesla-rag-vs-shopeasy-tools.png)
+![From ShopEasy memory chat to ReAct agent — saved conversation history upgrades to Thought Action Observation with Python REPL and Serper tools](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session33/session33-memory-to-react-agent.png)
 
 ---
 
@@ -37,7 +37,7 @@ A **chatbot** only generates text from what it already "knows" from training. An
 - **Common mistake:** Expecting the LLM to **multiply large numbers perfectly** — agents delegate math to **Python REPL**.
 - **Common mistake:** Trusting a **stock price** from chat without a **search tool** — the number may be outdated.
 
-![Chatbot vs agent — plain chat may guess Nvidia price; ReAct agent searches then calculates with observations](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-02-rag-vs-tools.png)
+![Chatbot vs agent — plain chat may guess Nvidia price; ReAct agent searches the web then calculates with observations before answering](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session33/session33-chatbot-vs-agent.png)
 
 ### The Manager and Worker Model
 
@@ -85,7 +85,7 @@ flowchart LR
 - **Why ReAct first:** You **see** the reasoning trail in the notebook. That builds intuition before wiring raw **function-calling** APIs by hand in a later session.
 - **Common mistake:** Skipping **`verbose=True`** and wondering why the agent "magically" knew a number — you never saw the **Action** step.
 
-![ReAct paradigm — Thought Action Observation loop on scratchpad until Final Solution](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-03-tool-schema.png)
+![ReAct paradigm — Thought Action Observation loop on a scratchpad notepad until Final Answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session33/session33-react-thought-action-observation.png)
 
 ### Activity — Label a ReAct Trace
 
@@ -218,7 +218,7 @@ print(search_tool.invoke("Who is the founder of Tesla?"))
 - You can verify live searches in the **Serper dashboard** — query text, credits used, and response time are logged.
 - **Common mistake:** Vague **`description`** like *"helps with stuff"* — the agent may pick the wrong tool or answer without searching.
 
-![LangChain Tool wrapper — name description func; PythonREPL and Serper; test with invoke before agent](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-04-register-bind.png)
+![LangChain Tool wrapper — manager delegates to python_repl and serper_search workers with name and description biodata](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session33/session33-langchain-tools-python-serper.png)
 
 ### Activity — Test Both Tools Without an Agent
 
@@ -282,8 +282,6 @@ print(response["output"])  # Final natural-language answer after all observation
 - **`AgentExecutor.invoke`** repeats: LLM proposes Thought/Action → tool runs → Observation appended → LLM continues.
 - In the live demo the manager **retried** the Python REPL after **syntax errors** — each failed run still produced an **Observation** the manager read before the next **Thought**.
 - **`verbose=True`** is your best debugging friend — read the trace before trusting **`output`**. Mismatching **`tools=`** between **`create_react_agent`** and **`AgentExecutor`** means the executor cannot run a tool the agent was not given.
-
-![Python ReAct agent — ChatGroq, hwchase17/react prompt, create_react_agent, AgentExecutor verbose for compound interest](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-05-model-tool-loop.png)
 
 ### Activity — Read the Verbose Trace
 
@@ -351,8 +349,6 @@ print(response["output"])
 - The ReAct prompt tells the manager that **Action** must be one of the tool **names** listed — tool selection works like matching the question to the best **description**.
 - **Common mistake:** Only enabling **`python_repl`** for a *"latest price"* question — the model cannot know today's market price without **search**.
 
-![Search ReAct agent — serper_search then python_repl; multi-step observations until Final Answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-06-tool-message-roles.png)
-
 ### Activity — Plan the Tool Sequence
 
 For the Nvidia + **$100 investment** query, write the expected order:
@@ -393,7 +389,7 @@ You did not write a manual **Groq function-calling** loop today — **LangChain 
 - **`AgentExecutor`** appends observations automatically; custom loops use **`MAX_STEPS`** from the **previous** memory lab — **`AgentExecutor`** uses **`max_iterations`** for the same purpose.
 - **Common mistake:** Treating **`response["output"]`** as grounded when **`verbose`** shows **no Observation** for a factual claim.
 
-![AgentExecutor loop — invoke input, Thought Action, run tool, append Observation until Final Answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-07-groq-executor.png)
+![AgentExecutor notebook lab — verbose Thought Action Observation trace from setup through multi-tool search and Python steps to Final Answer](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/module3/session33/session33-agent-executor-notebook-lab.png)
 
 ### Activity — Map ReAct to Function Calling
 
@@ -429,8 +425,6 @@ Most beginner bugs are **missing API keys**, **wrong package versions**, or **tr
 - **`max_iterations`** on **`AgentExecutor`** is the hard stop for the Thought → Action → Observation loop — same idea as **`MAX_STEPS`** in your memory chat lab.
 - **Debugging agents** means reading the **verbose** trace, not only the final **`output`** — the manager may pick the wrong tool or send bad Python syntax before self-correcting.
 - In a **production chat UI**, users usually see only the **Final Answer**; developers keep the full trace in logs. Use **`verbose=True`** in lab; turn it off in apps, and never show raw API tracebacks to end users.
-
-![Notebook lab flow — pip install, test tools, Python agent, Search agent; API keys and verbose trace](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2601/module3/session43/session43-08-notebook-demo-flow.png)
 
 ### Activity — Full Notebook Walkthrough
 
