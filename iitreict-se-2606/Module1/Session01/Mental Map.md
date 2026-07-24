@@ -3,7 +3,7 @@
 flowchart TB
     subgraph FOUNDATION[" "]
         direction LR
-        ENTRY["&nbsp;&nbsp;<b>Course Entry Point</b>&nbsp;&nbsp;<br/><br/>Certification in Agentic<br/>Systems and Design<br/><br/><i>No prior tech background<br/>required to begin</i>"]
+        ENTRY["&nbsp;&nbsp;<b>Course Entry Point</b>&nbsp;&nbsp;<br/><br/>Certification in Software<br/>Engineering with AI program<br/><br/><i>No prior tech background<br/>required to begin</i>"]
         CM[["&nbsp;&nbsp;<b>Current Module Until Previous Session</b>&nbsp;&nbsp;<br/><br/>Module 1: Programming<br/>&amp; Python Foundations<br/><br/><i>Course begins here<br/>No prior sessions covered</i>"]]
     end
 
