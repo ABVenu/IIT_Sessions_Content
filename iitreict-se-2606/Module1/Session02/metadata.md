@@ -1,6 +1,6 @@
 lecture ID:
 
-Course Name: Certification in Agentic Systems and Design
+Course Name: Certification in Software Engineering with AI program
 
 Target Audience : Students from any backgorund may not be necessarily form tech background
 
