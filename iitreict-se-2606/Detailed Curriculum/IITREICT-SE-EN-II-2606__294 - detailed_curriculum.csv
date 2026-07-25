@@ -1,0 +1,325 @@
+Module,Week,Session,Session Number,Title,Objective,Topics Covered,Detailed Subtopics/Learning Objectives,Proposed Sessions by,Date,Day,Time
+,0,,,Virtual Inaugural,Official Inaugural of the Programme,,,,,,
+Module 1: Programming Foundations + Developer Setup,1,1.1,1,Introduction to Programming & Python Basics,"Write and execute first Python programs using One Compiler with variables, data types, operators, and basic input/output","One Compiler setup; variables and data types; arithmetic, comparison, and logical operators; expressions; basic input/output with input() and print()","* Explain what a program is and how Python code is written and executed in One Compiler
+* Set up and run Python programs in One Compiler without local installation
+* Declare variables and work with core data types — int, float, str, and bool
+* Apply arithmetic, comparison, logical, and assignment operators in expressions
+* Use input() and print() to build simple interactive programs",Industry Mentor ,25/07/2026,Saturday,05:00 PM - 07:30 PM
+Module 1: Programming Foundations + Developer Setup,1,1.2,2,Operators & Conditional Statements,Control program flow using if/elif/else and boolean logic to solve conditional programming problems,Conditionals; if-elif-else; boolean logic; comparison operators in conditions; step-by-step problem decomposition; introductory conditional exercises,"* Implement if, elif, and else branches to control program flow
+* Evaluate conditions using comparison operators and boolean logic (and, or, not)
+* Break word problems into logical, testable steps before writing code
+* Build single-branch and multi-branch conditional programs for real scenarios
+* Trace and debug conditional logic by following execution paths for sample inputs",Industry Mentor ,26/07/2026,Sunday,11:00 AM - 01:30 PM
+Module 1: Programming Foundations + Developer Setup,2,MC1,MC1,Masterclass: How Computers Work & Operating Systems,How computers and operating systems work and why programmers need this foundation,Need to understand how machines run code; limits of treating a computer as a black box; CPU memory and storage roles; operating system responsibilities; processes; file systems,"* Explain why a programmer needs to understand how a computer works beyond writing code only
+* Explain the demerit of treating the machine as a black box when programs fail or run slowly
+* Explain the role of CPU memory and storage in running a program
+* Explain the role of an operating system in managing programs users and resources
+* Explain how processes and file systems help in understanding how code and data live on a machine",Professor ,30/07/2026,Thursday,8.00 PM - 9.30 PM
+Module 1: Programming Foundations + Developer Setup,2,2.1,3,Loops & Iterations in Python,Automate repetitive tasks using for loops and while loops with break and continue,For loops; while loops; break and continue; automating sequences; iterative problem solving; choosing the right loop for a problem,"* Write for loops to iterate over sequences and using range()
+* Write while loops to repeat actions until a condition changes
+* Control loop execution using break and continue appropriately
+* Apply loops to automate summing, counting, and filtering tasks
+* Choose the correct loop type (for vs while) for a given repetitive problem",Industry Mentor ,01/08/2026,Saturday,05:00 PM - 07:30 PM
+Module 1: Programming Foundations + Developer Setup,2,2.2,4,Functions in Python,"Design reusable code blocks with parameters, return values, and scope for modular programs",Functions; def keyword; parameters and arguments; return values; local vs global scope; writing reusable readable code,"* Define and call functions using def with a clear purpose
+* Pass data into functions using parameters and default arguments
+* Return results from functions and use return values in calling code
+* Explain local vs global scope and avoid common scope-related bugs
+* Refactor repeated logic into reusable, readable functions",Industry Mentor ,02/08/2026,Sunday,11:00 AM - 01:30 PM
+Module 1: Programming Foundations + Developer Setup,3,3.1,5,"Core Data Structures: Strings, Lists, Tuples, Dictionaries & Sets","Manipulate core Python data structures for storing, querying, and processing in-memory data",Strings; lists; tuples; dictionaries; sets; indexing and slicing; key-value operations; common methods; built-in functions on collections,"* Manipulate strings, lists, and tuples using indexing, slicing, and essential methods
+* Create and query dictionaries and sets for structured in-memory data
+* Apply built-in functions — len(), sorted(), min(), max(), sum() — on collections
+* Distinguish when to use lists, tuples, dictionaries, and sets for a given problem
+* Solve practical problems involving ordered and key-value data structures",Industry Mentor ,08/08/2026,Saturday,05:00 PM - 07:30 PM
+Module 1: Programming Foundations + Developer Setup,3,3.2,6,Sorting Algorithms – Bubble Sort & Selection Sort,Understand and implement bubble sort and selection sort and compare with Python built-in sorting using One Compiler,Bubble sort intuition and implementation; selection sort intuition and implementation; tracing sort execution; O(n²) complexity; sorted() and list.sort() comparison,"* Explain how bubble sort and selection sort work step by step
+* Implement bubble sort and selection sort in Python
+* Trace algorithm execution manually on sample arrays
+* Analyze O(n²) time complexity for elementary sorting algorithms
+* Compare custom sort implementations with Python's sorted() and list.sort()",Industry Mentor ,09/08/2026,Sunday,11:00 AM - 01:30 PM
+Module 1: Programming Foundations + Developer Setup,4,4.1,7,Searching Algorithms – Linear Search & Binary Search,Implement searching algorithms on sorted and unsorted data and analyze basic time complexity using One Compiler,Linear search; binary search prerequisites; iterative binary search; tracing search execution; O(n) and O(log n) complexity intuition,"* Implement linear search on lists using loops and membership checks
+* Explain why binary search requires sorted data and how sorting enables efficient lookup
+* Implement iterative binary search in Python on sorted arrays
+* Trace linear and binary search execution step-by-step on sample inputs
+* Compare linear search O(n) vs binary search O(log n) at an intuitive level",Industry Mentor ,16/08/2026,Sunday,11:00 AM - 01:30 PM
+Module 1: Programming Foundations + Developer Setup,5,MC2,MC2,Masterclass: Algorithms & Complexity Analysis,Why algorithm choice and complexity analysis matter when solving problems,Need for algorithms; demerit of inefficient approaches; what complexity means; Big-O intuition; comparing searching and sorting strategies,"* Explain why we need algorithms instead of solving every problem with ad-hoc steps only
+* Explain the demerit of an inefficient approach as input size grows
+* Explain what time and space complexity mean at a conceptual level
+* Explain Big-O intuition for comparing two approaches to the same problem
+* Explain why searching and sorting strategies should be compared before choosing one",Professor ,20/08/2026,Thursday,8.00 PM - 9.30 PM
+Module 1: Programming Foundations + Developer Setup,4,4.2,8,Hands-on DSA Problem Solving & Logic Building,Solve structured DSA problems by combining conditionals loops data structures and searching and sorting algorithms in One Compiler,Problem decomposition; nested conditionals and loops; applying search and sort in problem contexts; guided DSA exercises; integrating prior Python foundations,"* Decompose a problem into inputs, logic steps, and expected outputs before coding
+* Solve structured problems using lists, strings, dictionaries, conditionals, and loops
+* Apply sorting and searching techniques in the correct order within problem contexts
+* Use nested conditionals and loops to solve multi-step DSA exercises
+* Solve guided DSA problems in One Compiler with step-by-step mentor support",Industry Mentor ,22/08/2026,Saturday,05:00 PM - 07:30 PM
+Module 1: Programming Foundations + Developer Setup,5,5.1,9,"Python Installation, VS Code Setup & Python Modules",Install Python locally configure VS Code and organize code into modules for a professional development workflow,Python installation; VS Code and terminal setup; running scripts locally; modules and packages; import statements; creating and organizing Python modules; migrating from One Compiler to local workflow,"* Install Python locally and configure VS Code with the integrated terminal
+* Run Python scripts locally and transition workflows from One Compiler to a local project
+* Organize code into modules and import them across project files
+* Explain namespaces and how import statements resolve module access
+* Create and use custom Python modules across a small multi-file script",Industry Mentor ,23/08/2026,Sunday,11:00 AM - 01:30 PM
+Module 1: Programming Foundations + Developer Setup,5,5.2,10,"Understanding Typical Python Project Structure, pip, Virtual Environments & Practical Utilities","Set up a professional Python project with proper structure, dependency management, and a working text-file utility inside a virtual environment",Typical project layout; src and data folders; requirements.txt; pip and package installation; venv/virtualenv; dependency isolation; basic text file I/O; building and running a practical utility project; debugging workflows in VS Code,"* Explain a typical Python project structure and the purpose of each folder and file
+* Create and activate virtual environments and install dependencies with pip
+* Manage project dependencies using requirements.txt inside an isolated venv
+* Organize a multi-file utility project with modules, data files, and a clear entry point
+* Build and run a practical local utility that reads and writes plain-text data within a structured project",Industry Mentor ,29/08/2026,Saturday,05:00 PM - 07:30 PM
+Module 1: Programming Foundations + Developer Setup,6,6.1,11,"JSON Basics, File Operations & Exception Handling","Extend a structured Python project with JSON data handling, robust file I/O, and defensive error handling",JSON structure and syntax; Python dict-to-JSON mapping; json module load/dump; reading and writing files with open(); try-except blocks; input validation; upgrading a utility to use JSON persistence,"* Understand JSON structure, syntax rules, and how it represents structured data in real applications
+* Map Python dictionaries and lists to JSON-compatible in-memory data
+* Read and write persistent JSON data using json.load() and json.dump() within an existing project
+* Handle runtime errors gracefully with try/except blocks during file and JSON operations
+* Validate inputs and file data before processing to prevent common runtime failures",Industry Mentor ,30/08/2026,Sunday,11:00 AM - 01:30 PM
+Module 1: Programming Foundations + Developer Setup,6,6.2,12,Git Fundamentals & Repository Management,Track code changes using Git and manage local and remote repositories on GitHub,Version control fundamentals; git init/add/commit; local vs remote repositories; GitHub clone and push; repository hygiene,"* Explain why version control matters and how Git tracks code changes
+* Initialize a repository and perform core local operations — init, add, commit, log
+* Connect a local repository to GitHub and push committed code to a remote
+* Clone an existing remote repository and work with it locally
+* Apply repository hygiene — .gitignore, meaningful commit messages, and README basics",Industry Mentor ,05/09/2026,Saturday,05:00 PM - 07:30 PM
+Module 1: Programming Foundations + Developer Setup,7,7.1,13,"Git Collaboration, Branching & Pull Requests","Collaborate safely on shared code using branching, merging, pull requests, and code reviews",Branching and merging; pull requests; merge conflicts intro; code review basics; team collaboration workflow on GitHub,"* Create and switch branches for parallel development work
+* Merge branches using standard Git workflows on a shared repository
+* Open, review, and merge a pull request on GitHub
+* Identify and resolve a basic merge conflict with mentor guidance
+* Participate in a code review as both author and reviewer",Industry Mentor ,06/09/2026,Sunday,11:00 AM - 01:30 PM
+,,,,Module 1 Evaluation Attempt 1,,,,,,,
+,,,,Module 1 Evaluation Attempt 2,,,,,,,
+,,,,,,,,,,,
+Module 2: Web Fundamentals + JavaScript (Frontend-101),8,MC3,MC3,Masterclass: Internet & Browser Internals,How the internet connects systems and why secure reliable communication is needed,Need for the internet in software products; demerit of isolated systems; role of internet networking; DNS; HTTPS; how requests travel across the network,"* Explain why modern applications need the internet to connect users servers and services
+* Explain the demerit of building products as fully isolated systems without network communication
+* Explain the role of the internet in request and response based software systems
+* Explain why DNS is needed to map human-readable names to machine addresses
+* Explain why HTTPS is needed for secure communication over the internet",Professor ,10/09/2026,Thursday,8.00 PM - 9.30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),8,8.1,14,HTML & Semantic Markup,Build structured accessible web pages using semantic HTML forms and input elements,HTML document structure; semantic tags; headings paragraphs links images; forms and input types; labels and buttons; accessible page structure,"* Explain how the frontend developer role fits in a web application
+* Write well-structured HTML pages using proper semantic tags
+* Implement forms with common input elements labels and buttons
+* Apply semantic HTML for better accessibility and readability
+* Inspect and validate HTML structure using browser DevTools",Industry Mentor ,12/09/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),8,8.2,15,CSS Fundamentals,Apply CSS selectors properties and the box model to style HTML pages,Linking CSS to HTML; element class and id selectors; color typography backgrounds borders; box model margin padding border; hands-on styling of HTML pages,"* Apply CSS on an HTML page using internal and external stylesheets
+* Use element class and id selectors with core CSS properties
+* Explain and implement the CSS box model including margin padding and border, Flex box
+* Style typography colour and background on a complete HTML page
+* Debug basic CSS issues using browser DevTools",Industry Mentor ,13/09/2026,Sunday,11:00 AM - 01:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),9,9.1,16,CSS Grid Layout,Build page layouts using CSS Grid for structured multi-section web pages,CSS Grid container and items; rows and columns; grid gaps; grid areas; header main and footer layout patterns,"* Explain how CSS Grid works for two-dimensional page layout
+* Define grid rows columns and gaps on a container element
+* Place page sections using grid areas for header main and footer
+* Implement a multi-section page layout using CSS Grid
+* Apply Grid properties to layout the HTML page from earlier sessions",Industry Mentor ,19/09/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),9,9.2,17,JavaScript Fundamentals I,Learn JavaScript fundamentals including variables data types operators and control flow in the browser,Attaching JavaScript to HTML; console debugging; let const var; primitive types; operators; conditionals and loops; strings arrays and objects introduction,"* Attach JavaScript to HTML and debug output using the browser console
+* Declare variables with let and const and use basic JavaScript data types
+* Implement conditional logic and loops to control program flow
+* Manipulate strings arrays and objects in simple browser scripts
+* Explain the difference between var let and const",Industry Mentor ,20/09/2026,Sunday,11:00 AM - 01:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),10,10.1,18,JavaScript Fundamentals II,Write reusable JavaScript functions and work with arrays and objects for structured browser programs,Function declarations and expressions; parameters and return values; arrow functions; scope rules; object property access,"* Write functions using function declarations expressions and arrow functions
+* Pass parameters and return values from JavaScript functions
+* Apply global and block scope rules correctly in browser scripts
+* Manipulate arrays and objects to store and read structured data
+* Refactor repeated logic into reusable functions",Industry Mentor ,26/09/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),10,10.2,19,Modern JavaScript,Apply modern JavaScript ES6+ syntax and array methods for cleaner expressive browser code,Template literals; destructuring; spread and rest operators; default parameters; map filter reduce forEach; optional chaining; nullish coalescing,"* Use template literals destructuring and spread/rest operators in JavaScript
+* Apply default parameters and object literal shorthand syntax
+* Transform array data using map filter and reduce
+* Apply optional chaining and nullish coalescing for safe property access
+* Refactor loop-based logic into map filter and reduce patterns",Industry Mentor ,27/09/2026,Sunday,11:00 AM - 01:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),11,MC4,MC4,Masterclass: Evolution of the Web,How the web evolved and how browsers render pages and run JavaScript across web eras,Need for web evolution; limits of static Web 1.0; Web 2.0 interactivity; browser rendering; JavaScript in the browser; APIs and cloud shift; Web 3.0 at a high level,"* Explain why the web needed to evolve beyond static Web 1.0 pages
+* Explain the demerit of static-only websites for modern user interaction and products
+* Explain how Web 2.0 changed websites into interactive user-driven platforms
+* Explain how a browser loads and renders a web page for the user
+* Explain the role of JavaScript runtime inside the browser for dynamic web behaviour",Professor ,01/10/2026,Thursday,8.00 PM - 9.30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),11,11.1,20,Async JavaScript,Understand asynchronous JavaScript execution with callbacks promises and async/await,Synchronous vs asynchronous execution; callback functions; Promise states; then catch finally; async/await syntax; error handling in async code,"* Explain the difference between synchronous and asynchronous JavaScript execution
+* Implement callback functions and Promise chains using then and catch
+* Write async functions using async/await syntax
+* Handle errors in async code using try/catch blocks
+* Demonstrate setTimeout and Promise-based patterns in the browser",Industry Mentor ,03/10/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),11,11.2,21,DOM & Event Handling,Access DOM elements and handle user interactions with event listeners and basic DOM manipulation,DOM tree; getElementById querySelector querySelectorAll; reading and updating content; addEventListener; click input submit events; basic form validation,"* Select DOM elements using getElementById querySelector and querySelectorAll
+* Read and update element content and attributes dynamically
+* Attach event listeners for click input and submit events
+* Implement basic form validation using JavaScript event handling
+* Explain how HTML CSS and JavaScript work together in the browser",Industry Mentor ,04/10/2026,Sunday,11:00 AM - 01:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),12,12.1,22,Advanced DOM Manipulation,Dynamically create update and style DOM elements for richer interactive UI components,Creating removing and replacing elements; modifying inline styles and CSS classes; dynamic lists and tabs; traversing and updating the DOM; browser devtools for UI debugging,"* Create remove and replace DOM elements dynamically at runtime
+* Modify inline styles and toggle CSS classes using JavaScript
+* Build a dynamic list or simple tab component using DOM APIs
+* Traverse and update the DOM tree for UI state changes
+* Debug DOM and event issues using browser DevTools",Industry Mentor ,10/10/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),12,12.2,23,How the Web Works,Explain how the web works using HTTP methods status codes headers cookies sessions and CORS with practical examples,Client-server architecture; request-response cycle; HTTP methods (GET POST PUT DELETE); status codes; headers; cookies and sessions; CORS fundamentals; tracing a browser request,"* Explain client-server architecture and the HTTP request-response cycle
+* Identify common HTTP methods and status codes used in web applications
+* Describe the role of headers cookies and sessions in web communication
+* Explain CORS and why it is needed for browser-based API calls
+* Trace what happens when a user enters a URL till the server sends a response",Industry Mentor ,11/10/2026,Sunday,11:00 AM - 01:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),13,13.1,24,APIs as Contracts,Learn how API design works in real products including request/response shape error contracts and pagination,REST API concepts; resources and endpoints; request and response structure; error contracts and status codes; pagination and filtering; reading API documentation,"* Explain REST API concepts including resources endpoints and HTTP verbs
+* Describe request and response structure for common CRUD operations
+* Interpret error responses using HTTP status codes and response body
+* Explain pagination filtering and query parameters in API design
+* Read third-party API documentation and identify required endpoints",Industry Mentor ,17/10/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),13,13.2,25,Working with REST APIs,Use the Fetch API with async/await to call REST APIs from the browser and render JSON data,Fetch API GET requests; parsing JSON responses; error handling; displaying remote data in the DOM; JSONPlaceholder todos endpoint,"* Make GET requests using the Fetch API with async/await
+* Parse JSON responses and handle fetch errors in the browser
+* Render API data dynamically in the DOM from a remote endpoint
+* Read JSONPlaceholder API docs and call the todos endpoint
+* Implement a browser page that fetches and displays data from jsonplaceholder.typicode.com",Industry Mentor ,18/10/2026,Sunday,11:00 AM - 01:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),14,MC5,MC5,Masterclass: Understanding Libraries & Frameworks,Why libraries and frameworks exist and when each is needed in product development,Demerit of writing everything from scratch; need for reusable code; library vs framework; when each helps; why React-like tools emerged,"* Explain the demerit of writing every feature from scratch in a real product
+* Explain why developers need libraries and frameworks to build faster and more consistently
+* Explain the difference between a library and a framework at a conceptual level
+* Explain when a library is enough and when a framework is needed
+* Explain why component frameworks such as React became important for UI development",Professor ,22/10/2026,Thursday,8.00 PM - 9.30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),14,14.1,26,"React Fundamentals – Theory, Components, JSX & Hooks",Learn React theory and build components using JSX props useState and useEffect only,React theory and component-based architecture; Vite setup; JSX syntax; functional components; props; useState for local state; useEffect for side effects; no other hooks,"* Explain component-based architecture and how React uses the virtual DOM
+* Set up a React project with Vite and write functional components in JSX
+* Pass data between components using props
+* Manage component state using the useState hook
+* Run side effects on mount and update using the useEffect hook",Industry Mentor ,24/10/2026,Saturday,05:00 PM - 07:30 PM
+Module 2: Web Fundamentals + JavaScript (Frontend-101),14,14.2,27,React Fundamentals – CRUD App,Build a basic React Todo CRUD app with localStorage persistence and one API call to JSONPlaceholder,Todo list UI; add edit delete and toggle complete; localStorage persistence; one GET fetch from jsonplaceholder.typicode.com/todos on mount; no FastAPI,"* Implement a React Todo list with add edit delete and mark-complete features
+* Persist todo data in localStorage and load it back on page reload
+* Manage todo state with useState and handle side effects with useEffect
+* Make one GET call to jsonplaceholder.typicode.com/todos to load sample data
+* Show loading state while the API fetch is in progress",Industry Mentor ,25/10/2026,Sunday,11:00 AM - 01:30 PM
+,,,,Module 2 Evaluation Attempt 1,,,,,,,
+,,,,Module 2 Evaluation Attempt 2,,,,,,,
+,,,,,,,,,,,
+Module 3: Backend Engineering with FastAPI,15,15.1,28,Backend Setup with FastAPI,Set up a backend project with venv and build a first FastAPI application with a basic GET endpoint,Backend role in the stack; project setup with venv pip and environment variables; FastAPI intro; first GET endpoint; running the dev server,"* Explain the role of backend development in a web application
+* Create and activate a virtual environment for a backend project
+* Install FastAPI and run the development server
+* Build a minimal FastAPI application
+* Implement and test a basic GET endpoint",Industry Mentor ,31/10/2026,Saturday,05:00 PM - 07:30 PM
+Module 3: Backend Engineering with FastAPI,15,15.2,29,REST API Development with FastAPI,Implement CRUD endpoints with path and query parameters and explore Swagger documentation,HTTP methods GET POST PUT DELETE; request and response handling; path and query parameters; request body; filtering sorting and pagination basics; OpenAPI and Swagger UI; testing with Postman or Swagger,"* Implement GET POST PUT and DELETE endpoints in FastAPI
+* Accept path parameters query parameters and JSON request bodies
+* Apply basic filtering sorting and pagination on list endpoints
+* Explore and test APIs using Swagger UI at /docs
+* Test CRUD routes using Postman or Swagger",Industry Mentor ,01/11/2026,Sunday,11:00 AM - 01:30 PM
+Module 3: Backend Engineering with FastAPI,16,16.1,30,Request Validation with Pydantic,Define Pydantic schemas for request and response validation in FastAPI endpoints,Pydantic BaseModel; type hints; request and response models; field constraints; validation errors; nested models basics,"* Create Pydantic models with basic field types and type hints
+* Apply request body validation on FastAPI endpoints
+* Define response models for consistent API output
+* Apply field constraints such as min length max length and required fields
+* Read and handle validation error responses from FastAPI",Industry Mentor ,07/11/2026,Saturday,05:00 PM - 07:30 PM
+Module 3: Backend Engineering with FastAPI,16,16.2,31,Dependency Injection & Middleware,Build modular FastAPI applications using dependency injection and middleware,Dependency injection basics; creating and injecting dependencies; middleware fundamentals; request and response processing with middleware,"* Explain dependency injection and why it is useful in FastAPI
+* Create and inject reusable dependencies into route functions
+* Implement basic middleware for request or response processing
+* Apply a shared dependency across multiple API endpoints
+* Demonstrate how middleware runs before and after route handlers",Industry Mentor ,14/11/2026,Saturday,05:00 PM - 07:30 PM
+Module 3: Backend Engineering with FastAPI,17,17.1,32,File Handling & CORS,Configure CORS run background tasks and handle file upload and download in FastAPI,CORS configuration; background tasks; file upload endpoints; file download responses,"* Configure CORS middleware for frontend-backend communication
+* Add background tasks to FastAPI endpoints
+* Implement a basic file upload endpoint
+* Return a file download response from an API
+* Explain when to use background tasks versus regular request handling",Industry Mentor ,15/11/2026,Sunday,11:00 AM - 01:30 PM
+Module 3: Backend Engineering with FastAPI,17,17.2,33,SQL Fundamentals I,Understand relational databases design tables and write SELECT and INSERT queries,Relational databases; CREATE TABLE; primary keys and foreign keys; constraints; SELECT; INSERT,"* Explain why relational databases are used in backend applications
+* Design tables with primary keys foreign keys and basic constraints
+* Write SELECT queries to retrieve data from tables
+* Write INSERT statements to add new records
+* Create a simple schema for a sample application",Industry Mentor ,21/11/2026,Saturday,05:00 PM - 07:30 PM
+Module 3: Backend Engineering with FastAPI,18,18.1,34,SQL Fundamentals II,Write UPDATE and DELETE queries filter data with WHERE and explain one-to-one one-to-many and many-to-many relationships,UPDATE; DELETE; WHERE clause; one-to-one relationships; one-to-many relationships; many-to-many relationships; combining WHERE with CRUD operations,"* Write UPDATE statements to modify existing records
+* Write DELETE statements with WHERE conditions
+* Filter data using the WHERE clause in SELECT queries
+* Explain one-to-one one-to-many and many-to-many relationships between tables
+* Combine WHERE with UPDATE and DELETE for safe data changes",Industry Mentor ,22/11/2026,Sunday,11:00 AM - 01:30 PM
+Module 3: Backend Engineering with FastAPI,18,MC6,MC6,Masterclass: Database Transactions & ACID,Why database transactions and ACID properties are needed for reliable data systems,Demerit of multi-step updates without protection; need for transactions; commit and rollback concepts; ACID properties; why backends depend on transactions,"* Explain the demerit of updating related data in multiple steps without transaction protection
+* Explain why databases need transactions for reliable business operations
+* Explain commit and rollback as concepts for success and failure handling
+* Explain the ACID properties and why each property matters
+* Explain why backend APIs and ORMs rely on transactions for safe data changes",Professor ,26/11/2026,Thursday,8.00 PM - 9.30 PM
+Module 3: Backend Engineering with FastAPI,18,18.2,35,SQLAlchemy ORM,Define SQLAlchemy models and perform CRUD operations with one-to-one one-to-many and many-to-many ORM relationships,ORM introduction; SQLAlchemy setup; model definition; ORM CRUD queries; one-to-one relationships; one-to-many relationships; many-to-many relationships,"* Explain ORM benefits over raw SQL for API development
+* Define SQLAlchemy models mapped to database tables
+* Perform SELECT INSERT UPDATE and DELETE using SQLAlchemy
+* Set up one-to-one one-to-many and many-to-many relationships in ORM models
+* Connect a FastAPI route to a simple ORM query",Industry Mentor ,28/11/2026,Saturday,05:00 PM - 07:30 PM
+Module 3: Backend Engineering with FastAPI,19,19.1,36,Authentication with JWT,Implement authentication using password hashing and JWT tokens in FastAPI,Authentication vs authorization; password hashing with bcrypt; JWT create and verify; token expiration; login and protected access basics,"* Explain the difference between authentication and authorization
+* Hash and verify passwords using bcrypt
+* Create and verify JWT tokens in a FastAPI application
+* Implement a basic login endpoint that returns a JWT
+* Apply token expiration for safer API access",Industry Mentor ,29/11/2026,Sunday,11:00 AM - 01:30 PM
+Module 3: Backend Engineering with FastAPI,19,19.2,37,Authorization & API Security,Protect API routes with dependencies apply RBAC basics and follow secure API defaults,Protecting routes with dependencies; RBAC basics with roles; role checks on endpoints; handling secrets safely; security headers and common API mistakes,"* Protect FastAPI routes using authentication dependencies
+* Explain RBAC basics and how roles control access to endpoints
+* Implement a simple role check on selected API routes
+* Store and use secrets safely with environment variables
+* Apply secure defaults such as input validation and avoiding common API mistakes",Industry Mentor ,05/12/2026,Saturday,05:00 PM - 07:30 PM
+Module 3: Backend Engineering with FastAPI,20,20.1,38,End-to-End Backend Application,Build a mini end-to-end backend application connecting FastAPI ORM authentication and a database,Architecture from API to database; full CRUD with persistent storage; SQLAlchemy session wiring; applying auth on protected routes; instructor-led walkthrough of a mini backend app,"* Explain the full backend flow from API route to database
+* Build CRUD endpoints backed by persistent storage using ORM
+* Wire SQLAlchemy models and sessions with FastAPI route handlers
+* Protect selected endpoints using authentication from prior sessions
+* Follow an instructor-led demo of a complete mini backend application",Industry Mentor ,06/12/2026,Sunday,11:00 AM - 01:30 PM
+,,,,Module 3 Evaluation Attempt 1,,,,,,,
+,,,,Module 3 Evaluation Attempt 2,,,,,,,
+,,,,,,,,,,,
+Module 4: LLM Foundations + OpenAI APIs (Build Reliable AI Features),20,20.2,39,LLM Foundations & Prompt Engineering,Understand LLM basics at a builder level and design stable prompts using zero-shot few-shot role prompting and structured outputs,What an LLM is; tokens and tokenization; context windows; knowledge cutoff; output variability; prompt structure; zero-shot and few-shot prompting; role prompting; structured output prompting; stable prompt design,"* Explain what a Large Language Model is and how tokens context windows and knowledge cutoff affect outputs
+* Explain why LLM outputs can vary for the same prompt
+* Write zero-shot and few-shot prompts for common product tasks
+* Apply role prompting and structured output prompting for consistent results
+* Refine prompts to reduce unstable or inconsistent responses",Professor ,12/12/2026,Saturday,05:00 PM - 07:30 PM
+Module 4: LLM Foundations + OpenAI APIs (Build Reliable AI Features),21,21.1,40,Controllability & Tradeoffs,Control LLM behaviour using temperature max tokens stop sequences and penalties and understand the tradeoffs,Temperature and creativity vs consistency; max tokens and response length; stop sequences; frequency and presence penalties; practical tradeoffs for product use cases; hands-on parameter tuning,"* Explain when temperature matters and how it changes model output
+* Apply max tokens to control response length and cost
+* Use stop sequences to end generation at the right point
+* Explain how frequency and presence penalties affect repeated or new content
+* Tune generation parameters for a given product use case and compare tradeoffs",Professor ,13/12/2026,Sunday,11:00 AM - 01:30 PM
+Module 4: LLM Foundations + OpenAI APIs (Build Reliable AI Features),21,21.2,41,OpenAI API Integration,Call OpenAI APIs from Python handle response structure errors retries and rate limits,OpenAI API setup and authentication; Chat Completions API; system user and assistant messages; response structure; error handling; retries; rate limits; applying temperature max_tokens and stop sequences in API calls,"* Set up OpenAI API access and authentication in a Python project
+* Call the Chat Completions API with system user and assistant messages
+* Read and use the API response structure in application code
+* Handle API errors retries and rate limits in a professional way
+* Pass temperature max_tokens and stop sequences from the prior session into OpenAI API calls",Professor ,19/12/2026,Saturday,05:00 PM - 07:30 PM
+Module 4: LLM Foundations + OpenAI APIs (Build Reliable AI Features),22,22.1,42,AI Endpoints & LLM Security,Expose AI features from FastAPI with safe contracts and apply LLM security practices,Exposing AI endpoints in FastAPI; safe request response contracts; prompt injection; untrusted inputs; safe retrieval patterns; keeping LLM systems robust under adversarial inputs,"* Expose an AI feature as a FastAPI endpoint with a clear request response contract
+* Validate inputs before sending user content to an LLM
+* Explain prompt injection and risks from untrusted inputs
+* Apply safe patterns when passing user data into prompts
+* Build a FastAPI AI endpoint that handles errors without leaking sensitive details",Professor ,20/12/2026,Sunday,11:00 AM - 01:30 PM
+,,,,Module 4 Evaluation Attempt 1,,,,,,,
+,,,,Module 4 Evaluation Attempt 2,,,,,,,
+,,,,,,,,,,,
+"Module 5: AI-First Software Development (Coding Agents, Workflow, and Context Engineering)",22,22.2,43,AI Pair Programming & GitHub Copilot,Use AI as a pair programmer with GitHub Copilot for scaffolding refactoring debugging and tests while rejecting unsafe suggestions,AI as a senior pair programmer; scaffolding and refactoring with AI; debugging and explaining code; GitHub Copilot autocomplete and suggestions; docstrings and tests with Copilot; when to accept or reject suggestions; enforcing code standards,"* Use AI as a pair programmer for scaffolding refactoring and explaining code
+* Generate code suggestions docstrings and tests using GitHub Copilot
+* Apply Copilot to debug and improve an existing piece of code
+* Reject unsafe or incorrect Copilot suggestions to avoid silent bugs
+* Enforce basic code standards while working with AI-generated code",Professor ,26/12/2026,Saturday,05:00 PM - 07:30 PM
+"Module 5: AI-First Software Development (Coding Agents, Workflow, and Context Engineering)",23,23.1,44,Context Engineering,Design effective context for AI coding tools to keep the model grounded in the codebase and reduce hallucinations,What to include in context and what to avoid; grounding the model in the codebase; constraints and guardrails; reducing hallucinations; practical context packing for multi-file tasks,"* Explain what context engineering means in AI-assisted coding
+* Select the right files and constraints to include in AI context
+* Identify context that should be avoided to reduce noise and errors
+* Keep AI outputs grounded in the actual codebase for a given task
+* Apply context engineering to reduce hallucinations in a coding exercise",Professor ,27/12/2026,Sunday,11:00 AM - 01:30 PM
+"Module 5: AI-First Software Development (Coding Agents, Workflow, and Context Engineering)",23,23.2,45,Specs & UI Design with AI,Use AI to draft product specs and UI flows then refine them with human judgment into implementable requirements,Drafting PRDs with AI; user stories and acceptance criteria; API contracts and edge cases; UI flows and wireframes with AI; translating design into user journeys and API requirements; human review and refinement,"* Draft a PRD or feature brief using AI and refine it with human judgment
+* Write user stories and acceptance criteria with AI support
+* Generate API contracts and edge cases for a sample feature
+* Draft UI flows or wireframes with AI for a simple user journey
+* Convert AI-generated design notes into clear implementable requirements",Professor ,02/01/2027,Saturday,05:00 PM - 07:30 PM
+"Module 5: AI-First Software Development (Coding Agents, Workflow, and Context Engineering)",24,24.1,46,AI Coding Agents & Personal Workflow,Run a disciplined AI coding agent workflow with plans small diffs and PR review and build a personal AI-first coding framework,AI coding agent workflow; agent proposes a plan; clarifying questions; small diffs; review through pull requests; staying in control of the agent; personal AI-first coding framework across design implementation and debugging,"* Run an AI coding agent workflow where the agent proposes a plan before coding
+* Guide the agent with clarifying questions and keep changes as small diffs
+* Review AI-generated changes through a pull request style checklist
+* Stay in control of the agent instead of accepting large unreviewed edits
+* Build a personal repeatable AI-first workflow for design implementation and debugging",Professor ,03/01/2027,Sunday,11:00 AM - 01:30 PM
+,,,,Module 5 Evaluation Attempt 1,,,,,,,
+,,,,Module 5 Evaluation Attempt 2,,,,,,,
+,,,,,,,,,,,
+"Module 6: Shipping & Running AI Apps (Multimodal, LLMOps, Quality, Patterns)",24,24.2,47,Deploying FastAPI Applications,Package and deploy FastAPI services with environment management secrets handling and stable production configs,Packaging FastAPI services; environment management; secrets handling; production configs; basic containerization with Docker; stable deployment artifacts,"* Package a FastAPI application for deployment with a clear project layout
+* Manage environment variables and secrets for local and production configs
+* Create a basic Dockerfile for a FastAPI service
+* Deploy or run a containerised FastAPI app with stable configuration
+* Apply production config practices that avoid hardcoding secrets",Industry Mentor ,09/01/2027,Saturday,05:00 PM - 07:30 PM
+"Module 6: Shipping & Running AI Apps (Multimodal, LLMOps, Quality, Patterns)",25,25.1,48,LLMOps Foundations,Apply LLMOps practices including prompt versioning evaluation sets regression testing caching and cost latency budgeting,Prompt versioning; evaluation sets; regression testing for prompts; caching strategies; latency and cost budgeting; monitoring basic model usage,"* Version prompts and track changes across iterations
+* Build a small evaluation set to test prompt quality
+* Run basic regression checks when prompts change
+* Apply caching strategies to reduce latency and repeated API cost
+* Set simple latency and cost budgets for an AI feature",Industry Mentor ,10/01/2027,Sunday,11:00 AM - 01:30 PM
+"Module 6: Shipping & Running AI Apps (Multimodal, LLMOps, Quality, Patterns)",25,25.2,49,AI Testing & Code Review,Use AI to generate and validate tests and to review PRs while keeping human ownership of quality,AI-generated test ideas and test cases; running and debugging tests; AI-assisted PR review; identifying risks and refactor suggestions; improving readability; human ownership of final decisions,"* Use AI to generate test ideas and test cases for an existing feature
+* Run and debug AI-generated tests like an engineer before accepting them
+* Use AI tools to review a pull request and identify risks
+* Apply useful refactor and readability suggestions from AI review
+* Keep human ownership by accepting or rejecting AI quality suggestions with judgment",Industry Mentor ,16/01/2027,Saturday,05:00 PM - 07:30 PM
+"Module 6: Shipping & Running AI Apps (Multimodal, LLMOps, Quality, Patterns)",26,26.1,50,Multimodal AI Features,Build at least one product feature that uses non-text input such as images and integrate it safely into a workflow,Multimodal AI overview; image or non-text input; OpenAI vision or equivalent multimodal API; safe integration into a product workflow; input validation and error handling for multimodal requests,"* Explain how multimodal AI differs from text-only LLM features
+* Call a multimodal API with non-text input such as an image
+* Build one feature that accepts image or non-text input in an application flow
+* Validate multimodal inputs and handle API errors safely
+* Integrate the multimodal feature into a simple product workflow end to end",Industry Mentor ,17/01/2027,Sunday,11:00 AM - 01:30 PM
+,,,,Module 6 Evaluation Attempt 1,,,,,,,
+,,,,Module 6 Evaluation Attempt 2,,,,,,,
+,,,,,,,,,,,
+Module 7: Capstone Project (Portfolio-Ready AI Product),26,26.2,51,Capstone Planning & Spec,Define capstone scope PRD architecture tech stack database schema API contracts and security approach before building,Project scope and core features; PRD and spec; high-level and low-level design; tech stack selection; database schema; API endpoint planning; request response contracts; authentication and security considerations; architecture notes,"* Define project scope and core features for the capstone product
+* Draft a PRD or product spec with user stories and acceptance criteria
+* Design high-level architecture and select the technology stack
+* Design the database schema and document API endpoint contracts
+* Define authentication and security approach before implementation",Other,23/01/2027,Saturday,05:00 PM - 07:30 PM
+Module 7: Capstone Project (Portfolio-Ready AI Product),27,27.1,52,Capstone Backend & AI Build,Build the FastAPI backend with database-backed APIs and integrate at least one meaningful AI feature,FastAPI backend implementation; ORM and persistent storage; core business logic; AI feature integration using OpenAI or equivalent; prompt or multimodal feature as applicable; error handling; mentor checkpoint review,"* Build FastAPI endpoints for the capstone backend
+* Connect APIs to the database using ORM models
+* Implement core server-side business logic for the product
+* Integrate at least one meaningful AI feature into the backend
+* Complete the backend and AI milestone with mentor review",Other,24/01/2027,Sunday,11:00 AM - 01:30 PM
+Module 7: Capstone Project (Portfolio-Ready AI Product),27,27.2,53,Capstone Frontend & Integration,Build a minimal frontend and integrate it with backend and AI features for complete end-to-end user flows,Minimal frontend pages and components; connecting UI to FastAPI; end-to-end user workflows; AI feature consumption from the frontend; integration debugging; mentor checkpoint review,"* Build minimal frontend pages and components for the capstone
+* Connect the frontend to backend APIs
+* Complete end-to-end user workflows across frontend and backend
+* Consume the AI feature from the frontend in a real user flow
+* Resolve integration issues across the full stack with mentor support",Other,30/01/2027,Saturday,05:00 PM - 07:30 PM
+Module 7: Capstone Project (Portfolio-Ready AI Product),28,28.1,54,Capstone Deployment & Quality Gate,Finalise documentation evaluation notes and deployment and deliver a demo that meets the quality gate,API documentation; README and setup guide; architecture notes; evaluation notes for AI behaviour; clean repository; working deployment; final demo; quality gate checklist; submission readiness,"* Write API documentation README and setup steps another engineer can follow
+* Add architecture notes and evaluation notes for AI behaviour
+* Deploy the capstone application with a working production-like setup
+* Prepare and deliver a short product demo
+* Pass the quality gate with a clean repository working deployment and clear documentation",Other,31/01/2027,Sunday,11:00 AM - 01:30 PM
+,,,,Capstone Support Session 1 (TBD),,,,,03/02/2027,,
+,,,,Capstone Support Session 2 (TBD),,,,,06/02/2027,,
+,,,,Capstone Support Session 3 (TBD),,,,,07/02/2027,,
+,,,,,,,,,,,
+,,,,End of program - offline exam,,,,,,,
