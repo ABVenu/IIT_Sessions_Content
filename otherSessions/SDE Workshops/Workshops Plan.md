@@ -1,7 +1,7 @@
-# Software Development – Workshop Series (15 Hands-On Sessions)
+# Software Development – Workshop Series (17 Hands-On Sessions)
 
 > **Design rule:** Each session is **2 hours** — first **30 minutes** theory/concept framing, remaining **1.5 hours** pure implementation.
-> **Difficulty mix:** 10 Beginner, 3 Intermediate, 2 Advanced.
+> **Difficulty mix:** 10 Beginner, 4 Intermediate, 3 Advanced.
 
 ### Topic Distribution
 
@@ -14,7 +14,7 @@
 | WebSockets & Real-Time | 1 | 12 |
 | Caching & Batching | 1 | 13 |
 | NoSQL Database (MongoDB) | 1 | 14 |
-| DSA | 1 | 15 |
+| DSA | 3 | 15, 16, 17 |
 
 ---
 
@@ -794,14 +794,97 @@ Build a working arithmetic expression evaluator using two completely different a
 
 ---
 
+## Session 16: Spotify’s Skip Logic — Find the Perfect Window 🎧
+
+**Level:** Intermediate
+
+**Prerequisite:** Python loops, lists/arrays, `if/else`, basic function writing. Session 15 helps but is not required — this session starts from pattern intuition, not parsing theory.
+
+**Learning Objective / Outcome:** Learners will solve classic array/string problems using **two pointers** and **sliding window** techniques — the same ideas behind “no-repeat” playlist stretches and “best stretch of k songs” — writing O(n) solutions where a nested-loop instinct would produce O(n²), and recognising which pattern fits from the problem statement alone.
+
+### Detailed Subtopics
+
+**First 30 minutes — Theory & Concept**
+- Why brute-force nested loops feel natural — and when they waste work (a playlist scan that re-checks every pair of songs)
+- Two-pointer intuition: left and right meet in the middle, or chase from the same side
+- Sliding window intuition: a contiguous segment that grows and shrinks as you scan — like a “now playing” window over a track list
+- Sorted vs unsorted arrays: when sorting first unlocks two pointers
+- Fixed-size window vs variable-size window (with a condition / constraint)
+- Time and space trade-offs in plain language: O(n) scan vs O(n²) pairs
+- How to pick a pattern from keywords (“pair sum”, “longest substring”, “maximum of every k”)
+
+**Remaining 1.5 hours — Implementation**
+- Warm-up: reverse an array / string in-place with two pointers
+- Two Sum II on a sorted array (two pointers meeting from ends)
+- Remove duplicates from a sorted array in-place (slow/fast pointers)
+- Maximum sum of any subarray of size `k` (fixed sliding window — “best k-song stretch”)
+- Longest substring without repeating characters (variable window + a set/map — “longest no-repeat streak”)
+- Container With Most Water or Valid Palindrome (choose one as a pair exercise)
+- Trace each solution on paper for a small input before coding
+- Compare your O(n) version against a nested-loop baseline on the same input
+- (Stretch) Minimum window substring that covers all characters of a target string
+- (Stretch) write 8 pytest cases: empty input, single element, all duplicates, window larger than array
+- **AI-assisted block:** ask AI to classify 6 new problem statements as “two pointers”, “sliding window”, or “neither” — then verify and debate mismatches
+
+### Tools / Tech Stack / AI Tools
+- Python 3.11+, Pytest
+- VS Code / Cursor
+- Cursor AI / ChatGPT for pattern classification + edge-case generation
+
+### By the End of This Workshop, Students Should Be Able To
+Look at an array or string problem and decide whether two pointers or a sliding window applies — then implement an O(n) solution with confidence. Students will stop defaulting to nested loops for contiguous or pair-based problems, and will be able to explain *why* their window grows, shrinks, or why their left/right pointers move — the same logic that powers “perfect stretch” scans in apps like Spotify. This session turns “I solved it somehow” into “I recognised the pattern and chose the right tool.”
+
+---
+
+## Session 17: IRCTC Berth Filler — Fit Passengers Without Conflicts 🚆
+
+**Level:** Advanced
+
+**Prerequisite:** Comfortable with Python functions and Session 15’s recursion basics (base case, recursive case, call stack). Session 16 is helpful for warm-up fluency but not required. No prior backtracking experience needed.
+
+**Learning Objective / Outcome:** Learners will solve multi-choice / decision-tree problems with **recursion and backtracking** — seat/berth assignment under constraints, permutations, and combinations — and see that backtracking is just “try a berth → check conflicts → undo” on a search tree (the same mental model as filling an IRCTC coach without two passengers fighting for the same seat or rule).
+
+### Detailed Subtopics
+
+**First 30 minutes — Theory & Concept**
+- Recursion recap: base case, recursive case, progress toward the base (from Session 15)
+- Decision trees: every recursive call is a branch; backtracking prunes dead ends (a berth that already breaks a rule)
+- The backtracking template: choose → explore → un-choose (assign berth → recurse → free berth)
+- State to track: current assignment, remaining passengers/berths, constraints that kill a branch early
+- When recursion depth / stack overflow matters — and how to think about it
+- Time complexity intuition: branching factor × depth (why 2ⁿ and n! show up when every passenger has many berths)
+- Recursion vs iteration for search problems: when the call stack *is* the algorithm
+
+**Remaining 1.5 hours — Implementation**
+- Warm-up: factorial / Fibonacci with clear base cases (confidence builder)
+- Generate all subsets (power set) of a list via include/exclude recursion
+- Generate all permutations of a string or list (swap or used-array style — “all ways to order passengers”)
+- Combination Sum / target sum with candidates (reuse allowed or not — clarify the rule)
+- **Hero build:** IRCTC-style berth filler — assign passengers to berths with conflict rules (no double-booking; optional: lower/upper preference, family-together, gender/age soft rules simplified for class)
+- Add pruning: skip branches that already violate a constraint (same idea as N-Queens “attack” checks)
+- Print or collect valid coach layouts carefully — avoid mutating the shared assignment list incorrectly
+- (Stretch) Word Search on a 2D grid (mark visited → recurse → unmark) *or* add one more berth constraint
+- (Stretch) write 8 pytest cases: empty coach, single passenger, no valid seating, duplicate preferences
+- **AI-assisted block:** ask AI to rewrite your berth filler iteratively with an explicit stack — then compare readability and bug surface
+
+### Tools / Tech Stack / AI Tools
+- Python 3.11+, Pytest
+- VS Code / Cursor
+- Cursor AI / ChatGPT for iterative rewrite + complexity discussion
+
+### By the End of This Workshop, Students Should Be Able To
+Break a “fit everyone without conflicts” problem into a backtracking template — choose, explore, undo — and implement an IRCTC-style berth filler without losing track of shared state. Students will explain why pruning matters, estimate when a search explodes (2ⁿ / n!), and connect recursive search back to the explicit-stack idea from Session 15. This is the session that turns recursion from “a scary interview topic” into a practical problem-solving habit they can explain with a train coach.
+
+---
+
 ## Difficulty Distribution
 
-Matches the guideline split of **10 / 3 / 2**:
+Matches the guideline split of **10 / 4 / 3**:
 
 | Level | Count | Sessions |
 |---|---|---|
 | Beginner | 10 | 1, 2, 3, 4, 6, 7, 10, 11, 12, 14 |
-| Intermediate | 3 | 5, 8, 15 |
-| Advanced | 2 | 9, 13 |
+| Intermediate | 4 | 5, 8, 15, 16 |
+| Advanced | 3 | 9, 13, 17 |
 
 Every session is independently executable, follows the **30-min theory + 1.5-hr implementation** structure, integrates AI assistants (Cursor / ChatGPT) as a practical pair-programmer, and closes with a clear student-facing outcome statement.
