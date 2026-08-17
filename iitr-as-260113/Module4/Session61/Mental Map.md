@@ -14,7 +14,7 @@ flowchart TB
     end
 
     subgraph Future["What This Enables Next"]
-        U1["<b>Upcoming Module</b><br/>Program Close<br/><i>Demo + Exam</i><br/>Wire agents, tools, memory, and the first eval loop"]
+        U1["<b>Upcoming Module</b><br/>Program Close<br/><i>Demo + Exam</i><br/>Wire agents, tools, memory, n8n, and the first eval loop"]
     end
 
     M4 ==>|&nbsp;Contract&nbsp;| CM

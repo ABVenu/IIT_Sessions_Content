@@ -6,15 +6,15 @@ flowchart TB
         CM["<b>Current Module Until Previous Session</b><br/>Capstone Project<br/><i>Scaffolded Repo</i><br/>Doors, SQLite, samples, pipeline stub"]
     end
 
-    CS(["<b>Current Session</b><br/>Prototyping a Multi-Agent System<br/><i>Tools + Memory + Eval</i><br/>Run CLEAN, HIGH, and BADGST live on PayDesk"])
+    CS(["<b>Current Session</b><br/>Prototyping a Multi-Agent System<br/><i>Tools + RAG + n8n + Eval</i><br/>Run CLEAN, HIGH, and BADGST, then attach the courier"])
 
     subgraph Value["Why This Matters"]
-        CV["<b>Course Value</b><br/>Assembles LangChain, tools, RAG, and HITL into one demoable product"]
+        CV["<b>Course Value</b><br/>Assembles LangChain, SQL, RAG, HITL, and n8n into one demoable product"]
         RV["<b>Real-Life Value</b><br/>A CFO can watch a clean bill pass and a dirty bill stop"]
     end
 
     subgraph Future["What This Enables Next"]
-        U1["<b>Upcoming Module</b><br/>Program Close<br/><i>Demo + Exam</i><br/>Support week: stamp UI, n8n courier, remaining eval cases"]
+        U1["<b>Upcoming Module</b><br/>Program Close<br/><i>Demo + Exam</i><br/>Support week: remaining cases and a clearer screen — still no bank"]
     end
 
     M4 ==>|&nbsp;Scaffold&nbsp;| CM
