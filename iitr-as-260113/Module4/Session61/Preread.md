@@ -18,7 +18,7 @@ flowchart TB
     end
 
     subgraph Future["What This Enables Next"]
-        U1["<b>Upcoming Module</b><br/>Program Close<br/><i>Demo + Exam</i><br/>Wire agents, tools, memory, and the first eval loop"]
+        U1["<b>Upcoming Module</b><br/>Program Close<br/><i>Demo + Exam</i><br/>Wire agents, tools, memory, n8n, and the first eval loop"]
     end
 
     M4 ==>|&nbsp;Contract&nbsp;| CM
@@ -52,7 +52,7 @@ This session answers:
 
 > **What is the smallest office we can open today — folders, lock combination, register book, and a reception window — so a vendor bill becomes a ticket that still exists after we restart the laptop?**
 
-That skeleton is **project setup and scaffolding**. Success is deliberately boring: `/health` says ok, ingest writes a row, fetch reads it back. No model required.
+That skeleton is **project setup and scaffolding**. Success is deliberately boring: health says ok, ingest writes a row, fetch reads it back. No model required.
 
 ---
 
@@ -62,9 +62,11 @@ That skeleton is **project setup and scaffolding**. Success is deliberately bori
 
 You would have a demo you cannot audit. Restart the kernel and the nine-day problem is back, plus a new problem: nobody can prove a human stamped ₹90,000. The CFO cannot fund a disappearing desk.
 
-You have already built **FastAPI** apps, **Pydantic** models, and **SQLite-style** access. Scaffolding is those skills aimed at PayDesk doors: health, ingest, get ticket. Extract, policy, and routing stay as labelled empty rooms so you do not secretly invent a payout script while making folders.
+You have already built **FastAPI** apps, **Pydantic** packets, and **SQLite-style** access. Scaffolding is those skills aimed at PayDesk doors: health, ingest, get ticket. Extract, policy, and routing stay as labelled empty rooms so you do not secretly invent a payout script while making folders.
 
-Secrets belong in a local `.env` that git ignores. The committed file is a **blank form**. Copying a live key into GitHub is the digital version of photocopying a PAN card onto a notice board.
+Secrets belong in a local environment file that git ignores. The committed file is a **blank form**. Copying a live key into GitHub is the digital version of photocopying a PAN card onto a notice board.
+
+Connecting **SQL** today is not “database class.” It is the strong-room waking up. Tickets, events, vendors, and purchase orders must live in tables before any specialist talks. If ingest only prints a reply in memory, a restart wipes the audit.
 
 ---
 
@@ -72,15 +74,17 @@ Secrets belong in a local `.env` that git ignores. The committed file is a **bla
 
 A useful picture is moving into a small office:
 
-- **The keys** — virtual environment so course libraries do not fight with other projects; `.gitignore` so the desk database and secrets never travel to GitHub.
-- **The nameplates** — `app/` for code, `data/` for handbook and sample bills, `eval/` for exam papers. Empty `pipeline.py` is a locked specialist office, not a junk drawer.
+- **The keys** — a virtual environment so course libraries do not fight with other projects; a git ignore list so the desk database and secrets never travel to GitHub.
+- **The nameplates** — an app room for code, a data room for the handbook and sample bills, an eval room for exam papers. An empty pipeline file is a locked specialist office, not a junk drawer.
 - **The register** — four tables: tickets, events, vendors, purchase orders. Vendors **Kaveri** and **Nilgiri** with dummy GST numbers. Purchase orders **PO-7781** and **PO-8802**. Unknown GSTIN `99INVALID` must *not* be in the book — otherwise the tax gate can never fire.
-- **The reception window** — FastAPI `/docs`. You post a labelled slip (`Vendor: …`). You get a ticket id with status `ingested`. You fetch it after restart. That is the **system of record** waking up.
-- **The handbook on the shelf** — a short `policy.md` that still sits as a file. Meaning search comes next. Putting it in the repo today means retrieval has something honest to index.
+- **The reception window** — FastAPI docs. You post a labelled slip (`Vendor: …`). You get a ticket id with status **ingested**. You fetch it after restart. That is the **system of record** waking up.
+- **The handbook on the shelf** — a short policy file that still sits as a document. Meaning search comes next. Putting it in the repo today means retrieval has something honest to index.
 
 Labelled sample invoices are not a cheat. They are like a clerk’s typing for the lab so exams stay stable. Production extract will read messier prose. Today we do not block opening day on a model key.
 
-If a teammate adds `pay_vendor.py` “just to complete the folders,” they have built a basement the architecture banned. Delete it. The cashier still sits in finance, not in this repo.
+If a teammate adds a pay-vendor file “just to complete the folders,” they have built a basement the architecture banned. Delete it. The cashier still sits in finance, not in this repo.
+
+A second ingest of the same ticket id should update the row, not crash. That is how a courier retry and a re-run of an exam stay honest.
 
 ---
 
@@ -88,7 +92,7 @@ If a teammate adds `pay_vendor.py` “just to complete the folders,” they have
 
 - **Why** the first runnable PayDesk must **write a ticket** before it talks like an agent
 - **How** a **virtual environment**, **secret file**, and **gitignore** keep keys and desk data off GitHub
-- **What** belongs in **SQLite** on opening day versus what waits in empty pipeline files
+- **What** belongs in **SQL** on opening day versus what waits in empty pipeline files
 - **How** you will **prove** the office is open with health, ingest, and a restart test
 
 ---
@@ -96,12 +100,12 @@ If a teammate adds `pay_vendor.py` “just to complete the folders,” they have
 ## After This Session, You Will Be Able To
 
 - **Create** the PayDesk repo layout that matches the architecture folder map
-- **Load** dependencies without committing `.env` or `*.db`
+- **Load** dependencies without committing secrets or the desk database
 - **Store** an ingested bill as a row with an audit event
 - **Seed** the vendor and PO registers the policy tools will later read
-- **Show** `/health` and `/docs` as the reception desk
+- **Show** health and docs as the reception desk
 
-Upcoming work **hires the clerks**: GST and PO tools, policy retrieval, sequential LangChain, a human stamp door, and three live exam cases. They should walk into rooms that already exist.
+Upcoming work **hires the clerks**: GST and PO tools, policy retrieval, sequential LangChain, a human stamp door, three live exam cases, then a courier workflow. They should walk into rooms that already exist.
 
 ---
 
@@ -109,10 +113,10 @@ Upcoming work **hires the clerks**: GST and PO tools, policy retrieval, sequenti
 
 Bring your curiosity to these live challenges:
 
-1. **The Disappearing Ticket** — Ingest works in a notebook variable but GET after restart is empty. Which floor did you skip, and which command proves the register is real?
+1. **The Disappearing Ticket** — Ingest works in a notebook variable but fetch after restart is empty. Which floor did you skip, and what proves the register is real?
 
 2. **The Friendly Seed** — A teammate inserts `99INVALID` into the vendor table “so demos never fail.” Which exam case becomes impossible, and why is that a safety bug rather than a convenience?
 
-3. **The Extra Dependency** — Someone adds a bank SDK to `requirements.txt` on scaffolding day. How do you refuse it using the architecture decision record, in four sentences a CFO would accept?
+3. **The Extra Dependency** — Someone adds a bank library on scaffolding day. How do you refuse it using the architecture decision record, in four sentences a CFO would accept?
 
-Walk in tomorrow ready to type. We will open a quiet office: keys, rooms, register, reception lamp. The talking specialists arrive in the next session — into a building that already keeps files.
+Walk in ready to type. We will open a quiet office: keys, rooms, register, reception lamp. The talking specialists arrive in the next session — into a building that already keeps files.

@@ -52,13 +52,17 @@ Picture Accounts Payable at **Nimbus Retail** the week before a festival sale. F
 
 Vendors call store managers. Store managers call AP. The **CFO** wants the nine-day wait to die. The chartered accountant wants zero surprise payments. Both are right. The pile still grows.
 
-In the **previous** session you drew the **desk**: specialist roles, labelled slips, human gates, and a scoreboard that splits speed from safety. That drawing is a blueprint. It is not yet a product you can demo to a CFO.
+This is not a “clever chatbot” problem. It is a **desk** problem: who reads the bill, who checks the rules, who stops a risky case, and how leadership knows the desk is actually better.
+
+In the **previous** session you drew that desk as a six-box canvas — roles, labelled slips, tools, human gates, risks, and metrics. That drawing is a blueprint. It is not yet a product you can demo.
 
 This session answers the next question:
 
 > **If we are going to build one real invoice desk in the capstone — not a chatbot that talks about invoices — what must we freeze about the problem, the tools, the memory, and the exam papers before anyone opens a repository?**
 
 That freeze is **full-cycle agent design**. The product name is **Nimbus PayDesk**.
+
+The live capstone has four meetings in a row: freeze the job, draw the building, open an empty office, then hire the clerks and sit the exam. Today is only the first. Skipping the freeze is how teams “start coding” and finish with three different products.
 
 ---
 
@@ -76,24 +80,26 @@ The way through is a full cycle written down: **observe** the bill, **think** wi
 
 ## Think of It Like a Passport Seva File, Not a Printer
 
-A useful picture is still a **passport seva** office — but today we zoom into the **file**, not only the windows.
+A useful picture is a **passport seva** office — but today we zoom into the **file**, not only the windows.
 
 - **The problem on the token** — “This person needs a booklet without a fake police check.” Not “we will install a new printer brand.”
 - **What the file may contain** — Photograph, form, old passport number. Not the applicant’s entire life story stuffed into one WhatsApp chat.
 - **Which cupboard holds what** — Today’s token is on the counter. The rule book is on the shelf. Yesterday’s issued list is in the steel almirah. Mixing all three into one drawer is how stations — and GST numbers — get missed.
 - **The exam before opening day** — A clean file must pass. A high-risk file must stop. A “please print the booklet now” request must be refused.
 
-**Nimbus PayDesk** is that office for vendor bills. **Intake** creates a ticket. **Extractor** fills a structured slip. **Policy** compares GST, PO, and handbook. **Router** stops a named human when amount, GST, confidence, or a duplicate looks wrong. Nobody at this desk sends **NEFT**.
+**Nimbus PayDesk** is that office for vendor bills. **Intake** creates a ticket. **Extractor** fills a structured slip. **Policy** compares GST, PO, and handbook. **Router** stops a named human when amount, GST, confidence, or a duplicate looks wrong. A **reporter** counts for the CFO. Nobody at this desk sends **NEFT**. The cashier still sits in finance.
 
 Memory is the part students skip. Think of three drawers:
 
 | Drawer | Everyday twin | PayDesk twin |
 |---|---|---|
 | This bill | Whiteboard for the current file | Short-term **ticket packet** |
-| Rule book | Binder of “always / never” | Long-term **policy** in a meaning search |
+| Rule book | Binder of “always / never” | Long-term **policy** found by meaning |
 | History register | “Did we already issue this?” | **Ticket log** for duplicates and audit |
 
 A **tool** is a key to a cupboard, not a personality. Policy may *read* the vendor register. It may not *write* the bank. If the GST lookup is down, the desk **fails closed** — send to a human — rather than assume the number is fine.
+
+Success must sit on two dials. **Speed** is a clean small bill reaching “ready to pay” the same day. **Safety** is a missed high-value or GST gate staying at **zero**. Mixing those numbers is how teams hide exceptions to look good.
 
 ---
 
@@ -114,7 +120,7 @@ A **tool** is a key to a cupboard, not a personality. Policy may *read* the vend
 - **Place** each fact in short-term, semantic, or episodic memory
 - **Write** exam cases the prototype must pass — including at least one case that must **stop**
 
-Upcoming work is **architecture**: which floors the building has (API, agents, databases) once this contract is signed. Do not skip the signature.
+Upcoming work is **architecture**: which floors the building has once this contract is signed. Do not skip the signature.
 
 ---
 
@@ -122,7 +128,7 @@ Upcoming work is **architecture**: which floors the building has (API, agents, d
 
 Bring your curiosity to these live challenges:
 
-1. **The CrewAI Screenshot** — A teammate arrives with a framework diagram and no problem sentence. What four things must you demand before that screenshot is allowed to become a folder?
+1. **The Framework Screenshot** — A teammate arrives with a tool diagram and no problem sentence. What must you demand before that screenshot is allowed to become a folder?
 
 2. **The Three Drawers** — Someone asks, “Did we already pay Kaveri’s ₹18,600 bill last Tuesday?” Which memory drawer answers that, and why is the policy binder the wrong cupboard?
 

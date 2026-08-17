@@ -46,7 +46,7 @@ flowchart TB
 
 ## A Contract Without a Building
 
-You already know **Nimbus PayDesk** as a job: cut a nine-day vendor wait without paying a wrong **GSTIN** or skipping a high-value stamp. You froze who observes the bill, who thinks, who acts, which cupboard holds policy, and which exam papers the desk must sit.
+You already know **Nimbus PayDesk** as a job: cut a nine-day vendor wait without paying a wrong **GSTIN** or skipping a high-value stamp. In the **previous** session you froze who observes the bill, who thinks, who acts, which cupboard holds policy, and which exam papers the desk must sit.
 
 That is a **contract**. A contract does not tell a carpenter where the strong-room sits.
 
@@ -68,22 +68,26 @@ You have already used **FastAPI**, **SQLite-style registers**, **Chroma**, **Lan
 
 Think of a **kirana** that runs two billing apps for the same shelf. Reconciliation becomes the full-time job. PayDesk cannot afford two brains for GST.
 
+A noisy **group debate** among agents is a poor runtime when rupees are on the counter. Roles can still look like a crew. The walk through the office should be **in order**: extract, then policy, then route — like token windows, not a shouting match.
+
 ---
 
 ## Think of It Like a Four-Storey Seva Bhavan
 
 A useful picture is a small government **seva bhavan** — not a mall with twenty atriums.
 
-- **Floor 1 — reception** — People and couriers knock on labelled windows. For PayDesk those windows are HTTP doors: health, ingest a bill, read a ticket, stamp, report. A courier automation (**n8n**) may knock on ingest. It does not sit inside and rewrite rules.
-- **Floor 2 — specialist offices** — Extract, policy, and routing happen **in order**, like token windows. A noisy group debate is the wrong pattern when rupees are at stake.
-- **Floor 3 — the workshop** — Stamps and lookup phones: GST check, purchase-order book, policy binder search, audit log. Tools read or write. They do not “have opinions” that override a rupee gate.
-- **Floor 4 — the strong-room** — Registers that survive locking up for the night: tickets, vendors, POs, events in a file database; policy paragraphs in a meaning search. The large language model’s memory is **not** the strong-room.
+- **Floor 1 — reception** — People and couriers knock on labelled windows. Health check, ingest a bill, read a ticket, human stamp, weekly counts. A courier automation (**n8n**) may knock on ingest. It does not sit inside and rewrite rules.
+- **Floor 2 — specialist offices** — Extract, policy, and routing happen **in order**. The supervisor does not rewrite the numbers on the slip.
+- **Floor 3 — the workshop** — GST check, purchase-order book, policy binder search, audit log. Tools read or write. They do not “have opinions” that override a rupee gate.
+- **Floor 4 — the strong-room** — Tickets, vendors, POs, and events in a file database; policy paragraphs in a meaning search. The language model’s memory is **not** the strong-room.
 
-There is **no basement bank**. The cashier still signs **NEFT** in the finance office down the road. If your plan grows a `pay_vendor` window, the architecture has already failed.
+There is **no basement bank**. The cashier still signs **NEFT** in the finance office down the road. If your plan grows a pay-vendor window, the architecture has already failed.
 
-When the GST helpdesk is closed, a good clerk **fails closed** — parks the file — rather than writing “probably fine.” Architecture must say the same for a down tool or an empty policy shelf.
+When the GST helpdesk is closed, a good clerk **fails closed** — parks the file — rather than writing “probably fine.” Architecture must say the same for a down tool or an empty policy shelf. A clean-looking ₹18,600 bill with an empty handbook must still stop.
 
 Risks are the rain plan on a wedding card: wrong GSTIN, skipped ₹50,000 stamp, the same bill ingested twice because a webhook retried, PAN leaking into a chat, a secret key committed to GitHub. Each risk needs a lock you can point to on the floor plan, not a hope that the model will “be careful.”
+
+You will also freeze **doors** so the courier and the exam papers knock in the same place: health, ingest, fetch ticket, stamp, report. If those names keep changing, automation and tests both break.
 
 ---
 
@@ -112,10 +116,10 @@ Upcoming work **creates the rooms**: virtual environment, files, schema, a healt
 
 Bring your curiosity to these live challenges:
 
-1. **The Group Chat Temptation** — AutoGen can let three agents talk until they agree. Why is that a poor **runtime** for an amount gate, even if the *roles* still look like a crew?
+1. **The Group Chat Temptation** — Three agents can talk until they agree. Why is that a poor **runtime** for an amount gate, even if the *roles* still look like a crew?
 
 2. **The Empty Binder** — Policy retrieval returns nothing because the handbook was never loaded. Should a clean-looking ₹18,600 bill go to “ready to pay”? What does fail closed look like on the floor plan?
 
-3. **The Extra File** — A teammate adds `pay_vendor.py` “only for the demo.” Which floor did they invent, and how would you explain the refusal to a CFO in four sentences?
+3. **The Extra File** — A teammate adds a pay-vendor script “only for the demo.” Which floor did they invent, and how would you explain the refusal to a CFO in four sentences?
 
-Imagine walking a vendor PDF from the reception window to the strong-room without ever opening a bank vault. That walk is the architecture we will freeze so the next session can put files on disk.
+Imagine walking a vendor bill from the reception window to the strong-room without ever opening a bank vault. That walk is the architecture we will freeze so the next session can put files on disk.
