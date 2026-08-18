@@ -106,7 +106,7 @@ That is the demerit of an inefficient approach: **the pain does not grow in a st
 
 ### Simple Code: Count the Work, Not Just the Answer
 
-Run these two short programs (One Compiler or your editor). Both use `n = 4`. The first does a nested scan. The second does one pass.
+Open **[OneCompiler Python](https://onecompiler.com/python)**, paste each snippet, and click **Run**. Both programs use `n = 4` — the first does a nested scan, and the second does one pass.
 
 ```python
 # How many items we have
@@ -217,6 +217,8 @@ You do not need heavy mathematics here. You need four families that appear again
 
 ### Simple Code: O(1) vs O(n)
 
+Open **[OneCompiler Python](https://onecompiler.com/python)**, paste each snippet, and click **Run**.
+
 ```python
 # A list of marks
 marks = [80, 70, 90, 60]
@@ -265,7 +267,7 @@ Use Big-O to choose among serious options for real data sizes — not to brag th
 
 ### Simple Code: Count Steps in a Linear Search
 
-This short program finds a roll number by checking items from the start. That is the searching strategy you will compare in this session.
+Open **[OneCompiler Python](https://onecompiler.com/python)**, paste this snippet, and click **Run**. This short program finds a roll number by checking items from the start.
 
 ```python
 # A short list of roll numbers
@@ -369,6 +371,8 @@ You have already seen elementary sorts such as **Bubble Sort** and **Selection S
 Python's built-in **`sorted()`** and **`list.sort()`** use a highly tuned method (Timsort) that is about **O(n log n)** in typical cases, and they are implemented in fast underlying code. For real programs, that is usually the default professional choice.
 
 ### Simple Code: Two Built-in Sort Styles
+
+Open **[OneCompiler Python](https://onecompiler.com/python)**, paste each snippet, and click **Run**.
 
 ```python
 # Unsorted prices
@@ -477,4 +481,5 @@ This way of thinking continues into later programming work. Whenever you write a
 | **`sorted()`** | Returns a new sorted list | Photocopy, then arrange the copy |
 | **`list.sort()`** | Sorts the same list in place | Rearranging people in the same queue |
 | **`set`** | Collection for fast "have I seen this?" checks | Attendance notebook of unique rolls |
+| **OneCompiler** | Browser tool to paste and run Python snippets | [https://onecompiler.com/python](https://onecompiler.com/python) |
 | **Worst case** | The most work the method might need for size n | Target is last, or not present at all |
