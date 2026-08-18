@@ -210,9 +210,12 @@ def policy_agent(packet: InvoicePacket) -> InvoicePacket:  # specialist 2
     po = lookup_po.invoke({"po_number": packet.po_number})  # tool: ERP stand-in
     if po == "MISSING":  # unknown PO
         reasons.append("po_missing")  # do not invent
-    pol = retrieve_policy.invoke({"query": "amount gate GSTIN purchase order NEFT"})  # grounded rules
+    pol = retrieve_policy.invoke({"query": "amount gate GSTIN purchase order NEFT"})  # Chroma RAG
     if pol == "POLICY_STORE_EMPTY":  # chroma not seeded
         reasons.append("tool_error_fail_closed")  # fail closed
+        packet.policy_hits = ""  # no evidence to show
+    else:
+        packet.policy_hits = pol  # retrieved handbook lines for the ticket / UI
     if packet.amount_inr >= AMOUNT_GATE_INR:  # python gate, not prompt
         reasons.append("amount_gate")  # AP lead
     if find_duplicate(packet.vendor, packet.amount_inr, packet.invoice_date, packet.ticket_id):
@@ -244,6 +247,7 @@ Replace the stub `run_pipeline` in `app/pipeline.py`. Ingest already calls it â€
 
 - `|` is LCEL: extract, then policy, then route. No AutoGen debate.
 - If extract sets `needs_typecheck`, **policy does not run**. That matches the gate you froze in design.
+- Add `policy_hits: str = ""` on `InvoicePacket`. Policy writes the **Chroma** lines there so `GET /tickets/{id}` can show RAG evidence.
 - Gates live in **Python** and **tool return codes**. Retrieved handbook lines are evidence, not a licence to skip `AMOUNT_GATE_INR`.
 - `ready_to_pay` remains a **recommendation**.
 
