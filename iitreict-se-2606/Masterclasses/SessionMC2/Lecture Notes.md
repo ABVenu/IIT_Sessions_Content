@@ -104,65 +104,43 @@ That is the demerit of an inefficient approach: **the pain does not grow in a st
 
 ![Input size growth — a small classroom register staying manageable, then a huge exam hall and a crowded railway booking screen where the same nested-checking method explodes in work as n grows](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitreict-se-2606/masterclasses/sessionmc2/sessionmc2-02-input-size-growth.png)
 
-### Full Code: Count the Work, Not Just the Answer
+### Simple Code: Count the Work, Not Just the Answer
 
-Run this program (One Compiler or your editor). Notice that both methods can find the same duplicate — but they do very different amounts of work.
+Run these two short programs (One Compiler or your editor). Both use `n = 4`. The first does a nested scan. The second does one pass.
 
 ```python
-# Store a list of roll numbers; 104 is repeated on purpose
-rolls = [101, 102, 103, 104, 105, 104, 106]
+# How many items we have
+n = 4
+# Start a counter at zero
+checks = 0
+# Outer loop runs n times
+for i in range(n):
+    # Inner loop also runs n times
+    for j in range(n):
+        # Count one check
+        checks = checks + 1
+# Show the total work
+print("Nested loop checks:", checks)
+```
 
-# Start a counter for the nested-scan method
-nested_checks = 0
-# Remember whether the nested method found a duplicate
-nested_found = False
-
-# Walk through every position i in the list
-for i in range(len(rolls)):
-    # Walk through every later position j after i
-    for j in range(i + 1, len(rolls)):
-        # Count one comparison between two roll numbers
-        nested_checks = nested_checks + 1
-        # If the two positions hold the same roll number, we found a duplicate
-        if rolls[i] == rolls[j]:
-            # Record that a duplicate exists
-            nested_found = True
-
-# Start a counter for the one-pass notebook method
-pass_checks = 0
-# Create an empty set to remember roll numbers already seen
-seen = set()
-# Remember whether the one-pass method found a duplicate
-pass_found = False
-
-# Walk through each roll number exactly once
-for roll in rolls:
-    # Count one "have I seen this?" check
-    pass_checks = pass_checks + 1
-    # If this roll number is already in the notebook, it is a duplicate
-    if roll in seen:
-        # Record that a duplicate exists
-        pass_found = True
-    # If it is new, add it to the notebook for later checks
-    else:
-        # Store this roll number as already seen
-        seen.add(roll)
-
-# Print whether both methods agree on the answer
-print("Nested method found a duplicate:", nested_found)
-# Print how many pair-checks the nested method needed
-print("Nested method checks:", nested_checks)
-# Print whether the one-pass method found a duplicate
-print("One-pass method found a duplicate:", pass_found)
-# Print how many checks the one-pass method needed
-print("One-pass method checks:", pass_checks)
+```python
+# How many items we have
+n = 4
+# Start a counter at zero
+checks = 0
+# One loop runs n times
+for i in range(n):
+    # Count one check
+    checks = checks + 1
+# Show the total work
+print("One loop checks:", checks)
 ```
 
 **How the code works**
 
-- The nested method compares pairs of positions. For 7 items, pair-checks are `6 + 5 + 4 + 3 + 2 + 1 = 21`.
-- The one-pass method looks at each item once and asks a set "have I seen this?" — about 7 checks, using extra memory for `seen`.
-- Both can report that `104` is repeated. If `rolls` later has 1,000 items, nested work grows like n² and one-pass work grows like n.
+- Nested loops print **16** checks for `n = 4` — that is `n × n`.
+- One loop prints **4** checks — that is `n`.
+- Change `n` to `10` in both programs. Nested work becomes 100. One-loop work becomes 10. Same pattern as the table above.
 
 ### Activity: Feel the Curve Yourself
 
@@ -198,7 +176,7 @@ A few useful distinctions:
 
 ### The Time–Space Trade-Off
 
-Faster methods often spend memory to save time. The duplicate finder above did exactly that: a `seen` set uses extra RAM so you do not scan the list again and again. That is not automatically bad — RAM exists to be used.
+Faster methods often spend memory to save time. The "notebook of already-seen roll numbers" idea does exactly that: extra RAM so you do not scan the list again and again. That is not automatically bad — RAM exists to be used.
 
 The professional question is: **Is the extra memory worth the time you save, on the data sizes you actually have?** A college tool on 2,000 names can afford extra memory. Copying a 10-lakh-row table just to make a lookup nicer can exhaust RAM.
 
@@ -231,11 +209,38 @@ You do not need heavy mathematics here. You need four families that appear again
 | Big-O | Growth in simple words | Everyday picture | Typical coding pattern |
 |---|---|---|---|
 | **O(1)** | Work stays almost the same even if n grows | Picking the top book from a labelled pile | Direct index access, `list[0]` |
-| **O(log n)** | Work grows very slowly; data can double and you add only a few extra steps | Finding a name in a sorted phone directory by opening the middle | Binary search on sorted data |
+| **O(log n)** | Work grows very slowly; data can double and you add only a few extra steps | Finding a name in a sorted phone directory by opening the middle | A method that throws away half the remaining work each time |
 | **O(n)** | Work grows in a straight line with n | Checking every student in a register once | A single loop over the list |
 | **O(n²)** | Work grows like n times n | Every student compared with every other student | Nested loops over the same list |
 
 **O(n log n)** also matters for good sorting methods (including Python's built-in sort). Read it as: "more than a single pass, much less than nested n × n work."
+
+### Simple Code: O(1) vs O(n)
+
+```python
+# A list of marks
+marks = [80, 70, 90, 60]
+# Pick the first item — this does not grow with list length
+print("First mark:", marks[0])
+```
+
+```python
+# The same list of marks
+marks = [80, 70, 90, 60]
+# Start a total at zero
+total = 0
+# Add every mark one by one
+for mark in marks:
+    # Add this mark to the total
+    total = total + mark
+# Show the sum
+print("Total:", total)
+```
+
+**How the code works**
+
+- `marks[0]` is **O(1)** — one look, even if the list later has 10,000 marks.
+- The `for` loop is **O(n)** — four additions today, 10,000 additions if the list has 10,000 marks.
 
 ### Same Problem, Two Labels
 
@@ -243,12 +248,12 @@ Big-O is most powerful when both methods solve **the same problem**.
 
 Problem: "Does this roll number exist in the list?"
 
-- Walk from start to end until you find it or finish. That is **linear search**, **O(n)** time.
-- If the list is already sorted, jump to the middle, throw away half, repeat. That is **binary search**, **O(log n)** time.
+- If you already know the position, read `rolls[0]` or `rolls[3]`. That is **O(1)** time.
+- If you must scan from start to end until you find it or finish, that is **linear search**, **O(n)** time.
 
 Both can be correct. Big-O tells you which plan stays kind as n grows.
 
-For 16 items, binary search needs about 4–5 checks in the worst case (`16 → 8 → 4 → 2 → 1`), while linear search may need 16. For 1,000,000 items, binary search needs about 20 checks, while linear search may need 1,000,000. That gap is the difference between "instant" and "the app feels stuck."
+For 4 items, a full scan may need 4 looks. For 1,000,000 items, a full scan may need 1,000,000 looks. Direct index access still needs one look. That gap is the difference between "instant" and "the app feels stuck."
 
 ### What Big-O Ignores (On Purpose)
 
@@ -258,71 +263,32 @@ Use Big-O to choose among serious options for real data sizes — not to brag th
 
 ![Big-O growth families — four lanes labelled O(1), O(log n), O(n), and O(n squared), with queues staying flat, growing slowly, growing steadily, and exploding, so students can see shape rather than exact seconds](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitreict-se-2606/masterclasses/sessionmc2/sessionmc2-04-big-o-intuition.png)
 
-### Full Code: Count Steps in Linear vs Binary Search
+### Simple Code: Count Steps in a Linear Search
 
-This program searches for the same target with two strategies and prints the step count. Binary search is used only because the list is sorted.
+This short program finds a roll number by checking items from the start. That is the searching strategy you will compare in this session.
 
 ```python
-# Create a sorted list of roll numbers so binary search is allowed
-rolls = [101, 104, 109, 112, 118, 121, 125, 130]
-# Choose the roll number we want to find
-target = 125
-
-# Start a step counter for linear search
-linear_steps = 0
-# Remember the index if linear search finds the target
-linear_index = -1
-# Check items from left to right
-for i in range(len(rolls)):
-    # Count one comparison against the target
-    linear_steps = linear_steps + 1
-    # If this position holds the target, record the index and stop
-    if rolls[i] == target:
-        # Store the found position
-        linear_index = i
-        # Leave the loop because the search is over
-        break
-
-# Start a step counter for binary search
-binary_steps = 0
-# Left boundary is the first index
-left = 0
-# Right boundary is the last index
-right = len(rolls) - 1
-# Remember the index if binary search finds the target
-binary_index = -1
-# Repeat while the search window still has items
-while left <= right:
-    # Count one middle-item comparison
-    binary_steps = binary_steps + 1
-    # Find the middle index of the current window
-    mid = (left + right) // 2
-    # If the middle item is the target, record it and stop
-    if rolls[mid] == target:
-        # Store the found position
-        binary_index = mid
-        # Leave the loop because the search is over
-        break
-    # If the middle item is smaller than the target, search the right half
-    elif rolls[mid] < target:
-        # Move the left boundary just after mid
-        left = mid + 1
-    # Otherwise the middle item is larger, so search the left half
-    else:
-        # Move the right boundary just before mid
-        right = mid - 1
-
-# Print linear search result and how many steps it took
-print("Linear search index:", linear_index, "steps:", linear_steps)
-# Print binary search result and how many steps it took
-print("Binary search index:", binary_index, "steps:", binary_steps)
+# A short list of roll numbers
+rolls = [101, 104, 109, 112]
+# The roll number we want to find
+target = 109
+# Count how many items we look at
+steps = 0
+# Check each roll number from start to end
+for roll in rolls:
+    # One more look
+    steps = steps + 1
+    # Stop when we find the target
+    if roll == target:
+        # Show how many looks we needed
+        print("Found after", steps, "steps")
 ```
 
 **How the code works**
 
-- Linear search may stop early if the target is near the front. In the worst case it checks every item — **O(n)**.
-- Binary search halves the window each time, but **only because the list is sorted**. Extra space is **O(1)** for both methods here.
-- The step gap looks small on 8 items and becomes huge when n is large. Same problem, two growth labels — now you can choose.
+- The loop looks from the start. For target `109`, it prints **Found after 3 steps**.
+- If the target is last, or not in the list, the loop checks every item. That worst case is **O(n)**.
+- Change the list to 10 items later. The maximum number of looks grows with the list — not with laptop speed.
 
 ### Activity: Match the Label
 
@@ -349,43 +315,42 @@ You now have Big-O as a comparison tool. Let us apply it to searching — a task
 - **In Simple Words:** Start at the first desk in a classroom and ask each student "Are you roll 125?" until you find them or you run out of desks.
 - **Real-Life Example:** Finding a guest in an unmarked wedding hall. There is no seating chart. You walk row by row.
 
-Linear search is a good choice when the list is **unsorted**, **small**, or you will search **only once** (or a few times). It hurts when you search again and again on a huge unsorted list, because each search restarts from zero.
+Linear search is a good choice when the list is **small**, **unsorted**, or you will search **only once** (or a few times). It hurts when you search again and again on a huge list, because each search restarts from zero.
 
-### Binary Search: Fast, With a Ticket Price
+### Direct Lookup: When You Already Know the Position
 
-- **Official Definition:** **Binary search** finds a target in a **sorted** collection by repeatedly comparing the middle element and discarding half of the remaining range.
-- **In Simple Words:** Open a sorted telephone directory in the middle. If the name you want comes after that page, throw away the left half. Repeat.
-- **Real-Life Example:** Finding a word in an English dictionary. You would never start at page 1 for every word.
+- **Official Definition:** **Direct lookup** (index access) reads the item at a known position in constant time.
+- **In Simple Words:** If you already know the student is in seat 1, you walk to seat 1. You do not ask every other student.
+- **Real-Life Example:** Opening page 1 of a notebook because the index says "Attendance is on page 1."
 
-The ticket price is **sorted data**. If the list is unsorted, binary search is not "a bit wrong." It is the wrong tool.
+This is **O(1)** time. It is not a replacement for every search. You can use it only when the position is already known.
 
-### The Hidden Cost: Sort Then Search vs Just Scan
+### How Many Times Will You Search?
 
-Suppose you have an unsorted list and you need **one** lookup.
+This is the comparison beginners skip.
 
-- Linear search: about **O(n)**.
-- Sort first (good sort is about **O(n log n)**), then binary search **O(log n)**. Total is dominated by sorting: **O(n log n)**.
+Suppose you have a list of roll numbers and you need **one** lookup.
 
-For **one** search, sorting first is usually extra work. Linear search wins.
+- Linear search: about **O(n)**. For a short list, that is plenty.
 
-Now suppose you will look up 10,000 different roll numbers in the same list.
+Now suppose you will look up 10,000 different roll numbers in the same list, and each lookup scans from the start.
 
 - 10,000 linear searches: about **10,000 × n** checks.
-- Sort once **O(n log n)**, then 10,000 binary searches: about **10,000 × log n** extra checks.
+- On 50,000 items, that is a huge amount of repeated work.
 
-The second plan wins because you **paid the sorting cost once** and reused the sorted order many times.
+The professional questions are: **How large is n? How many times will I search? Do I already know the position, or must I scan?**
 
-This is why "binary search is faster" is incomplete. The professional question is: **How many times will I search? Is the data already sorted? Can I afford to sort?**
+Sorting is a separate decision. If you need a ranked list or a report in order, sort first. If you only need one "does this name exist?" check on 12 names, a simple scan is enough.
 
 ### Activity: Choose the Search Plan
 
-For each case, write **linear**, **binary**, or **sort once then binary**.
+For each case, write **linear scan**, **direct lookup**, or **organise first, then many scans**.
 
 1. A list of 12 lab partners, unsorted. Find one name.
-2. A sorted college merit list of 8,000 names. Find one name.
-3. An unsorted dump of 50,000 order IDs. You must answer 20,000 "does this ID exist?" questions.
+2. You already stored the class monitor at index `0`. Print that name.
+3. An unsorted dump of 50,000 order IDs. You must answer 20,000 "does this ID exist?" questions during the day.
 
-Suggested answers: (1) linear, (2) binary, (3) sort once then binary.
+Suggested answers: (1) linear scan, (2) direct lookup, (3) organise first, then many scans — repeating a full scan 20,000 times on 50,000 items is too much work.
 
 ---
 
@@ -403,6 +368,31 @@ You have already seen elementary sorts such as **Bubble Sort** and **Selection S
 
 Python's built-in **`sorted()`** and **`list.sort()`** use a highly tuned method (Timsort) that is about **O(n log n)** in typical cases, and they are implemented in fast underlying code. For real programs, that is usually the default professional choice.
 
+### Simple Code: Two Built-in Sort Styles
+
+```python
+# Unsorted prices
+prices = [50, 20, 80, 10]
+# Make a new sorted list; original stays as it is
+print("New list:", sorted(prices))
+# Original list is unchanged
+print("Original:", prices)
+```
+
+```python
+# Unsorted prices
+prices = [50, 20, 80, 10]
+# Sort the same list in place
+prices.sort()
+# This list is now sorted
+print("Same list:", prices)
+```
+
+**How the code works**
+
+- `sorted(prices)` builds a **new** list. Extra memory grows with n. Use this when you must keep the original order too.
+- `prices.sort()` changes the **same** list. Use this when you own the list and can rearrange it.
+
 ### A Comparison Checklist (Use This Before Coding)
 
 Ask these questions *before* you write a sort:
@@ -417,7 +407,7 @@ Ask these questions *before* you write a sort:
 | Bubble / Selection style nested sort | O(n²) | O(1) extra | Learning, tiny lists, tracing |
 | Python `list.sort()` | about O(n log n) | sorts in place | You own the list and can change it |
 | Python `sorted()` | about O(n log n) | new list, extra O(n) | You must keep the original order too |
-| Sort once, then many binary searches | O(n log n) setup, then cheap lookups | depends on the sort | Many searches on the same data |
+| Sort once, then many later lookups | O(n log n) setup, then cheaper repeated work | depends on the sort | Many searches or ordered reports on the same data |
 
 ### Common Doubt: "Then Why Did I Learn Slow Sorts?"
 
@@ -425,7 +415,7 @@ Because a built-in function is a black box unless you understand what "sort" is 
 
 You do not throw away elementary sorts. You put them in the right drawer: **teaching tools and tiny cases**, not default tools for huge data.
 
-![Comparing search and sort strategies — unmarked wedding hall row-by-row search versus a sorted directory opened in the middle, plus a small classroom pile sort versus a huge result-portal sort choosing a faster built-in method](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitreict-se-2606/masterclasses/sessionmc2/sessionmc2-05-search-sort-compare.png)
+![Comparing search and sort strategies — unmarked wedding hall row-by-row search versus a known seat number, plus a small classroom pile sort versus a huge result-portal sort choosing a faster built-in method](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitreict-se-2606/masterclasses/sessionmc2/sessionmc2-05-search-sort-compare.png)
 
 ### Activity: Pick a Strategy, Then Defend It
 
@@ -436,7 +426,7 @@ For each scenario, write the strategy and one reason.
 3. Keep the original unsorted list of applicants, but also display a sorted-by-marks copy.
 4. Unsorted log of 1 lakh ticket PNR numbers; operators will search thousands of PNRs during the day.
 
-Suggested direction: (1) elementary sort for learning, (2) in-place built-in sort, (3) `sorted()` so the original remains, (4) sort once, then binary search.
+Suggested direction: (1) elementary sort for learning, (2) in-place built-in sort, (3) `sorted()` so the original remains, (4) organise or sort once, because thousands of full scans on 1 lakh items will be slow.
 
 ---
 
@@ -448,7 +438,7 @@ Algorithm choice is a habit. State the problem, reject pure ad-hoc steps, estima
 
 A list of student names. You must answer whether a name exists.
 
-Write **Plan A** for 10 unsorted names, searched once. Write **Plan B** for 1,00,000 unsorted names, searched 5,000 times. For each plan, mention time complexity in Big-O and whether you sort first.
+Write **Plan A** for 10 unsorted names, searched once. Write **Plan B** for 1,00,000 unsorted names, searched 5,000 times. For each plan, mention time complexity in Big-O and whether a simple scan is enough.
 
 ---
 
@@ -458,7 +448,7 @@ Write **Plan A** for 10 unsorted names, searched once. Write **Plan B** for 1,00
 - An inefficient method often looks fine on small **n** because computers are fast. The demerit appears when input grows: nested work can explode toward **n × n**, while a one-pass plan grows far more gently.
 - **Time complexity** describes how work grows. **Space complexity** describes how extra memory grows. Faster plans sometimes spend RAM to save time — that trade-off is a design choice, not an accident.
 - **Big-O** is a growth label for comparing two approaches to the *same* problem. O(1), O(log n), O(n), O(n²), and O(n log n) are the families you will use most.
-- **Search** and **sort** are not one-size tools. Linear search, binary search, elementary sorts, and built-in sorts each win in different situations. Compare strategies — including "how many times will I search?" — before you choose.
+- **Search** and **sort** are not one-size tools. Linear search is fine for small lists and few lookups. Elementary sorts teach tracing. Built-in sorts are the usual choice for large data. Compare strategies — including "how many times will I search?" — before you choose.
 
 This way of thinking continues into later programming work. Whenever you write a loop inside a loop, store an extra copy of data, or pick a search method, you are making a complexity decision. The machine you studied earlier has limits, and algorithms decide how hard you push those limits.
 
@@ -482,7 +472,7 @@ This way of thinking continues into later programming work. Whenever you write a
 | **O(n log n)** | More than one pass, much less than n × n | A good general-purpose sort |
 | **O(n²)** | Work grows like n times n | Every student compared with every other |
 | **Linear search** | Scan items one by one; O(n) | Walking an unmarked wedding hall |
-| **Binary search** | Halve a **sorted** range each time; O(log n) | Dictionary lookup |
+| **Direct lookup** | Read a known index; O(1) | Walking straight to a numbered seat |
 | **Sorting algorithm** | Arrange items into order | Arranging scripts by roll number |
 | **`sorted()`** | Returns a new sorted list | Photocopy, then arrange the copy |
 | **`list.sort()`** | Sorts the same list in place | Rearranging people in the same queue |
