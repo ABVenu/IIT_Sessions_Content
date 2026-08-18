@@ -33,6 +33,8 @@ If JavaScript could only work in a straight line, a 3-second wait would lock but
 JavaScript reads your script from top to bottom.  
 The difference is whether a line **must finish now** or can be **scheduled for later**.
 
+![Kirana billing queue frozen behind one customer versus hostel canteen tokens — synchronous work blocks the line; asynchronous work lets others continue while the kitchen cooks](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session21/session21-01-sync-vs-async-canteen.png?v=20260818)
+
 - **Synchronous execution**  
   - *Official meaning:* Each statement completes before the next statement starts.  
   - *In simple words:* One job at a time, in order, with no skipping ahead.  
@@ -87,6 +89,8 @@ The difference is whether a line **must finish now** or can be **scheduled for l
 You already know the page can listen for clicks.  
 A timer is similar: the browser watches the clock, and JavaScript only runs your function when it is free.
 
+![Hostel canteen with one serving window, a kitchen clock, a ready-food shelf, and a waiter — call stack, browser timer, callback queue, and event loop as a working canteen](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session21/session21-02-event-loop-canteen.png?v=20260818)
+
 - **Call stack**  
   - *Official meaning:* The list of functions JavaScript is running right now.  
   - *In simple words:* The one window at the office that can serve one file at a time.
@@ -107,6 +111,8 @@ A timer is similar: the browser watches the clock, and JavaScript only runs your
 
 Timers need an answer to “what should happen when the wait is over?”  
 That answer is a **callback**—a function you pass to someone else.
+
+![Delivery rider receives a folded note saying when you reach, call this number — a callback is a packed instruction to run later](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session21/session21-03-callback-delivery-note.png?v=20260818)
 
 - **Callback function**  
   - *Official meaning:* A function passed as an argument to another function, to be invoked later.  
@@ -305,6 +311,8 @@ Sometimes the user changes their mind before the delay ends.
 `setTimeout` is a single bell.  
 **`setInterval`** is a repeating metronome—perfect for clocks and countdowns.
 
+![Phone alarm ringing once versus a wall clock and cricket scoreboard ticking every second — setTimeout runs once; setInterval repeats until you stop it](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session21/session21-04-settimeout-setinterval.png?v=20260818)
+
 - **`setInterval(callback, delay)`**  
   - *Official meaning:* Repeatedly calls `callback` every `delay` milliseconds until cleared.  
   - *In simple words:* “Keep doing this every so often.”  
@@ -377,6 +385,8 @@ Sometimes the user changes their mind before the delay ends.
 
 You now have the two pieces from this module: **DOM skills** and **timers**.  
 Together they make UI that feels alive—status text, toasts, and buttons that recover after a wait.
+
+![Laptop page showing Sending status and a Message sent toast while the student can still use the screen — timers update the DOM without freezing the page](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session21/session21-05-async-dom-toast.png?v=20260818)
 
 - Update **`textContent`** inside callbacks so the user sees progress.
 - Toggle **`disabled`** or **`classList`** during the wait so people do not double-submit.
