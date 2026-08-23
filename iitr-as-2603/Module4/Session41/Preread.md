@@ -22,9 +22,9 @@ flowchart TB
   end
 
   subgraph Future["Where This Leads"]
-    F1["<b>Upcoming Module</b><br/>Reliability on Graphs<br/><i>Checkpoints, Retries</i><br/>Resume long runs after a pause"]
-    F2["<b>Upcoming Module</b><br/>Observability &amp; Eval<br/><i>Tracing, Golden Sets</i><br/>Debug steps and gate releases"]
-    F3["<b>Upcoming Module</b><br/>Deployment &amp; Capstone<br/><i>UI, API, Demo</i><br/>Ship the agent with evidence"]
+    F1["<b>Upcoming Module</b><br/>Workflow Graphs<br/><i>LangGraph Basics</i><br/>Draw nodes, state, and a runnable map"]
+    F2["<b>Upcoming Module</b><br/>Reliability on Graphs<br/><i>Checkpoints, Retries</i><br/>Resume long runs after a pause"]
+    F3["<b>Upcoming Module</b><br/>Observability, Deploy, Capstone<br/><i>Eval, UI, Demo</i><br/>Trace, ship, and defend the agent"]
   end
 
   M1 ==>|&nbsp;Foundation&nbsp;| M2
