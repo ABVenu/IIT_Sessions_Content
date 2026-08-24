@@ -90,7 +90,7 @@ Typical steps feel ordinary once you name them:
 - A reply comes back with a result stamp and a body (a page, a packing list, or almost nothing).
 - The browser reads the stamp and the body, then updates the screen.
 
-You can still scroll while the reply is on the way. That is why the previous session’s “do not freeze the page” idea matters here. One page load is often **many** cycles: first the document, then styles, pictures, and data — each file its own ask and answer.
+You can still scroll while the reply is on the way. That is why the previous session’s “do not freeze the page” idea matters here. One page load is often **many** cycles: first the document, then styles, pictures, and scripts — each file its own ask and answer.
 
 ---
 
@@ -147,7 +147,7 @@ JSON is **text** on the wire. Keys and strings use double quotes. No trailing co
 
 A JavaScript object in your script is live memory. JSON on the network is a string. **Parse** unpacks the string into values you can read (name, berth). **Stringify** packs an object into text before a create or replace trip. Invalid text throws an error — that red message is useful: the packing list is not valid yet. Always read the **stamp** first. Then unpack. Then use fields. Skipping the stamp is how an error note gets treated as a train.
 
-You will **narrate** one visit in class — method, path, stamp, packing list — the way the Network tab would. Sending that ask from JavaScript with a live wait belongs in an upcoming session. This session builds the map.
+You will **narrate** one visit in class — method, path, stamp, and usually an HTML page — the way the Network tab would. A **JSON** packing list is a different kind of body: you unpack it from text here; sending a data ask from JavaScript belongs in an upcoming session. This session builds the map.
 
 ---
 
@@ -164,11 +164,11 @@ In this pre-read, you'll discover:
 
 After the session, you will be able to:
 
-- Name **client** and **server** for apps you already use, and trace one round trip from button to reply.
+- Name **client** and **server** for apps you already use, and trace one round trip from a typed address or a tap to the reply.
 - Read a **URL** as scheme, host, path, and optional filter text, and follow a first visit in the Network tab.
 - Choose **GET / POST / PUT / DELETE** for show, add, replace, and remove — and match stories to stamps such as **200, 201, 404, and 500**.
 - Spot valid vs invalid **JSON** packing lists, and explain parse and stringify as unpack and pack.
-- Narrate a full **GET** of a train list: method, path, success stamp, JSON body — without confusing “not found” with “no internet.”
+- Narrate a first **GET** of a page (method, path, success stamp, HTML) and unpack a **JSON** packing list from text — without confusing “not found” with “no internet.”
 
 Upcoming work in this module uses the same map when the browser **sends** the ask from JavaScript and waits for live data. Later modules put a real backend behind that conversation. Strong “who asks, who answers, what is on the slip” thinking now makes those features easier to follow.
 

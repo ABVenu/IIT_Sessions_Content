@@ -5,7 +5,8 @@ Those ideas describe *what* travels on the wire.
 This session answers the next question: **how** does JavaScript wait for that reply without freezing the page, and **how** do you ask a real URL for JSON from the browser?
 
 Think of a Flipkart parcel.  
-You place the order now; the packet is not in your hand yet.  
+You place the order now; the packet is not in your hand yet.
+
 The tracking page is a **Promise**: it starts as **pending**, becomes **fulfilled** when the parcel arrives, or **rejected** if the order is cancelled. **`fetch`** is how the browser places that order on the internet.
 
 ## What you will learn in this session
@@ -233,8 +234,8 @@ For this session you only send **GET**: “please give me this resource.”
 - `fetch` is available in Chrome, Edge, Firefox, and other modern browsers. You do not install a library.
 - Need: Hard-coding JSON in a variable (previous session) is practice. Real apps load live lists: users, trains, products.
 - A **query string** still works: `https://jsonplaceholder.typicode.com/posts?_limit=5` is GET with a filter, the same `?` idea as before.
-- Optional headers: `fetch(url, { method: "GET", headers: { "Accept": "application/json" } })` tells the server you prefer JSON. Many public GET APIs work without this; it is still useful to recognise.
-- **CORS** (Cross-Origin Resource Sharing) is a browser rule: a page on one site may be blocked from reading another site’s response unless that server allows it. Practice APIs such as JSONPlaceholder allow it; a random private URL may not.
+- Optional: `fetch(url, { method: "GET", headers: { "Accept": "application/json" } })` tells the server you prefer JSON. Many public GET APIs work without this.
+- Practice APIs such as JSONPlaceholder are meant to be read from a student page. A random private URL may refuse the browser, and the console then shows `Failed to fetch`.
 - Common doubt: “Does `fetch` return the JSON object?” No. It fulfils with a **Response**. Parsing the body is a **second** Promise (`response.json()`).
 - Common error: expecting the next line after `fetch(url)` to already hold the data. `fetch` returns a Promise at once; the JSON arrives in `.then`.
 
@@ -335,16 +336,15 @@ Check for the list URL: you should see ten names. For `/users/1` you should see 
 ## Basic error handling: network vs HTTP
 
 `.catch` does **not** mean “any unhappy status code.”  
-**`fetch` rejects mainly on a network problem** (offline, DNS, some CORS blocks).  
-A **404** or **500** still **fulfils** the fetch Promise with a Response. You must check **`response.ok`** (or `status`) yourself.
+**`fetch` rejects mainly on a network problem** (offline, or the request never completed).  
+A **404** or **500** still **fulfils** the fetch Promise with a Response, so you must check **`response.ok`** (or `status`) yourself.
 
 ![Split scene: Wi-Fi off so no envelope arrives versus an envelope on the desk stamped 404 NOT FOUND — network failure rejects; HTTP errors still arrive and need the stamp checked](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session23/session23-05-network-vs-http-stamp.png?v=20260818)
 
 - Need: If you skip the check, you may call `.json()` on an error body and then treat `{"error":"..."}` as a user list.
 - Logic: Envelope can arrive with a red stamp. Arrival is not the same as “the office found your file.”
-- **Network error** → Promise **rejected** → `.catch`.
+- **Network error** → Promise **rejected** → `.catch`. The message is often `Failed to fetch`.
 - **HTTP 404 / 500** → Promise **fulfilled** → inspect `ok` / `status`, then decide.
-- A **CORS** block often looks like a network failure (`Failed to fetch`) even though your Wi-Fi is fine. Check the console for a CORS message before you blame the cable.
 - `throw new Error("HTTP " + response.status)` inside `.then` **rejects** the rest of the chain so one `.catch` can handle both network and HTTP problems.
 - Common error: showing “Server down” for every failure. `404` means the path or id was not found. `Failed to fetch` often means the request never completed.
 
@@ -451,7 +451,7 @@ JSON parse and the DOM are how the user sees the answer.
 
 `console.log` is for you while learning. Users need **text on the page**. If Network shows 200 but the list is empty, your loop or field names (`name` vs `title`) are the first place to look.
 
-In an upcoming session, you will reuse this same GET-and-display flow while generating and **debugging** frontend code with AI tools, including Fetch mistakes such as missing `ok` checks and broken URLs.
+In an upcoming session, you will reuse this same GET-and-display flow on fuller frontend pages — still reading **status** first, then unpacking **JSON**.
 
 ## Important Commands, Libraries, Terminologies used
 
@@ -480,12 +480,11 @@ In an upcoming session, you will reuse this same GET-and-display flow while gene
 | Query string | Filters after `?`, e.g. `posts?_limit=5` |
 | `{ method: "GET" }` | Optional fetch options; GET is the default |
 | `Accept` header | Tells the server you prefer JSON |
-| CORS | Browser rule for reading another site’s response |
 | `application/json` | Typical `Content-Type` for a JSON body |
-| Network error | `fetch` rejects (offline, many CORS failures) |
+| Network error | `fetch` rejects (offline, request never completed) |
 | HTTP error | Response arrived but `ok` is false |
 | DevTools Network | Inspect GET, status, and JSON payload |
 | Headers / Preview | Status and `Content-Type`; parsed JSON view |
 | `button.disabled` | Block extra clicks while a GET is pending |
 | Nested field | e.g. `user.address.city` after parse |
-| `Failed to fetch` | Typical network or CORS failure message |
+| `Failed to fetch` | Typical message when the request never completed |
