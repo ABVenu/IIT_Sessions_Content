@@ -6,7 +6,7 @@ This session answers the next question: how do you use **AI coding assistants** 
 
 Think of a college **Canva** poster.  
 The tool drafts a banner in seconds; you still check spelling, club name, and whether the QR code works.  
-**ChatGPT** or **Claude** is that designer for HTML, CSS, and JavaScript. You remain the student who must **read**, **run**, and **own** every line.
+**ChatGPT** or **Claude** is that designer for HTML, CSS, and JavaScript — you remain the student who must **read**, **run**, and **own** every line.
 
 ![Student at a hostel desk watching AI draft a college fest poster, then standing with a red pen and phone to check the date and scan the QR code — AI drafts, you own every line](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session24/session24-01-ai-canva-partner.png?v=20260818)
 
@@ -57,7 +57,7 @@ Skipping a step is how you get pretty CSS and a blank list.
 | **6. Debug** | Paste **error + code + what you tried** | AI fixes faster when it sees the real failure |
 | **7. Refine** | Loading, empty, error, names, accessibility | First draft is rarely submission quality |
 
-Connecting idea: Steps 2–4 are where AI is fastest. Steps 5–7 are where **you** become the frontend developer. The same chain in one line is **Brief → Layout → Review → JS → Fetch → Debug → Refine**.
+Connecting idea: Steps 2–4 are where AI is fastest. Steps 5–7 are where **you** become the frontend developer.
 
 **Common mistake:** Asking “Give me a full website with API and animations” in one message. You cannot review 200 lines you did not request in pieces.
 
@@ -123,7 +123,6 @@ Save as `notices.html`, open in the browser, and confirm the empty grid and tool
 <html lang="en"> <!-- Starts the page; English language hint -->
 <head> <!-- Holds title and CSS -->
   <meta charset="UTF-8" /> <!-- Sets character encoding -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" /> <!-- Makes layout readable on phones -->
   <title>Campus Notice Board</title> <!-- Tab title -->
   <style> /* Starts internal CSS */
     body { font-family: Arial, sans-serif; margin: 0; background: #f4f1ea; } /* Page background like old notice paper */
@@ -207,17 +206,16 @@ Comment every JavaScript line in simple English.
 After this works, a **second** prompt can add search: filter those cards by title as the user types.
 
 Do not jump to Fetch until sample cards appear.  
-If Load does nothing, the bug is **ids** or the script — not the API.  
-Keep a `current` array that search reads; if you filter a hard-coded `sample` list later mixed with Fetch, the board will show the wrong notices.
+If Load does nothing, the bug is **ids** or the script — not the API.
+
+If AI writes `.filter` or another method you do not recognise, ask it to walk the list with a **`for` loop** you already know.
 
 **How this JS should work (check AI’s script against this):**
 
 - `render(list)` clears `#noticeList` with `textContent = ""`, then `createElement` for each `title` and `body`.
 - Load copies sample data into `current` and calls `render(current)`.
-- Search on `input` filters `current` by title and calls `render` again.
+- Search walks `current` with a `for` loop and calls `render` again.
 - Prefer `textContent` over `innerHTML` for titles.
-
-The **complete** file with `render`, search, and then live **GET** is in the next topic, so you see one full page from `<!DOCTYPE html>` to the last `</html>`.
 
 ### Student activity: one extra behaviour
 
@@ -279,9 +277,9 @@ Include response.ok handling.
 
 - **Missing `return` before `response.json()`** — next `.then` gets `undefined`; cards cannot loop.
 - **No `response.ok` check** — 404 HTML or error JSON is parsed as if it were posts.
-- **Wrong shape** — `/posts/1` is one object; `forEach` fails. `/posts` is an array.
+- **Wrong shape** — `/posts/1` is one object; looping as if it were a list fails. `/posts` is an array.
 - **Wrong field** — users have `name`; posts have `title`. The card title looks empty.
-- **`Failed to fetch`** — often offline, CORS, or a `file://` page; open via `http://localhost` if needed.
+- **`Failed to fetch`** — often offline, or a `file://` page; open via `http://localhost` if needed.
 - **Search before load** — `current` is still `[]`. Not an API bug.
 
 ### Complete example: Fetch GET with `ok` check and status text
@@ -335,7 +333,8 @@ JSONPlaceholder `/posts?_limit=6` returns an **array** of posts with `title` and
         statusMsg.textContent = "No notices match."; // Empty message
         return; // Stop drawing
       } // Ends empty check
-      list.forEach(function (item) { // Each post
+      for (let i = 0; i < list.length; i++) { // Walk each post with a loop you already know
+        const item = list[i]; // Current post object
         const card = document.createElement("article"); // Card
         card.className = "card"; // Class
         const h = document.createElement("h2"); // Title tag
@@ -345,7 +344,7 @@ JSONPlaceholder `/posts?_limit=6` returns an **array** of posts with `title` and
         card.appendChild(h); // Add title
         card.appendChild(p); // Add body
         noticeList.appendChild(card); // Add card
-      }); // Ends loop
+      } // Ends loop
     } // Ends render
     function loadNotices() { // Starts GET
       statusMsg.textContent = "Loading…"; // Pending UI
@@ -373,10 +372,14 @@ JSONPlaceholder `/posts?_limit=6` returns an **array** of posts with `title` and
     } // Ends loadNotices
     loadBtn.addEventListener("click", loadNotices); // Load on click
     searchInput.addEventListener("input", function () { // Filter as you type
-      const q = searchInput.value.toLowerCase(); // Query
-      const filtered = current.filter(function (item) { // Filter titles
-        return item.title.toLowerCase().indexOf(q) !== -1; // Match
-      }); // Ends filter
+      const q = searchInput.value.toLowerCase(); // Query in small letters
+      const filtered = []; // Notices whose title contains the query
+      for (let i = 0; i < current.length; i++) { // Walk the loaded list
+        const title = current[i].title.toLowerCase(); // Title in small letters
+        if (title.includes(q)) { // True when the query sits inside the title
+          filtered.push(current[i]); // Keep this notice
+        } // Ends match check
+      } // Ends walk
       render(filtered); // Redraw
       if (current.length > 0 && filtered.length > 0) { // Avoid wiping a success message badly
         statusMsg.textContent = "Showing " + filtered.length + " of " + current.length + "."; // Count
@@ -390,7 +393,7 @@ JSONPlaceholder `/posts?_limit=6` returns an **array** of posts with `title` and
 **How the code works**
 
 - **Pending** is “Loading…” and a disabled button — the same Promise idea as a UPI spinner.
-- **`ok` false** throws so `.catch` can show HTTP 404 instead of calling `forEach` on the wrong body.
+- **`ok` false** throws so `.catch` can show HTTP 404 instead of looping the wrong body.
 - **`return response.json()`** is required so the next `.then` receives an array, not `undefined`.
 - The last `.then` re-enables the button after **either** success or failure so the UI does not stay stuck.
 
@@ -436,9 +439,7 @@ Follow-up prompt example: `Do not change the URL or ids. Rename unclear variable
 ### Quality checks you run, not the chat
 
 - Read the HTML aloud: header, main, footer still there after “improvements”?
-- Disable the network in DevTools and click Load — do you see a human error, or a frozen “Loading…”?
-- Search for `zzzz` after a successful load — empty state, not a blank white grid with no message.
-- Hover every control: is there a visible label, or only a placeholder (placeholders disappear while typing)?
+- Disable the network and click Load — human error, not a frozen “Loading…”? Search `zzzz` after a successful load — empty message, not a blank grid.
 
 ### Student activity: refine one AI draft
 
@@ -453,22 +454,15 @@ Self-check: you can explain `render` and the Fetch chain without looking at the 
 
 ## Putting the lab together
 
-Layout is the board.  
-JavaScript is the volunteer.  
-Fetch is the office that sends notices.  
-Debug prompts are the complaint form with evidence. Refine is the final red pen.
+Layout is the board. JavaScript is the volunteer. Fetch is the office that sends notices.
 
-- Brief → layout prompt → review ids.
-- One JS feature on sample data → then Fetch.
+- Brief → layout prompt → review ids → one JS feature on sample data → then Fetch.
 - Console + Network go into the debug prompt; ask for a **minimal** fix.
 - Four UI states and semantic HTML are part of quality, not extras.
-- If the UI is blank, check three places: **URL**, **`ok` / status**, **`return response.json()`** — then field names (`title`).
 
 ### Mini lab (solo)
 
-Build **Mess Alerts**: same workflow, JSONPlaceholder `/posts?_limit=4`.  
-Header “Today’s Mess Alerts”, Flex toolbar, Grid cards, Load, search, `ok` check, disabled button while pending.  
-Save prompts in a `prompts.md` file next to `index.html` so the chat is not your only memory.
+Build **Mess Alerts** with the same workflow and JSONPlaceholder `/posts?_limit=4`: header, Flex toolbar, Grid cards, Load, search, `ok` check. Save prompts next to `index.html` so the chat is not your only memory.
 
 ## Key Takeaways
 
@@ -478,7 +472,7 @@ Save prompts in a `prompts.md` file next to `index.html` so the chat is not your
 - **Debug with evidence:** Console error, Network status, JSON Preview, and what you already tried — not “rewrite everything.”
 - **Refinement** adds loading, empty, and error states, clear names, semantic tags, and labels; first-draft AI CSS is not the finish line.
 
-`console.log` is for you while learning. Hostel residents need **cards on the board**. In an upcoming session you will move to the **server** side; the same habit — brief, generate, verify, refine — still applies when the code is an API instead of a webpage.
+`console.log` is for you while learning. Hostel residents need **cards on the board**. In an upcoming session you will keep this same brief–generate–verify–refine habit when the work sits behind the page, not only on it.
 
 ## Important Commands, Libraries, Terminologies used
 
@@ -499,13 +493,8 @@ Save prompts in a `prompts.md` file next to `index.html` so the chat is not your
 | `response.ok` | `true` for status 200–299 |
 | `response.json()` | Parse body; **return** it in `.then` |
 | JSONPlaceholder | Practice API, e.g. `/posts?_limit=6` |
-| Collection vs resource | `/posts` array; `/posts/1` one object |
-| Network error | `fetch` rejects (`Failed to fetch`, many CORS cases) |
-| HTTP error | Response arrived but `ok` is false |
+| Network error | `fetch` rejects (`Failed to fetch`) |
 | Minimal fix | Change only the broken line, not the whole page |
-| Loading state | “Loading…” plus `button.disabled` |
-| Empty state | “No notices match.” after a search |
 | `aria-live` | Screen reader hears list updates |
 | DevTools Network | Status, Headers, Preview of JSON |
 | Code refinement | Cleanup for names, states, accessibility, leftover CSS |
-| Vanilla JS | No extra libraries; browser JavaScript only |

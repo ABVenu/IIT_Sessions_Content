@@ -5,7 +5,8 @@ Those skills keep the page usable while something finishes later.
 This session answers the next question: **who** is the page waiting for, and **what** travels between your browser and a computer somewhere else?
 
 Think of IRCTC.  
-You sit at home (the **client**) and tap “Search trains.”  
+You sit at home (the **client**) and tap “Search trains.”
+
 A computer in a data centre (the **server**) checks seats and sends back a list. The back-and-forth is the **request–response cycle**, and the common language is **HTTP** plus **JSON**.
 
 ## What you will learn in this session
@@ -60,8 +61,7 @@ One role **asks**. The other role **serves**.
 
 ## The request–response cycle
 
-A **cycle** is one complete round trip.  
-The client sends a **request**. The server sends a **response**. Then the client can ask again.
+A **cycle** is one complete round trip. The client sends a **request**; the server sends a **response**. Then the client can ask again.
 
 ![Order slip GET /trains leaving a laptop and a stamped 200 train list coming back from the railway office — one request goes out; one response returns](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session22/session22-02-request-response-cycle.png?v=20260818)
 
@@ -80,13 +80,13 @@ The client sends a **request**. The server sends a **response**. Then the client
   - The server sends an HTTP response.
   - The browser reads the status and body, then updates the page.
 - This wait is **asynchronous** for the user: you can still scroll while the reply is on the way. That is why the previous session’s “do not freeze the page” idea matters here.
-- Common error: thinking one page load is “just HTML.” The first response may be HTML, then the page may send **more requests** for CSS, images, and JSON.
+- Common error: thinking one page load is “just HTML.” The first response may be HTML, then the browser may send **more requests** for CSS, JavaScript files, and images.
 
 ### Student activity: order-slip story
 
 1. Write four boxes on paper: **You → Browser → Server → Browser**.
 2. Label the arrows: **request** going right, **response** coming left.
-3. In the request box write `GET /trains`. In the response box write `200` and `[{ "train": "Duronto" }]`.
+3. In the request box write `GET /trains`. In the response box write `200` and `[{ "train": "Duronto" }]` as a **data** packing list (not the HTML page).
 
 ## Tracing what happens when you visit a URL
 
@@ -108,7 +108,7 @@ That one action is not magic. It is a **traceable** path.
   - It sends `GET` for that path (often `/` for the home page).
   - The server responds with status `200` and an HTML body (if the page exists).
   - The browser parses HTML, then may request CSS, JavaScript, and images—each is another cycle.
-- **DevTools Network tab:** Right click the page → **Inspect** → **Network**. Reload. The first row is often the **document**. Columns show **method**, **status**, and **type**.
+- **DevTools Network tab:** Right click the page → **Inspect** → **Network**, then reload. The first row is often the **document**; columns show **method**, **status**, and **type**.
 - Common doubt: “Why so many rows for one site?” Because one page is many files. Each file is its own request–response pair.
 
 ### Student activity: read one network row
@@ -185,10 +185,12 @@ This page does **not** call a real server. It shows the **shape** of one cycle s
 - `request` and `response` are teaching models. Real HTTP is text on the network; JavaScript objects help you see the parts.
 - `response.body` is a **string**. You cannot write `response.body[0].train` until you **parse**.
 - `JSON.parse` turns the string into an array of objects. Then `trains[0].train` is `"Duronto"`.
+- This models a **data** cycle (JSON body). Typing a URL in the address bar is usually a **page** cycle (HTML body). Both use the same HTTP parts.
 
 ## HTTP methods: the verb on the order slip
 
-The **path** says *which* resource. The **method** says *what to do* with it.  
+The **path** says *which* resource. The **method** says *what to do* with it.
+
 Four methods cover most beginner work. They map to **CRUD**: Create, Read, Update, Delete.
 
 ![Four railway ticket counters labelled GET show me, POST add a new one, PUT replace fully, and DELETE remove this — same office, four different jobs](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module2/session22/session22-03-http-methods-counter.png?v=20260818)
@@ -352,7 +354,7 @@ The server expects a **string** in the body, not a live JS object.
 - `JSON.stringify` produces `'{"from":"Pune","to":"Nagpur","date":"2026-08-20"}'`.
 - A real `POST` would put that string in the HTTP **body** with header `Content-Type: application/json`.
 - `JSON.parse(body).from` is `"Pune"` again. Parse and stringify are inverse operations when the data is valid JSON.
-- Common doubt: “Can I send the JS object as it is?” Not on the network. HTTP body is text. Stringify first, parse when it comes back.
+- Common doubt: “Can I send the JS object as it is?” Not on the network — HTTP body is text, so stringify first and parse when it comes back.
 
 ### Student activity: valid or invalid JSON
 
@@ -368,57 +370,54 @@ Invalid lines throw in the console. That error is useful: it means the **text** 
 ## Hands-on: one URL, full trace
 
 Put the pieces in order.  
-You will not use `fetch` yet. You will **narrate** the cycle the way the Network tab would.
+Typing an address is a **GET** for a **page**. The Network tab records that cycle.
 
-1. User types `https://example.com/trains?from=Pune`.
-2. **Client** = browser. **Method** = `GET`. **Path** = `/trains` with a query `from=Pune`.
-3. Server looks up trains, builds a JSON array, sets status `200` and `Content-Type: application/json`.
-4. Browser receives the **response**. JavaScript will later `JSON.parse` the body (next session: sending this request from code).
-5. If the path is wrong, status is `404` and the body may be `{"error":"Not found"}`. Parse still works; your UI must read `status` before treating the body as a train list.
+1. User types `https://www.example.com/train-search?from=Pune`.
+2. **Client** = browser. **Method** = `GET`. **Path** = `/train-search`. Query `from=Pune` is extra filter text on this request.
+3. Server sends status `200`, `Content-Type: text/html`, and an HTML body.
+4. Browser paints the page, then may request CSS, JavaScript, and images — each file is another cycle.
+5. A wrong path still completes the cycle with `404`. That is not “no internet.”
 
-### Complete example: simulate the trace on the page
+On the wire (text, not JavaScript) the request can start `GET /train-search?from=Pune HTTP/1.1` with a `Host` header.  
+The page reply starts `HTTP/1.1 200 OK` and `Content-Type: text/html`.
+
+A **JSON** packing list is a different kind of body.  
+Typing a normal website address does not by itself give you a train array.
+
+This session you **read** JSON text as if you copied it from Network. Sending that data request from your own JavaScript belongs in an upcoming session.
+
+A copied JSON reply would show `Content-Type: application/json` and a body such as `[{"train":"Duronto"},{"train":"Shatabdi"}]`.
+
+### Complete example: unpack a body copied from Network
+
+The status and body below are already in the file, as if you copied one Network row.  
+The script does **not** send a request. It only **reads the stamp**, then **parses**.
 
 ```html
 <!DOCTYPE html> <!-- Declares this file as an HTML5 document -->
 <html lang="en"> <!-- Starts the HTML document -->
 <head> <!-- Holds metadata and title -->
   <meta charset="UTF-8" /> <!-- Sets character encoding -->
-  <title>Trace a Visit</title> <!-- Browser tab title -->
+  <title>Unpack Copied JSON</title> <!-- Browser tab title -->
 </head> <!-- Ends the head -->
 <body> <!-- Starts visible content -->
-  <button id="goBtn">Visit /trains</button> <!-- Button that starts the simulated cycle -->
-  <ol id="steps"></ol> <!-- Numbered list of trace steps -->
-  <p id="result"></p> <!-- Shows parsed train names at the end -->
+  <button id="unpackBtn">Unpack the copied body</button> <!-- Starts parse after you click -->
+  <p id="stamp"></p> <!-- Will show the copied status code -->
+  <p id="result"></p> <!-- Will show train names or an error string -->
 
   <script> // Starts JavaScript
-    const steps = document.getElementById("steps"); // Selects the ordered list
+    const stamp = document.getElementById("stamp"); // Selects the status paragraph
     const result = document.getElementById("result"); // Selects the result paragraph
-    const goBtn = document.getElementById("goBtn"); // Selects the visit button
+    const unpackBtn = document.getElementById("unpackBtn"); // Selects the unpack button
+    const copiedStatus = 200; // Stands in for the status column in Network (try 404 in the activity)
+    const copiedBody = '[{"train":"Duronto"},{"train":"Shatabdi"}]'; // JSON text as if copied from the response body
 
-    function addStep(text) { // Defines a helper that appends one trace line
-      const li = document.createElement("li"); // Creates a list item
-      li.textContent = text; // Sets the step text
-      steps.appendChild(li); // Adds the step to the page
-    } // Ends addStep
-
-    function fakeServer(method, path) { // Models a tiny server in one function
-      if (method === "GET" && path === "/trains") { // Checks method and path together
-        return { status: 200, body: '[{"train":"Duronto"},{"train":"Shatabdi"}]' }; // Success JSON body
-      } // Ends the success branch
-      return { status: 404, body: '{"error":"Not found"}' }; // Failure JSON body for any other pair
-    } // Ends fakeServer
-
-    goBtn.addEventListener("click", function () { // Runs the trace when the button is clicked
-      steps.innerHTML = ""; // Clears old steps from a previous click
-      result.textContent = ""; // Clears old result text
-      addStep("User clicks Visit — client starts a request"); // Records the user action
-      addStep("HTTP GET /trains leaves the browser"); // Records the request line
-      const response = fakeServer("GET", "/trains"); // Runs the fake server and stores its response
-      addStep("Response status " + response.status); // Records the status code
-      const data = JSON.parse(response.body); // Parses the JSON body into JavaScript
-      if (response.status === 200) { // Only treats the body as trains when status is success
-        result.textContent = "Trains: " + data[0].train + ", " + data[1].train; // Shows names on the page
-      } else { // Handles the error-shaped body
+    unpackBtn.addEventListener("click", function () { // Runs unpack only when you click
+      stamp.textContent = "Status " + copiedStatus; // Shows the stamp before trusting the body
+      const data = JSON.parse(copiedBody); // Converts the copied JSON string into a JavaScript value
+      if (copiedStatus === 200) { // Only treats the body as trains when the stamp is success
+        result.textContent = "Trains: " + data[0].train + ", " + data[1].train; // Reads fields after parse
+      } else { // Handles an error-shaped packing list
         result.textContent = data.error; // Shows the error string from JSON
       } // Ends the status check
     }); // Ends the click listener
@@ -429,26 +428,28 @@ You will not use `fetch` yet. You will **narrate** the cycle the way the Network
 
 **How the code works**
 
-- `fakeServer` is not the internet. It is a stand-in so you can see **method + path → status + JSON body**.
-- The client still **parses** JSON and still **checks status** before showing trains.
-- Change the call to `fakeServer("GET", "/wrong")` and the page should show `Not found` with status `404`.
+- `copiedStatus` and `copiedBody` are stand-ins for **one Network row**. Nothing here talks to the internet.
+- You still **read status first**. Then **parse**. Then use fields.
+- With `200` and a train array, names appear. With `404` and `{"error":"Not found"}`, the error string appears.
+- If the text is invalid JSON, `JSON.parse` throws. Practise that in the **console**, not by breaking this file.
 
-### Student activity: break the path
+### Student activity: stamp first, then unpack
 
-1. In the click handler, call `fakeServer("GET", "/wrong")` instead of `"/trains"`.
-2. Click the button. Confirm the list of steps still appears, status is `404`, and the result is `Not found`.
-3. Restore `"/trains"` and confirm `200` plus train names.
+1. Set `copiedStatus` to `404` and `copiedBody` to `'{"error":"Not found"}'`. Refresh and click. Confirm the result is `Not found`, not train names.
+2. Restore `200` and the train array. Confirm both names appear.
+3. In the console, run `JSON.parse('{city:"Pune"}')` and read the red error — keys need double quotes.
 
 ## Putting HTTP and JSON together
 
 You now have the full picture for one round trip.  
-The **client** speaks HTTP. The **body** is often JSON. JavaScript converts JSON text to objects, then to DOM.
+The **client** speaks HTTP. A **page** body is often HTML. A **data** body is often JSON.
 
-- Read (`GET`) → parse JSON → show list.
+- Visit a URL: usually **GET** + HTML, then extra cycles for CSS and images.
+- Data packing list: JSON **text** → read **status** → `JSON.parse` → show fields.
 - Create (`POST`) → `JSON.stringify` the form data → server replies `201` and maybe the new object as JSON.
 - Update (`PUT`) → stringify the full new record → expect `200`.
 - Remove (`DELETE`) → often an empty body and `200` or `204`.
-- Always read **status** first. Then parse. Then use fields. Skipping status is how a `{"error":"..."}` gets treated as a train.
+- Skipping status is how a `{"error":"..."}` packing list gets treated as a train.
 
 ## Key Takeaways
 
@@ -458,7 +459,7 @@ The **client** speaks HTTP. The **body** is often JSON. JavaScript converts JSON
 - **JSON** is text; **`JSON.parse`** and **`JSON.stringify`** move between text and JavaScript values.
 - Visiting a URL is a traceable `GET`; DevTools **Network** shows method, status, and path for each file.
 
-In an upcoming session, you will send real HTTP from JavaScript with the **Fetch API** and handle the wait with **Promises**, using the same JSON parse step you practised here.
+In an upcoming session, you will send this same kind of HTTP request from your own JavaScript and wait for the reply — still reading **status** first, then unpacking **JSON**.
 
 ## Important Commands, Libraries, Terminologies used
 

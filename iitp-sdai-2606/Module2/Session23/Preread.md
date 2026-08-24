@@ -132,7 +132,7 @@ After the session, you will be able to:
 - Send a **GET**, unpack **JSON**, and show fields on the page.
 - Tell a **network** failure apart from “not found.”
 
-Upcoming work reuses this GET-and-display flow when you **debug** frontend code with AI. Later modules put a real backend behind the same ask.
+Upcoming work reuses this GET-and-display flow on fuller pages you build and check yourself. Later modules put a real backend behind the same ask.
 
 ---
 

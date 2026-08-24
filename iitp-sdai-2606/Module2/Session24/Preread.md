@@ -124,7 +124,7 @@ After the session, you will be able to:
 - Debug a blank list with the console, the Network stamp, and a **minimal** fix.
 - Run a quality pass: waiting, success, empty, error, labels.
 
-Upcoming work moves to the **server** side. The same habit — brief, generate, verify, refine — still applies.
+Upcoming work keeps this same brief–generate–verify–refine habit when the work sits behind the page, not only on it.
 
 ---
 
