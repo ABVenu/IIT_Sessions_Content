@@ -1,59 +1,62 @@
-# AutoGen: Conversable Agents and Tool Use
+# AutoGen: Hands-on — End-to-End Multi-Agent System
 
 ## Context of This Session
 
 In the **previous** session you upgraded a **CrewAI** Placement Brief Crew into a production-style workflow: **custom tools**, **process** choice, optional **memory**, a validation checklist, and **iteration** on one weak prompt.
 
-This session adds a different unit of design. **AutoGen** treats agents as **conversable** partners in a dialogue. You delegate a **daily campus ops summary** to a pair: a desk runner and a stipend analyst, with **registered tools** and a clear **stop rule**.
+This session adds a different unit of design. **AutoGen** treats agents as **conversable** partners in one dialogue. You will ship **one campus desk**: first a stipend-and-dispatch **pair** with registered tools and a stop stamp, then the same facts in a **chaired group** that writes a placement-drive notice.
 
 **In this session, you will:**
 
-- **Configure** an **AssistantAgent** and a **UserProxyAgent** with system messages and boundaries
-- **Register** stipend and dispatch lookup functions with safe execution constraints
-- **Run** agent-to-agent chat until an explicit **termination** condition is met
-- **Read** the **conversation trace** to verify tool use and final-answer quality
+- **Configure** conversable agents with system messages and non-overlapping campus seats
+- **Register** lookup tools and run a pair until an explicit **termination** condition
+- **Orchestrate** a **GroupChat** with speaker selection and max rounds
+- **Read** conversation traces to verify tool use, handoffs, and one configuration fix
 
 ---
 
-## From Fixed Crew Tickets to Dialogue-Driven Delegation
+## From Crew Tickets to One Dialogue Desk
 
-Connecting sentence: CrewAI shines when research, write, and review are **tickets**. Morning ops often needs **ask, look up, follow up, stop**.
+Connecting sentence: CrewAI shines when research, write, and review are **tickets**. Morning ops often needs **ask, look up, follow up, stop** — and some mornings that lookup must become a **briefing**.
 
 - **Official Definition:** The **conversable-agent model** is AutoGen’s pattern: agents send and receive messages in a loop until a **termination** condition fires.
-- **In Simple Words:** Two colleagues on a work chat, not three folders on a conveyor.
-- **Real-Life Example:** **Ananya** needs a **daily** stipend-and-dispatch summary for Prof. Meera Kulkarni at Greenfield Institute of Technology, Pune — not another four-section weekly brief.
+- **In Simple Words:** Colleagues on a work chat, not folders on a conveyor.
+- **Real-Life Example:** **Ananya** must answer Prof. Meera Kulkarni at Greenfield Institute of Technology, Pune: *Are Nimbus and Riverbank still delayed, and has trainer Slack gone?* If the drive is this week, that same packet must also become faculty copy with **risk fences**.
 
-```mermaid
-flowchart LR
-  C[CrewAI tickets] --> A[AutoGen dialogue]
-  A --> T[Registered tools]
-  T --> S[Stop when SUMMARY_READY]
-```
+![From CrewAI ticket folders on a conveyor to an AutoGen pair at a campus desk, then a chaired group briefing in the GIT Pune placement cell](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-01-from-crew-to-autogen-desk.png)
 
-**Need:** A weekly crew can feel heavy when Meera only asks, “Riverbank only — has Slack gone?” A pair can follow up without rewriting three tasks.
+The same campus morning can move from ticket folders, to a two-seat work chat, to a chaired briefing room.
 
-**Common doubt:** *“Does AutoGen replace CrewAI?”* — No. Crews remain strong for fixed handoffs. Pairs shine for **interactive delegation**.
+**Need:** A weekly crew is heavy for “Riverbank only — has Slack gone?” A pair with no chair is noisy when research, risk, and messaging must share **one** thread.
+
+**Common doubt:** *“Does AutoGen replace CrewAI?”* — No. Crews remain strong for fixed handoffs. AutoGen shines for **interactive delegation** and **chaired specialist talk**.
 
 ### Activity — Pick the unit
 
-Write one line: a job that still wants a **crew**, and one line: a job that wants a **conversable pair**.
+Write **crew**, **pair**, or **group** for: (1) four-section weekly brief, (2) “Riverbank only — dispatch status”, (3) drive page with risk fences visible.
 
 ---
 
 ## AssistantAgent and UserProxyAgent
 
-Connecting sentence: A conversation still needs **job titles**. AutoGen names the two seats you will keep repeating.
+Connecting sentence: A conversation still needs **job titles**. These two seats stay in both runs today.
 
-- **Official Definition:** An **AssistantAgent** is an LLM-backed specialist that plans, replies, and may **suggest** registered tools. A **UserProxyAgent** is the user-side (or desk-side) agent that **starts** the task, may execute tools, and helps enforce stop rules.
-- **In Simple Words:** Analyst thinks and asks for lookups. Desk runner starts the thread and presses approved buttons.
+- **Official Definition:** An **AssistantAgent** is an LLM-backed specialist that plans, replies, and may **suggest** registered tools. A **UserProxyAgent** is the user-side agent that **starts** the task, may execute tools, and helps enforce stop rules.
+- **In Simple Words:** The analyst thinks and asks for lookups. The desk runner starts the thread and presses approved buttons.
 - **Real-Life Example:** Ananya (or a script standing in for her) posts the morning ask. The stipend analyst must not invent that Infosys owes eight students.
 
 | Agent | Campus seat | Must do | Must not do |
 |---|---|---|---|
 | **UserProxyAgent** | Campus desk runner | Start the ask; run registered tools | Invent register rows |
-| **AssistantAgent** | Stipend analyst | Plan, call tools, write the summary | Guess headcounts; run unregistered code |
+| **AssistantAgent** | Specialist | Plan, call tools or write a slice | Guess headcounts; run unregistered code |
 
-**System messages** are the contracts. Weak: “Be helpful.” Strong: “Use lookup tools for every company status. Never invent a student count.”
+![AutoGen pair tech stack: UserProxyAgent CampusDeskRunner, AssistantAgent StipendAnalyst, register_function with caller and executor, tools and SUMMARY_READY](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-02-pair-tech-stack.png)
+
+These are the AutoGen building blocks you will type: two agent classes, one registration arrow, and a stop stamp.
+
+- **Official Definition:** A **system message** is the initial instruction that sets an agent’s seat, limits, and stop phrase.
+- **In Simple Words:** The job contract taped to the chair.
+- **Real-Life Example:** Weak: “Be helpful.” Strong: “Use lookup tools for every company status. Never invent a student count.”
 
 **Common error:** Both agents writing the final summary. Roles blur and the trace becomes unreadable.
 
@@ -63,103 +66,66 @@ Rewrite *“You are a helpful analyst”* in two sentences: campus setting, and 
 
 ---
 
-## Register Functions and Optional Code Execution
+## Register Functions and Termination
 
-Connecting sentence: A system message is a promise. **Registration** is the access card that makes the promise checkable.
+Connecting sentence: A system message is a promise. **Registration** is the access card. **Termination** is the meeting alarm.
 
-- **Official Definition:** **`register_function`** connects a Python helper to a **caller** (who may suggest it) and an **executor** (who may run it), with a description the model sees.
-- **In Simple Words:** Issue one swipe card. The analyst requests the lookup; the desk runner runs it.
-- **Real-Life Example:** `lookup_stipend_status("Nimbus Analytics")` may return eight delayed students. `lookup_stipend_status("Infosys")` must return `UNKNOWN_COMPANY`, not a guessed row.
+- **Official Definition:** **`register_function`** connects a Python helper to a **caller** (who may suggest it) and an **executor** (who may run it).
+- **In Simple Words:** Issue one swipe card. The analyst asks; the desk swipes.
+- **Real-Life Example:** `lookup_stipend_status("Infosys")` must return `UNKNOWN_COMPANY`, not a guessed row.
 
-```mermaid
-flowchart LR
-  A[AssistantAgent suggests] --> R[register_function]
-  R --> U[UserProxyAgent executes]
-  U --> T[Tool result in the trace]
-```
+- **Official Definition:** A **termination condition** is an explicit rule (`is_termination_msg`, a keyword, or a turn cap) that ends the loop.
+- **In Simple Words:** Stamp **minutes ready** so the chat may stop.
+- **Real-Life Example:** The analyst ends the pair with `SUMMARY_READY`. The group ends with `BRIEF_READY`.
 
-**This lab’s tools:**
+![AutoGen conversable data flow: initiate_chat, suggest tool, execute function, tool result in the trace, then SUMMARY_READY stops the loop](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-03-pair-data-flow.png)
+
+Messages and tool results travel in a loop until `is_termination_msg` sees **SUMMARY_READY**. That loop is the data flow, not a conveyor of tickets.
 
 | Function | Returns | Fail honestly |
 |---|---|---|
 | `lookup_stipend_status(company)` | Delayed count and last HR reminder | `UNKNOWN_COMPANY` |
 | `lookup_dispatch_queue()` | Trainer Slack and second-reminder status | Never invent “sent” |
 
-- **Official Definition:** **Code execution** on a UserProxyAgent means that agent may run generated Python (`code_execution_config`).
-- **In Simple Words:** Letting the desk runner execute whatever code the analyst writes.
-- **Real-Life Example:** Useful later for a chart. Dangerous on a shared campus key. **This lab sets it off.**
-
-**Need:** Unregistered “tools” are just hallucinations. If the trace shows a headcount with **no** tool result, the answer is not grounded.
-
-**Common error:** Registering tools with the same agent as caller and executor while also enabling free-form code. Keep **caller ≠ executor** here, and keep code execution **False**.
-
-### Activity — Who swipes?
-
-If the analyst suggests `lookup_dispatch_queue`, who must speak next in a safe pair — analyst or desk runner?
-
----
-
-## Termination Conditions
-
-Connecting sentence: Tools answer *how* facts arrive. **Termination** answers *when the chat is allowed to stop*.
-
-- **Official Definition:** A **termination condition** is an explicit rule (`is_termination_msg`, a keyword, a structured phrase, or a turn cap) that ends the agent-to-agent loop.
-- **In Simple Words:** The meeting alarm plus a “minutes ready” stamp.
-- **Real-Life Example:** The analyst ends with `SUMMARY_READY` after a three-line daily summary. Without that, the pair may keep rephrasing “please review.”
-
-| Stop design | Use when |
-|---|---|
-| Keyword (`TERMINATE` / `SUMMARY_READY`) | Success is a short, obvious phrase |
-| Structured last line | You want a machine-readable close |
-| Max turns (pair round limit) | Safety net if the keyword never appears |
+- **Official Definition:** **Code execution** (`code_execution_config` on a UserProxyAgent) lets that agent run generated Python during the chat.
+- **In Simple Words:** The desk may execute whatever script the analyst writes.
+- **Real-Life Example:** Useful later for a chart. Dangerous on a shared campus key. **This run keeps it off** — lookups only.
 
 **Logic:** CrewAI stopped when the **task list** finished. AutoGen stops when **you** say the job is done. If you never say it, the dialogue can run until money or patience runs out.
 
-**Common error:** Checking only for `TERMINATE` while the analyst writes “done” in plain English. The loop continues. Put the exact phrase in the system message.
+**Common error:** Registering tools with the same agent as caller and executor, or checking only for `TERMINATE` while the analyst writes “done” in plain English.
 
-### Activity — Write the stamp
+### Activity — Who swipes, and what stamp?
 
-Write the last two lines you want in a successful daily summary, including the keyword you will search for.
+If the analyst suggests `lookup_dispatch_queue`, who must speak next? Write the last two lines of a successful pair summary, including the keyword you will search for.
 
 ---
 
-## Lab Setup
+## Lab Setup and Bounded Campus Facts
 
-Connecting sentence: Same secret habit as CrewAI: the key lives in `.env`, not in the script.
+Connecting sentence: Same secret habit as CrewAI: the key lives in `.env`. One folder holds **both** runs.
 
-Create folder `campus_ops_pair`. Inside it, `.env` (do **not** commit):
+Create folder `campus_ops_autogen`. Inside it, `.env` (do **not** commit):
 
 ```text
 OPENAI_API_KEY=your_openai_key_here
 ```
 
-Install:
-
 ```bash
 pip install ag2 python-dotenv
 ```
 
-`ag2` is the maintained AutoGen package family that still exposes `AssistantAgent`, `UserProxyAgent`, and `register_function`.
+`ag2` is the maintained AutoGen package family that still exposes `AssistantAgent`, `UserProxyAgent`, `register_function`, `GroupChat`, and `GroupChatManager`.
 
-If the classroom model name differs, change only the `model` string inside `llm_config`.
+Keep this data **inside** the scripts as the training-wheels version of a campus lookup: **Nimbus Analytics** (8 delayed, HR reminder 4 August) and **Riverbank Retail** (6 delayed, same reminder). Trainer Slack is **not sent**; the second HR reminder is **pending**. The tracker launch is a **status board**, not a payment guarantee.
 
----
-
-## Bounded Scenario — Daily Stipend and Dispatch Summary
-
-Connecting sentence: The fence is an in-memory register — the training-wheels version of a campus **REST endpoint** or internal lookup. No live web.
-
-Keep this data **inside** the script as `STIPEND_REGISTER` and `DISPATCH_QUEUE`. Companies on file: **Nimbus Analytics** (8 delayed, HR reminder 4 August) and **Riverbank Retail** (6 delayed, same reminder). Trainer Slack: **not sent**. Second HR reminder: **pending**.
-
-**Goal of the run:** One daily ops summary: who is delayed, what dispatch is pending, one recommended action. Stop with `SUMMARY_READY`.
-
-This continues Campus Ops Inbox: n8n routed complaints; CrewAI wrote the weekly faculty brief; this pair answers Meera’s **morning** question.
+**Pair goal:** Daily ops summary + `SUMMARY_READY`. **Group goal:** Research → risk → messaging notice + `BRIEF_READY`.
 
 ---
 
 ## Full Pair Script
 
-Connecting sentence: The register is the fence. The script is the pair: analyst, desk runner, two registered tools, one stop rule.
+Connecting sentence: First product of the morning: two seats, two tools, one stop rule.
 
 Save as `campus_ops_pair.py` in the same folder as `.env`.
 
@@ -167,15 +133,13 @@ Save as `campus_ops_pair.py` in the same folder as `.env`.
 # campus_ops_pair.py — AutoGen conversable pair for a daily campus ops summary
 import os  # read OPENAI_API_KEY from the environment
 from dotenv import load_dotenv  # load .env into environment variables
-from autogen import AssistantAgent, UserProxyAgent, register_function  # AutoGen pair building blocks
+from autogen import AssistantAgent, UserProxyAgent, register_function  # pair building blocks
 
 load_dotenv()  # read the API key before any model call
 API_KEY = os.getenv("OPENAI_API_KEY", "")  # empty string if missing
 
 llm_config = {  # shared LLM settings for the specialist
-    "config_list": [  # one endpoint entry
-        {"model": "gpt-4o-mini", "api_key": API_KEY},  # classroom OpenAI model
-    ],  # end config_list
+    "config_list": [{"model": "gpt-4o-mini", "api_key": API_KEY}],  # classroom OpenAI model
     "temperature": 0.2,  # steady facts for a daily desk
 }  # end llm_config
 
@@ -189,25 +153,17 @@ DISPATCH_QUEUE = {  # bounded dispatch board
     "second_hr_reminder": "pending",  # second company HR mail not yet sent
 }  # end dispatch queue
 
-
 def lookup_stipend_status(company: str) -> str:  # tool 1 — company stipend row
     """Return stipend status for one company from the campus register."""  # agent-facing description
     key = company.strip().lower()  # normalise the company name
     row = STIPEND_REGISTER.get(key)  # lookup or None
     if not row:  # unknown company
         return f"UNKNOWN_COMPANY:{company}"  # honest miss
-    return (  # human-readable card
-        f"company={company}; students={row['students']}; status={row['status']}; last_hr={row['last_hr']}"  # card
-    )  # end return
-
+    return f"company={company}; students={row['students']}; status={row['status']}; last_hr={row['last_hr']}"  # card
 
 def lookup_dispatch_queue() -> str:  # tool 2 — pending campus dispatch
     """Return the current trainer Slack and HR reminder dispatch flags."""  # agent-facing description
-    return (  # no arguments — whole board
-        f"trainer_slack={DISPATCH_QUEUE['trainer_slack']}; "  # slack flag
-        f"second_hr_reminder={DISPATCH_QUEUE['second_hr_reminder']}"  # hr flag
-    )  # end return
-
+    return f"trainer_slack={DISPATCH_QUEUE['trainer_slack']}; second_hr_reminder={DISPATCH_QUEUE['second_hr_reminder']}"  # board
 
 def is_done(message) -> bool:  # termination helper
     content = (message.get("content") or "") if isinstance(message, dict) else str(message)  # read text safely
@@ -223,7 +179,7 @@ analyst = AssistantAgent(  # specialist who may suggest tools
         "For dispatch you must call lookup_dispatch_queue. "  # second tool
         "Never invent student counts or claim Slack was sent. "  # accuracy fence
         "Write a daily summary with three short bullets, then the line SUMMARY_READY. "  # stop stamp
-        "Do not run code. Do not mention companies that returned UNKNOWN_COMPANY except as unknown."  # honest miss
+        "Do not run code. Do not treat UNKNOWN_COMPANY as a delayed employer."  # honest miss
     ),  # end system message
     llm_config=llm_config,  # model config
 )  # end analyst
@@ -249,217 +205,262 @@ register_function(  # wire dispatch lookup
     description="Look up trainer Slack and second HR reminder flags.",  # model-facing help
 )  # end register dispatch
 
-
-def print_trace(chat_result):  # quality-review helper
-    print("=== CONVERSATION TRACE ===")  # banner
-    messages = chat_result.chat_history if hasattr(chat_result, "chat_history") else []  # AutoGen history
-    if not messages and hasattr(desk, "chat_messages"):  # fallback to agent store
-        stored = desk.chat_messages.get(analyst, [])  # pair transcript
-        messages = stored  # use stored list
-    for i, msg in enumerate(messages, start=1):  # numbered turns
-        name = msg.get("name") or msg.get("role") or "unknown"  # speaker label
-        content = str(msg.get("content") or "")[:240]  # short preview
-        print(f"{i}. [{name}] {content}")  # one line per turn
-    print("=== END TRACE ===")  # footer
-
-
 if __name__ == "__main__":  # run only when executed directly
     if not API_KEY:  # fail clearly
         raise ValueError("Set OPENAI_API_KEY in .env")  # setup reminder
     opening = (  # delegated morning task
         "Prepare this morning's campus ops summary for Prof. Meera Kulkarni. "  # daily ask
         "Cover Nimbus Analytics and Riverbank Retail stipend delays, "  # two companies
-        "then dispatch status, then one recommended next action. "  # dispatch plus action
-        "Use tools. Do not guess."  # no hallucination
+        "then dispatch status, then one recommended next action. Use tools. Do not guess."  # no hallucination
     )  # end opening
     result = desk.initiate_chat(analyst, message=opening)  # start the pair dialogue
-    print_trace(result)  # review tool use and stop reason
+    history = getattr(result, "chat_history", None) or []  # AutoGen history if present
+    if not history and hasattr(desk, "chat_messages"):  # fallback to stored pair transcript
+        history = desk.chat_messages.get(analyst, [])  # messages with the analyst
+    print("=== PAIR TRACE ===")  # banner
+    for i, msg in enumerate(history, start=1):  # numbered turns
+        name = msg.get("name") or msg.get("role") or "unknown"  # speaker
+        print(f"{i}. [{name}] {str(msg.get('content') or '')[:220]}")  # preview
+    print("=== END PAIR TRACE ===")  # footer
 ```
 
 **How the code works:**
 
 - `AssistantAgent` holds the analyst **system message**. `UserProxyAgent` starts the chat and **executes** tools.
 - `register_function` sets **caller=analyst** and **executor=desk**. Suggestions and runs stay on different seats.
-- `code_execution_config=False` is the optional-code decision for this campus desk: lookups only, no generated scripts.
-- `is_done` looks for `SUMMARY_READY` or `TERMINATE`. That is the **termination condition**.
-- `print_trace` is how you verify the analyst did not invent a row. No tool line in the trace means the summary is untrusted.
+- `code_execution_config=False` keeps the desk on lookups only. `is_done` looks for `SUMMARY_READY`.
+- The printed **trace** is how you verify the analyst did not invent a row.
 
-Run:
-
-```bash
-python campus_ops_pair.py
-```
+Run: `python campus_ops_pair.py`
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| Auth error | Missing key | `.env` + `load_dotenv()` |
+| Auth / import error | Missing key or package | `.env` + `pip install ag2 python-dotenv` |
 | Endless rephrasing | Keyword never emitted | Repeat `SUMMARY_READY` in the system message |
-| Invented Infosys count | Tool not called | Trace: must show `lookup_stipend_status` |
-| Code-exec warning | Config left on | Keep `code_execution_config=False` |
-| Import error | Wrong package | `pip install ag2 python-dotenv` |
+| Invented Infosys count | Tool not called | Trace must show `lookup_stipend_status` |
+
+A healthy pair trace typically shows: desk opening → analyst suggests a lookup → desk returns students=8 or 6 → dispatch tool → three bullets + **SUMMARY_READY**. A final paragraph with **zero** tool lines is a guessing chatbot, not a delegated workflow.
+
+### Activity — Trace detective (pair)
+
+After your run, tick: both tools visible? Final bullets match 8 and 6 and Slack **not sent**? Chat ended with **SUMMARY_READY**? Optional probe: add *Also check Infosys* and confirm `UNKNOWN_COMPANY`, not a delayed headcount.
 
 ---
 
-## Analyse the Conversation Trace
+## GroupChat, Speaker Selection, and Max Rounds
 
-Connecting sentence: A polished final paragraph is not evidence. The **trace** is.
+Connecting sentence: The pair finished the lookup. A drive notice needs **three slices** in one room — or Infosys appears in a cheerful poster.
+
+- **Official Definition:** A **GroupChat** is a shared message space for several conversable agents. A **GroupChatManager** is the coordinator that runs that space under your rules.
+- **In Simple Words:** The meeting room, and the person who gives the floor.
+- **Real-Life Example:** Ananya’s opening ask stays in one thread. The manager is the chair, not a fourth novelist.
+
+- **Official Definition:** **Speaker selection** is the policy for who speaks next. **Max rounds** (`max_round`) is a hard cap on group turns. A **handoff** is the designed move of work from one specialist to another.
+- **In Simple Words:** Call the right expert; pass the folder; ring the bell.
+- **Real-Life Example:** After research lists Nimbus and Riverbank, **risk** must speak before **messaging** writes the poster. If messaging speaks first, the poster invents urgency-as-lawsuit.
+
+![AutoGen GroupChat orchestration: GroupChatManager chairs a shared GroupChat, speaker selection Research then Risk then Messaging, max_round 10, BRIEF_READY](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-04-groupchat-orchestration.png)
+
+The shared room is **GroupChat**. The chair is **GroupChatManager**. Numbered arrows are **speaker selection**. `max_round` is the bell.
+
+| Specialist | Distinct sub-result | Must not do |
+|---|---|---|
+| **ResearchSpecialist** | File-backed facts: 14 students, two companies, tracker is status-only | Write final student copy |
+| **RiskSpecialist** | Fence list: no legal threats, no unpaid totals, no extra companies | Invent replacement facts |
+| **MessagingSpecialist** | Notice from **approved** lines only | Invent Nimbus headcount |
+
+**This run:** custom `select_briefing_speaker` after the desk opens: research → risk → messaging, with **max rounds = 10**.
+
+**Common error:** `max_round=3` on a three-specialist brief so messaging never speaks — that is an **incomplete handoff**, not efficiency. Treating the manager as a fourth novelist also hides which specialist failed.
+
+### Activity — Set the bell
+
+If each specialist needs one substantial turn, what is the **smallest** `max_round` you would try — 4, 10, or 40 — and why not 40?
+
+---
+
+## Full Group Script
+
+Connecting sentence: Same folder, same facts, new objects: room, chair, ladder.
+
+Save as `campus_ops_group.py`.
+
+```python
+# campus_ops_group.py — AutoGen group chat for a placement-drive briefing
+import os  # read OPENAI_API_KEY
+from dotenv import load_dotenv  # load .env
+from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager  # group blocks
+
+load_dotenv()  # load the key
+API_KEY = os.getenv("OPENAI_API_KEY", "")  # empty if missing
+llm_config = {"config_list": [{"model": "gpt-4o-mini", "api_key": API_KEY}], "temperature": 0.2}  # classroom model
+
+FACTS = (  # bounded briefing fence — same campus register as the pair
+    "Campus: Greenfield Institute of Technology, Pune. Lead: Prof. Meera Kulkarni. "  # people
+    "Issue: June internship stipends delayed for 14 students. "  # problem
+    "Companies: Nimbus Analytics; Riverbank Retail. Range: Rs 8000 to 15000. "  # on-file names
+    "HR reminder sent 4 August. Trainer Slack not sent. "  # dispatch facts
+    "Launch: stipend-status tracker shows delay status only — not a payment promise. "  # feature fence
+    "Do not invent companies, unpaid totals, or legal threats."  # hard no
+)  # end FACTS
+
+def is_done(message) -> bool:  # shared stop rule
+    content = (message.get("content") or "") if isinstance(message, dict) else str(message)  # safe text
+    return "BRIEF_READY" in content.upper() or "TERMINATE" in content.upper()  # completion stamps
+
+research = AssistantAgent(  # specialist 1
+    name="ResearchSpecialist",  # trace label
+    system_message=(  # slice
+        "You are campus research for a GIT Pune placement-drive briefing. "  # seat
+        f"Use only these facts: {FACTS} "  # fence
+        "Write 5 to 7 bullets of evidence. No student-facing poster. No legal language."  # sub-result
+    ),  # end research message
+    llm_config=llm_config,  # model
+)  # end research
+
+risk = AssistantAgent(  # specialist 2
+    name="RiskSpecialist",  # trace label
+    system_message=(  # slice
+        "You are policy risk for the placement cell. Read research bullets. "  # seat
+        "List fences: no extra companies, no unpaid totals, no legal threats, tracker is status-only. "  # fences
+        "Flag any invented claim. Do not write the final student notice."  # not messaging
+    ),  # end risk message
+    llm_config=llm_config,  # model
+)  # end risk
+
+messaging = AssistantAgent(  # specialist 3
+    name="MessagingSpecialist",  # trace label
+    system_message=(  # slice
+        "You write faculty and student messaging for the stipend-tracker launch. "  # seat
+        "Use only research bullets that Risk did not flag. "  # approved inputs
+        "Produce a short notice with Title, What students will see, What we will not claim. "  # shape
+        "End with the line BRIEF_READY. Never invent facts."  # stop stamp
+    ),  # end messaging message
+    llm_config=llm_config,  # model
+)  # end messaging
+
+desk = UserProxyAgent(  # starts the meeting
+    name="CampusDeskRunner",  # trace label
+    human_input_mode="NEVER",  # automatic demo
+    code_execution_config=False,  # no generated code
+    is_termination_msg=is_done,  # stop on BRIEF_READY
+)  # end desk
+
+
+def select_briefing_speaker(last_speaker, groupchat):  # custom speaker selection
+    if (not groupchat.messages) or (last_speaker is desk):  # empty room or desk just opened
+        return research  # research speaks first
+    if last_speaker is research:  # research handoff
+        return risk  # then policy
+    if last_speaker is risk:  # risk handoff
+        return messaging  # then copy
+    return messaging  # stay until BRIEF_READY / max_round
+
+
+groupchat = GroupChat(  # the room
+    agents=[desk, research, risk, messaging],  # roster
+    messages=[],  # fresh transcript
+    max_round=10,  # hard stop against runaway dialogue
+    speaker_selection_method=select_briefing_speaker,  # chair rules
+)  # end groupchat
+
+manager = GroupChatManager(  # the chair
+    groupchat=groupchat,  # attach the room
+    llm_config=llm_config,  # available if the manager must speak
+    is_termination_msg=is_done,  # same close rule
+)  # end manager
+
+if __name__ == "__main__":  # direct execution only
+    if not API_KEY:  # fail clearly
+        raise ValueError("Set OPENAI_API_KEY in .env")  # setup
+    opening = (  # complex campus task
+        "Prepare one placement-drive briefing for faculty and a student notice "  # two audiences
+        "for the stipend-status tracker launch. Research, then risk, then messaging. Stay inside known facts."  # order
+    )  # end opening
+    desk.initiate_chat(manager, message=opening)  # start through the chair
+    print("=== GROUP TRACE ===")  # banner
+    for i, msg in enumerate(groupchat.messages, start=1):  # numbered turns
+        name = msg.get("name") or msg.get("role") or "unknown"  # speaker
+        print(f"{i}. [{name}] {str(msg.get('content') or '')[:200]}")  # preview
+    print("=== END GROUP TRACE ===")  # footer
+```
+
+**How the code works:**
+
+- Three **AssistantAgent** specialists have **non-overlapping** system messages. Each must produce a different sub-result.
+- **GroupChat** is the shared room. **GroupChatManager** is the chair `initiate_chat` talks to.
+- `select_briefing_speaker` encodes **handoffs**: desk opening → research → risk → messaging. That is **speaker selection**, not luck.
+- `max_round=10` is the bell. `BRIEF_READY` is the success stamp.
+
+Run: `python campus_ops_group.py`
+
+If you temporarily set `speaker_selection_method="round_robin"`, the desk or the wrong specialist may talk out of turn. Restore `select_briefing_speaker`. Rigidity is the point when risk must speak before messaging.
+
+---
+
+## Read Traces and Fix One Failure
+
+Connecting sentence: A polished last paragraph is not evidence. The **trace** is the CCTV of both runs.
 
 - **Official Definition:** A **conversation trace** is the ordered record of messages, tool suggestions, tool results, and the close signal.
 - **In Simple Words:** CCTV of the work chat.
-- **Real-Life Example:** If the summary says “Slack already sent” but `lookup_dispatch_queue` returned `not sent`, the **analyst** ignored the tool — not “AutoGen failed.”
+- **Real-Life Example:** If the pair summary says “Slack sent” but dispatch returned `not sent`, the **analyst** ignored the tool.
 
-**Read in this order:**
+- **Official Definition:** A **group-chat failure mode** is a repeatable bad pattern such as **wrong speaker** or **repetition deadlock**.
+- **In Simple Words:** The meeting got stuck, or the wrong person grabbed the mic.
+- **Real-Life Example:** Messaging answers “can we threaten legal action?” That is **wrong speaker**. Research repeating the same seven bullets four times is **repetition deadlock**.
 
-1. Did the analyst **suggest** both tools (or clearly cover both companies plus dispatch)?
-2. Did the **desk runner** execute them (tool results visible)?
-3. Did the loop **stop** because of `SUMMARY_READY`, not because you hit Ctrl+C?
-4. Does the final summary match the tool cards (8 and 6; Slack not sent)?
-
-```mermaid
-flowchart TB
-  Ask[Desk opening ask] --> Plan[Analyst plans]
-  Plan --> Tool[Suggest lookup]
-  Tool --> Run[Desk executes]
-  Run --> Sum[Three bullets + SUMMARY_READY]
-```
-
-### Activity — Trace detective
-
-After your run, write one sentence: *Tool use was visible / not visible because…*
-
-### Activity — Follow-up without a new crew
-
-Change the opening message to: *Riverbank Retail only.* Predict: one stipend lookup, still one dispatch lookup, still `SUMMARY_READY`. That is why a **pair** fits daily ops.
-
----
-
-## A Healthy Trace vs a Guessing Trace
-
-Connecting sentence: After one successful run, lock what “good CCTV” looks like so the next failure is obvious.
-
-| Turn (typical) | Speaker | What good looks like |
+| Failure | What you see | One configuration fix |
 |---|---|---|
-| 1 | CampusDeskRunner | Morning ask for Meera; names both companies |
-| 2 | StipendAnalyst | Plans; suggests `lookup_stipend_status` |
-| 3 | CampusDeskRunner | Tool result with students=8 or 6 |
-| 4–6 | Pair | Second company + `lookup_dispatch_queue` |
-| Last | StipendAnalyst | Three bullets + **SUMMARY_READY** |
+| Guessing pair | Final paragraph, zero tool lines | Strengthen “must call lookup” |
+| Wrong speaker | Messaging speaks right after the desk | Restore the custom ladder (do not use loose auto select) |
+| Repetition deadlock | Risk restates research with no new fence | Tighten risk’s message; keep room for messaging |
+| Incomplete handoff | Messaging never speaks / no `BRIEF_READY` | Raise `max_round`; confirm the ladder after risk |
+| Missing stamp | Endless “happy to help” | Put `SUMMARY_READY` / `BRIEF_READY` in the system message and in `is_done` |
 
-| Trace smell | What it usually means | First fix |
-|---|---|---|
-| Final paragraph, zero tool lines | Analyst guessed | Strengthen “must call lookup” in the system message |
-| Tool suggested, never executed | Caller/executor mix-up | `caller=analyst`, `executor=desk` |
-| Chat fades without a stamp | Weak termination | Repeat `SUMMARY_READY` in the system message |
-| Infosys has a headcount | Hallucinated row | Probe `UNKNOWN_COMPANY`; forbid treating it as delayed |
+**Lab fix:** Set `max_round=3`, re-run, write what failed (likely incomplete handoff). Restore `max_round=10` and confirm messaging returns. That is a **configuration** fix, not a new framework.
 
-**Logic:** CrewAI taught you to open **three files**. AutoGen teaches you to open the **trace**. Same professional habit: do not grade only the last paragraph.
+A messy trace is a configuration document. Change one setting: the ladder, the role text, or the round cap.
 
-### Activity — Score this fake trace
+### Activity — Break then fix
 
-A summary says “Nimbus 8 delayed, Slack sent.” Dispatch tool returned `trainer_slack=not sent`. Which failed — tool registration, or the analyst ignoring the tool result?
+After the group run: Did research speak before risk? Did messaging include `BRIEF_READY`? Did any extra company appear? Then run the `max_round=3` experiment and name the failure.
 
 ---
 
-## Crew Tickets vs a Conversable Pair
+## What “Good” Looks Like on This Desk
 
-Connecting sentence: You now have two design units in this module. Choose on purpose.
+A successful **end-to-end** morning has all of the following:
 
-| When the job looks like… | Prefer |
-|---|---|
-| Research notes → draft → review every Monday | **CrewAI** sequential (or hierarchical) crew |
-| Meera asks a follow-up before lunch | **AutoGen** pair with registered lookups |
-| You need a Driven-by table for faculty | Crew artifacts (`output_file`) |
-| You need to see *when* a lookup ran | Pair **conversation trace** |
+- Pair trace names **StipendAnalyst** and **CampusDeskRunner**, shows both lookups, ends with **SUMMARY_READY**
+- Group trace shows **ResearchSpecialist**, then **RiskSpecialist**, then **MessagingSpecialist** with three distinct sub-results
+- No extra company names; no legal threats; tracker stays status-only
+- You can name one failure you induced and the **one** setting you changed
 
-Ananya’s week can use **both**. Weekly faculty brief stays a crew. Daily “has Slack gone?” is a pair. Do not force every campus question through three tasks.
-
-### Activity — Label Ananya’s requests
-
-For each request, write **crew** or **pair**: (1) four-section weekly brief, (2) “Riverbank only — dispatch status”, (3) re-run after an accuracy FAIL on Infosys.
-
----
-
-## Safe Execution Constraints — A Desk Policy
-
-Connecting sentence: Registration is not only wiring. It is a **policy** you can say aloud in the placement cell.
-
-Keep this four-line policy next to the script:
-
-1. Only **named** Python functions are tools — stipend lookup and dispatch lookup.
-2. The **analyst** may suggest; the **desk** may run. Do not swap those seats without a reason.
-3. **Code execution** stays off. A daily summary does not need generated Python.
-4. Unknown companies return **UNKNOWN_COMPANY**. The summary may list them as unknown, never as delayed employers.
-
-**When would you turn code execution on?** A later product that must draw a chart from the register. Even then, constrain the working directory and never paste keys into generated code. This lab does not need that power.
-
-**Common doubt:** *“Can I register a live HTTP lookup?”* — Yes, later, as a small Python function that calls a campus **REST endpoint** and returns a **JSON packet**. The AutoGen wiring stays the same: caller suggests, executor runs, trace shows the packet. Do not add a live URL until the local register pair is clean.
-
-### Activity — Policy yes/no
-
-Should the analyst receive `code_execution_config` with a shell? **No.** Should a future `lookup_stipend_status` call an internal register URL and return JSON text? **Yes**, once the pair habit works.
-
----
-
-## What “Good” Looks Like on This Pair
-
-A successful delegated run has all of the following:
-
-- Trace names **StipendAnalyst** and **CampusDeskRunner**
-- At least one stipend lookup and one dispatch lookup appear
-- `UNKNOWN_COMPANY` if you probe Infosys — and that name is not treated as a delayed employer
-- Final bullets stay inside tool results
-- Chat ends with **SUMMARY_READY** (or `TERMINATE`)
-
-**Upcoming** work scales this pair into a **group chat** with research, risk, and messaging specialists. This session’s job is a **controlled two-agent loop**.
-
-### Activity — Reliability checklist
-
-Tick each box after your run:
+Do not put three novelists in a GroupChat for a yes/no dispatch question. Do not ask one pair to own research, risk, *and* messaging without a chair. Keep this run automatic so the ladder stays visible.
 
 | # | Check | Done? |
 |---|---|---|
-| 1 | System messages name campus seats and fences | |
-| 2 | Two functions registered with caller ≠ executor | |
-| 3 | Code execution is off | |
-| 4 | Trace shows stipend and dispatch lookups | |
-| 5 | Infosys probe would return UNKNOWN_COMPANY | |
-| 6 | Chat ended with SUMMARY_READY | |
-| 7 | Final bullets match tool cards (8, 6, Slack not sent) | |
+| 1 | Pair system messages name seats and fences | |
+| 2 | Two functions registered with caller ≠ executor; code execution off | |
+| 3 | Pair trace shows stipend + dispatch lookups and SUMMARY_READY | |
+| 4 | Custom speaker ladder is research → risk → messaging | |
+| 5 | Group trace shows three distinct sub-results and BRIEF_READY (or a named failure + one fix) | |
 
-If any box is empty, name **system message**, **registration**, or **termination** — then change only that layer.
+If a box is empty, name **system message**, **registration**, **termination**, or **speaker / max_round** — then change only that layer.
 
-Connecting sentence: A pair that looks fluent but fails row 4 is still a guessing chatbot. Row 4 is the professional standard.
-
-### Activity — Probe an unknown company
-
-Add one sentence to the opening message: *Also check Infosys.* Predict the tool return. The daily summary may say Infosys is **unknown**, not “8 students delayed.”
-
----
-
-## If Kickoff-Style Chat Fails
-
-Connecting sentence: Fix the layer that failed. Do not add a third agent to “help.”
-
-The pair is not a crew. A third novelist will not repair a missing `SUMMARY_READY` or a swapped executor.
-
-Read the terminal from the top: import errors first, then auth, then missing tool lines, then missing stamps. That order saves you from rewriting a system message when the key was empty.
-
-**Common error:** Copying CrewAI `kickoff` vocabulary into AutoGen. Here the start button is **`initiate_chat`**. The stop button is **`is_termination_msg`**. The evidence file is the **trace**, not `output/03_final_brief.md`.
-
-### Activity — Translate the nouns
-
-Write the AutoGen name for each CrewAI habit: (1) kickoff, (2) output artifact, (3) tool on one agent only. Suggested: initiate_chat; conversation trace; register_function with a single caller.
+**Upcoming** work moves from AutoGen’s conversation loop to **graph-shaped** agent workflows, where nodes and edges replace the chat chair.
 
 ---
 
 ## Key Takeaways
 
-- **AutoGen** conversable pairs delegate work through **dialogue**, not only through a fixed CrewAI task list.
-- Split seats: **AssistantAgent** reasons and suggests; **UserProxyAgent** starts the job and **executes** registered tools.
-- **`register_function`** plus **termination** (`SUMMARY_READY`) and **code execution off** keep the campus desk inspectable and bounded.
-- Judge quality from the **conversation trace**: tool calls, honest misses, and the real stop reason.
+- **AutoGen** delegates work through **dialogue**: a conversable **pair** for lookups, a **GroupChat** when several specialists must share one thread.
+- Split seats: **AssistantAgent** reasons and suggests; **UserProxyAgent** starts the job and **executes** registered tools. **`register_function`** plus a keyword stamp keep the desk inspectable.
+- **GroupChatManager**, **speaker selection**, and **max rounds** keep research, risk, and messaging in order and stop runaway chat.
+- Judge quality from the **conversation trace**, then change **one** configuration — system message, registration, stop rule, or speaker / round cap.
 
-These habits — clear system messages, registered tools, and a designed stop — are what you will reuse when more than two specialists must share one room in **upcoming** sessions.
+These habits — clear seats, registered tools, a designed stop, and a chair you can debug — are what you will reuse when workflows are drawn as graphs in **upcoming** sessions.
 
 ---
 
@@ -471,14 +472,16 @@ These habits — clear system messages, registered tools, and a designed stop �
 | **Conversable-agent model** | Pattern | Agents chat until a stop rule fires |
 | **AssistantAgent** | Class | LLM specialist; may suggest tools |
 | **UserProxyAgent** | Class | Starts the task; may execute tools |
-| **System message** | Field | Role, limits, and stop phrase |
 | **register_function** | Call | Caller suggests; executor runs |
-| **Caller / executor** | Roles | Who proposes a tool vs who runs it |
-| **Code execution** | Optional | UserProxy running generated Python — **off** here |
 | **Termination condition** | Rule | `is_termination_msg` / keyword |
-| **SUMMARY_READY** | Keyword | Success stamp for this lab |
+| **SUMMARY_READY / BRIEF_READY** | Keywords | Pair and group success stamps |
+| **GroupChat** | Class | Shared multi-agent message room |
+| **GroupChatManager** | Class | Chair that runs the group |
+| **Speaker selection** | Policy | Who speaks next |
+| **max_round** | Setting | Hard cap on group turns |
+| **Wrong speaker / deadlock** | Failures | Unsuitable agent, or same points looping |
 | **Conversation trace** | Evidence | Ordered messages and tool results |
-| **initiate_chat** | Method | Desk starts dialogue with the analyst |
-| **UNKNOWN_COMPANY** | Tool result | Honest miss from the register |
+| **initiate_chat** | Method | Desk starts the pair or the chair |
 | `pip install ag2 python-dotenv` | Command | Install AutoGen family and `.env` loader |
 | `python campus_ops_pair.py` | Command | Run the daily ops pair |
+| `python campus_ops_group.py` | Command | Run the placement-drive group |

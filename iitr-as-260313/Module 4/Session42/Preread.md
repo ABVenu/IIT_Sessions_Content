@@ -1,4 +1,4 @@
-# Pre-read: AutoGen — Conversable Agents and Tool Use
+# Pre-read: AutoGen: Hands-on — End-to-End Multi-Agent System
 
 ## Context of This Session in the Course
 
@@ -13,22 +13,22 @@ flowchart TB
 
   CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[n8n + CrewAI production crews]</i><br/>Tools, process choice, validation"]]
 
-  CS{{"<b>Current Session</b><br/>AutoGen: Conversable Agents and Tool Use<br/><i>[AssistantAgent + UserProxyAgent]</i><br/>Mental shift: from fixed crew tasks to dialogue-driven delegation"}}
+  CS{{"<b>Current Session</b><br/>AutoGen: Hands-on — End-to-End Multi-Agent System<br/><i>[Pair + GroupChat in one desk]</i><br/>Mental shift: from fixed crew tasks to dialogue, then a chaired specialist meeting"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>Dialogue-driven agent pairs<br/>Registered tools and stop rules"]
-    RV["<b>Real-Life Value</b><br/>Daily campus ops summaries<br/>Ask, look up, refine, finish"]
+    CV["<b>Course Value</b><br/>Conversable pairs with tools<br/>Chaired groups with stop rules"]
+    RV["<b>Real-Life Value</b><br/>Daily campus lookups<br/>Placement-drive briefings"]
   end
 
   subgraph Future["Where This Leads"]
-    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[group chat + hosted builders]</i><br/>Group chat, hosted builders, ops"]
+    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[graph-shaped agent workflows]</i><br/>Nodes, edges, and stateful graphs"]
     F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>End-to-end autonomous system"]
   end
 
   M1 ==>|&nbsp;Foundation&nbsp;| M2
   M2 ==>|&nbsp;Components&nbsp;| M3
   M3 ==>|&nbsp;Scale up&nbsp;| CM
-  CM ==>|&nbsp;Conversable pair&nbsp;| CS
+  CM ==>|&nbsp;AutoGen desk&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
   CS ==>|&nbsp;Next Steps&nbsp;| F4
@@ -50,132 +50,129 @@ flowchart TB
 
 **Ananya** opens the Campus Ops Inbox at 8:40 a.m. on the Bengaluru–Pune training campus. Prof. Meera Kulkarni at Greenfield Institute of Technology, Pune, does not want another weekly faculty brief. She wants a **daily ops summary**: which internship stipends are still delayed, what reminder has already gone to company HR, and whether trainer Slack has been dispatched.
 
-The **previous** session gave her a production-style **CrewAI** crew — custom tools, a process she could defend, a checklist, one targeted fix. That model is excellent when the job is a **fixed ticket list**: research, then write, then review.
+Some mornings that is enough. This week it is not. The institute is also launching a **campus stipend-status tracker** during a **placement drive**. The same facts must become one packet: known internship evidence, **policy fences**, and student-facing copy. Three separate documents that nobody reconciled is how Infosys appears in a cheerful notice.
 
-Daily ops is messier. Some mornings Meera asks a follow-up: “Also check Riverbank only.” Some mornings a lookup returns `UNKNOWN_COMPANY` and the analyst must try the other tool. Some mornings the desk should **stop** the moment a reliable three-line summary appears — not after every pre-written task has fired.
+The **previous** session gave Ananya a production-style **CrewAI** crew — custom tools, a process she could defend, a checklist, one targeted fix. That model is excellent when the job is a **fixed ticket list**: research, then write, then review.
 
-Ananya does not need another rigid pipeline every dawn. She needs a **working conversation** between two focused partners: one who states the campus request, and one who can think, use **approved** lookups, and reply until the job is truly done.
+Daily ops is messier. Meera may ask, “Also check Riverbank only.” A lookup may return `UNKNOWN_COMPANY`. The desk should **stop** the moment a reliable summary appears. And when the job grows into a drive briefing, three specialists must share **one** thread with a chair — not a WhatsApp group with no admin.
 
-That is where **AutoGen** enters — not as a replacement for every CrewAI habit you have, but as a way to build **conversable agent pairs** that delegate work through dialogue.
+That is where **AutoGen** enters — not as a replacement for every CrewAI habit, and not as two separate products. It is one **dialogue desk**: a **conversable pair** with approved lookups, then a **group chat** when research, risk, and messaging must hand work across.
 
 ---
 
 ## When a fixed team brief is not enough
 
-Picture a team lead and an analyst on an internal chat thread. The lead posts: “Give me today’s delayed stipends and one dispatch action.” The analyst plans, calls the register, shares an interim finding, and asks if Pune or Bengaluru dispatch is in scope. The lead says, “Pune placement cell only.” The analyst uses the approved tool again, updates the answer, and sends a final summary. The thread ends when a **completion signal** appears — not because the chat randomly stopped.
+Picture a team lead and an analyst on an internal chat. The lead posts: “Give me today’s delayed stipends and one dispatch action.” The analyst plans, calls the register, and sends a final summary when a **completion signal** appears.
 
-A single chatbot can talk fluently and still invent that Infosys owes eight students. A rigid crew can feel heavy for a small delegated job. A dialogue between two agents can become **endless** if nobody defines who does what and **when to stop**.
+Now picture the same morning an hour later. Meera wants a page faculty can read before the drive, with risk fences visible. The researcher must not write the poster. The messenger must not answer a legal question. Someone must **call the next speaker** and ring a **bell** so the meeting cannot run forever.
+
+A single chatbot can talk fluently and still invent that Infosys owes eight students. A rigid crew can feel heavy for a small delegated job. A pair with no chair is noisy when three experts must contribute **distinct** slices. A group with no stop rule is an endless meeting.
 
 ---
 
 ## The challenge we will tackle
 
-What if you had to hand one delegated campus task to a specialist agent, let it use approved stipend and dispatch lookups during a back-and-forth conversation, and stop cleanly only when explicit success rules are met — without the conversation running forever or guessing when to finish?
+What if you had to hand one delegated campus task to a specialist pair, let it use approved stipend and dispatch lookups, stop cleanly on an explicit stamp — and then, the same morning, bring three specialists into a shared conversation with speaker rules and a round cap so the campus ships **one** trustworthy briefing?
 
-This session focuses on that design problem using AutoGen’s **conversable-agent model**.
+This session focuses on that **end-to-end** design problem using AutoGen’s conversable-agent model **and** group orchestration.
 
 ---
 
-## Two agents, one delegated workflow
+## Two agents, then a chaired room
 
 AutoGen treats agents as **participants in a conversation**, not only as static role cards on a CrewAI task board.
 
-| Agent type | Simple role | What it typically does |
+| Piece | Simple role | What it typically does |
 |---|---|---|
-| **AssistantAgent** | The specialist | Plans, reasons, replies, and can call **registered** tools when extra ability is needed |
-| **UserProxyAgent** | The delegate or human stand-in | Starts the request, can guide the exchange, optionally runs code, and helps control when the run ends |
+| **AssistantAgent** | The specialist | Plans, reasons, replies, and can suggest **registered** tools |
+| **UserProxyAgent** | The delegate or desk runner | Starts the request, can run tools, and helps control when the run ends |
+| **GroupChat** | The shared room | Keeps every specialist contribution in one traceable thread |
+| **GroupChatManager** | The chair | Applies flow and stop rules so the meeting stays structured |
 
-In simple Indian English, a **conversable agent** is an AI participant that can send messages, receive replies, and continue until a defined stop point. **Conversable** means “able to hold a structured conversation.”
+In simple Indian English, a **conversable agent** is an AI participant that can send messages, receive replies, and continue until a defined stop point. **Orchestration** means managing turn-taking so a group stays purposeful instead of chaotic.
 
-The power comes from pairing them with boundaries:
+The power comes from pairing those pieces with boundaries:
 
-1. **System messages** — Initial instructions for tone, limits, and responsibility. Example: the analyst must use lookup tools for stipend status, not guess.
-2. **Registered tools** — Approved helper functions the assistant may invoke. Safer than open-ended freedom.
-3. **Termination conditions** — Explicit rules for when the conversation should end. A final keyword, a success phrase, or a maximum number of turns.
-4. **Optional code execution** — In some setups, the user-side agent can run code. Powerful, so this lab keeps it **off** unless a later product truly needs it.
+1. **System messages** — Seat, limits, and stop phrase. Example: the analyst must use lookup tools; messaging must not invent companies.
+2. **Registered tools** — Approved helpers (`register_function`) with a **caller** who may suggest and an **executor** who may run. Safer than open-ended code.
+3. **Termination conditions** — A keyword (`SUMMARY_READY` / `BRIEF_READY`), a success phrase, or a maximum number of turns.
+4. **Speaker selection and max rounds** — Who speaks next, and the bell that stops runaway dialogue.
 
-Together, these pieces turn “two agents chatting” into a **delegated task workflow** you can inspect.
+Optional **code execution** and always-on **human input** exist in AutoGen. This lab keeps code execution **off** and the demo automatic, so you can see tools and handoffs clearly.
+
+Together, these pieces turn “agents chatting” into a **delegated workflow** you can inspect.
 
 ---
 
-## A manager and an analyst on work chat
+## A work chat that can grow into a round-table
 
-Keep the campus story primary. The **manager–analyst** picture is only the analogy.
+Keep the campus story primary. The **manager–analyst** picture and the **chairperson** picture are only analogies.
 
-| Work-chat behaviour | AutoGen idea | Campus mapping |
+| Behaviour | AutoGen idea | Campus mapping |
 |---|---|---|
-| Team lead states the job | UserProxyAgent starts the delegated task | Ananya / desk runner posts the morning ask |
-| Analyst thinks and fetches data | AssistantAgent reasons and uses registered tools | Stipend analyst looks up Nimbus and Riverbank |
-| Approved internal systems only | Safe **register_function** with constraints | Register lookup and dispatch lookup — nothing else |
-| “Done — please review” | **Termination condition** | `SUMMARY_READY` or `TERMINATE` |
-| Saved chat for audit | **Conversation trace** | Who spoke, which tool ran, what came back |
+| Desk states the morning job | UserProxyAgent starts the task | Ananya posts the ask |
+| Analyst fetches data | AssistantAgent + registered tools | Stipend lookup; dispatch lookup |
+| “Done — please review” | Termination condition | `SUMMARY_READY` on the pair |
+| Shared discussion room | GroupChat | One briefing thread |
+| Chair calling the right expert | Speaker selection | Research → risk → messaging |
+| Meeting cannot continue forever | Max rounds | `max_round` plus `BRIEF_READY` |
+| Saved chat for audit | Conversation trace | Who spoke, which tool ran, what came back |
 
-Once you see it this way, AutoGen is not “more chat for chat’s sake.” It is a **controlled dialogue loop** where responsibility, tool access, and stopping rules are designed on purpose.
-
----
-
-## Why registration and termination matter
-
-Giving an agent tools is like giving a new employee access cards. If everyone gets every card, confusion and risk increase. If the right person gets the right access, work becomes focused.
-
-**Registering a function** means officially connecting a helper — fetch stipend status, check the dispatch queue — so the assistant can call it during the conversation under defined rules. The agent should not silently invent tool results. The trace should show **when** a tool was called and **what** came back.
-
-**Termination conditions** solve the second common failure: endless loops. Without them, two agents keep agreeing, rephrasing, or chasing minor details. With them, the workflow knows when success has been reached.
-
-Professionals do not only ask, “Did it answer?” They ask, “Did it use the right tools, stop at the right time, and leave a trace I can verify?”
+Once you see it this way, AutoGen is not “more chat for chat’s sake.” It is a **controlled dialogue loop** that can stay a pair or become a chaired specialist meeting — by design.
 
 ---
 
-## Read the conversation trace like a quality reviewer
+## Why registration, termination, and a chair matter
 
-After a run finishes, the **conversation trace** is your evidence file: messages, tool calls, intermediate reasoning, and the final response.
+Giving an agent tools is like giving a new employee access cards. If everyone gets every card, confusion and risk increase.
 
-A strong trace helps you answer:
+**Registering a function** means officially connecting a helper so the assistant can call it under defined rules. The agent should not silently invent tool results. The trace should show **when** a tool was called and **what** came back.
 
-- Did the assistant **use a tool** when live register data was needed, or did it guess a headcount?
-- Did the user-side agent **stay within its boundary**, or did roles blur?
-- Did the exchange **stop for the right reason**, or too early, or too late?
-- Is the **final summary** supported by the tool outputs shown in the trace?
+**Termination conditions** solve endless loops. Without them, two agents keep agreeing or chasing minor details.
 
-This habit connects to the evaluation mindset you built with CrewAI checklists. Multi-agent systems become trustworthy when their behaviour is **observable**.
+**Speaker selection** and **max rounds** solve the two most common group failures: **wrong speaker** (the messenger answers a policy question) and **runaway dialogue** / **repetition deadlock** (the same Nimbus paragraph four times). The fix usually lives in **configuration** — the ladder, the role text, or the round cap — not in a new framework.
+
+Professionals do not only ask, “Did it answer?” They ask, “Did it use the right tools, did the right specialist speak, did it stop at the right time, and is there a trace I can verify?”
 
 ---
 
 ## How this fits with what you already know
 
-You already understand tools, specialist roles, and validation. CrewAI remains strong when **roles, tasks, and process order** are the main design unit. AutoGen conversable pairs shine when the task benefits from **interactive delegation** — ask, tool-use, follow-up, refine, finish.
+You already understand tools, specialist roles, and validation. CrewAI remains strong when **roles, tasks, and process order** are the main design unit. AutoGen conversable pairs shine when the task benefits from **interactive delegation**. AutoGen groups shine when **different experts must contribute in sequence** under a chair.
 
-**Upcoming** work extends this idea from pairs to **group conversations** with multiple specialists. Mastering the pair model first gives you a clean foundation.
+Do not force every campus question through three CrewAI tasks. Do not put three novelists in a GroupChat for a yes/no dispatch question.
+
+**Upcoming** work draws the same kind of workflow as a **graph**: nodes and edges instead of a chat chair. Mastering seats, tools, stop rules, and traces here gives you a clean foundation.
 
 ---
 
 In this pre-read, you'll discover:
 
-- **Understand** how conversable agent pairs delegate a campus ops task through dialogue instead of only fixed task lists
-- **Discover** why **AssistantAgent** and **UserProxyAgent** need clear system messages and responsibility boundaries
-- **Learn** how **registered tools** give safe, inspectable abilities during an agent-to-agent run
-- **Understand** why **termination** and **conversation traces** separate a useful workflow from an endless or unreliable chat
+- **Understand** how conversable AutoGen agents — with clear system messages — form both a two-seat pair and specialist group members
+- **Discover** why **registered tools**, a **caller/executor** split, and an explicit **termination** stamp turn a pair into a delegated lookup you can inspect
+- **Learn** how **GroupChat**, **speaker selection**, and **max rounds** let three specialists finish one briefing with distinct sub-results
+- **Understand** how to read a **conversation trace** and apply one configuration fix for missing tools, wrong speaker, deadlock, or a missing stop stamp
 
 ---
 
 ## What's next
 
-After this session, you should be able to explain an AutoGen delegated workflow in everyday language: which agent plans and uses tools, which agent represents the user side, and why both need explicit instructions.
+After this session, you should be able to explain an AutoGen campus desk in everyday language: which agent plans and uses tools, which agent represents the user side, when two seats are enough, and when you need a chair.
 
-You will also be able to discuss **safe tool access** — which functions are registered, why constraints matter, and when optional code execution is appropriate (and why this lab keeps it off). You will be able to explain **termination design**: what signal tells the system the job is complete, and what happens if that signal never appears.
+You will also be able to discuss **safe tool access**, **termination design**, and **orchestration choices**: which speaker ladder fits a briefing, why a round limit is necessary, and what the trace must show before you trust the last paragraph.
 
-Most importantly, you will review a **conversation trace** like a professional. Instead of trusting a polished final paragraph, you will check whether tools were used correctly, roles stayed clear, and the workflow stopped for the right reason.
+Most importantly, you will review a run like a professional. Instead of saying “the chat failed,” you will name the layer — system message, registration, stop rule, or speaker / round cap — and change only that.
 
 ---
 
 ## Questions to think about before class
 
-1. For Ananya’s daily stipend-and-dispatch summary, how would you divide responsibility between the **assistant-side** analyst and the **user-side** desk runner so roles do not overlap?
+1. For Ananya’s daily stipend-and-dispatch summary, how would you divide responsibility between the **assistant-side** analyst and the **user-side** desk runner so roles do not overlap — and what extra seats would you add for a drive briefing?
 
-2. Which **tools** should be registered for campus lookup — and what could go wrong if the assistant is allowed to call unregistered or unsafe functions, or to run free-form code?
+2. Which **tools** should be registered for campus lookup, who should **execute** them, and what **termination** stamp would you choose so the pair cannot talk forever?
 
-3. What **termination condition** would you choose — a keyword, a structured final message, a round limit, or a combination — and why?
+3. For a placement-drive group with research, risk, and messaging, how would you define **speaker selection** and **max rounds** so messaging still gets a turn?
 
-4. If the final answer looks correct but the **trace** shows no tool calls for live register data, what would you change first: the system message, tool registration, or termination setup?
+4. If the final answer looks correct but the **trace** shows no tool calls — or messaging spoke first — what would you change first, and why is that a configuration issue rather than “AutoGen is broken”?
 
-By the end, AutoGen should feel less like “two chatbots talking” and more like a **designed delegation system** — conversable agents, registered tools, and controlled termination turning dialogue into dependable morning work for the placement cell.
+By the end, AutoGen should feel less like “chatbots talking” and more like a **designed campus desk** — conversable agents, registered tools, a chair when you need one, and traces that make the morning work inspectable.

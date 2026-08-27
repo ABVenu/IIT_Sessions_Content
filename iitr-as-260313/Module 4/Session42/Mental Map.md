@@ -9,22 +9,22 @@ flowchart TB
 
   CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[n8n + CrewAI production crews]</i><br/>Tools, process choice, validation"]]
 
-  CS{{"<b>Current Session</b><br/>AutoGen: Conversable Agents and Tool Use<br/><i>[AssistantAgent + UserProxyAgent]</i><br/>Mental shift: from fixed crew tasks to dialogue-driven delegation"}}
+  CS{{"<b>Current Session</b><br/>AutoGen: Hands-on — End-to-End Multi-Agent System<br/><i>[Pair + GroupChat in one desk]</i><br/>Mental shift: from fixed crew tasks to dialogue, then a chaired specialist meeting"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>Dialogue-driven agent pairs<br/>Registered tools and stop rules"]
-    RV["<b>Real-Life Value</b><br/>Daily campus ops summaries<br/>Ask, look up, refine, finish"]
+    CV["<b>Course Value</b><br/>Conversable pairs with tools<br/>Chaired groups with stop rules"]
+    RV["<b>Real-Life Value</b><br/>Daily campus lookups<br/>Placement-drive briefings"]
   end
 
   subgraph Future["Where This Leads"]
-    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[group chat + hosted builders]</i><br/>Group chat, hosted builders, ops"]
+    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[graph-shaped agent workflows]</i><br/>Nodes, edges, and stateful graphs"]
     F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>End-to-end autonomous system"]
   end
 
   M1 ==>|&nbsp;Foundation&nbsp;| M2
   M2 ==>|&nbsp;Components&nbsp;| M3
   M3 ==>|&nbsp;Scale up&nbsp;| CM
-  CM ==>|&nbsp;Conversable pair&nbsp;| CS
+  CM ==>|&nbsp;AutoGen desk&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
   CS ==>|&nbsp;Next Steps&nbsp;| F4
