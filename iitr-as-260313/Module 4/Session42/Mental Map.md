@@ -9,11 +9,11 @@ flowchart TB
 
   CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[n8n + CrewAI production crews]</i><br/>Tools, process choice, validation"]]
 
-  CS{{"<b>Current Session</b><br/>AutoGen: Hands-on — End-to-End Multi-Agent System<br/><i>[Pair + GroupChat in one desk]</i><br/>Mental shift: from fixed crew tasks to dialogue, then a chaired specialist meeting"}}
+  CS{{"<b>Current Session</b><br/>AutoGen: Hands-on — End-to-End Multi-Agent System<br/><i>[Hotel Guest Complaint Intake Desk]</i><br/>Mental shift: from ticket-shaped crews to one conversable intake product"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>Conversable pairs with tools<br/>Chaired groups with stop rules"]
-    RV["<b>Real-Life Value</b><br/>Daily campus lookups<br/>Placement-drive briefings"]
+    CV["<b>Course Value</b><br/>Intake, classify, tools, ticket<br/>Speaker rules and stop stamps"]
+    RV["<b>Real-Life Value</b><br/>Guest complaint in<br/>Case id out, trace to audit"]
   end
 
   subgraph Future["Where This Leads"]

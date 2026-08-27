@@ -79,3 +79,87 @@ Two AutoGen sessions were redesigned into **one** Session 42. This is not a conc
 | Analyze traces; one configuration fix (wrong speaker / deadlock / missing stamp) | Read Traces and Fix One Failure; What “Good” Looks Like |
 
 **Outcome:** QC passed on iteration 3 after improvisation from iteration 2.
+
+---
+
+## QC Iteration 4 (one-product Campus Ops Intake Desk)
+
+Campus story kept. Lab rebuilt as **one** end-to-end application (hotel-workshop shape): intake → classify → lookup → `create_ops_ticket` → `TICKET_CREATED` / `TERMINATE`, with clerk+desk as the conversable pair **inside** GroupChat. Three demos in `campus_ops_desk.py`. Groq/OpenAI `llm_config` retained. Merits vs n8n/make.com retained.
+
+| Criteria | Result |
+|---|---|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References | True |
+
+**Notes:** Speaker rule routes tool calls to `CampusDeskRunner`. Transcript reset between demos. Official Definition triples on core terms. Student-facing activities. Full script with line comments and “How the code works.” S3 images (one scenario + three diagrams). Key Takeaways + terminology table. Line count `480` (max 500). No session numbers. No duration/audience leakage.
+
+### Coverage Checklist (updated metadata)
+
+| Subtopic | Section |
+|---|---|
+| Configure seats: intake, classify, clerk, desk runner | Seats, Tools, and the Stop Stamp; full script |
+| Register lookup + ticket; caller ≠ executor | Tools table; `register_function` in script |
+| GroupChat, speaker selection, max rounds; distinct sub-results | GroupChat section; `select_ops_speaker` |
+| Analyze traces; one configuration fix | Read the Trace; `max_round=3` activity |
+
+**Outcome:** QC passed on iteration 4 for the single intake-desk product.
+
+---
+
+## QC Iteration 5 (standalone hotel desk — no previous-session story thread)
+
+Example continuity with CrewAI campus names (Ananya / Meera / GIT Pune / Nimbus) was dropped. Previous session remains a **skill** recap only (CrewAI tools, process, validation). This session is a **new** product: Hotel Guest Complaint Intake Desk (`hotel_desk.py`). Images 01–04 regenerated for hotel seats and AutoGen diagrams (not campus office photos).
+
+| Criteria | Result |
+|---|---|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 4/5 |
+| No Logical Mistakes | False |
+| No Presentation Mistakes | False |
+| No Previous Session Number References | True |
+| No Metadata/Internal References | True |
+
+**Checked against:** `Command Center/prompts/LectureNotesPrompt4.md` and `Command Center/prompts/LectureNotesQC.md`.
+
+**Issues found:**
+
+1. **Logical:** After `desk.initiate_chat`, `last_speaker` is the desk, so the chair returned **DeskClerkAgent** first. Vague demo 2 could skip IntakeAgent. Fix: after a desk opening (not a tool result), return **IntakeAgent**; after `STAY` / `STAY_NOT_FOUND` / `TICKET_CREATED`, return the clerk.
+2. **Structural:** GroupChat vs GroupChatManager and speaker selection vs max rounds were packed into combined Official Definition blocks. Split into one triple per keyword.
+3. **Presentation:** “A intake desk” grammar; leftover campus labels on diagrams 02–04 (`CampusDeskRunner`, `StipendAnalyst`, `SUMMARY_READY`).
+
+**Improvisation applied:** Speaker ladder updated; triples split; grammar fixed; four hotel-aligned S3 images uploaded; preread/mental map/metadata retargeted to hotel. Line count `500` (max 500).
+
+---
+
+## QC Iteration 6 (re-run after improvisation)
+
+| Criteria | Result |
+|---|---|
+| Content Coverage | 5/5 |
+| Creativity | 5/5 |
+| Structural Adherence | 5/5 |
+| No Logical Mistakes | True |
+| No Presentation Mistakes | True |
+| No Previous Session Number References | True |
+| No Metadata/Internal References | True |
+
+**Notes:** Context names CrewAI skills from the **previous** session without session numbers and without continuing that story. Official Definition / In Simple Words / Real-Life Example on core terms. Student-facing activities. Full `hotel_desk.py` with line comments and “How the code works.” Groq or OpenAI via `llm_config`. Three isolated demos. Trace table + one config fix. vs n8n/make.com. Key Takeaways (5 bullets + upcoming graphs) + terminology table. Four S3 images (one hotel scenario + three AutoGen diagrams). No duration, audience, or “keep it lite” leakage.
+
+### Coverage Checklist (current metadata)
+
+| Subtopic | Section in notes |
+|---|---|
+| Configure conversable agents; non-overlapping hotel seats | Seats, Tools, and the Stop Stamp; full script |
+| Register lookup + ticket; caller ≠ executor | Tools table; `register_function` in script |
+| GroupChat, speaker selection, max rounds; tools reach executor | Keyword triples; `hotel_speaker_select`; `max_round=12` |
+| Analyze traces; one configuration fix | Read the Trace; Fix One Failure; activities |
+
+**Outcome:** QC passed on iteration 6 after improvisation from iteration 5.
+
+
