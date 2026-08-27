@@ -9,17 +9,17 @@ session duration: 1hr  50mins
 
 Session Notes Length: 480 lines to 500 lines max
 
-title: AutoGen: Conversable Agents and Tool Use
+title: AutoGen: Hands-on — End-to-End Multi-Agent System
 
-objective: Create AutoGen agent pairs with tool access and controlled termination for a delegated task workflow.
+objective: Build one AutoGen campus workflow from a tool-using conversable pair with controlled termination to a chaired group briefing.
 
-type of session: theory/implementation/mixture of theory + implementation / You take the call
+type of session: mixture of theory + implementation
 
-topics be covered: AssistantAgent; UserProxyAgent; conversable-agent model; register_function; code execution optional; termination conditions
+topics be covered: AssistantAgent; UserProxyAgent; conversable-agent model; register_function; termination conditions; GroupChat; GroupChatManager; speaker selection; max rounds; conversation traces
 
 
 detailed subtopics to be covered:
-* Configure conversable agents with clear system messages and responsibility boundaries.
-* Register tools or functions agents may invoke during a run with safe execution constraints.
-* Run agent-to-agent interactions until explicit termination conditions are met.
-* Analyze conversation traces to verify tool use reasoning and final answer quality.
+* Configure conversable AutoGen agents with system messages and non-overlapping campus seats for a pair and for specialist group members.
+* Register lookup tools with a safe caller/executor split and run a delegated pair until an explicit termination condition.
+* Orchestrate a GroupChat with speaker selection and max rounds so three specialists contribute distinct sub-results to one briefing.
+* Analyze conversation traces to verify tool use and handoffs, then apply one configuration fix for a failure such as wrong speaker, repetition deadlock, or a missing stop stamp.
