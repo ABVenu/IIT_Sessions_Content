@@ -11,7 +11,7 @@ Session Notes Length: 480 lines to 500 lines max
 
 title: AutoGen: Hands-on — End-to-End Multi-Agent System
 
-objective: Build one AutoGen campus workflow from a tool-using conversable pair with controlled termination to a chaired group briefing.
+objective: Build one Hotel Guest Complaint Intake Desk in AutoGen that intakes a guest message, classifies it, looks up the stay with tools, creates a ticket, and closes under speaker and termination controls.
 
 type of session: mixture of theory + implementation
 
@@ -19,7 +19,7 @@ topics be covered: AssistantAgent; UserProxyAgent; conversable-agent model; regi
 
 
 detailed subtopics to be covered:
-* Configure conversable AutoGen agents with system messages and non-overlapping campus seats for a pair and for specialist group members.
-* Register lookup tools with a safe caller/executor split and run a delegated pair until an explicit termination condition.
-* Orchestrate a GroupChat with speaker selection and max rounds so three specialists contribute distinct sub-results to one briefing.
+* Configure conversable AutoGen agents with system messages and non-overlapping hotel seats for intake, classify, clerk, and desk-runner roles.
+* Register lookup and ticket tools with a safe caller/executor split so the clerk suggests and the desk runner executes.
+* Orchestrate a GroupChat with speaker selection and max rounds so specialists contribute distinct sub-results and tools still reach the executor.
 * Analyze conversation traces to verify tool use and handoffs, then apply one configuration fix for a failure such as wrong speaker, repetition deadlock, or a missing stop stamp.

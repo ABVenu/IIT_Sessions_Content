@@ -2,486 +2,500 @@
 
 ## Context of This Session
 
-In the **previous** session you upgraded a **CrewAI** Placement Brief Crew into a production-style workflow: **custom tools**, **process** choice, optional **memory**, a validation checklist, and **iteration** on one weak prompt.
+In the **previous** session you built a **CrewAI** production workflow: **custom tools**, **process** choice, optional **memory**, a validation checklist, and **iteration** on one weak prompt. Crews shine when research, write, and review are **tickets**.
 
-This session adds a different unit of design. **AutoGen** treats agents as **conversable** partners in one dialogue. You will ship **one campus desk**: first a stipend-and-dispatch **pair** with registered tools and a stop stamp, then the same facts in a **chaired group** that writes a placement-drive notice.
+This session is a **new product**, not a sequel to that story. You will build a **Hotel Guest Complaint Intake Desk** in **AutoGen**: a guest message arrives, specialists **intake**, **classify**, **look up** the stay, **create a ticket**, and **stop**. The conversable pair (clerk + desk runner) lives **inside** a chaired GroupChat.
 
 **In this session, you will:**
 
-- **Configure** conversable agents with system messages and non-overlapping campus seats
-- **Register** lookup tools and run a pair until an explicit **termination** condition
-- **Orchestrate** a **GroupChat** with speaker selection and max rounds
-- **Read** conversation traces to verify tool use, handoffs, and one configuration fix
+- **Configure** intake, classifier, clerk, and desk-runner seats with non-overlapping system messages
+- **Register** stay-lookup and ticket tools with caller ≠ executor
+- **Run** a **GroupChat** with speaker selection and max rounds
+- **Read** traces and apply one configuration fix
 
 ---
 
-## From Crew Tickets to One Dialogue Desk
+## Why AutoGen for a Front-Office Desk
 
-Connecting sentence: CrewAI shines when research, write, and review are **tickets**. Morning ops often needs **ask, look up, follow up, stop** — and some mornings that lookup must become a **briefing**.
+Connecting sentence: A weekly crew is the wrong shape for “AC not cooling in 412 — raise a ticket now.”
 
-- **Official Definition:** The **conversable-agent model** is AutoGen’s pattern: agents send and receive messages in a loop until a **termination** condition fires.
-- **In Simple Words:** Colleagues on a work chat, not folders on a conveyor.
-- **Real-Life Example:** **Ananya** must answer Prof. Meera Kulkarni at Greenfield Institute of Technology, Pune: *Are Nimbus and Riverbank still delayed, and has trainer Slack gone?* If the drive is this week, that same packet must also become faculty copy with **risk fences**.
+- **Official Definition:** The **conversable-agent model** is AutoGen’s pattern: agents send and receive messages until a **termination** condition fires.
+- **In Simple Words:** A designed work chat, not folders on a conveyor.
+- **Real-Life Example:** Reception WhatsApp buries the trail. A chatbot invents booking ids. An **intake desk** listens, sorts, checks the stay, and stamps a case id.
 
-![From CrewAI ticket folders on a conveyor to an AutoGen pair at a campus desk, then a chaired group briefing in the GIT Pune placement cell](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-01-from-crew-to-autogen-desk.png)
+![Hotel front desk: guest complaint incoming versus a labelled AutoGen intake desk that files a tracked ticket](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-01-from-crew-to-autogen-desk.png)
 
-The same campus morning can move from ticket folders, to a two-seat work chat, to a chaired briefing room.
+**Need:** One mega-agent hides who invented the room number. Split seats keep the **trace** auditable.
 
-**Need:** A weekly crew is heavy for “Riverbank only — has Slack gone?” A pair with no chair is noisy when research, risk, and messaging must share **one** thread.
+**Common doubt:** *“Does AutoGen replace CrewAI?”* — No. Crews remain strong for fixed handoffs. AutoGen shines for **interactive intake** with tools and a chair.
 
-**Common doubt:** *“Does AutoGen replace CrewAI?”* — No. Crews remain strong for fixed handoffs. AutoGen shines for **interactive delegation** and **chaired specialist talk**.
+| Guest message | Expected path |
+|---|---|
+| `"AC not cooling in room 412, booking BK-7781"` | Classify `room_comfort` → lookup stay → create ticket |
+| `"Something is wrong with my stay"` | Intake asks for booking id / clearer details |
+| `"Wrong spa charge of 2500, BK-9002"` | Classify `billing` → lookup → ticket |
 
-### Activity — Pick the unit
-
-Write **crew**, **pair**, or **group** for: (1) four-section weekly brief, (2) “Riverbank only — dispatch status”, (3) drive page with risk fences visible.
+The same pattern appears in e-commerce returns and HR helpdesks. This lab uses a hotel so roles stay easy to picture.
 
 ---
 
-## AssistantAgent and UserProxyAgent
+## Seats, Tools, and the Stop Stamp
 
-Connecting sentence: A conversation still needs **job titles**. These two seats stay in both runs today.
+Connecting sentence: The desk needs job titles, access cards, and a meeting alarm **before** code.
 
-- **Official Definition:** An **AssistantAgent** is an LLM-backed specialist that plans, replies, and may **suggest** registered tools. A **UserProxyAgent** is the user-side agent that **starts** the task, may execute tools, and helps enforce stop rules.
-- **In Simple Words:** The analyst thinks and asks for lookups. The desk runner starts the thread and presses approved buttons.
-- **Real-Life Example:** Ananya (or a script standing in for her) posts the morning ask. The stipend analyst must not invent that Infosys owes eight students.
+- **Official Definition:** An **AssistantAgent** is an LLM specialist that plans and may **suggest** tools. A **UserProxyAgent** starts the case and may **execute** registered functions.
+- **In Simple Words:** Experts think. The desk runner presses approved buttons.
+- **Real-Life Example:** The clerk may request `lookup_guest_stay`. Only the desk runner runs it.
 
-| Agent | Campus seat | Must do | Must not do |
+| Seat | AutoGen class | Must do | Must not do |
 |---|---|---|---|
-| **UserProxyAgent** | Campus desk runner | Start the ask; run registered tools | Invent register rows |
-| **AssistantAgent** | Specialist | Plan, call tools or write a slice | Guess headcounts; run unregistered code |
+| IntakeAgent | AssistantAgent | Ask for booking / room if missing | Guess BK-ids; create tickets |
+| ClassifierAgent | AssistantAgent | Tag `room_comfort`, `housekeeping`, `billing`, `dining`, `unclear` | Lookup stays; invent categories |
+| DeskClerkAgent | AssistantAgent | Suggest tools; write the confirmation | Execute tools; skip lookup |
+| HotelDeskRunner | UserProxyAgent | Run registered functions; start the chat | Invent ticket ids |
 
-![AutoGen pair tech stack: UserProxyAgent CampusDeskRunner, AssistantAgent StipendAnalyst, register_function with caller and executor, tools and SUMMARY_READY](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-02-pair-tech-stack.png)
+**Tools (local fake PMS — property management system):**
 
-These are the AutoGen building blocks you will type: two agent classes, one registration arrow, and a stop stamp.
-
-- **Official Definition:** A **system message** is the initial instruction that sets an agent’s seat, limits, and stop phrase.
-- **In Simple Words:** The job contract taped to the chair.
-- **Real-Life Example:** Weak: “Be helpful.” Strong: “Use lookup tools for every company status. Never invent a student count.”
-
-**Common error:** Both agents writing the final summary. Roles blur and the trace becomes unreadable.
-
-### Activity — Tighten one system message
-
-Rewrite *“You are a helpful analyst”* in two sentences: campus setting, and one thing the analyst must **not** do.
-
----
-
-## Register Functions and Termination
-
-Connecting sentence: A system message is a promise. **Registration** is the access card. **Termination** is the meeting alarm.
-
-- **Official Definition:** **`register_function`** connects a Python helper to a **caller** (who may suggest it) and an **executor** (who may run it).
-- **In Simple Words:** Issue one swipe card. The analyst asks; the desk swipes.
-- **Real-Life Example:** `lookup_stipend_status("Infosys")` must return `UNKNOWN_COMPANY`, not a guessed row.
-
-- **Official Definition:** A **termination condition** is an explicit rule (`is_termination_msg`, a keyword, or a turn cap) that ends the loop.
-- **In Simple Words:** Stamp **minutes ready** so the chat may stop.
-- **Real-Life Example:** The analyst ends the pair with `SUMMARY_READY`. The group ends with `BRIEF_READY`.
-
-![AutoGen conversable data flow: initiate_chat, suggest tool, execute function, tool result in the trace, then SUMMARY_READY stops the loop](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-03-pair-data-flow.png)
-
-Messages and tool results travel in a loop until `is_termination_msg` sees **SUMMARY_READY**. That loop is the data flow, not a conveyor of tickets.
-
-| Function | Returns | Fail honestly |
+| Tool | Returns | Safe failure |
 |---|---|---|
-| `lookup_stipend_status(company)` | Delayed count and last HR reminder | `UNKNOWN_COMPANY` |
-| `lookup_dispatch_queue()` | Trainer Slack and second-reminder status | Never invent “sent” |
+| `lookup_guest_stay(booking_id)` | Guest, room, dates | `STAY_NOT_FOUND` |
+| `create_complaint_ticket(category, summary, room)` | Ticket id e.g. `HT-ROOM-412` | Never invent an id without the tool |
 
-- **Official Definition:** **Code execution** (`code_execution_config` on a UserProxyAgent) lets that agent run generated Python during the chat.
-- **In Simple Words:** The desk may execute whatever script the analyst writes.
-- **Real-Life Example:** Useful later for a chart. Dangerous on a shared campus key. **This run keeps it off** — lookups only.
-
-**Logic:** CrewAI stopped when the **task list** finished. AutoGen stops when **you** say the job is done. If you never say it, the dialogue can run until money or patience runs out.
-
-**Common error:** Registering tools with the same agent as caller and executor, or checking only for `TERMINATE` while the analyst writes “done” in plain English.
-
-### Activity — Who swipes, and what stamp?
-
-If the analyst suggests `lookup_dispatch_queue`, who must speak next? Write the last two lines of a successful pair summary, including the keyword you will search for.
-
----
-
-## Lab Setup and Bounded Campus Facts
-
-Connecting sentence: Same secret habit as CrewAI: the key lives in `.env`. One folder holds **both** runs.
-
-Create folder `campus_ops_autogen`. Inside it, `.env` (do **not** commit):
+**Stop stamp:** After a successful ticket, the clerk’s last line is `TICKET_CREATED:` plus `TERMINATE`. Vague complaints never get a fake ticket.
 
 ```text
-OPENAI_API_KEY=your_openai_key_here
+Guest complaint
+   → IntakeAgent (clarify if needed)
+   → ClassifierAgent (tag category)
+   → DeskClerkAgent suggests tools → HotelDeskRunner executes
+   → Clerk confirmation → TERMINATE
 ```
+
+![Tech stack for the hotel desk: AutoGen classes, register_function, GroupChatManager, and Groq or OpenAI behind llm_config](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-02-pair-tech-stack.png)
+
+### Activity — Predict the Hand-off
+
+For `"Towels not replaced in room 208, booking BK-3301"`, write expected category, next speaker after classify, and first tool.
+
+**Suggested answers:** `housekeeping` → DeskClerkAgent → `lookup_guest_stay`
+
+### Activity — Spot the Role Leak
+
+Which system message is wrong and why? “ClassifierAgent may also create tickets if the guest sounds angry.”
+
+**Suggested answer:** Category and ticket creation must stay separate so audits remain clear.
+
+Connecting sentence: Those seats only work if tools, the chair, and the stop phrase are named as clearly as the job titles.
+
+- **Official Definition:** `register_function` wires a Python helper so a **caller** may suggest it and an **executor** may run it.
+- **In Simple Words:** An access card for one button. The clerk points; the desk runner presses.
+- **Real-Life Example:** Reception may *request* a PMS lookup. Only the authorised clerk terminal *runs* it.
+
+- **Official Definition:** A **termination condition** ends the chat when a phrase appears or a turn cap is hit.
+- **In Simple Words:** The meeting stops when the stamp is real, or when the alarm rings.
+- **Real-Life Example:** `TICKET_CREATED:` plus `TERMINATE` is the planned close. `max_round=12` is the fire alarm.
+
+- **Official Definition:** **GroupChat** is the shared message list every specialist writes into.
+- **In Simple Words:** One notepad for the whole desk.
+- **Real-Life Example:** Intake, classifier, and clerk do not keep private chats. The auditor reads one thread.
+
+- **Official Definition:** **GroupChatManager** is the coordinator that applies speaker rules to that list.
+- **In Simple Words:** The chairperson of the room.
+- **Real-Life Example:** The manager does not clean rooms. It only decides who speaks next.
+
+- **Official Definition:** **Speaker selection** chooses which agent talks on the next turn.
+- **In Simple Words:** The chair calls the right person.
+- **Real-Life Example:** After a tool-call payload, the next speaker must be **HotelDeskRunner**, not ClassifierAgent.
+
+- **Official Definition:** **Max rounds** is a hard cap on turns in the GroupChat.
+- **In Simple Words:** The meeting alarm.
+- **Real-Life Example:** `max_round=12` stops polite loops. It is a fuse, not the planned close.
+
+- **Official Definition:** `human_input_mode="NEVER"` runs the proxy without typing between turns.
+- **In Simple Words:** The lab is automatic so you can read the trace, not pause for a human.
+- **Real-Life Example:** A Zoom demo should not wait for you to press Enter after every tool.
+
+**Need:** If the chair never returns the desk, tools stay as text and the ticket id is invented.
+
+**Common doubt:** *“Can one AssistantAgent be caller and executor?”* — Not in this lab. The split is the audit.
+
+---
+
+## Setup and `llm_config` (Groq or OpenAI)
+
+Connecting sentence: The same desk should run on the key you already have.
 
 ```bash
-pip install ag2 python-dotenv
+pip install "ag2[openai]"
+export GROQ_API_KEY="your_key"
+# or: export OPENAI_API_KEY="your_key"
+# optional: export LLM_MODEL="llama-3.3-70b-versatile"
 ```
 
-`ag2` is the maintained AutoGen package family that still exposes `AssistantAgent`, `UserProxyAgent`, `register_function`, `GroupChat`, and `GroupChatManager`.
+`ag2` is the maintained AutoGen family. It still exposes `AssistantAgent`, `UserProxyAgent`, `GroupChat`, and `GroupChatManager`.
 
-Keep this data **inside** the scripts as the training-wheels version of a campus lookup: **Nimbus Analytics** (8 delayed, HR reminder 4 August) and **Riverbank Retail** (6 delayed, same reminder). Trainer Slack is **not sent**; the second HR reminder is **pending**. The tracker launch is a **status board**, not a payment guarantee.
+The script below reads `LLM_API_KEY`, then `GROQ_API_KEY`, then `OPENAI_API_KEY`. Set `LLM_API_TYPE=groq` (and usually `LLM_MODEL`) when the key is Groq. Never paste keys into notebooks you share.
 
-**Pair goal:** Daily ops summary + `SUMMARY_READY`. **Group goal:** Research → risk → messaging notice + `BRIEF_READY`.
+If the key is missing, agents cannot call the model. That is a setup failure, not an AutoGen bug.
 
 ---
 
-## Full Pair Script
+## Build the Full Desk
 
-Connecting sentence: First product of the morning: two seats, two tools, one stop rule.
-
-Save as `campus_ops_pair.py` in the same folder as `.env`.
+Connecting sentence: One file is the product: seats, tools, chair, three demos.
 
 ```python
-# campus_ops_pair.py — AutoGen conversable pair for a daily campus ops summary
-import os  # read OPENAI_API_KEY from the environment
-from dotenv import load_dotenv  # load .env into environment variables
-from autogen import AssistantAgent, UserProxyAgent, register_function  # pair building blocks
+# Operating-system helpers for API keys
+import os  # Read environment variables
 
-load_dotenv()  # read the API key before any model call
-API_KEY = os.getenv("OPENAI_API_KEY", "")  # empty string if missing
-
-llm_config = {  # shared LLM settings for the specialist
-    "config_list": [{"model": "gpt-4o-mini", "api_key": API_KEY}],  # classroom OpenAI model
-    "temperature": 0.2,  # steady facts for a daily desk
-}  # end llm_config
-
-STIPEND_REGISTER = {  # bounded company rows — not a live HTTP API
-    "nimbus analytics": {"students": 8, "status": "delayed", "last_hr": "4 August"},  # file-backed row
-    "riverbank retail": {"students": 6, "status": "delayed", "last_hr": "4 August"},  # file-backed row
-}  # end register
-
-DISPATCH_QUEUE = {  # bounded dispatch board
-    "trainer_slack": "not sent",  # Campus Ops Inbox has not pinged trainers
-    "second_hr_reminder": "pending",  # second company HR mail not yet sent
-}  # end dispatch queue
-
-def lookup_stipend_status(company: str) -> str:  # tool 1 — company stipend row
-    """Return stipend status for one company from the campus register."""  # agent-facing description
-    key = company.strip().lower()  # normalise the company name
-    row = STIPEND_REGISTER.get(key)  # lookup or None
-    if not row:  # unknown company
-        return f"UNKNOWN_COMPANY:{company}"  # honest miss
-    return f"company={company}; students={row['students']}; status={row['status']}; last_hr={row['last_hr']}"  # card
-
-def lookup_dispatch_queue() -> str:  # tool 2 — pending campus dispatch
-    """Return the current trainer Slack and HR reminder dispatch flags."""  # agent-facing description
-    return f"trainer_slack={DISPATCH_QUEUE['trainer_slack']}; second_hr_reminder={DISPATCH_QUEUE['second_hr_reminder']}"  # board
-
-def is_done(message) -> bool:  # termination helper
-    content = (message.get("content") or "") if isinstance(message, dict) else str(message)  # read text safely
-    upper = content.upper()  # case-insensitive
-    return ("SUMMARY_READY" in upper) or ("TERMINATE" in upper)  # success stamp or explicit stop
+# AutoGen building blocks for the hotel desk
+from autogen import (  # Core symbols used below
+    AssistantAgent,  # Specialist LLM agent
+    UserProxyAgent,  # Starter + tool executor
+    GroupChat,  # Shared conversation room
+    GroupChatManager,  # Chairperson for the room
+    register_function,  # Safe tool wiring helper
+)
 
 
-analyst = AssistantAgent(  # specialist who may suggest tools
-    name="StipendAnalyst",  # unique name in the trace
-    system_message=(  # responsibility boundary
-        "You are the GIT Pune stipend analyst for Ananya's Campus Ops Inbox. "  # campus seat
-        "For every company status you must call lookup_stipend_status. "  # tool rule
-        "For dispatch you must call lookup_dispatch_queue. "  # second tool
-        "Never invent student counts or claim Slack was sent. "  # accuracy fence
-        "Write a daily summary with three short bullets, then the line SUMMARY_READY. "  # stop stamp
-        "Do not run code. Do not treat UNKNOWN_COMPANY as a delayed employer."  # honest miss
-    ),  # end system message
-    llm_config=llm_config,  # model config
-)  # end analyst
+def build_llm_config():  # Shared Groq / OpenAI config for all specialists
+    """Build llm_config from Groq or OpenAI env vars."""
+    # Prefer a generic key name, then Groq, then OpenAI
+    api_key = (  # First non-empty key wins
+        os.getenv("LLM_API_KEY")  # Optional generic name
+        or os.getenv("GROQ_API_KEY")  # Groq
+        or os.getenv("OPENAI_API_KEY")  # OpenAI
+    )
+    if not api_key:  # Fail fast with a clear message
+        raise RuntimeError(  # Setup error, not an AutoGen bug
+            "Set LLM_API_KEY, GROQ_API_KEY, or OPENAI_API_KEY."
+        )
+    model = os.getenv("LLM_MODEL", "gpt-4o-mini")  # Override with LLM_MODEL
+    config = {  # One config list item
+        "model": model,  # Chat-completions model id
+        "api_key": api_key,  # Secret from the environment
+    }
+    api_type = os.getenv("LLM_API_TYPE", "").strip().lower()  # Optional provider
+    if api_type:  # e.g. groq
+        config["api_type"] = api_type  # Provider hint for the client
+    return {"config_list": [config], "temperature": 0}  # Stable lab replies
 
-desk = UserProxyAgent(  # starter + tool executor
-    name="CampusDeskRunner",  # unique name
-    human_input_mode="NEVER",  # fully automatic demo
-    code_execution_config=False,  # optional code execution stays OFF
-    is_termination_msg=is_done,  # stop on SUMMARY_READY or TERMINATE
-)  # end desk
 
-register_function(  # wire stipend lookup
-    lookup_stipend_status,  # Python function
-    caller=analyst,  # who may suggest
-    executor=desk,  # who may run
-    description="Look up internship stipend status by company name.",  # model-facing help
-)  # end register stipend
+llm_config = build_llm_config()  # Shared by all AssistantAgents
 
-register_function(  # wire dispatch lookup
-    lookup_dispatch_queue,  # Python function
-    caller=analyst,  # who may suggest
-    executor=desk,  # who may run
-    description="Look up trainer Slack and second HR reminder flags.",  # model-facing help
-)  # end register dispatch
+# Fake hotel stay register keyed by booking id
+HOTEL_STAYS = {  # Local stand-in for a PMS
+    "BK-7781": {  # AC / room comfort demo
+        "guest": "Rohit Sharma",  # Guest name
+        "room": "412",  # Room number
+        "check_in": "2026-04-10",  # Stay start
+        "check_out": "2026-04-13",  # Stay end
+    },
+    "BK-9002": {  # Billing / spa demo
+        "guest": "Anita Desai",  # Guest name
+        "room": "918",  # Room number
+        "check_in": "2026-04-11",  # Stay start
+        "check_out": "2026-04-14",  # Stay end
+    },
+    "BK-3301": {  # Housekeeping demo
+        "guest": "Vikram Rao",  # Guest name
+        "room": "208",  # Room number
+        "check_in": "2026-04-09",  # Stay start
+        "check_out": "2026-04-12",  # Stay end
+    },
+}
 
-if __name__ == "__main__":  # run only when executed directly
-    if not API_KEY:  # fail clearly
-        raise ValueError("Set OPENAI_API_KEY in .env")  # setup reminder
-    opening = (  # delegated morning task
-        "Prepare this morning's campus ops summary for Prof. Meera Kulkarni. "  # daily ask
-        "Cover Nimbus Analytics and Riverbank Retail stipend delays, "  # two companies
-        "then dispatch status, then one recommended next action. Use tools. Do not guess."  # no hallucination
-    )  # end opening
-    result = desk.initiate_chat(analyst, message=opening)  # start the pair dialogue
-    history = getattr(result, "chat_history", None) or []  # AutoGen history if present
-    if not history and hasattr(desk, "chat_messages"):  # fallback to stored pair transcript
-        history = desk.chat_messages.get(analyst, [])  # messages with the analyst
-    print("=== PAIR TRACE ===")  # banner
-    for i, msg in enumerate(history, start=1):  # numbered turns
-        name = msg.get("name") or msg.get("role") or "unknown"  # speaker
-        print(f"{i}. [{name}] {str(msg.get('content') or '')[:220]}")  # preview
-    print("=== END PAIR TRACE ===")  # footer
+
+def lookup_guest_stay(booking_id: str) -> str:  # Tool: stay lookup
+    """Return stay facts or STAY_NOT_FOUND. Never invent a stay."""
+    bid = (booking_id or "").strip().upper()  # Normalise the id
+    row = HOTEL_STAYS.get(bid)  # None if unknown
+    if not row:  # Honest miss
+        return f"STAY_NOT_FOUND: {bid}"  # Safe failure
+    return (  # Compact stay line
+        f"STAY {bid}: guest={row['guest']}; room={row['room']}; "
+        f"dates={row['check_in']} to {row['check_out']}"
+    )
+
+
+def create_complaint_ticket(category: str, summary: str, room: str) -> str:  # Tool: ticket stamp
+    """Issue a ticket id from category + room. Do not call without a lookup."""
+    prefix = (category or "general").strip().upper().replace(" ", "-")[:12]  # Ticket prefix from category
+    room_part = (room or "000").strip()  # Room from the stay row
+    return f"TICKET_CREATED: HT-{prefix}-{room_part}"  # Visible stamp
+
+
+# Intake: clarify only — no tools, no tickets
+intake = AssistantAgent(
+    name="IntakeAgent",  # Unique speaker name
+    llm_config=llm_config,  # Shared model config
+    system_message=(  # Clarify missing booking or room
+        "You are hotel intake. If booking id or room is missing, ask one "
+        "short question. Do not classify. Do not invent BK-ids. Do not "
+        "create tickets. If details are enough, say INTAKE_READY."
+    ),
+)
+
+# Classifier: category only
+classifier = AssistantAgent(
+    name="ClassifierAgent",  # Unique speaker name
+    llm_config=llm_config,  # Shared model config
+    system_message=(  # Closed category list
+        "You classify guest complaints. Reply with one tag: room_comfort, "
+        "housekeeping, billing, dining, or unclear. No tools. No tickets."
+    ),
+)
+
+# Clerk: suggest tools and write the confirmation
+clerk = AssistantAgent(
+    name="DeskClerkAgent",  # Unique speaker name
+    llm_config=llm_config,  # Shared model config
+    system_message=(  # Suggest tools; never execute them
+        "You are the hotel desk clerk. Suggest lookup_guest_stay, then "
+        "create_complaint_ticket. Never invent a ticket id. After a real "
+        "TICKET_CREATED line, write one guest-facing confirmation and end "
+        "with TERMINATE. If intake is still asking, wait."
+    ),
+)
+
+# Desk runner: start the chat and execute tools
+desk = UserProxyAgent(
+    name="HotelDeskRunner",  # Executor name used in speaker rules
+    human_input_mode="NEVER",  # Unattended lab
+    code_execution_config=False,  # Tools only, no shell
+    max_consecutive_auto_reply=8,  # Cap executor chatter
+    is_termination_msg=lambda m: "TERMINATE" in (m.get("content") or ""),  # Desk stops on stamp
+    llm_config=False,  # No LLM on the executor
+    system_message="Execute registered hotel tools. Do not invent ids.",
+)
+
+# Caller = clerk; executor = desk. Never reverse.
+register_function(
+    lookup_guest_stay,  # Stay lookup
+    caller=clerk,  # May suggest
+    executor=desk,  # May run
+    name="lookup_guest_stay",  # Tool name in the chat
+    description="Look up a hotel stay by booking id. Returns STAY or STAY_NOT_FOUND.",
+)
+register_function(
+    create_complaint_ticket,  # Ticket stamp
+    caller=clerk,  # May suggest
+    executor=desk,  # May run
+    name="create_complaint_ticket",  # Tool name in the chat
+    description="Create a complaint ticket. Use only after a successful stay lookup.",
+)
+
+
+def hotel_speaker_select(last_speaker, groupchat):  # Chair: who speaks next
+    """Open at intake; route tool calls to the desk; send tool results to the clerk."""
+    last = groupchat.messages[-1] if groupchat.messages else {}  # Last turn
+    content = (last.get("content") or "") if isinstance(last, dict) else ""  # Text of last turn
+    # Tool-call payloads must run on the executor, not another specialist
+    if "function_call" in str(last) or "tool_call" in str(last).lower():  # Suggested tool must execute
+        return desk  # HotelDeskRunner executes
+    if last_speaker is desk:  # Opening complaint vs tool result
+        if any(s in content for s in ("STAY ", "STAY_NOT_FOUND", "TICKET_CREATED")):  # Tool result text
+            return clerk  # Interpret tool output
+        return intake  # Guest text goes to intake first
+    if last_speaker is intake:  # After intake, classifier tags
+        if "INTAKE_READY" in content:  # Details enough to classify
+            return classifier
+        return intake  # Still clarifying
+    if last_speaker is classifier:  # After a tag, clerk owns tools
+        return clerk
+    return clerk  # Default: clerk drives the case
+
+
+groupchat = GroupChat(
+    agents=[desk, intake, classifier, clerk],  # One shared notepad
+    messages=[],  # Fresh thread per demo
+    max_round=12,  # Meeting alarm
+    speaker_selection_method=hotel_speaker_select,  # Custom chair
+)
+
+manager = GroupChatManager(
+    groupchat=groupchat,  # Same room
+    llm_config=llm_config,  # Manager may use the model
+    is_termination_msg=lambda m: "TERMINATE" in (m.get("content") or ""),  # Manager stops on stamp
+)
+
+
+def run_hotel_desk(complaint: str) -> None:  # One isolated demo
+    """Reset the shared notepad, then start one guest complaint."""
+    groupchat.messages = []  # Do not leak demo 1 into demo 2
+    print("\n" + "=" * 64)  # Banner
+    print("GUEST:", complaint)  # The incoming message
+    print("=" * 64)  # Banner
+    desk.initiate_chat(manager, message=complaint, max_turns=12)  # Start the chaired room
+
+
+if __name__ == "__main__":  # Run three isolated demos
+    run_hotel_desk("AC not cooling in room 412, booking BK-7781")  # Happy path
+    run_hotel_desk("Something is wrong with my stay")  # Clarify path
+    run_hotel_desk("Wrong spa charge of 2500 on my bill, booking BK-9002")  # Billing path
 ```
 
-**How the code works:**
+Save as `hotel_desk.py`. Run: `python hotel_desk.py`.
 
-- `AssistantAgent` holds the analyst **system message**. `UserProxyAgent` starts the chat and **executes** tools.
-- `register_function` sets **caller=analyst** and **executor=desk**. Suggestions and runs stay on different seats.
-- `code_execution_config=False` keeps the desk on lookups only. `is_done` looks for `SUMMARY_READY`.
-- The printed **trace** is how you verify the analyst did not invent a row.
+**How the code works**
 
-Run: `python campus_ops_pair.py`
+- `build_llm_config` picks **Groq** or **OpenAI** from the environment so the desk is not locked to one vendor.
+- Four seats share one `GroupChat`. Intake clarifies. Classifier tags. Clerk suggests tools. **HotelDeskRunner** executes them.
+- `register_function` sets **caller = clerk** and **executor = desk**. Reversing that split lets a specialist invent a stamp.
+- `hotel_speaker_select` sends the opening complaint to intake, tool-call turns to the desk, and tool results to the clerk.
+- `run_hotel_desk` clears `groupchat.messages` so demo 2 cannot inherit room 412 from demo 1.
+- The planned close is `TICKET_CREATED:` plus `TERMINATE`. `max_round=12` is only a fuse.
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Auth / import error | Missing key or package | `.env` + `pip install ag2 python-dotenv` |
-| Endless rephrasing | Keyword never emitted | Repeat `SUMMARY_READY` in the system message |
-| Invented Infosys count | Tool not called | Trace must show `lookup_stipend_status` |
-
-A healthy pair trace typically shows: desk opening → analyst suggests a lookup → desk returns students=8 or 6 → dispatch tool → three bullets + **SUMMARY_READY**. A final paragraph with **zero** tool lines is a guessing chatbot, not a delegated workflow.
-
-### Activity — Trace detective (pair)
-
-After your run, tick: both tools visible? Final bullets match 8 and 6 and Slack **not sent**? Chat ended with **SUMMARY_READY**? Optional probe: add *Also check Infosys* and confirm `UNKNOWN_COMPANY`, not a delayed headcount.
+![Conversable loop: clerk suggests a tool, desk runner executes, result returns until TERMINATE](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-03-pair-data-flow.png)
 
 ---
 
-## GroupChat, Speaker Selection, and Max Rounds
+## What This End-to-End System Implements
 
-Connecting sentence: The pair finished the lookup. A drive notice needs **three slices** in one room — or Infosys appears in a cheerful poster.
+Connecting sentence: If a demo cannot show this table, the lab is incomplete.
 
-- **Official Definition:** A **GroupChat** is a shared message space for several conversable agents. A **GroupChatManager** is the coordinator that runs that space under your rules.
-- **In Simple Words:** The meeting room, and the person who gives the floor.
-- **Real-Life Example:** Ananya’s opening ask stays in one thread. The manager is the chair, not a fourth novelist.
+| Piece | What the guest / auditor sees |
+|---|---|
+| Intake | One clarify question when booking or room is missing — not a fake ticket |
+| Classify | One tag from the closed list |
+| Tools | `lookup_guest_stay` then `create_complaint_ticket`; `STAY_NOT_FOUND` if the id is wrong |
+| Orchestration | Named speakers; tool calls routed to **HotelDeskRunner** |
+| Close | `TICKET_CREATED:` plus `TERMINATE` on a complete case |
+| Isolation | `groupchat.messages = []` so demo 2 does not inherit demo 1 |
 
-- **Official Definition:** **Speaker selection** is the policy for who speaks next. **Max rounds** (`max_round`) is a hard cap on group turns. A **handoff** is the designed move of work from one specialist to another.
-- **In Simple Words:** Call the right expert; pass the folder; ring the bell.
-- **Real-Life Example:** After research lists Nimbus and Riverbank, **risk** must speak before **messaging** writes the poster. If messaging speaks first, the poster invents urgency-as-lawsuit.
+**Happy path (demo 1):** BK-7781 → `room_comfort` → stay facts → `HT-ROOM-412` (or similar) → guest-facing line → stop.
 
-![AutoGen GroupChat orchestration: GroupChatManager chairs a shared GroupChat, speaker selection Research then Risk then Messaging, max_round 10, BRIEF_READY](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-04-groupchat-orchestration.png)
+**Clarify path (demo 2):** No booking id → intake asks → **no** invented ticket.
 
-The shared room is **GroupChat**. The chair is **GroupChatManager**. Numbered arrows are **speaker selection**. `max_round` is the bell.
+**Billing path (demo 3):** BK-9002 → `billing` → stay for room 918 → ticket → stop.
 
-| Specialist | Distinct sub-result | Must not do |
-|---|---|---|
-| **ResearchSpecialist** | File-backed facts: 14 students, two companies, tracker is status-only | Write final student copy |
-| **RiskSpecialist** | Fence list: no legal threats, no unpaid totals, no extra companies | Invent replacement facts |
-| **MessagingSpecialist** | Notice from **approved** lines only | Invent Nimbus headcount |
+**Need:** `max_round=12` is a fuse, not the plan. The plan is `TERMINATE` after a real stamp.
 
-**This run:** custom `select_briefing_speaker` after the desk opens: research → risk → messaging, with **max rounds = 10**.
-
-**Common error:** `max_round=3` on a three-specialist brief so messaging never speaks — that is an **incomplete handoff**, not efficiency. Treating the manager as a fourth novelist also hides which specialist failed.
-
-### Activity — Set the bell
-
-If each specialist needs one substantial turn, what is the **smallest** `max_round` you would try — 4, 10, or 40 — and why not 40?
+![GroupChat: Intake, Classifier, and Clerk under a manager; tool calls route to the desk runner](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session42/session42-04-groupchat-orchestration.png)
 
 ---
 
-## Full Group Script
+## AutoGen vs n8n / make.com
 
-Connecting sentence: Same folder, same facts, new objects: room, chair, ladder.
+Connecting sentence: Students often ask why not draw the same desk in a no-code builder.
 
-Save as `campus_ops_group.py`.
+| | AutoGen (this lab) | n8n / make.com |
+|---|---|---|
+| Shape | Named agents, tools, chair, traces | Boxes, routers, retries |
+| Strength | Ambiguous guest text; speaker policy | SaaS glue; logs; non-engineers |
+| Weakness | Needs a key, traces, prompt care | Weak at multi-turn “who speaks” |
+| Fit | Interactive intake + tools | Nightly syncs, webhooks, CRMs |
 
-```python
-# campus_ops_group.py — AutoGen group chat for a placement-drive briefing
-import os  # read OPENAI_API_KEY
-from dotenv import load_dotenv  # load .env
-from autogen import AssistantAgent, UserProxyAgent, GroupChat, GroupChatManager  # group blocks
+**Need:** AutoGen does not replace a workflow SaaS. Use AutoGen when the hard part is **dialogue and seats**. Use n8n/make.com when the hard part is **integrations**. Many products use both.
 
-load_dotenv()  # load the key
-API_KEY = os.getenv("OPENAI_API_KEY", "")  # empty if missing
-llm_config = {"config_list": [{"model": "gpt-4o-mini", "api_key": API_KEY}], "temperature": 0.2}  # classroom model
-
-FACTS = (  # bounded briefing fence — same campus register as the pair
-    "Campus: Greenfield Institute of Technology, Pune. Lead: Prof. Meera Kulkarni. "  # people
-    "Issue: June internship stipends delayed for 14 students. "  # problem
-    "Companies: Nimbus Analytics; Riverbank Retail. Range: Rs 8000 to 15000. "  # on-file names
-    "HR reminder sent 4 August. Trainer Slack not sent. "  # dispatch facts
-    "Launch: stipend-status tracker shows delay status only — not a payment promise. "  # feature fence
-    "Do not invent companies, unpaid totals, or legal threats."  # hard no
-)  # end FACTS
-
-def is_done(message) -> bool:  # shared stop rule
-    content = (message.get("content") or "") if isinstance(message, dict) else str(message)  # safe text
-    return "BRIEF_READY" in content.upper() or "TERMINATE" in content.upper()  # completion stamps
-
-research = AssistantAgent(  # specialist 1
-    name="ResearchSpecialist",  # trace label
-    system_message=(  # slice
-        "You are campus research for a GIT Pune placement-drive briefing. "  # seat
-        f"Use only these facts: {FACTS} "  # fence
-        "Write 5 to 7 bullets of evidence. No student-facing poster. No legal language."  # sub-result
-    ),  # end research message
-    llm_config=llm_config,  # model
-)  # end research
-
-risk = AssistantAgent(  # specialist 2
-    name="RiskSpecialist",  # trace label
-    system_message=(  # slice
-        "You are policy risk for the placement cell. Read research bullets. "  # seat
-        "List fences: no extra companies, no unpaid totals, no legal threats, tracker is status-only. "  # fences
-        "Flag any invented claim. Do not write the final student notice."  # not messaging
-    ),  # end risk message
-    llm_config=llm_config,  # model
-)  # end risk
-
-messaging = AssistantAgent(  # specialist 3
-    name="MessagingSpecialist",  # trace label
-    system_message=(  # slice
-        "You write faculty and student messaging for the stipend-tracker launch. "  # seat
-        "Use only research bullets that Risk did not flag. "  # approved inputs
-        "Produce a short notice with Title, What students will see, What we will not claim. "  # shape
-        "End with the line BRIEF_READY. Never invent facts."  # stop stamp
-    ),  # end messaging message
-    llm_config=llm_config,  # model
-)  # end messaging
-
-desk = UserProxyAgent(  # starts the meeting
-    name="CampusDeskRunner",  # trace label
-    human_input_mode="NEVER",  # automatic demo
-    code_execution_config=False,  # no generated code
-    is_termination_msg=is_done,  # stop on BRIEF_READY
-)  # end desk
-
-
-def select_briefing_speaker(last_speaker, groupchat):  # custom speaker selection
-    if (not groupchat.messages) or (last_speaker is desk):  # empty room or desk just opened
-        return research  # research speaks first
-    if last_speaker is research:  # research handoff
-        return risk  # then policy
-    if last_speaker is risk:  # risk handoff
-        return messaging  # then copy
-    return messaging  # stay until BRIEF_READY / max_round
-
-
-groupchat = GroupChat(  # the room
-    agents=[desk, research, risk, messaging],  # roster
-    messages=[],  # fresh transcript
-    max_round=10,  # hard stop against runaway dialogue
-    speaker_selection_method=select_briefing_speaker,  # chair rules
-)  # end groupchat
-
-manager = GroupChatManager(  # the chair
-    groupchat=groupchat,  # attach the room
-    llm_config=llm_config,  # available if the manager must speak
-    is_termination_msg=is_done,  # same close rule
-)  # end manager
-
-if __name__ == "__main__":  # direct execution only
-    if not API_KEY:  # fail clearly
-        raise ValueError("Set OPENAI_API_KEY in .env")  # setup
-    opening = (  # complex campus task
-        "Prepare one placement-drive briefing for faculty and a student notice "  # two audiences
-        "for the stipend-status tracker launch. Research, then risk, then messaging. Stay inside known facts."  # order
-    )  # end opening
-    desk.initiate_chat(manager, message=opening)  # start through the chair
-    print("=== GROUP TRACE ===")  # banner
-    for i, msg in enumerate(groupchat.messages, start=1):  # numbered turns
-        name = msg.get("name") or msg.get("role") or "unknown"  # speaker
-        print(f"{i}. [{name}] {str(msg.get('content') or '')[:200]}")  # preview
-    print("=== END GROUP TRACE ===")  # footer
-```
-
-**How the code works:**
-
-- Three **AssistantAgent** specialists have **non-overlapping** system messages. Each must produce a different sub-result.
-- **GroupChat** is the shared room. **GroupChatManager** is the chair `initiate_chat` talks to.
-- `select_briefing_speaker` encodes **handoffs**: desk opening → research → risk → messaging. That is **speaker selection**, not luck.
-- `max_round=10` is the bell. `BRIEF_READY` is the success stamp.
-
-Run: `python campus_ops_group.py`
-
-If you temporarily set `speaker_selection_method="round_robin"`, the desk or the wrong specialist may talk out of turn. Restore `select_briefing_speaker`. Rigidity is the point when risk must speak before messaging.
+**Common doubt:** *“Is AutoGen production?”* — Treat this desk as a **correct lab product**. Production still needs auth, a real PMS, and human override.
 
 ---
 
-## Read Traces and Fix One Failure
+## Read the Trace; Fix One Failure
 
-Connecting sentence: A polished last paragraph is not evidence. The **trace** is the CCTV of both runs.
+Connecting sentence: A green exit code is not a passing desk.
 
-- **Official Definition:** A **conversation trace** is the ordered record of messages, tool suggestions, tool results, and the close signal.
-- **In Simple Words:** CCTV of the work chat.
-- **Real-Life Example:** If the pair summary says “Slack sent” but dispatch returned `not sent`, the **analyst** ignored the tool.
+**Read in order:** (1) Did IntakeAgent speak when details were thin? (2) Did ClassifierAgent emit one allowed tag? (3) Did **HotelDeskRunner** run tools — not the clerk? (4) Is there `TICKET_CREATED:` and `TERMINATE` on complete cases? (5) Did demo 2 invent a booking?
 
-- **Official Definition:** A **group-chat failure mode** is a repeatable bad pattern such as **wrong speaker** or **repetition deadlock**.
-- **In Simple Words:** The meeting got stuck, or the wrong person grabbed the mic.
-- **Real-Life Example:** Messaging answers “can we threaten legal action?” That is **wrong speaker**. Research repeating the same seven bullets four times is **repetition deadlock**.
-
-| Failure | What you see | One configuration fix |
+| Failure | Likely cause | One config fix |
 |---|---|---|
-| Guessing pair | Final paragraph, zero tool lines | Strengthen “must call lookup” |
-| Wrong speaker | Messaging speaks right after the desk | Restore the custom ladder (do not use loose auto select) |
-| Repetition deadlock | Risk restates research with no new fence | Tighten risk’s message; keep room for messaging |
-| Incomplete handoff | Messaging never speaks / no `BRIEF_READY` | Raise `max_round`; confirm the ladder after risk |
-| Missing stamp | Endless “happy to help” | Put `SUMMARY_READY` / `BRIEF_READY` in the system message and in `is_done` |
+| Tools never run | Speaker never returns the desk | Route `function_call` / `tool_call` to HotelDeskRunner |
+| Ticket with no stay line | Clerk skipped lookup | System message: lookup before create |
+| Demo 2 gets a fake ticket | Clerk spoke first; intake skipped | After the desk opening, return IntakeAgent |
+| Chat hits round 12 | Weak `TERMINATE` | Require stamp + TERMINATE; keep max_round as fuse |
+| Demo 2 mentions 412 | Shared `messages` | Reset `groupchat.messages` before each run |
 
-**Lab fix:** Set `max_round=3`, re-run, write what failed (likely incomplete handoff). Restore `max_round=10` and confirm messaging returns. That is a **configuration** fix, not a new framework.
+### Activity — Trace Audit
 
-A messy trace is a configuration document. Change one setting: the ladder, the role text, or the round cap.
+Paste a 12-turn log. Mark the first turn tools should have run but a specialist spoke instead. Name the speaker-function change.
 
-### Activity — Break then fix
+**Suggested answer:** After a tool-call payload, return **HotelDeskRunner**, not IntakeAgent.
 
-After the group run: Did research speak before risk? Did messaging include `BRIEF_READY`? Did any extra company appear? Then run the `max_round=3` experiment and name the failure.
+### Activity — Isolation Check
+
+If demo 3 cites room 412 from demo 1, what line did you skip?
+
+**Suggested answer:** `groupchat.messages = []` at the start of `run_hotel_desk`.
 
 ---
 
-## What “Good” Looks Like on This Desk
+## Recap
 
-A successful **end-to-end** morning has all of the following:
+Connecting sentence: One hotel desk is the whole session — not a pair lab plus a later group lab.
 
-- Pair trace names **StipendAnalyst** and **CampusDeskRunner**, shows both lookups, ends with **SUMMARY_READY**
-- Group trace shows **ResearchSpecialist**, then **RiskSpecialist**, then **MessagingSpecialist** with three distinct sub-results
-- No extra company names; no legal threats; tracker stays status-only
-- You can name one failure you induced and the **one** setting you changed
+You configured **non-overlapping seats**, registered **lookup** and **ticket** with **caller ≠ executor**, ran a **GroupChat** with a **speaker function** and **max rounds**, and treated **traces** as the test. **Groq** or **OpenAI** is only `llm_config`. **CrewAI** remains the ticket-shaped crew from the previous session; this session is a **different product** for live guest intake.
 
-Do not put three novelists in a GroupChat for a yes/no dispatch question. Do not ask one pair to own research, risk, *and* messaging without a chair. Keep this run automatic so the ladder stays visible.
+**Need:** If the trace has no `TICKET_CREATED:` on a complete complaint, do not call the desk done.
 
-| # | Check | Done? |
-|---|---|---|
-| 1 | Pair system messages name seats and fences | |
-| 2 | Two functions registered with caller ≠ executor; code execution off | |
-| 3 | Pair trace shows stipend + dispatch lookups and SUMMARY_READY | |
-| 4 | Custom speaker ladder is research → risk → messaging | |
-| 5 | Group trace shows three distinct sub-results and BRIEF_READY (or a named failure + one fix) | |
+---
 
-If a box is empty, name **system message**, **registration**, **termination**, or **speaker / max_round** — then change only that layer.
+## Knowledge Check
 
-**Upcoming** work moves from AutoGen’s conversation loop to **graph-shaped** agent workflows, where nodes and edges replace the chat chair.
+**Question 1**
+
+Why may IntakeAgent not call `create_complaint_ticket`?
+
+A. AutoGen forbids assistants from seeing tools  
+B. Tickets must stay on the clerk + desk-runner path so the audit stays clear  
+C. GroupChat cannot mix AssistantAgent and UserProxyAgent  
+D. Groq keys cannot register functions  
+
+**Correct answer:** B
+
+**Explanation:** Split seats keep category, stay facts, and stamps on different speakers.
+
+**Question 2**
+
+A tool-call payload appears and ClassifierAgent speaks next. What is the first fix?
+
+A. Delete GroupChatManager  
+B. Return HotelDeskRunner from the speaker function on tool-call turns  
+C. Set temperature to 1  
+D. Remove `lookup_guest_stay`  
+
+**Correct answer:** B
+
+**Explanation:** Suggested tools must reach the executor.
+
+**Question 3**
+
+Demo 2 (`"Something is wrong with my stay"`) prints `TICKET_CREATED` with no booking id. What failed?
+
+A. `max_round` was too high  
+B. Intake did not block a stamp without a stay  
+C. OpenAI is required  
+D. `register_function` was used twice  
+
+**Correct answer:** B
+
+**Explanation:** Vague complaints must clarify, not invent tickets.
 
 ---
 
 ## Key Takeaways
 
-- **AutoGen** delegates work through **dialogue**: a conversable **pair** for lookups, a **GroupChat** when several specialists must share one thread.
-- Split seats: **AssistantAgent** reasons and suggests; **UserProxyAgent** starts the job and **executes** registered tools. **`register_function`** plus a keyword stamp keep the desk inspectable.
-- **GroupChatManager**, **speaker selection**, and **max rounds** keep research, risk, and messaging in order and stop runaway chat.
-- Judge quality from the **conversation trace**, then change **one** configuration — system message, registration, stop rule, or speaker / round cap.
+- AutoGen is a **conversable team** with tools and a chair — the right shape for live guest intake
+- **Caller ≠ executor** keeps stay facts and ticket stamps honest
+- **Speaker selection** plus **max rounds** stop polite loops; `TERMINATE` is the planned close
+- The **trace** is the test: names, tools, stamp, and isolation across demos
+- **CrewAI** stays the ticket-shaped crew from the **previous** session; this hotel desk is a **new** product, not a sequel
 
-These habits — clear seats, registered tools, a designed stop, and a chair you can debug — are what you will reuse when workflows are drawn as graphs in **upcoming** sessions.
+**Upcoming** work draws similar workflows as **graphs** (nodes and edges) instead of a chat chair. Seats, tools, stop rules, and traces here remain the foundation.
 
 ---
 
-## Important Commands, Libraries, and Terminologies Used
+## Important Commands, Libraries, Terminologies
 
-| Term / Command | Type | Meaning |
-|---|---|---|
-| **AutoGen / ag2** | Framework | Conversable multi-agent library |
-| **Conversable-agent model** | Pattern | Agents chat until a stop rule fires |
-| **AssistantAgent** | Class | LLM specialist; may suggest tools |
-| **UserProxyAgent** | Class | Starts the task; may execute tools |
-| **register_function** | Call | Caller suggests; executor runs |
-| **Termination condition** | Rule | `is_termination_msg` / keyword |
-| **SUMMARY_READY / BRIEF_READY** | Keywords | Pair and group success stamps |
-| **GroupChat** | Class | Shared multi-agent message room |
-| **GroupChatManager** | Class | Chair that runs the group |
-| **Speaker selection** | Policy | Who speaks next |
-| **max_round** | Setting | Hard cap on group turns |
-| **Wrong speaker / deadlock** | Failures | Unsuitable agent, or same points looping |
-| **Conversation trace** | Evidence | Ordered messages and tool results |
-| **initiate_chat** | Method | Desk starts the pair or the chair |
-| `pip install ag2 python-dotenv` | Command | Install AutoGen family and `.env` loader |
-| `python campus_ops_pair.py` | Command | Run the daily ops pair |
-| `python campus_ops_group.py` | Command | Run the placement-drive group |
+| Name | What it is in this lab |
+|---|---|
+| `ag2` / `autogen` | Package family that exposes AutoGen agent and GroupChat classes |
+| `AssistantAgent` | LLM specialist: intake, classifier, or clerk |
+| `UserProxyAgent` | **HotelDeskRunner** — starts the case and executes tools |
+| `register_function` | Wires a tool with caller ≠ executor |
+| `GroupChat` / `GroupChatManager` | Shared notepad and chairperson |
+| Speaker selection / `max_round` | Who speaks next / meeting alarm |
+| `lookup_guest_stay` | Fake PMS lookup; may return `STAY_NOT_FOUND` |
+| `create_complaint_ticket` | Issues a visible `TICKET_CREATED:` stamp |
+| `llm_config` | Groq or OpenAI from environment keys |
+| Conversation trace | Ordered speakers, tool results, and stop phrase |
