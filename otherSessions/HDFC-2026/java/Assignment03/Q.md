@@ -6,9 +6,9 @@ This is a **new project**. You do not need last week's repo.
 
 Plain Java only. **No Spring. No Java Streams.** Compile and run with `javac` / `java`, or Maven/Gradle if you already use it.
 
-You **may** use `java.util.concurrent` (`ExecutorService`, `Future`, `CompletableFuture`, `BlockingQueue`, `ArrayBlockingQueue`) and `PriorityQueue` / `ArrayDeque` where the section says so.
+You **may** use `java.util.concurrent` (`ExecutorService`, `Future`, `CompletableFuture`, `BlockingQueue`, `ArrayBlockingQueue`) and `java.util.PriorityQueue` where the section says so.
 
-Do **not** use `java.util.LinkedList` or `java.util.Stack` for the linked-list and stack sections. Write your own nodes and your own stack.
+Do **not** use `java.util.LinkedList` or `java.util.Stack` for the linked-list and stack sections. Write your own nodes and your own stack. For BFS only, a `Queue` (including `LinkedList` used only as a `Queue`) is allowed.
 
 Do not resubmit last week's array store. Two-pointer this week is **slow/fast on a linked list**.
 
@@ -42,9 +42,10 @@ Sum of the six amounts → **`140000`**.
 Class `ClaimLinkedList` with `ClaimNode` (`int amount`, `ClaimNode next`):
 
 - `addLast(int amount)` — append
-- `addFirst(int amount)` — insert at head
+- `addFirst(int amount)` — insert at head (required API; you do not have to demo it in `main`)
 - `insertAt(int index, int amount)` — 0-based; index `size` means append
 - `deleteAt(int index)` — 0-based
+- `nodeAt(int index)` — returns the node (needed to link a cycle)
 - `toArray()` / print — amounts in list order
 - `size()`
 
@@ -89,7 +90,7 @@ Comment Big-O above each method.
 
 ### 3. Middle and cycle — slow / fast pointers
 
-Work on copies. Use Floyd's tortoise and hare. Do **not** compute `size()` and walk `size/2` steps. Do **not** use extra collections to store visited nodes for the cycle check.
+Work on **copies**. Use Floyd's tortoise and hare. Do **not** compute `size()` and walk `size/2` steps. Do **not** use a `HashSet` / `HashMap` of nodes for `hasCycle` or for finding the cycle start.
 
 **Middle** of the seed (even length → the **second** middle node, LeetCode 876 style):
 
@@ -127,12 +128,21 @@ Comment: **O(max(m, n))** time, **O(max(m, n))** extra for the result list.
 
 ### 5. Stack — array and linked list
 
-Interface `ClaimStack`: `push`, `pop`, `peek`, `isEmpty`.
+Interface `ClaimStack`:
+
+```text
+void push(int value)
+int pop()
+int peek()
+boolean isEmpty()
+```
 
 Implement **both**:
 
 - `ArrayClaimStack` — fixed `int[]`, capacity at least `32`
 - `LinkedClaimStack` — nodes, grow as needed
+
+For balanced brackets, `push` / `pop` the bracket **character as an `int`**.
 
 `pop` / `peek` on empty → `StackEmptyException`  
 `push` when the array stack is full → `StackFullException`
@@ -180,7 +190,7 @@ In `main`, in this order:
 
 Comment: enqueue/dequeue **O(1)** time, **O(1)** extra space besides the array.
 
-**BFS** of HDFC Life branches. Use **your circular queue or a `Queue`** (a `LinkedList` used only as a `Queue` is allowed **here**). Do not use recursion for BFS.
+**BFS** of HDFC Life branches. Use a `Queue<String>` (your own queue or `java.util.Queue`). Do not use recursion for BFS. Do not use the int circular-claim-queue for branch names.
 
 Adjacency (left-to-right is enqueue order):
 
@@ -221,6 +231,8 @@ Do not sort an `ArrayList` and pretend it is a heap. `poll()` must drive the pri
 
 Use real threads. Do not fake this with a sequential loop on the main thread.
 
+The NEW / TERMINATED demo must use a **named class that `implements Runnable`** (not only a lambda). `ClaimTotalCallable` must `implement Callable<Integer>`.
+
 | Piece | What it must do |
 | ----- | --------------- |
 | `Thread.getState()` before `start()` | **`NEW`** |
@@ -237,7 +249,7 @@ Use real threads. Do not fake this with a sequential loop on the main thread.
 - Consumer `take`s three values into a list
 - `join` both, then print → `25000, 18000, 42000`
 
-Shut down the `ExecutorService`. Do not leave non-daemon workers running.
+Producer and consumer may be raw `Thread`s. Shut down the `ExecutorService` used for the `Callable` / cancel demo. Do not leave non-daemon workers running.
 
 Comment above the Callable: the blocking `get()` waits for the worker; the extra space is the worker's stack, not an extra O(n) array.
 
@@ -282,7 +294,7 @@ Do not empty-catch. Print the exception message in `main`.
 
 `main` must demonstrate:
 
-- `deleteAt(99)` on the seed list (or an equivalent invalid index)
+- `deleteAt(99)` on a **non-cyclic** copy of the seed (or an equivalent invalid index)
 - `pop()` on a new empty `ArrayClaimStack`
 - `dequeue()` on a new empty `CircularClaimQueue`
 
@@ -294,12 +306,13 @@ Do not empty-catch. Print the exception message in `main`.
 hdfc-life-claim-pipeline/
   src/com/hdfclife/
     Main.java
+    model/       Claim, Urgency
     list/        ClaimNode, ClaimLinkedList, ListReverser,
                  CycleDetector, DigitListAdder
     stack/       ClaimStack, ArrayClaimStack, LinkedClaimStack,
                  ParenthesesChecker, PostfixEvaluator
     queue/       CircularClaimQueue, BranchBfs, ClaimPriorityDesk
-    thread/      ClaimTotalCallable, ProducerConsumer
+    thread/      SeedRunnable, ClaimTotalCallable, ProducerConsumer
     exception/   PipelineException, InvalidIndexException, EmptyListException,
                  StackEmptyException, StackFullException,
                  QueueEmptyException, QueueFullException
@@ -327,20 +340,21 @@ You may merge small helpers, but do not put every algorithm in `Main`.
 12. Balanced `((TERM)(ULIP)` → **`false`**
 13. Balanced `([)]` → **`false`**
 14. Postfix `25000 18000 + 1000 -` → **`42000`**
-15. Circular queue after wrap → `18000, 42000, 15000, 31000`
-16. BFS from `MUMBAI` → `MUMBAI, PUNE, DELHI, HYDERABAD, KOLKATA, CHENNAI`
-17. PriorityQueue poll ids → `CLM-03, CLM-01, CLM-05, CLM-02, CLM-04, CLM-06`
-18. Thread state before start → **`NEW`**
-19. Thread state after join → **`TERMINATED`**
-20. Callable `Future.get()` sum → **`140000`**
-21. `isDone` after get → **`true`**
-22. `CompletableFuture.supplyAsync` sum → **`140000`**
-23. Cancelled future → **`true`**
-24. Daemon flag → **`true`**
-25. Producer–consumer takes → `25000, 18000, 42000`
-26. Caught message for invalid list index `99`
-27. Caught message for empty stack `pop`
-28. Caught message for empty queue `dequeue`
+15. Circular `dequeue()` → **`25000`**
+16. Circular queue after wrap → `18000, 42000, 15000, 31000`
+17. BFS from `MUMBAI` → `MUMBAI, PUNE, DELHI, HYDERABAD, KOLKATA, CHENNAI`
+18. PriorityQueue poll ids → `CLM-03, CLM-01, CLM-05, CLM-02, CLM-04, CLM-06`
+19. Thread state before start → **`NEW`**
+20. Thread state after join → **`TERMINATED`**
+21. Callable `Future.get()` sum → **`140000`**
+22. `isDone` after get → **`true`**
+23. `CompletableFuture.supplyAsync` sum → **`140000`**
+24. Cancelled future → **`true`**
+25. Daemon flag → **`true`**
+26. Producer-consumer takes → `25000, 18000, 42000`
+27. Caught message for invalid list index `99`
+28. Caught message for empty stack `pop`
+29. Caught message for empty queue `dequeue`
 
 ---
 
@@ -363,4 +377,5 @@ Submit the **GitHub repository link**.
 - <a href="https://leetcode.com/problems/valid-parentheses/" target="_blank" rel="noopener noreferrer">Valid Parentheses</a>
 - <a href="https://leetcode.com/problems/evaluate-reverse-polish-notation/" target="_blank" rel="noopener noreferrer">Evaluate Reverse Polish Notation</a>
 - <a href="https://leetcode.com/problems/design-circular-queue/" target="_blank" rel="noopener noreferrer">Design Circular Queue</a>
-- <a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener noreferrer">Binary Tree Level Order Traversal</a>
+- <a href="https://leetcode.com/problems/implement-queue-using-stacks/" target="_blank" rel="noopener noreferrer">Implement Queue using Stacks</a>
+- <a href="https://leetcode.com/problems/palindrome-linked-list/" target="_blank" rel="noopener noreferrer">Palindrome Linked List</a>
