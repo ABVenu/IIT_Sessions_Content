@@ -9,17 +9,17 @@ session duration: 1hr  50mins
 
 Session Notes Length: 480 lines to 500 lines max
 
-title: ChatGPT Agent and Hosted Agent Builder Patterns
+title: make.com and ChatGPT Hosted Agents
 
-objective: Evaluate hosted agent builder products and configure a working agent with knowledge actions and guardrails.
+objective: Assemble a make.com enquiry scenario and configure a ChatGPT-style hosted agent with knowledge, actions, and guardrails.
 
-type of session: theory/implementation/mixture of theory + implementation / You take the call
+type of session: mixture of theory + implementation
 
-topics be covered: ChatGPT Agent; knowledge sources; actions; instructions; guardrails; hosted vs self-hosted trade-offs
+topics be covered: scenarios; modules; routers; OpenAI modules; ChatGPT Agent; knowledge sources; actions; instructions; guardrails; hosted vs no-code vs code-first
 
 
 detailed subtopics to be covered:
-* Compare hosted agent builders and code-first frameworks across control flexibility cost and deployment effort.
-* Configure a ChatGPT-style or equivalent hosted agent with knowledge boundaries and action permissions.
-* Define instructions and guardrails that reduce harmful incorrect or out-of-scope responses.
-* Demonstrate the hosted agent on in-domain and refusal queries with explainable behavior.
+* Assemble a make.com scenario with a trigger, an AI-powered transformation, a router, and an action to email or a spreadsheet.
+* Compare no-code scenarios and hosted agent builders with code-first frameworks across control, flexibility, cost, and who maintains the system.
+* Configure a ChatGPT-style hosted agent with knowledge boundaries, action permissions, instructions, and guardrails.
+* Test one make.com success path and demonstrate the hosted agent on in-domain and refusal queries with explainable behaviour.

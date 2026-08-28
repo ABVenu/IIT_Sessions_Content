@@ -59,7 +59,7 @@ By Tuesday:
 
 Nothing here is science fiction. These are ordinary **operations failures** — the gap between “it worked in the demo” and “it is safe to run for five hundred students every day.”
 
-In the **previous** session you configured **hosted agents** with knowledge boundaries, action permissions, and guardrails — the first layer of control. This session goes deeper: how teams **run**, **secure**, **measure**, and **release** agent changes without gambling on luck.
+In the **previous** session you assembled a **make.com** enquiry scenario and configured **hosted agents** with knowledge boundaries, action permissions, and guardrails — the first layer of control. This session goes deeper: how teams **run**, **secure**, **measure**, and **release** agent changes without gambling on luck.
 
 ---
 
