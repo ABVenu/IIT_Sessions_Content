@@ -7,13 +7,13 @@ flowchart TB
     M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, memory, debug & iterate"]
   end
 
-  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[CrewAI + AutoGen + make.com]</i><br/>Multi-agent teams and no-code AI scenarios"]]
+  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[CrewAI + AutoGen]</i><br/>Specialist crews and multi-agent dialogue"]]
 
-  CS{{"<b>Current Session</b><br/>ChatGPT Agent and Hosted Builders<br/><i>[Knowledge + Actions + Guardrails]</i><br/>Mental shift: configure a hosted concierge vs owning the whole shop"}}
+  CS{{"<b>Current Session</b><br/>make.com and ChatGPT Hosted Agents<br/><i>[Trigger + AI + Router + Guardrails]</i><br/>Mental shift: inspectable scenario, then a bounded hosted agent"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>Hosted agent patterns<br/>Knowledge, actions, rails"]
-    RV["<b>Real-Life Value</b><br/>Leave policy and placement FAQ<br/>Safe campus concierge"]
+    CV["<b>Course Value</b><br/>No-code junction + hosted desk<br/>Same campus, two products"]
+    RV["<b>Real-Life Value</b><br/>Enquiry form to email and sheet<br/>Leave and placement FAQ that refuses"]
   end
 
   subgraph Future["Where This Leads"]
@@ -24,7 +24,7 @@ flowchart TB
   M1 ==>|&nbsp;Foundation&nbsp;| M2
   M2 ==>|&nbsp;Components&nbsp;| M3
   M3 ==>|&nbsp;Scale up&nbsp;| CM
-  CM ==>|&nbsp;Host the desk&nbsp;| CS
+  CM ==>|&nbsp;Wire then host&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
   CS ==>|&nbsp;Next Steps&nbsp;| F4

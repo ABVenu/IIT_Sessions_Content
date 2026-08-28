@@ -2,7 +2,7 @@
 
 ## Context of This Session
 
-In the **previous** session you configured a **hosted Greenfield Leave & Placement Desk**: knowledge, actions, instructions, guardrails, then in-domain and refusal tests. That was a **bounded concierge**.
+In the **previous** session you wired a **make.com enquiry junction** and configured a **hosted Greenfield Leave & Placement Desk**: knowledge, actions, instructions, guardrails, then in-domain and refusal tests. That was a **junction plus a bounded concierge**.
 
 This session treats the same desk as **software you release**. You will version prompts, run an **eval gate**, put secrets in **environment variables**, filter **PII**, and use cost plus quality — not Friday luck — to decide go / no-go.
 
