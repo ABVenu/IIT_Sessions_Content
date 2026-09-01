@@ -1,493 +1,465 @@
-# make.com: No-Code AI Automation Scenarios
+# LangGraph: Building an End-to-End AI Agentic Workflow
 
-## Context of This Session
+## Introduction
 
-In the **previous** session you ran an **AutoGen group chat**: specialised agents, a speaker-selection policy, round limits, and one collaborative task with distinct sub-results. That was a **staffed meeting**.
+The end-to-end example for this session is a **Service Request Desk**.
 
-This session walks out of the meeting room and onto the **ops floor**. You will wire the same campus enquiry into **make.com**: a form arrives, AI classifies it, a router picks a path, then email and a CRM-style sheet update — without writing an application.
+A user sends **one message**. The desk must read it, look up the record, follow office rules, and finish with a clear outcome: **open a ticket**, **ask for a missing id**, or **wait for a supervisor**.
 
-**In this session, you will:**
+That full path — message in, honest outcome out, with a saved case file — is the application you will build. LangGraph is the engine. The desk is the product.
 
-- **Explain** how make.com **scenarios** serve the same integration goal as code-first automation, with a different build style
-- **Assemble** a scenario with a **trigger**, a **router**, and at least one **AI-powered** transformation
-- **Connect** output actions to **email** and a **spreadsheet** used as a campus CRM
-- **Test** and document **one success path** and **one recoverable error path**
+By the end you will have **one runnable desk**, not four disconnected demos.
 
----
+### What “end to end” means here
 
-## From a Staffed Meeting to a Business Assembly Line
-
-Crews and group chats are excellent when **roles** must think. Campus Ops still has another job: **move a row through apps** the office already uses.
-
-- **Official Definition:** **make.com** is a no-code platform for building **scenarios** — visual workflows that connect apps, AI modules, and actions.
-- **In Simple Words:** A canvas where you plug Form → AI → Gmail → Sheet without compiling a product.
-- **Real-Life Example:** **Ananya** at **Greenfield Institute of Technology, Pune** should not copy every student enquiry into Prof. Meera Kulkarni’s placement register by hand.
-
-```mermaid
-flowchart TB
-  subgraph Meeting["Previous habit"]
-    G["Group chat / crew<br/>roles think and hand off"]
-  end
-  subgraph Floor["Today"]
-    S["make.com scenario<br/>apps move the enquiry"]
-  end
-  G ==>|&nbsp;Same campus story&nbsp;| S
-```
-
-**Need:** Code-first stacks give deep control. They are slow when the only goal is “when a form lands, classify it and email the right desk.”
-
-**Common doubt:** *“Did we already do this in n8n?”* — Same **thinking**. Different **product**, different **connectors**, and a style ops teams meet often in Indian startups and campus offices.
-
----
-
-## Scenarios Versus Code-First Automation
-
-Connecting sentence: Before you click modules, lock the honest comparison — same destination, different vehicle.
-
-- **Official Definition:** A **scenario** is one runnable make.com workflow: trigger, modules, routers, and actions assembled on a canvas.
-- **In Simple Words:** The whole factory floor plan you turn **On**.
-- **Real-Life Example:** “Student Enquiry Junction” is a scenario. “Send Gmail” is only one station.
-
-| Lens | make.com scenario | Code-first automation |
-|---|---|---|
-| How you build | Visual modules and mapping | Python, REST endpoints, environment variables |
-| Who can maintain | Ops / Campus Ops with training | Engineering process and reviews |
-| Speed to first demo | Hours for Form → AI → Sheet | Days if you also host an API |
-| Deep custom logic | Filters, routers, HTTP | Full control of every branch |
-| Same goal | Reliable integration | Reliable integration |
-
-**Logic:** Choosing make.com is not “giving up engineering.” It is picking the tool that matches **who must keep the lights on** after class.
-
-### Activity — Pick the vehicle
-
-Write one sentence: for Greenfield’s enquiry form, would you start with make.com or a Python HTTP API — and **who** would edit it next week?
-
----
-
-## Building Blocks on the Canvas
-
-Connecting sentence: A scenario is not one magic box. It is named stations you can point to in a review.
-
-- **Official Definition:** A **module** is one app step on the scenario canvas (watch a form, call AI, send email, update a sheet).
-- **In Simple Words:** A worker at one station.
-- **Real-Life Example:** “Watch Google Form responses” is a module. So is “Create a Google Sheets row.”
-
-| Block | Official meaning | Campus mapping today |
-|---|---|---|
-| **Trigger** | Event that starts a run | New student enquiry form row |
-| **Router** | Splits the bundle into labelled routes | Placement / leave / incomplete / complaint |
-| **AI module** | LLM classify, extract, or draft | Intent + short CRM note |
-| **HTTP module** | Call any REST endpoint when no native app exists | Optional later; skip if Gmail + Sheets exist |
-| **Data store** | Small key–value cupboard inside make.com | Lookup: intent → owner email |
-| **Scheduling** | Run on a clock, not only on an event | Weekday 9 AM pull if the form is polled |
-| **Error handling** | Directives when a module fails | Gmail timeout → “needs human” sheet |
-
-**Common error:** Putting classify, email, and sheet update inside **one** module “to keep it simple.” You cannot test or recover a mashed station.
-
----
-
-## Analogy — The Railway Junction
-
-Connecting sentence: If the canvas feels noisy, reuse one picture for the rest of the lab.
-
-```mermaid
-flowchart TB
-  A["Train arrives<br/>Trigger"] --> B["Route board<br/>Router"]
-  B --> C["Clerk writes a clean slip<br/>AI module"]
-  C --> D["Platforms and log book<br/>Email + CRM-style sheet"]
-  D --> E["Blocked track plan<br/>Error handler"]
-```
-
-1. The enquiry **arrives** (trigger).
-2. The **route board** splits placement, leave, incomplete, complaint (router).
-3. The **clerk** turns messy language into a label and a short note (AI).
-4. **Platforms** update: email the desk, write the register (actions).
-5. A blocked track follows a **recovery plan**, not a silent freeze (error handling).
-
-**Logic:** Anyone can demo the express train. Professionals also document what happens when the track is blocked.
-
----
-
-## Bounded Scenario — Greenfield Student Enquiry Desk
-
-Connecting sentence: A first scenario needs a **fence**. The fence is four enquiry types and two apps: Gmail and a sheet.
-
-Campus Ops already has a Google Form (or a sheet that receives form rows). Columns you will treat as truth:
-
-| Field | Example |
+| User message | What the desk should do |
 |---|---|
-| `timestamp` | 24 Aug 2026, 08:12 |
-| `student_name` | Riya Sharma |
-| `email` | riya.sharma@greenfield.edu |
-| `message` | When is the Nimbus Analytics placement talk? |
-| `source` | Campus Ops Inbox form |
+| `"Close ticket id-104, amount 800"` | Look up the record and **stamp a ticket** (`TKT-104`) |
+| `"Please help, nothing works"` | **Ask again** — there is no record id, so no ticket |
+| `"Refund id-200, amount 7500"` | **Pause** — Rs 5000 or more needs a supervisor’s yes or no |
 
-**Goal of the run:** Classify the message, email the right owner, append one CRM-style row. Do **not** invent a company drive that is not in the message.
+You will wire every station of that walk: read the message → look up the register → apply the money rule → ticket **or** wait for a person → send a reply.
 
-**Owners (write these in a data store or a mapping table):**
+### How the aims of the session fit the desk
 
-| Intent | Owner inbox | Sheet status |
-|---|---|---|
-| `placement` | placement@greenfield.edu | `logged` |
-| `leave` | student.affairs@greenfield.edu | `logged` |
-| `incomplete` | (no faculty ping) | `holding` |
-| `complaint` | campus.ops@greenfield.edu | `escalate` |
+The list below is what the desk **needs in real use**. Each need is one skill you will code. The technical names are in brackets so they stay attached to the job, not floating as jargon.
 
-This continues Ananya’s story: n8n could route a stipend complaint; crews could write a brief; group chat could debate a plan. Today the **form itself** becomes a live junction.
+1. **Walk the whole job, not one mega-prompt.** A model may read the text. **Python** decides the path. High-value money cannot be “approved” by extra wording in a prompt.
+2. **Do not lose the case if the program stops.** Each request gets a **file number**. Progress is saved after each station so you can open the **same** case later. *(checkpointer + thread id)*
+3. **Do not let the computer stamp a big refund alone.** The graph **pauses**. A person says yes or no. Then the **same** case continues. The router cannot stamp `approved` by itself. *(human approval)*
+4. **Survive a slow or shaky register.** If lookup hangs, stop waiting. If it fails once with a temporary error, try a few times. If it still fails, tell the user honestly — **never invent** a ticket id. *(timeout, bounded retries, fail closed)*
+5. **Prove the desk with those three messages.** Clean close, missing id, high-amount refund. That small exam is the **golden pack**.
 
-### Activity — Label four messages
+**What you will walk out with:**
 
-On paper, mark each as `placement`, `leave`, `incomplete`, or `complaint`: (1) “TCS drive date?” (2) “Need 2 days leave for sister’s wedding.” (3) empty message (4) “Stipend still unpaid — this is unfair.”
-
----
-
-## Lab Setup
-
-Connecting sentence: The scenario will call an LLM and Gmail, so credentials live in make.com connections — not in a pasted chat.
-
-1. Open [make.com](https://www.make.com) and sign in with the classroom account.
-2. Create a folder named `Greenfield Campus Ops`.
-3. Click **Create a new scenario**.
-4. Add connections when a module asks: **Google Forms** or **Google Sheets**, **Gmail**, **OpenAI** (or the class LLM connection).
-5. Keep API keys inside make.com credentials. Do **not** paste keys into Slack or the scenario notes.
-
-If Google Forms is unavailable, **Watch new rows** on a sheet that mimics the form. The thinking is identical.
+- One Service Request Desk graph you can run
+- Three live outcomes: auto-ticket, clarify, pause-and-resume
+- A saved case you can inspect mid-way
+- A clear user message when the register is slow or down
 
 ---
 
-## Click Path — Trigger
+## Application: Service Request Desk
 
-Connecting sentence: Nothing runs until something **starts** the line.
+The same desk, specified as stations. This is the worked example for the session, not a new framework.
 
-- **Official Definition:** A **trigger** is the first module that starts a scenario run when an event occurs or a schedule fires.
-- **In Simple Words:** The starting gun.
-- **Real-Life Example:** “When a new Greenfield form response appears.”
+**Job:** One request string in. Extract fields, look up a record, apply policy in **Python**, then open a ticket or wait for a human. The three messages named in the introduction are the three cases you will run.
 
-### Numbered clicks (form or sheet)
-
-1. On the empty canvas, click the **+** / **Add a module**.
-2. Search **Google Forms** → **Watch Responses** (or **Google Sheets** → **Watch New Rows**).
-3. Choose the enquiry form / sheet. Map the columns: name, email, message.
-4. Set **Limit** to `1` while testing so one enquiry equals one run.
-5. Right-click the trigger → **Run this module only** once to confirm a bundle appears.
-
-**Scheduling note:** Instant watch uses a webhook-style push. If you must **poll**, open the scenario clock and choose a weekday interval (for example every 15 minutes in class, not every second).
-
-**Common error:** Watching the wrong tab. Confirm the sheet name is `Enquiries`, not `Sheet1` leftovers.
-
-### Scheduling (clock versus event)
-
-- **Official Definition:** **Scheduling** in make.com is the scenario clock: how often a polling trigger runs, or a time module that starts work on a weekday timetable.
-- **In Simple Words:** A timetable, not only a doorbell.
-- **Real-Life Example:** If the form cannot push instantly, Ananya polls `Enquiries` every 15 minutes during office hours — not every second overnight.
-
-Instant **watches** are doorbells. **Polling** is a timetable. Use the timetable when the classroom form has no webhook.
-
-Turn the scenario **Off** on holidays so the clock does not burn operations while Campus Ops is closed.
-
-### Activity — Name the gun
-
-Write the trigger in one line: app + event + which campus form.
-
----
-
-## Click Path — AI Classification Module
-
-Connecting sentence: The bundle is still messy English. The next station must return a **strict label**.
-
-- **Official Definition:** An **AI module** (OpenAI or similar) sends a prompt and returns model text you map into later modules.
-- **In Simple Words:** The clerk who stamps `placement` / `leave` / `incomplete` / `complaint`.
-- **Real-Life Example:** Riya’s “When is the Nimbus talk?” should not be emailed to Student Affairs.
-
-### Numbered clicks
-
-1. Click **Add another module** after the trigger.
-2. Search **OpenAI** → **Create a Chat Completion** (or the class equivalent).
-3. Model: the classroom chat model (low temperature, for example `0.2`).
-4. System prompt (paste, then tighten): *You classify Greenfield student enquiries. Reply with JSON only: intent (placement|leave|incomplete|complaint), summary (max 25 words), draft_reply (two sentences). Never invent dates or company names.*
-5. User prompt: map `student_name`, `email`, and `message` from the trigger bundle.
-6. After one test run, add a **JSON** parse / **Parse JSON** module if the AI returns a string, so `intent` is a field — not a paragraph.
+**Need:** The model may extract text. It must not be the last word on money. Policy lives in Python.
 
 ```mermaid
-flowchart LR
-  T["Trigger bundle"] --> AI["AI module"]
-  AI --> J["JSON fields<br/>intent / summary / draft_reply"]
+flowchart TD
+    S[START] --> E[extract]
+    E --> L[lookup_record]
+    L --> P[policy]
+    P -->|missing id| C[clarify]
+    P -->|amount under limit| T[create_ticket]
+    P -->|amount at or above limit| H[human_approve]
+    H -->|approved| T
+    H -->|rejected| X[reject]
+    C --> D[END]
+    T --> D
+    X --> D
 ```
 
-**Need:** Later routers filter on **fields**. They cannot reliably filter on a poem.
+![Service Request Desk workflow: extract, lookup, policy, then clarify, create_ticket, or human_approve](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session44/session44-01-desk-workflow.png)
 
-**Common doubt:** *“Should I also draft a long email here?”* — No. Keep **classify + short draft**. Long letters belong in a later module or a human.
-
-### Activity — Tighten the stamp
-
-Rewrite the system prompt in two lines so `incomplete` is forced when `message` is blank.
-
----
-
-## Click Path — Router
-
-Connecting sentence: One label is useless until **different exits** exist.
-
-- **Official Definition:** A **router** in make.com copies the bundle onto multiple routes; **filters** on each route decide which path continues.
-- **In Simple Words:** The railway route board.
-- **Real-Life Example:** Placement FAQs go to Meera’s inbox. Complaints skip auto-cheer and escalate.
-
-### Numbered clicks
-
-1. After the JSON fields exist, add **Flow Control** → **Router**.
-2. Create **four** routes. On each, click the wrench → **Set up a filter**.
-3. Route A: `intent` Equal to `placement`.
-4. Route B: `intent` Equal to `leave`.
-5. Route C: `intent` Equal to `incomplete`.
-6. Route D: `intent` Equal to `complaint`.
-7. Optional fallback route: `intent` Does not equal any of the four — send to `needs_review`.
-
-**Logic:** Filters must use the **parsed** `intent`, not a keyword search on the original message. “stipend” inside a polite FAQ should not steal the complaint track.
-
-### Activity — Draw the board
-
-On paper, draw four arrows from one router. Write one filter condition on each arrow.
+| Node | Kind | Must do | Must not do |
+|---|---|---|---|
+| `extract` | LLM | Fill `record_id`, `amount`, `summary` | Invent a missing id |
+| `lookup_record` | Tool | Return register row or `NOT_FOUND` | Create tickets |
+| `policy` | Python | Set `route`: `clarify` / `ticket` / `human` | Call the LLM to “decide money” |
+| `human_approve` | Interrupt | Pause; apply resume payload | Auto-approve |
+| `create_ticket` | Python | Stamp `TKT-` + id | Run when route is `clarify` |
 
 ---
 
-## Click Path — Email and CRM-Style Sheet
+## Checkpoints and Thread IDs
 
-Connecting sentence: Classification without delivery is a labelled tray that nobody empties.
+An in-memory `invoke` dies when the process dies. Production graphs **save** after nodes.
 
-- **Official Definition:** An **action module** writes to an external app (send email, append a sheet row, create a CRM record).
-- **In Simple Words:** The platform announcement and the log book.
-- **Real-Life Example:** A sheet named `Enquiry_CRM` is Greenfield’s cheap CRM: every enquiry gets a row, an owner, and a status.
+- **Official Definition:** A **checkpoint** is a snapshot of graph state and position. A **checkpointer** is the store. A **thread id** is the key for one job.
+- **In Simple Words:** Save-game + filing cabinet + file number.
+- **Real-Life Example:** A draft form you reopen tomorrow. Two customers must not share one draft id.
 
-### Numbered clicks — success path (placement)
+![Checkpointer cabinet, thread_id case-104, and checkpoint snapshots after extract, lookup, and policy](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session44/session44-02-checkpoint-thread.png)
 
-1. On the **placement** route, add **Gmail** → **Send an Email**.
-2. **To:** `placement@greenfield.edu` (or your lab inbox). **Subject:** `[Placement] {{student_name}}`.
-3. **Body:** map `summary` and `draft_reply`. Do not paste the raw API key. Include the student email so staff can reply.
-4. Add **Google Sheets** → **Add a Row** on `Enquiry_CRM`.
-5. Map columns: timestamp, name, email, intent, summary, status=`logged`, owner=`placement`.
+| Checkpointer | Where it lives | Use |
+|---|---|---|
+| `MemorySaver` | Current process | Lab, HITL in one Python run |
+| `SqliteSaver` | SQLite file | Survive restart |
 
-Repeat for **leave** with Student Affairs. For **incomplete**, skip faculty Gmail; write status=`holding` only. For **complaint**, email Campus Ops with subject `[Escalate]` and status=`escalate`; do **not** auto-send a cheerful “we have solved this” to the student.
-
-```mermaid
-flowchart TB
-  R{Router}
-  R -->|placement| P["Gmail placement + sheet logged"]
-  R -->|leave| L["Gmail affairs + sheet logged"]
-  R -->|incomplete| I["Sheet holding only"]
-  R -->|complaint| C["Gmail escalate + sheet escalate"]
+```bash
+pip install langgraph langgraph-checkpoint-sqlite langchain-groq langchain-core python-dotenv
 ```
 
-**Common error:** Using the AI `draft_reply` as if it were already sent. The Gmail module is what **sends**. The sheet is what **proves** it.
+**Common error:** Resuming with a **new** thread id. That starts a new case. Resume uses the **same** `configurable.thread_id`.
+
+```python
+from langgraph.checkpoint.memory import MemorySaver  # in-process checkpointer
+from langgraph.checkpoint.sqlite import SqliteSaver  # disk checkpointer
+import sqlite3  # connection for SQLite
+
+memory = MemorySaver()  # lab checkpointer
+graph_mem = builder.compile(checkpointer=memory)  # attach before invoke
+
+conn = sqlite3.connect("desk.db", check_same_thread=False)  # file-backed store
+sqlite = SqliteSaver(conn)  # disk checkpointer
+graph_disk = builder.compile(checkpointer=sqlite)  # survives process exit
+
+config = {"configurable": {"thread_id": "case-104"}}  # file number for one job
+```
+
+List checkpoints for a thread when a run looks stuck:
+
+```python
+for cp in graph_mem.get_state_history(config):  # walk saved snapshots
+    print(cp.next, cp.values.get("route"), cp.values.get("trace"))  # position and flags
+```
 
 ---
 
-## Data Stores and Lookups
+## Human-in-the-Loop
 
-Connecting sentence: Hard-coding Meera’s inbox in four Gmail modules will rot the first time the owner changes.
+High-risk actions need a **person**, not a longer prompt.
 
-- **Official Definition:** A **data store** is make.com’s small persistent table for keys and values the scenario can look up.
-- **In Simple Words:** A cupboard of “intent → owner email.”
-- **Real-Life Example:** A printed duty roster on the Campus Ops wall — except the roster is inside the scenario.
+- **Official Definition:** **Human-in-the-loop** pauses the graph until a resume payload arrives. **`interrupt`** stops inside a node. **`Command(resume=...)`** continues that thread.
+- **In Simple Words:** The graph waits at the stamp desk.
+- **Real-Life Example:** A refund voucher that cannot print until a supervisor signs.
 
-### Numbered clicks
+![Human approval pause: interrupt payload, then Command resume true to ticket or false to reject](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session44/session44-03-hitl-resume.png)
 
-1. In make.com, open **Data stores** → **Add data store** → name `intent_owners`.
-2. Columns: `intent` (text), `owner_email` (text), `default_status` (text).
-3. Add four records matching the owner table above.
-4. In the scenario, after JSON parse, add **Data store** → **Get a record** (or Search) using `intent`.
-5. Map `owner_email` into Gmail **To**.
+**Logic:** `policy` may set `route = "human"`. Only `human_approve` may turn that into a ticket, and only after resume. The model never writes `approved=True` on its own.
 
-**Need:** Lookups keep routers thin. Changing a person should not require redrawing four routes.
-
-### Activity — One roster row
-
-Write the data-store record for `complaint` in three fields: intent, owner, status.
+**Common error:** Putting the money limit only in the system prompt. The model can ignore it. The limit belongs in the **policy** node.
 
 ---
 
-## Error Handling — The Blocked Track
+## Timeouts and Retries
 
-Connecting sentence: Anyone can demo Gmail on a good day. Professionals decide what happens at 11 PM when Gmail times out.
+Lookup calls fail in two messy ways: they **hang**, or they **blip**.
 
-- **Official Definition:** **Error handling** in make.com attaches directives to a module (break, ignore, rollback, commit, or a custom error route) so a failure is **visible and recoverable**.
-- **In Simple Words:** The recovery plan when a station fails.
-- **Real-Life Example:** If the announcement speaker dies, the station still writes the train in the log book and calls a human.
+- **Official Definition:** A **timeout** cancels a slow call. A **retry** repeats a **transient** failure with a **bounded** attempt count. **Backoff** waits longer between attempts.
+- **In Simple Words:** Kitchen timer. Knock again, not a hundred times.
+- **Real-Life Example:** UPI stops waiting. A 503 is worth one or two retries. A missing id is not.
 
-### Numbered clicks (Gmail)
+![Timeout on lookup, RetryPolicy after a blip, and fail closed with no invented ticket id](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session44/session44-04-timeout-retry.png)
 
-1. Right-click the **Gmail** module → **Add error handler**.
-2. Add **Google Sheets** → **Add a Row** on a tab `Needs_Human`.
-3. Map the original name, email, message, intent, and a field `error_reason` from the error bundle.
-4. Optionally add a second Gmail to **Ananya’s** ops address: subject `[make.com] send failed`.
-5. Choose **Break** or continue after the error route so the scenario does not look “successful” when mail never left.
-
-**Do not** “Ignore” Gmail errors in production-style tests. Ignore is how leads vanish.
-
-### Activity — Write the recovery sentence
-
-In one sentence: if Gmail fails, what two things must still exist tomorrow morning?
-
----
-
-## Test Plan — Success Path and Recoverable Error Path
-
-Connecting sentence: A green run is not a handoff. Two documented paths are.
-
-- **Official Definition:** A **success path** is one clean enquiry that reaches the intended email and sheet status. A **recoverable error path** is a forced failure that still logs the case for a human.
-- **In Simple Words:** The express train **and** the blocked-track drill.
-- **Real-Life Example:** Riya’s placement question versus a Gmail disconnect while her row is in flight.
-
-### Success path (run this first)
-
-1. Pin or submit: name `Riya Sharma`, email valid, message `When is the Nimbus Analytics placement talk?`
-2. Click **Run once**. Watch the bubble on each module turn green.
-3. Confirm: Gmail in the placement inbox, `Enquiry_CRM` status `logged`, intent `placement`.
-4. Screenshot or copy execution IDs into your runbook.
-
-### Recoverable error path
-
-1. Temporarily break Gmail: wrong connection, or a filter that cannot send, **or** disable the Gmail connection for one run.
-2. **Run once** with the same Riya bundle (or a new one).
-3. Confirm: `Needs_Human` has a row; `Enquiry_CRM` is not silently marked `logged` if mail never sent (adjust mapping if you logged too early — **sheet after successful send**, or set status `send_failed`).
-4. Restore Gmail. Re-run. Confirm the happy path still works.
-
-| Check | Success | Error drill |
+| Failure | Retry? | What the user should see |
 |---|---|---|
-| AI `intent` | `placement` | still classified |
-| Gmail sent | Yes | No |
-| CRM row | `logged` | `send_failed` or `Needs_Human` |
-| Human can retry | Not needed | Yes — row has email + message |
+| Timeout / 503 / brief network blip | Yes, within limits | Success after retry, or a clear error |
+| `NOT_FOUND`, bad input, forbidden | No | Honest message, no silent loop |
+| Retries exhausted | Stop | User-facing error; fail **closed** |
 
-**Common error:** Testing only spam. You never proved the placement track. Always keep **one golden success enquiry**.
+- **Official Definition:** **Fail closed** means stop with a named error rather than guessing a ticket id.
+- **In Simple Words:** No fake `TKT-` when the register did not answer.
 
-### Activity — Fill the runbook row
+LangGraph **`RetryPolicy`** wraps a node. A small **timeout wrapper** still belongs around the I/O itself.
 
-Copy the table. Tick what you actually saw, not what you hoped.
+### Activity — Classify the failure
 
----
-
-## HTTP Module — When There Is No Native Button
-
-Connecting sentence: Sheets and Gmail will not always be enough. Some campus tools only speak HTTP.
-
-- **Official Definition:** The **HTTP** module sends a request to a **REST endpoint** (URL, method, headers, JSON body) when make.com has no branded connector.
-- **In Simple Words:** A polite knock on any API door.
-- **Real-Life Example:** A ticketing tool with a public REST endpoint but no make.com app yet.
-
-### Numbered clicks (concept you practise only if the class has a URL)
-
-1. Add **HTTP** → **Make a request**.
-2. Method `POST`. URL = the classroom REST endpoint.
-3. Headers: `Content-Type: application/json`. Put tokens in a **connection** or environment-style secret field — never in the mapping notes.
-4. Body: JSON with `student_name`, `intent`, `summary`.
-5. On error, reuse the same **Needs_Human** handler as Gmail.
-
-**Verify before you trust it:** status `2xx`, JSON shape you expect, and that a timeout still hits the error route.
-
-If you have no endpoint today, write the request on paper. Do not invent a fake export file.
-
----
-
-## Document the Scenario for Handoff
-
-Connecting sentence: Ananya going on leave should not take the junction with her.
-
-Write a one-page runbook (Google Doc or README in the class folder):
-
-- Scenario name and folder
-- Trigger (which form / sheet)
-- Four router filters
-- Which Gmail and which sheet tabs
-- Where credentials live (make.com connections — not Slack)
-- Success enquiry used
-- Error drill used
-- How to turn the scenario **Off** during holidays
-
-**Upcoming** work evaluates **hosted agent builders** — a concierge with knowledge and guardrails, not only a junction of apps. This session’s job is a **testable Campus Ops scenario**.
-
----
-
-## Map Bundles Like an Ops Lead
-
-Connecting sentence: Green clicks still hide a bad mapping. Read the bundle the way you read a crew artifact.
-
-After **Run once**, open the execution and inspect each module’s output:
-
-| Module | What you must see | Red flag |
+| Situation | Transient or permanent? | Timeout, retry, or clear error? |
 |---|---|---|
-| Trigger | `student_name`, `email`, `message` filled | Empty `message` treated as placement |
-| AI | JSON with one of four `intent` values | A paragraph, or a fifth invented label |
-| Router | Exactly one business route fires | Two Gmails for one enquiry |
-| Gmail | To = owner from data store | To = the student on a complaint |
-| Sheet | Status matches the route | `logged` even when send failed |
+| Lookup returns “service busy” | | |
+| User omitted a record id | | |
+| Lookup hangs for 60 seconds | | |
 
-**Logic:** Style in `draft_reply` can be friendly. **Facts** (drive dates, company names) must come from the student message. If the AI invents “Infosys 12 September,” treat it like a writer who ignored the facts file — tighten the system prompt, then re-run the golden enquiry.
-
-**Common doubt:** *“The router looks fine but Meera got a leave ticket.”* — Then `intent` was wrong, not Gmail. Fix the AI stamp first.
-
-### Activity — Name the guilty station
-
-Ananya sees a sheet row `intent=placement` and a Student Affairs email. Write which module lied, and which two outputs prove it.
+**Suggested answers:** transient → retry; permanent → clear error; hang → timeout (then retry only if policy allows).
 
 ---
 
-## What “Good” Looks Like on This First Scenario
+## Full Workflow Code
 
-Connecting sentence: You are not grading prose. You are grading **contracts** between stations.
+One program. Extract uses the model. Lookup is a tool with a simulated blip. Policy is Python. Human pause uses `interrupt`. Tickets are stamped only on the allowed routes.
 
-A successful first scenario has all of the following:
+```python
+from typing import Annotated, Literal, TypedDict  # state and route literals
+from operator import add  # trace reducer
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeout  # per-call timeout
+from dotenv import load_dotenv  # API key
+from langchain_core.messages import HumanMessage, SystemMessage  # extract prompt
+from langchain_groq import ChatGroq  # Groq extractor model
+from langgraph.graph import StateGraph, START, END  # builder
+from langgraph.checkpoint.memory import MemorySaver  # lab persistence
+from langgraph.types import RetryPolicy, interrupt, Command  # retry + HITL
 
-- Trigger reads the Greenfield enquiry form (or its sheet twin)
-- AI returns parseable JSON with exactly the four intents
-- Router has four filtered routes plus a review fallback
-- Placement and leave send email **and** write `Enquiry_CRM`
-- Incomplete writes `holding` and does **not** ping faculty
-- Complaint escalates and does **not** auto-soothe the student
-- Gmail errors land on `Needs_Human`
-- Runbook names the golden success enquiry and the error drill
 
-If the draft reply is a bit stiff, that is acceptable. If a **company drive** appears from nowhere, that is a prompt bug.
+load_dotenv()  # read GROQ_API_KEY
+llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)  # Groq extract
 
-### Activity — Holiday Off switch
 
-Write two lines Ananya would leave on the wall: how to turn the scenario **Off** before Diwali break, and what still sits in `Needs_Human`.
+class DeskState(TypedDict):  # shared notebook
+    request: str  # raw user text
+    record_id: str  # extracted id or empty
+    amount: int  # extracted amount or 0
+    summary: str  # short extract
+    lookup: str  # register payload or error
+    route: Literal["", "clarify", "ticket", "human"]  # policy decision
+    approved: bool  # set only after human resume
+    ticket_id: str  # TKT- stamp or empty
+    result: str  # user-facing message
+    error: str  # fail-closed text
+    trace: Annotated[list[str], add]  # append-only node log
+
+
+DIRECTORY = {"id-104": "OPEN", "id-200": "OPEN"}  # in-memory register
+ATTEMPTS = {"n": 0}  # demo counter so lookup fails once then works
+
+
+def run_with_timeout(fn, seconds: float, *args):  # kitchen timer around I/O
+    with ThreadPoolExecutor(max_workers=1) as pool:  # one worker
+        future = pool.submit(fn, *args)  # start the call
+        return future.result(timeout=seconds)  # raise if too slow
+
+
+def fake_lookup(record_id: str) -> str:  # register call with one blip
+    ATTEMPTS["n"] += 1  # count calls
+    if ATTEMPTS["n"] == 1:  # first call in the process
+        raise ConnectionError("service busy")  # transient failure for RetryPolicy
+    return DIRECTORY.get(record_id, "NOT_FOUND")  # real register result
+
+
+def extract(state: DeskState) -> dict:  # LLM station: structured fields only
+    sys = SystemMessage(  # extract contract
+        content=(  # tell the model the output shape
+            "Extract record_id (id-NNN or empty), amount (integer, else 0), "  # fields
+            "and a five-word summary. Reply as: ID=<id>;AMT=<n>;SUM=<text>"  # parseable line
+        )
+    )
+    raw = llm.invoke([sys, HumanMessage(content=state["request"])]).content  # one call
+    record_id, amount, summary = "", 0, raw  # defaults if parse fails
+    try:  # best-effort parse of the contract line
+        parts = dict(p.split("=", 1) for p in raw.strip().split(";"))  # ID/AMT/SUM
+        record_id = parts.get("ID", "").strip()  # may be empty
+        amount = int(parts.get("AMT", "0"))  # integer amount
+        summary = parts.get("SUM", raw).strip()  # short text
+    except (ValueError, KeyError):  # malformed model line
+        summary = raw  # keep raw text; policy will clarify if id missing
+    if record_id in ("", "empty", "none"):  # normalise empty ids
+        record_id = ""  # policy treats empty as clarify
+    return {  # partial update
+        "record_id": record_id,  # extracted or empty
+        "amount": amount,  # extracted or 0
+        "summary": summary,  # extract text
+        "trace": ["extract"],  # reducer append
+    }
+
+
+def lookup_record(state: DeskState) -> dict:  # tool station with timeout
+    if not state["record_id"]:  # nothing to look up
+        return {"lookup": "", "trace": ["lookup_record"]}  # skip I/O
+    try:  # bounded wait
+        payload = run_with_timeout(fake_lookup, 4.0, state["record_id"])  # 4s timer
+        return {"lookup": payload, "error": "", "trace": ["lookup_record"]}  # store row
+    except FuturesTimeout:  # too slow
+        return {  # fail closed
+            "lookup": "",  # no guessed row
+            "error": "Lookup timed out. Please retry.",  # user-facing
+            "trace": ["lookup_record"],  # still record the hop
+        }
+
+
+def policy(state: DeskState) -> dict:  # Python gates — not the model
+    if state.get("error"):  # timeout already set a message
+        return {"route": "clarify", "result": state["error"], "trace": ["policy"]}
+    if not state["record_id"] or state["lookup"] in ("", "NOT_FOUND"):  # missing / unknown
+        return {  # cannot ticket
+            "route": "clarify",  # blocked path
+            "result": "Please resend with a valid record id such as id-104.",  # ask
+            "trace": ["policy"],  # hop
+        }
+    if state["amount"] >= 5000:  # high-risk money
+        return {"route": "human", "trace": ["policy"]}  # must pause
+    return {"route": "ticket", "trace": ["policy"]}  # auto path
+
+
+def route_after_policy(state: DeskState) -> str:  # edge router
+    return {"clarify": "clarify", "human": "human_approve", "ticket": "create_ticket"}[
+        state["route"]
+    ]  # map flag to node name
+
+
+def human_approve(state: DeskState) -> dict:  # planned pause
+    decision = interrupt(  # stop; payload is shown to the operator
+        {  # inspectable payload
+            "record_id": state["record_id"],  # what they are signing
+            "amount": state["amount"],  # money at risk
+            "summary": state["summary"],  # short extract
+            "ask": "Approve ticket? Resume with true or false.",  # operator prompt
+        }
+    )
+    approved = bool(decision)  # resume payload
+    if not approved:  # supervisor said no
+        return {  # reject path
+            "approved": False,  # stamp
+            "result": "Request rejected by reviewer.",  # user message
+            "trace": ["human_approve"],  # hop
+        }
+    return {"approved": True, "trace": ["human_approve"]}  # continue to ticket
+
+
+def after_human(state: DeskState) -> str:  # edge after the stamp
+    if state.get("approved"):  # only a true stamp
+        return "create_ticket"  # allowed to stamp a ticket
+    return "clarify"  # reuse clarify/END path via result already set
+
+
+def create_ticket(state: DeskState) -> dict:  # stamp — never invent without a route
+    tid = "TKT-" + state["record_id"].replace("id-", "")  # deterministic id
+    return {  # success payload
+        "ticket_id": tid,  # visible stamp
+        "result": "Ticket " + tid + " created.",  # user message
+        "trace": ["create_ticket"],  # hop
+    }
+
+
+def clarify(state: DeskState) -> dict:  # terminal helper if result already set
+    msg = state["result"] or "Please resend with a valid record id."  # fallback
+    return {"result": msg, "trace": ["clarify"]}  # ensure result exists
+
+
+builder = StateGraph(DeskState)  # shell
+builder.add_node("extract", extract)  # LLM
+builder.add_node(  # lookup with bounded retries
+    "lookup_record",  # name
+    lookup_record,  # function
+    retry_policy=RetryPolicy(max_attempts=3, initial_interval=0.5, backoff_factor=2.0),  # blip
+)
+builder.add_node("policy", policy)  # Python gates
+builder.add_node("human_approve", human_approve)  # interrupt
+builder.add_node("create_ticket", create_ticket)  # stamp
+builder.add_node("clarify", clarify)  # blocked terminal
+builder.add_edge(START, "extract")  # always extract first
+builder.add_edge("extract", "lookup_record")  # then register
+builder.add_edge("lookup_record", "policy")  # then gates
+builder.add_conditional_edges("policy", route_after_policy)  # three-way
+builder.add_conditional_edges(  # after human
+    "human_approve",  # from interrupt node
+    after_human,  # approved → ticket else clarify
+)
+builder.add_edge("create_ticket", END)  # success ends
+builder.add_edge("clarify", END)  # blocked ends
+desk = builder.compile(checkpointer=MemorySaver())  # persist + HITL
+```
+
+### How the code works
+
+- `extract` may parse poorly. Empty `record_id` still hits **policy**, not a guessed ticket.
+- `RetryPolicy` retries `ConnectionError` on lookup. `NOT_FOUND` is data, not a retry reason.
+- `run_with_timeout` fails closed into `error`. Policy turns that into `clarify`.
+- `interrupt` runs only on the human route. Resume with `Command(resume=True)` or `False`.
+- `create_ticket` is unreachable from `clarify`. The router cannot self-approve `amount >= 5000`.
+
+---
+
+## Golden Pack: Three Cases
+
+Reset `ATTEMPTS["n"] = 0` before a batch if you need the first-call blip again. Use a **new thread id** per case.
+
+```python
+def blank(request: str) -> dict:  # initial notebook
+    return {  # every field named
+        "request": request,  # user text
+        "record_id": "",  # empty
+        "amount": 0,  # empty
+        "summary": "",  # empty
+        "lookup": "",  # empty
+        "route": "",  # empty
+        "approved": False,  # default
+        "ticket_id": "",  # empty
+        "result": "",  # empty
+        "error": "",  # empty
+        "trace": [],  # reducer start
+    }
+
+
+# Case A — clean auto-ticket
+cfg_a = {"configurable": {"thread_id": "gold-a"}}  # unique thread
+out_a = desk.invoke(blank("Close ticket id-104, amount 800"), cfg_a)  # under limit
+print("A", out_a["ticket_id"], out_a["trace"])  # expect TKT-104 and create_ticket
+
+
+# Case B — blocked, no id
+cfg_b = {"configurable": {"thread_id": "gold-b"}}  # unique thread
+out_b = desk.invoke(blank("Please help, nothing works"), cfg_b)  # no id
+print("B", out_b["route"], out_b["result"])  # expect clarify; no ticket_id
+
+
+# Case C — human gate, then approve
+cfg_c = {"configurable": {"thread_id": "gold-c"}}  # unique thread
+paused = desk.invoke(blank("Refund id-200, amount 7500"), cfg_c)  # >= 5000
+print("C paused next:", desk.get_state(cfg_c).next)  # expect ('human_approve',) or after interrupt
+resumed = desk.invoke(Command(resume=True), cfg_c)  # supervisor stamp
+print("C", resumed["ticket_id"], resumed["approved"])  # expect TKT-200 and True
+```
+
+| Case | Prove |
+|---|---|
+| A | `ticket_id` is `TKT-104`; trace includes `create_ticket`; no interrupt |
+| B | `ticket_id` is empty; `result` asks for an id |
+| C | First invoke does not stamp a ticket; after `Command(resume=True)`, `TKT-200` |
+
+Reject path: `Command(resume=False)` on thread `gold-c` (use a fresh thread). `ticket_id` must stay empty.
+
+Inspect a paused thread:
+
+```python
+snap = desk.get_state(cfg_c)  # latest checkpoint
+print(snap.values["amount"], snap.values["route"], snap.next)  # 7500, human, waiting node
+```
+
+### Activity — Predict Case C if resume is False
+
+What is `ticket_id`, and which terminal node should appear in `trace`?
+
+**Suggested answer:** empty `ticket_id`; `human_approve` then `clarify`; result explains rejection.
+
+---
+
+## Code-First Graphs and Other Surfaces
+
+A LangGraph desk owns **routing, logs, and pause points** in your runtime. A **no-code** scenario builder owns a visual canvas and app connectors. A **hosted agent** builder owns the model runtime and configuration panes.
+
+| Lens | LangGraph (this desk) | No-code scenario | Hosted agent builder |
+|---|---|---|---|
+| Routing | Python policy + edges | Visual routers | Instructions + platform defaults |
+| Pause | `interrupt` + thread | Manual module or approval app | Vendor HITL if offered |
+| Proof | `trace` + checkpoints | Run bundle | Chat / audit UI |
+| Maintainer | Engineering review | Ops on the canvas | Ops + platform admin |
+
+Use the graph when a money gate must be **unenforceable by the model**. Use a canvas when the job is event → app update. Use a hosted agent when the product is a bounded FAQ with files.
 
 ---
 
 ## Key Takeaways
 
-- **make.com scenarios** chase the same integration goal as code-first automation; you assemble **modules** visually instead of writing an application.
-- A trustworthy enquiry desk is **trigger → AI JSON → router → email + CRM-style sheet**, with owners in a **data store**.
-- **Error handling** plus a **Needs_Human** row is what separates a demo from an ops handoff.
-- Test **one success path** and **one recoverable error path**, then write the runbook so the next owner can replay both.
+- An end-to-end LangGraph workflow is **specialist nodes + Python policy + tools**, not one mega-prompt.
+- **Checkpointers** and **thread ids** persist and resume a case, including a planned human pause.
+- **`interrupt` / `Command`** implement human-in-the-loop. High-risk routes cannot self-approve.
+- **Timeouts**, **RetryPolicy**, and **fail closed** keep flaky I/O from inventing tickets.
+- A **three-case golden pack** (clean / blocked / human-gate) is the exam for the desk.
 
-These habits — junctions, labels, and recovery — are what you will reuse when **upcoming** sessions add hosted helpers, LLM operations, and governance around the same Greenfield story.
+The same graph is what you later version, evaluate, and observe in operations work: traces and checkpoints are already the audit trail.
 
 ---
 
-## Important Commands, Libraries, and Terminologies Used
+## Important Commands, Libraries, Terminologies Used
 
-| Term / item | Type | Meaning |
-|---|---|---|
-| **make.com** | Platform | No-code scenario builder (formerly Integromat) |
-| **Scenario** | Workflow | One visual automation you turn On |
-| **Module** | Step | One app station on the canvas |
-| **Trigger** | Module | Event or schedule that starts a run |
-| **Router** | Flow control | Splits bundles onto labelled routes |
-| **Filter** | Rule | Condition that lets a route continue |
-| **AI module** | Module | LLM classify / extract / draft |
-| **HTTP module** | Module | Call a REST endpoint with JSON |
-| **Action module** | Module | Email, sheet row, CRM-style write |
-| **Data store** | Feature | Key–value cupboard inside make.com |
-| **Scheduling** | Feature | Clock-based runs / polling interval |
-| **Error handler** | Feature | Recovery path when a module fails |
-| **Bundle** | Data | One item moving through modules |
-| **JSON** | Format | Strict fields (`intent`, `summary`) for routers |
-| **CRM-style sheet** | Habit | Spreadsheet used as the enquiry register |
-| **Success path** | Test | Clean enquiry reaches intended apps |
-| **Recoverable error path** | Test | Failure still logged for a human |
-| **Run once** | Control | Manual execution while designing |
-| **Connection / credential** | Secret | Gmail, Sheets, OpenAI keys stored in make.com |
-| **REST endpoint** | API | URL an HTTP module can call |
-| **Environment-style secret** | Habit | Token not pasted into notes or Slack |
-| **Runbook** | Doc | Handoff: filters, apps, tests, Off switch |
+| Name | Meaning |
+|---|---|
+| **Policy node** | Python gates that choose `clarify` / `ticket` / `human` |
+| **Checkpointer** | Store for graph snapshots |
+| **`MemorySaver`** | In-process checkpointer |
+| **`SqliteSaver`** | SQLite file checkpointer |
+| **Thread id** | Key for one job’s checkpoints |
+| **`get_state` / `get_state_history`** | Inspect the latest or all snapshots |
+| **`interrupt`** | Pause inside a node for a human payload |
+| **`Command(resume=...)`** | Continue a paused thread |
+| **Human-in-the-loop** | Planned pause before a high-risk action |
+| **`RetryPolicy`** | Bounded retries with backoff on a node |
+| **Timeout** | Maximum wait for one I/O call |
+| **Fail closed** | Stop with a named error; do not guess |
+| **Golden pack** | Fixed cases that must keep passing |
+| **`compile(checkpointer=...)`** | Attach persistence (required for interrupt) |
+| **`ChatGroq`** | LangChain chat wrapper for Groq (`llama-3.3-70b-versatile`) |
+| **`GROQ_API_KEY`** | Key loaded from `.env` |

@@ -1,4 +1,4 @@
-# Pre-read: AutoGen — Group Chat and Multi-Agent Orchestration
+# Pre-read: Getting Started with LangGraph: Fundamentals & Setup
 
 ## Context of This Session in the Course
 
@@ -8,27 +8,27 @@ flowchart TB
   subgraph Foundation["What Students Bring Into This Session"]
     M1["<b>Previous Module</b><br/>Agentic Foundation & Architecture<br/><i>[Python + LLM Basics]</i><br/>Prompts, APIs, agent concepts"]
     M2["<b>Previous Module</b><br/>Agent Components - Memory, Tools & RAG<br/><i>[Memory + Retrieval]</i><br/>Chunking, vectors, RAG pipeline"]
-    M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, memory, debug & iterate"]
+    M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, LCEL, AgentExecutor"]
   end
 
-  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[CrewAI + AutoGen pairs]</i><br/>Tools and termination"]]
+  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[CrewAI + AutoGen]</i><br/>Specialist crews and multi-agent dialogue"]]
 
-  CS{{"<b>Current Session</b><br/>AutoGen: Group Chat and Multi-Agent Orchestration<br/><i>[GroupChat + speaker selection]</i><br/>Mental shift: from agent pairs to orchestrated group dialogue"}}
+  CS{{"<b>Current Session</b><br/>LangGraph Fundamentals and Setup<br/><i>[State + Nodes + Edges]</i><br/>Mental shift: a runnable map, not a hidden loop"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>Orchestrated specialist groups<br/>Handoffs and round limits"]
-    RV["<b>Real-Life Value</b><br/>Placement-drive briefings<br/>Research, risk, and messaging"]
+    CV["<b>Course Value</b><br/>Control flow you can draw and trace"]
+    RV["<b>Real-Life Value</b><br/>Know which step ran and why it branched"]
   end
 
   subgraph Future["Where This Leads"]
-    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[make.com + hosted builders]</i><br/>make.com, hosted builders, ops, governance"]
-    F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>End-to-end autonomous system"]
+    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[E2E graph + ops]</i><br/>Full workflow, then go-live"]
+    F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>LangGraph multi-agent prototype"]
   end
 
   M1 ==>|&nbsp;Foundation&nbsp;| M2
   M2 ==>|&nbsp;Components&nbsp;| M3
   M3 ==>|&nbsp;Scale up&nbsp;| CM
-  CM ==>|&nbsp;Group orchestration&nbsp;| CS
+  CM ==>|&nbsp;Graph Control&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
   CS ==>|&nbsp;Next Steps&nbsp;| F4
@@ -48,149 +48,81 @@ flowchart TB
 
 ---
 
-**Prof. Meera Kulkarni** walks into the placement cell at Greenfield Institute of Technology, Pune, with a request that no longer fits a two-person morning chat. The institute is launching a **campus stipend-status tracker** for students — a feature on top of Ananya’s Campus Ops Inbox — and the same week hosts a **placement drive** briefing for faculty. Someone must gather what is actually known about Nimbus Analytics, Riverbank Retail, and the delayed June internships. Someone else must flag **risk**: no invented legal threats, no per-student unpaid totals, no company names that are not on file. A third person must turn approved findings into **messaging** faculty and students can scan in two minutes.
+Walk into a busy **taluk office**. A file for a certificate moves from one counter to the next. If something goes wrong, a good clerk does not say “the office answered.” They say: *this counter checked the id, that counter refused, this is the note on the file.*
 
-A two-agent AutoGen pair — the model you practised in the **previous** session — works well when one specialist and one desk runner can finish a delegated lookup through back-and-forth dialogue. Launch planning and a drive briefing need **three specialists in the same working conversation**. Each agent should contribute a distinct piece. The group should hand work to the right specialist at the right moment. The whole exchange must finish without turning into an endless meeting where everyone talks and nothing gets stapled.
+You already know how to call a model, write a prompt, and attach a tool. **LangChain** is that skilled clerk. What you often still cannot answer after a run is simpler and harder: **which step ran, why control moved, and what was written on the shared file.**
 
-That is the natural next step: from **two agents finishing one delegated task** to **a coordinated group completing a complex campus task together**.
+That gap is why this session exists.
 
----
+## The problem a chain does not solve
 
-## When one specialist is not enough
+Imagine you must accept a request only when an id is present, otherwise ask the user to resend. A **chain** (prompt → model → parser) is a straight pipe. It is excellent when every item takes the same path.
 
-Ananya has seen the failure mode on WhatsApp already. The researcher pastes competitor-style fluff. The risk person never speaks. The writer publishes a cheerful notice that names Infosys. Three separate documents. Nobody reconciled them.
+Now add a fork. Complete requests go to “accepted.” Incomplete ones go to “please resend.” Hide that fork inside one long prompt and you will get fluent answers that you cannot **audit**. The model may skip the id check. A tool result may disappear. You will only see the last sentence.
 
-A group that looks intelligent on paper can behave like a noisy meeting with **no chairperson**.
+**What if** a reviewer asks, three days later: *did lookup run, or did the model invent the status?* If your runtime is a hidden loop, you shrug. If your runtime is a **map**, you point at a station.
 
----
+## The map that the software actually follows
 
-## The challenge we will tackle
+**LangGraph** is not a new model company. **Groq** still generates text and tool calls. LangGraph is the **stage manager**. It decides which function runs, in what order, and what is kept in a shared notebook called **state**.
 
-What if you had to bring three or more specialized AutoGen agents into one shared conversation, let each contribute a different sub-result, control **who speaks next**, prevent the dialogue from looping forever, and still finish with one trustworthy combined briefing?
+Think of a printed office flowchart that the program **runs**, not a slide that nobody executes.
 
-This session focuses on **group chat orchestration** — the design layer that turns many conversable agents into a working team.
+Four names will carry the whole session:
 
----
+- **State** — the notebook for one run (`request`, `result`, `trace`)
+- **Node** — one station; one bounded job; a function that returns a small update
+- **Edge** — the track to the next station; always, or only when a rule says so
+- **Graph** — you assemble the map, **compile** it, then **invoke** (or **stream**) a journey
 
-## From pairs to a managed group conversation
-
-AutoGen extends the conversable-agent idea into a **group chat**: a shared message space where multiple agents participate in the same task thread.
-
-| Concept | Simple meaning | Why it matters |
-|---|---|---|
-| **GroupChat** | The shared room where agents exchange messages | Keeps all specialist contributions in one traceable conversation |
-| **GroupChatManager** | The coordinator that runs the group exchange | Decides flow, applies rules, keeps the dialogue structured |
-| **Speaker selection** | Rules for who should speak next | Prevents random or wrong agents from taking over the thread |
-
-In simple Indian English, **orchestration** means managing the order and control of a multi-participant workflow so the group stays purposeful instead of chaotic.
-
-A well-designed group chat also includes:
-
-1. **Max rounds** — A limit on speaking turns, so the conversation cannot run without end.
-2. **Multi-agent handoffs** — Clear movement of work from one specialist to another when their part is needed.
-3. **Optional human input** — A path for Ananya or Meera to guide or approve at key points when the scenario requires oversight. This lab can run fully automatic, then you discuss when a human should step in.
-
-Together, these controls turn “many agents in one chat” into **collaborative task completion** with observable structure.
-
----
-
-## A chaired round-table in the placement cell
-
-A strong analogy is a cross-functional review with a **chairperson**.
-
-Meera opens: “Prepare a placement-drive briefing covering known internship facts, policy risks, and student-facing messaging for the stipend tracker launch.” The **research specialist** speaks first with file-backed signals. The chair then invites the **risk specialist** to flag claims that would invent numbers or legal language. Next, the **messaging specialist** converts approved findings into the notice. If the group repeats the same debate, the chair redirects. If the messenger answers a policy question, the chair passes the floor to risk. When the brief is complete — or the meeting hits its time limit — the chair closes.
-
-| Meeting behaviour | AutoGen idea |
-|---|---|
-| Shared discussion room | **GroupChat** |
-| Chairperson managing flow | **GroupChatManager** |
-| Calling the right expert next | **Speaker selection** |
-| Meeting cannot continue forever | **Max rounds** |
-| Work moves between specialists | **Multi-agent handoffs** |
-| Meera can intervene when needed | **Optional human input** |
-
-Once you see the group this way, orchestration is not an extra feature. It is what makes multi-agent collaboration **usable**.
-
----
-
-## Three specialists, one complex task
-
-A group chat works best when each agent has a **clear specialty** and a **bounded contribution**.
-
-| Specialist | Owns | Must not do |
-|---|---|---|
-| **Research** | Known campus facts, companies on file, what the tracker will show | Write final marketing copy; invent companies |
-| **Risk** | Policy fences: no legal threats, no unpaid totals not on file, high-urgency rule is a policy not a lawsuit | Rewrite the whole brief without cause |
-| **Messaging** | Faculty/student notice from **approved** inputs | Invent market facts or stipend figures |
-
-Each agent should produce a **distinct sub-result** the group can build on. Good group design answers practical questions **before** the run starts: who owns which slice; when work moves from research to risk to messaging; what signal shows the combined task is complete; what happens if one output is weak.
-
----
-
-## Why speaker selection and round limits prevent failure
-
-The two most common group-chat failures are **wrong speaker** and **runaway dialogue**.
-
-**Wrong speaker** happens when the coordinator picks an agent not suited to the current need. Example: the messaging agent starts answering a compliance question because it spoke last and the selection policy is too loose. The fix usually lives in **speaker selection rules** — favour the agent whose role matches the current stage.
-
-**Runaway dialogue** happens when agents keep responding without closure. Sometimes they repeat similar points in a **repetition deadlock**. Sometimes they politely agree in circles. **Max rounds** gives a hard stop, forcing you to think about completion signals and efficient handoffs.
-
-A group chat without orchestration rules is like a placement-cell meeting with ten experts and no agenda.
-
----
-
-## Diagnose failure, then change one configuration
-
-Strong builders inspect messy runs and ask what **configuration** caused the behaviour.
-
-| Failure mode | What it looks like | Likely configuration angle |
-|---|---|---|
-| **Repetition deadlock** | Agents restate the same internship paragraph | Tighter speaker selection, clearer roles, or a firmer completion signal |
-| **Wrong speaker** | Messaging answers a risk question | Speaker policy tied to task stage |
-| **Incomplete handoff** | Risk never sees research | Clearer instructions on when to pass work forward |
-| **Endless loop** | No final briefing | Max rounds plus explicit termination |
-
-Treat the **conversation trace** as a debugging document — the same professional habit you built with CrewAI checklists and pair-based delegation.
-
----
-
-## How this builds on what you already know
-
-From **CrewAI**, you learned role-based teams with tasks, process choice, and validation. From the **previous** AutoGen session, you learned conversable pairs with tools, termination, and trace review. This session combines those instincts at **group scale**: multiple specialists, one shared conversation, explicit orchestration.
-
-A pair solves delegated work through direct dialogue. A group solves **complex collaborative work** where different experts must contribute in sequence or in response to each other — under management.
-
-**Upcoming** work in this module moves toward no-code scenarios, hosted builders, ops, and governance. Learning group orchestration now prepares you for richer system design later and for the capstone.
-
----
+**LangChain** stays. Tools, messages, and `ChatGroq` stay. LangGraph sits **on top** when you need **control flow**: branches, loops you can see, and a notebook several steps share.
 
 In this pre-read, you'll discover:
 
-- **Understand** why a placement-drive plus feature-launch brief needs three or more specialized AutoGen agents in one shared group conversation
-- **Discover** how **GroupChat** and **GroupChatManager** create a structured space with a coordinator instead of a free-for-all chat
-- **Learn** why **speaker selection** and **max rounds** prevent wrong-speaker mistakes and runaway dialogue
-- **Understand** how to diagnose **repetition deadlock** or **wrong speaker** and apply a targeted configuration fix
+- **Why** a graph is added when chains and agent loops already exist
+- **What** problem the graph solves (visible steps, Python gates, a shared file)
+- **How** a notebook must **append** a log instead of wiping it
+- **Where** a model-plus-tool loop sits on that map
 
----
+## Merits, costs, and where this shows up in real work
 
-## What's next
+A graph earns its keep when you must **name** the stations. Routing can live in **Python**, so a money or id rule is not left to extra wording in a prompt. A **trace** lists hops. The same map can later pause for a person or save progress. Those are the merits.
 
-After this session, you should be able to explain a multi-agent group design in plain language: which specialists belong in the group, what distinct sub-result each should contribute, and how work moves through **handoffs**.
+There is a cost. You write more structure than one pipe. If you forget how lists **merge**, the second station overwrites the first. If you split every line of code into its own station, the map becomes unreadable. A hello-chain with no fork should stay a chain.
 
-You will also discuss **orchestration choices** with confidence. Which speaker selection approach fits the campus briefing? Why is a round limit necessary? When might optional human input be appropriate?
+Where do people actually use this shape?
 
-Most importantly, you will review a group conversation like a systems thinker. Instead of saying “the group failed,” you will identify a likely failure mode and suggest one focused configuration improvement.
+- A **support desk** that extracts fields, looks up a record, then tickets or asks for an id
+- An **approval** path where a large refund cannot print until a supervisor stamps it
+- A **document** walk: classify, retrieve policy, draft, quality gate, send or hold
+- An **ops** runbook: check a system, try a shaky API again, then stop honestly
 
----
+The live lab uses a small **records lookup** so the objects stay easy to see. The product in the **next** session grows into a full desk. This session is the grammar.
 
-## Questions to think about before class
+## The two ideas that surprise first-time builders
 
-1. For a placement-drive group with research, risk, and messaging specialists, how would you define **speaker selection** so the right agent responds at each stage?
+**Reducers.** When two stations both write a list called `trace`, the default merge is **replace**. Station B would erase station A. A **reducer** says “append this item.” You return only the **new** name, not the whole old list plus the new name.
 
-2. What **max rounds** would you set, and what completion signal would tell the group it is safe to stop before hitting that limit?
+**Cycles.** A straight map never returns to a station. A tool-calling assistant often must: the model may request a lookup, read the tool result, then speak — or call a tool again. On a graph that loop is visible: **assistant → tools → assistant**, until there are no tool calls and the run ends.
 
-3. If the trace shows the same Nimbus paragraph repeated four times with no progress, which failure mode is likely — and what configuration change would you try first?
+If those two ideas are clear before you sit in class, the code will feel like labelling a map, not memorising spells.
 
-4. When should **optional human input** include Ananya or Prof. Meera, and how can it improve trust without slowing every turn?
+## Questions the live session will settle
 
-By the end, AutoGen group chat should feel less like “many chatbots in one room” and more like a **chaired specialist meeting** in the Pune placement cell — orchestration, handoffs, and round control turning multi-agent dialogue into one briefing the campus can actually use.
+Bring a short written guess. You do not need a laptop for these.
+
+1. A field `trace` **appends**. Station A writes `["clean"]`. Station B writes `["check"]`. What is `trace` at the end? What if there was **no** append rule?
+2. A user says `"Please close my ticket"` with **no** id token. Should the run visit the “accepted” station? Why or why not?
+3. After the model asks for `lookup_record`, who should **execute** the function — the model node, or a separate tool station? What happens if the tool result never returns to the model?
+
+If you can argue those three in plain language, you are ready. The lecture will attach names: `StateGraph`, `add_conditional_edges`, `ToolNode`, `tools_condition`, `GROQ_API_KEY`.
+
+## After this session you will be able to
+
+- Explain, to a non-engineer, why LangGraph is used **with** LangChain, not instead of it
+- Point at **state, node, edge, graph** on a diagram and say what each is for
+- Predict whether a list field was **replaced** or **appended**
+- Read a short **trace** and say which branch ran
+- Sketch an assistant-and-tool **cycle** before a longer product is assembled
+
+The map comes first. Saving the file mid-way, pausing for a human stamp, and surviving a slow register belong to the **next** session — on the same kind of graph, once this grammar is in your hands.

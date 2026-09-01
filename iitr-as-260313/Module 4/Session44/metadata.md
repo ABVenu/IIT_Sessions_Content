@@ -9,17 +9,16 @@ session duration: 1hr  50mins
 
 Session Notes Length: 480 lines to 500 lines max
 
-title: make.com: No-Code AI Automation Scenarios
+title: LangGraph: Building an End-to-End AI Agentic Workflow
 
-objective: Build a make.com scenario that connects triggers AI modules and application actions for a practical business automation.
+objective: Assemble a production-style LangGraph workflow with specialist nodes, persisted checkpoints, a human approval gate, and graceful failure, then prove it on a small golden set.
 
-type of session: theory/implementation/mixture of theory + implementation / You take the call
+type of session: mixture of theory + implementation
 
-topics be covered: scenarios; modules; routers; OpenAI or HTTP modules; data stores; scheduling; error handling
-
+topics be covered: specialist nodes; policy router; ToolNode; checkpointer; thread ID; MemorySaver; SqliteSaver; interrupt; Command; human-in-the-loop; RetryPolicy; timeouts; fail-closed errors; golden eval; traces
 
 detailed subtopics to be covered:
-* Explain how make.com scenarios differ from code-first automation while serving similar integration goals.
-* Assemble a scenario with trigger router and at least one AI-powered transformation step.
-* Connect output actions to business tools such as email CRM or spreadsheet updates.
-* Test and document one success path and one recoverable error path through the scenario.
+* Assemble an end-to-end LangGraph workflow with specialist nodes, tool calls, and a Python policy router that cannot self-approve a high-risk action.
+* Persist and resume a run with a checkpointer and thread id, including a planned human approval pause.
+* Apply timeouts and bounded retries on a flaky tool step, and surface a clear error when retries are exhausted.
+* Run a three-case golden pack (clean / blocked / human-gate) and use traces plus checkpoint payloads to explain each outcome.

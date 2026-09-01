@@ -1,491 +1,495 @@
-# AutoGen: Group Chat and Multi-Agent Orchestration
+# Getting Started with LangGraph: Fundamentals & Setup
 
-## Context of This Session
+## Introduction
 
-In the **previous** session you built an AutoGen **conversable pair**: **AssistantAgent**, **UserProxyAgent**, **register_function**, **termination**, and a **conversation trace** for Ananya’s daily stipend-and-dispatch summary.
+This session introduces **LangGraph**, the library used to run agent workflows as **graphs**.
 
-This session scales that idea. A **placement-drive briefing** plus a **stipend-tracker feature launch** needs three specialists in one room: research, risk, and messaging, under a **GroupChatManager**, with **speaker selection**, **max rounds**, and clear **handoffs**.
+**LangChain** is already in the stack. It wires **models**, **prompts**, **tools**, **memory**, and **RAG**. **LCEL** runs those pieces as a **chain** (prompt → model → parser). **AgentExecutor** can run a tool loop, but that loop is mostly hidden.
+
+LangGraph does **not** replace LangChain. It sits **on top of** the same models and tools when the job is **control flow**: named steps, branches, loops you can inspect, and a shared **state** object.
+
+### Why LangGraph when LangChain is already there
+
+LangChain answers: *how do I call a model, a tool, or a retriever?*
+
+LangGraph answers: *which step runs next, what is kept between steps, and how do I prove it?*
+
+A chain is the right tool for a straight transform. It is the wrong tool when you must **branch**, **loop**, **audit**, or later **pause** a run.
+
+**Common doubt:** *“Should every LCEL chain become a graph?”* — No. Keep LCEL for a pipeline with no fork. Add LangGraph when routing, shared state, or a visible tool cycle matter.
+
+| Layer | What it gives you | What it does not give you |
+|---|---|---|
+| LangChain LCEL | Prompt → model → parser as a pipe | Named stations, Python gates, a shared notebook |
+| LangChain AgentExecutor | A managed tool-calling loop | A map you can draw, branch, and trace by node |
+| **LangGraph** | State, nodes, edges, cycles, traces | A new model vendor (it still uses ChatGroq and the same tools) |
+
+![LangChain as a pipe and AgentExecutor loop versus LangGraph named stations with shared state](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session43/session43-01-langchain-vs-langgraph.png)
+
+### Problem LangGraph solves
+
+- **Official Definition:** **Orchestration** is coordinated control of multi-step work so the correct step runs with the correct shared context.
+- **In Simple Words:** A stage manager. The model is an actor, not the director.
+- **Real-Life Example:** A clerk can fill a form. A supervisor still decides which counter is next. LangGraph is that supervisor in code.
+
+Without a graph, typical failures look like this:
+
+- You cannot say **which function** ran, only that “the agent answered”
+- A **tool result** is swallowed and the model invents the missing fact
+- A **policy rule** (missing id, money limit) lives only in a prompt and the model ignores it
+- A **branch** (complete vs clarify) is buried inside one mega-function
+
+LangGraph makes those facts **visible**: nodes write fields; **edges** choose the next node; a `trace` lists the hop order.
+
+### Merits
+
+- **Explicit map** — nodes and edges *are* the workflow, not a comment above a chain
+- **Shared state** — several steps read and update one typed notebook
+- **Python routing** — a gate the model cannot override by talking more
+- **Visible cycles** — `assistant → tools → assistant` is on the graph, not inside AgentExecutor
+- **Same LangChain pieces** — `ChatGroq`, `@tool`, messages; only the control plane changes
+- **Room to harden** — checkpoints, human pause, retries attach to the same `StateGraph` later
+
+### Demerits
+
+- **More boilerplate** than one LCEL pipe (`StateGraph`, `add_node`, `compile`)
+- **Easy mistakes** — forgetting a **reducer** overwrites lists; a cycle with no stop can spin
+- **Over-splitting** — a node per line of code makes the map unreadable
+- **Heavier debugging** than a chain’s single output; you must read `trace` / `stream`
+- **Not the fastest path** for “one prompt in, one string out” with no branch
+
+**Logic:** Pay the graph cost when control and audit matter. Do not pay it for a hello-chain.
+
+### Real-life applications
+
+These products need a graph, not a single chain:
+
+- **Support and ticket desks** — extract fields → look up a record → Python policy → ticket or clarify
+- **Approvals** — a high-value refund or payout pauses until a human stamps it
+- **Document pipelines** — classify → retrieve policy → draft → quality gate → send or hold
+- **Ops runbooks** — check a system, retry a flaky API, page a human if it still fails
+- **Intake workflows** — missing identifiers take the clarify path; complete packs take the complete path
+
+The same pattern appears in banking KYC, campus administration, and IT service desks. The lab in this session uses a **records lookup** so the graph objects stay easy to see.
 
 **In this session, you will:**
 
-- **Design** a group of three or more specialized agents for one campus briefing
-- **Configure** speaker selection and **max rounds** so the dialogue cannot run forever
-- **Run** a chat where each agent contributes a **distinct sub-result**
-- **Diagnose** repetition deadlock or wrong speaker and apply one configuration fix
+- Justify LangGraph on top of LangChain (problem, merits, demerits, fit)
+- Define **shared state** with **reducers** so lists accumulate instead of being overwritten
+- Build a graph with **nodes**, **unconditional edges**, and one **conditional** branch
+- Add an **LLM node** and a **tool node** in a **cycle**, then **trace** what ran
 
 ---
 
-## From Agent Pairs to Orchestrated Group Dialogue
+## What is LangGraph
 
-Connecting sentence: A pair finishes a delegated lookup. A launch brief needs **several experts** who must not all talk at once.
+LangGraph is not a new model provider. It is an **orchestration** library. The model still generates text or tool calls. LangGraph decides **which function runs**, **in what order**, and **what data is kept**.
 
-- **Official Definition:** **Orchestration** is the set of rules that control turn-taking, handoffs, and closure in a multi-agent conversation.
-- **In Simple Words:** A chairperson and an agenda, not a WhatsApp group with no admin.
-- **Real-Life Example:** Prof. Meera Kulkarni wants one packet: known internship facts, policy fences, and student-facing copy for a **stipend-status tracker** launch during a Pune **placement drive**.
+- **Official Definition:** **LangGraph** is a framework for building stateful, multi-step agent workflows as graphs of nodes, edges, and shared state.
+- **In Simple Words:** You draw a runnable map. Each box is a function. A notebook travels with the run.
+- **Real-Life Example:** A printed office flowchart that the software actually follows, not a slide that nobody executes.
+
+**Need:** One long prompt hides *which* step ran and *why* control moved. A graph makes those facts visible in code.
 
 ```mermaid
 flowchart LR
-  P[Conversable pair] --> G[GroupChat]
-  G --> M[GroupChatManager]
-  M --> S[Speaker rules + max rounds]
+    S[START] --> N1[Node: prepare]
+    N1 --> N2[Node: decide]
+    N2 -->|condition A| N3[Node: complete]
+    N2 -->|condition B| N4[Node: clarify]
+    N3 --> E[END]
+    N4 --> E
 ```
 
-**Need:** Three separate documents that nobody reconciled is how Infosys appears in a cheerful notice. One shared thread with a chair is how the campus ships **one** briefing.
+---
 
-**Common doubt:** *“Can I just add a third AssistantAgent to the pair chat?”* — Without a **GroupChat** and speaker policy, you get a noisy meeting.
+## Building Blocks
 
-### Activity — Name the extra seat
+Four objects make every LangGraph program. Learn the names before the first `pip` command.
 
-Write one line: what the pair already did well, and one line: what a drive-plus-launch brief still needs.
+![LangGraph building blocks: State notebook, Node function, Edge arrow, StateGraph with START and END](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session43/session43-02-building-blocks.png)
+
+### State
+
+- **Official Definition:** **State** is the typed shared data that every node can read and that nodes update by returning a dictionary of changes.
+- **In Simple Words:** The notebook for one run.
+- **Real-Life Example:** A case file that moves from desk to desk. Each desk writes only its fields.
+
+Keep state **small**. Each field should have one job (`request`, `result`, `trace`). Do not dump the whole universe into one string.
+
+### Node
+
+- **Official Definition:** A **node** is a function that receives the current state and returns a **partial update** (a dict of fields to change).
+- **In Simple Words:** One station. One bounded job.
+- **Real-Life Example:** “Verify ID” is a station. “Verify ID, print letter, and email accounts” is three jobs stuffed into one desk.
+
+Name nodes as **verb + object**: `clean_request`, `route_request`, `write_result`.
+
+**Common error:** A node that both calls an API *and* decides three different next stations. Split: one node writes a flag; an **edge** chooses the next node.
+
+### Edge
+
+- **Official Definition:** An **edge** (transition) moves execution from one node to another. It is **unconditional** (always) or **conditional** (a router function chooses the next node name).
+- **In Simple Words:** The track between stations.
+- **Real-Life Example:** After document check, complete papers go to the next counter; incomplete papers go back to the help desk.
+
+### Graph
+
+- **Official Definition:** A **`StateGraph`** is the builder that registers state, nodes, and edges. **`compile()`** produces a runnable app. **`invoke`** runs it once. **`stream`** yields updates as nodes finish.
+- **In Simple Words:** You assemble the map, compile it, then run it.
+- **Real-Life Example:** Publishing a metro map, then running a single journey.
+
+`START` and `END` are built-in terminals. You always enter from `START`. You finish at `END`.
 
 ---
 
-## GroupChat and GroupChatManager
+## Setup
 
-Connecting sentence: Orchestration needs a **room** and a **chair**. AutoGen names both.
-
-- **Official Definition:** A **GroupChat** is a shared message space for multiple conversable agents. A **GroupChatManager** is the coordinator that runs that space under your rules.
-- **In Simple Words:** The meeting room, and the person who gives the floor.
-- **Real-Life Example:** Ananya’s Campus Ops Inbox supplies the opening ask. The manager is not a fourth novelist. It is the chair who calls research, then risk, then messaging.
-
-| Piece | Job | Campus mapping |
-|---|---|---|
-| **GroupChat** | Holds the shared transcript | One briefing thread |
-| **GroupChatManager** | Applies flow and stop rules | Placement-cell chair |
-| **UserProxyAgent** | Starts the case; optional tool executor | Desk runner |
-| **AssistantAgent** × 3 | Distinct specialties | Research / risk / messaging |
-
-**Optional human input:** `human_input_mode` on the user-side agent can be `NEVER` (this lab’s demo), `TERMINATE` (ask a human only at the end), or `ALWAYS` (Meera types every turn). Always-on input is slow on Zoom. Know the knob; keep the demo automatic.
-
-**Common error:** Treating the manager as a fourth writer. If the chair drafts student copy, you cannot see which specialist failed.
-
-### Activity — Chair vs specialist
-
-Who should write the student notice — **GroupChatManager** or **MessagingSpecialist**? Write one sentence why.
-
----
-
-## Speaker Selection, Handoffs, and Max Rounds
-
-Connecting sentence: A room and a chair are not enough. You must say **who speaks next** and **when the meeting dies**.
-
-- **Official Definition:** **Speaker selection** is the policy for the next speaker (auto, round-robin, or a custom function). A **multi-agent handoff** is the designed move of work from one specialist to another. **Max rounds** (`max_round`) is a hard cap on group turns.
-- **In Simple Words:** Call the right expert; pass the folder; ring the bell.
-- **Real-Life Example:** After research lists Nimbus and Riverbank, **risk** must speak before **messaging** turns notes into a poster. If messaging speaks first, the poster invents urgency-as-lawsuit.
-
-```mermaid
-flowchart TB
-  D[Desk opening] --> R[Research]
-  R --> K[Risk]
-  K --> M[Messaging]
-  M --> X[BRIEF_READY / max_round]
-```
-
-| Control | Failure it prevents |
-|---|---|
-| Custom speaker ladder | **Wrong speaker** (copywriter answering policy) |
-| Handoff in system messages | **Incomplete handoff** (risk never sees research) |
-| `max_round` | **Runaway dialogue** and **repetition deadlock** |
-
-**This lab:** a small custom `select_briefing_speaker` function: research → risk → messaging, with the desk runner only if you later add tools. **Max rounds = 10**.
-
-**Common error:** `max_round=3` on a three-specialist brief. The meeting dies before messaging speaks. That is not “efficient.” It is an incomplete handoff.
-
-### Activity — Set the bell
-
-If each specialist needs one substantial turn, what is the **smallest** `max_round` you would try — 4, 10, or 40 — and why not 40?
-
----
-
-## Three Specialists, One Complex Task
-
-Connecting sentence: Selection rules only work if each agent owns a **slice**.
-
-| Specialist | Distinct sub-result | Must not do |
-|---|---|---|
-| **ResearchSpecialist** | File-backed facts: 14 students, two companies, tracker will show delay status | Write final student copy |
-| **RiskSpecialist** | Fence list: no legal threats, no unpaid totals, no extra companies | Invent replacement facts |
-| **MessagingSpecialist** | Faculty/student notice from **approved** lines only | Invent Nimbus headcount |
-
-**Bounded facts** (inside the script, same fence as earlier campus files): Greenfield Institute of Technology, Pune; June stipends delayed; Nimbus Analytics; Riverbank Retail; Rs 8,000–15,000 range; HR reminder 4 August; trainer Slack not sent; tracker launch is a **status board**, not a payment guarantee.
-
-**Completion signal:** Messaging ends with `BRIEF_READY`. The manager uses the same `is_done` check.
-
-### Activity — Fill the slices
-
-On paper, write one bullet each specialist must produce for *“placement drive + stipend tracker launch.”*
-
----
-
-## Lab Setup
-
-Connecting sentence: Same key as the pair lab. The group only adds orchestration objects.
-
-Create folder `placement_drive_group`. `.env`:
-
-```text
-OPENAI_API_KEY=your_openai_key_here
-```
+Install LangGraph next to the LangChain packages already used for models and tools.
 
 ```bash
-pip install ag2 python-dotenv
+pip install langgraph langchain-groq langchain-core python-dotenv
 ```
 
-Keep **code execution off**. This briefing is words and fences, not generated scripts.
+| Package | Role |
+|---|---|
+| `langgraph` | `StateGraph`, edges, compile, invoke |
+| `langchain-core` | Messages, `@tool` |
+| `langchain-groq` | `ChatGroq` — Groq chat model with tool calling |
+| `python-dotenv` | Load `GROQ_API_KEY` from `.env` |
+
+Create a `.env` file in the project folder (never commit the key):
+
+```bash
+GROQ_API_KEY=your_key_here
+```
+
+This session uses **`ChatGroq`** with `llama-3.3-70b-versatile`. Get a key from the Groq console. The graph code stays the same if a later lab swaps the chat class; only the model line changes.
 
 ---
 
-## Full Group Script
+## Shared State and Reducers
 
-Connecting sentence: The facts are the fence. The script is the chaired meeting: three specialists, one desk starter, custom speaker policy, round cap.
+Nodes return **updates**, not a full copy of state. LangGraph **merges** those updates into the notebook.
 
-Save as `placement_drive_group.py`.
+For ordinary fields (`request`, `result`), the merge is **replace**: the new value overwrites the old one.
+
+For lists such as `messages` or `trace`, replace is dangerous. The second node would wipe the first node’s list. You attach a **reducer**.
+
+- **Official Definition:** A **reducer** is a merge function on a state field. LangGraph uses it to combine the old value with the node’s update.
+- **In Simple Words:** “Append this item” instead of “throw away the old list.”
+- **Real-Life Example:** A visitor log. Each desk adds a line. Nobody replaces the whole register with a single name.
+
+LangGraph ships `add_messages` for chat histories. Python’s `operator.add` concatenates lists.
+
+![State merge without a reducer overwrites the list; operator.add concatenates clean then check](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session43/session43-03-reducer-merge.png)
+
+**Common error:** Using a reducer **and** returning `state["trace"] + ["this_node"]`. That appends twice. With `add`, return only the **new** items: `{"trace": ["this_node"]}`.
+
+### Activity — Predict the merge
+
+Field `trace` uses `operator.add`. Node A returns `{"trace": ["clean"]}`. Node B returns `{"trace": ["check"]}`.
+
+What is `trace` after both nodes?
+
+**Suggested answer:** `["clean", "check"]` — concatenated, not replaced.
+
+If `trace` had **no** reducer and Node B returned `{"trace": ["check"]}`, the final value would be `["check"]` only.
+
+---
+
+## A First Graph: Nodes, Edges, and a Branch
+
+The framework is now defined. The program below is a **minimal runnable graph**: clean text, apply a completeness rule, then branch to `complete` or `clarify`.
+
+There is no LLM in this program. That is deliberate. First prove that **you** control routing in Python.
 
 ```python
-# placement_drive_group.py — AutoGen group chat for a placement-drive briefing
-import os  # read OPENAI_API_KEY
-from dotenv import load_dotenv  # load .env
-from autogen import (  # group-chat building blocks
-    AssistantAgent,  # specialists
-    UserProxyAgent,  # desk starter
-    GroupChat,  # shared room
-    GroupChatManager,  # chair
-)  # end import
-
-load_dotenv()  # load the key
-API_KEY = os.getenv("OPENAI_API_KEY", "")  # empty if missing
-
-llm_config = {  # shared model settings
-    "config_list": [{"model": "gpt-4o-mini", "api_key": API_KEY}],  # classroom model
-    "temperature": 0.2,  # steady campus facts
-}  # end llm_config
-
-FACTS = (  # bounded briefing fence
-    "Campus: Greenfield Institute of Technology, Pune. "  # institute
-    "Lead: Prof. Meera Kulkarni. Ops: Ananya, Campus Ops Inbox. "  # people
-    "Issue: June internship stipends delayed for 14 students. "  # problem
-    "Companies: Nimbus Analytics; Riverbank Retail. "  # on-file names
-    "Range on file: Rs 8000 to 15000 per month. "  # stipend range
-    "HR reminder sent 4 August. Trainer Slack not sent. "  # dispatch facts
-    "Launch: stipend-status tracker shows delay status only — not a payment promise. "  # feature fence
-    "Do not invent companies, unpaid totals, or legal threats."  # hard no
-)  # end FACTS
+from typing import Annotated, TypedDict  # typed state and reducer annotation
+from operator import add  # list-concat reducer for the trace field
+from langgraph.graph import StateGraph, START, END  # graph builder and terminals
 
 
-def is_done(message) -> bool:  # shared stop rule
-    content = (message.get("content") or "") if isinstance(message, dict) else str(message)  # safe text
-    return "BRIEF_READY" in content.upper() or "TERMINATE" in content.upper()  # completion stamps
+class RequestState(TypedDict):  # shared notebook for one run
+    request: str  # raw user text
+    cleaned: str  # normalised text
+    is_complete: bool  # Python rule: does the text include an id token
+    result: str  # final user-facing message
+    trace: Annotated[list[str], add]  # append-only list of node names
 
 
-research = AssistantAgent(  # specialist 1
-    name="ResearchSpecialist",  # trace label
-    system_message=(  # slice
-        "You are campus research for a GIT Pune placement-drive briefing. "  # seat
-        f"Use only these facts: {FACTS} "  # fence
-        "Write 5 to 7 bullets of evidence. No student-facing poster. No legal language. "  # sub-result
-        "Do not mention companies that are not in the facts."  # accuracy
-    ),  # end research message
-    llm_config=llm_config,  # model
-)  # end research
-
-risk = AssistantAgent(  # specialist 2
-    name="RiskSpecialist",  # trace label
-    system_message=(  # slice
-        "You are policy risk for the placement cell. "  # seat
-        "Read research bullets. List fences: no extra companies, no unpaid totals, "  # fences
-        "no legal threats, tracker is status-only. Flag any invented claim. "  # flags
-        "Do not write the final student notice."  # not messaging
-    ),  # end risk message
-    llm_config=llm_config,  # model
-)  # end risk
-
-messaging = AssistantAgent(  # specialist 3
-    name="MessagingSpecialist",  # trace label
-    system_message=(  # slice
-        "You write faculty and student messaging for the stipend-tracker launch. "  # seat
-        "Use only research bullets that Risk did not flag. "  # approved inputs
-        "Produce a short notice with Title, What students will see, What we will not claim. "  # shape
-        "End with the line BRIEF_READY. Never invent facts."  # stop stamp
-    ),  # end messaging message
-    llm_config=llm_config,  # model
-)  # end messaging
-
-desk = UserProxyAgent(  # starts the meeting
-    name="CampusDeskRunner",  # trace label
-    human_input_mode="NEVER",  # automatic demo; optional human input stays off
-    code_execution_config=False,  # no generated code
-    is_termination_msg=is_done,  # stop on BRIEF_READY
-)  # end desk
+def clean_request(state: RequestState) -> dict:  # station 1: normalise input
+    text = state["request"].strip()  # remove surrounding whitespace
+    return {  # partial update only
+        "cleaned": text.lower(),  # store a stable form for the rule
+        "trace": ["clean_request"],  # reducer will append this name
+    }
 
 
-def select_briefing_speaker(last_speaker, groupchat):  # custom speaker selection
-    messages = groupchat.messages  # shared transcript
-    if not messages:  # first turn after kickoff
-        return research  # research speaks first
-    if last_speaker is research:  # research handoff
-        return risk  # then policy
-    if last_speaker is risk:  # risk handoff
-        return messaging  # then copy
-    if last_speaker is messaging:  # notice done or repeating
-        return messaging  # stay until BRIEF_READY / max_round
-    return research  # safe default
+def check_complete(state: RequestState) -> dict:  # station 2: Python gate
+    has_id = "id-" in state["cleaned"]  # demo rule: an id token must appear
+    return {  # write the flag; do not choose the next node here
+        "is_complete": has_id,  # True → complete path; False → clarify path
+        "trace": ["check_complete"],  # append this station to the trace
+    }
 
 
-groupchat = GroupChat(  # the room
-    agents=[desk, research, risk, messaging],  # roster
-    messages=[],  # fresh transcript
-    max_round=10,  # hard stop against runaway dialogue
-    speaker_selection_method=select_briefing_speaker,  # chair rules
-)  # end groupchat
-
-manager = GroupChatManager(  # the chair
-    groupchat=groupchat,  # attach the room
-    llm_config=llm_config,  # available if the manager must speak
-    is_termination_msg=is_done,  # same close rule
-)  # end manager
+def write_complete(state: RequestState) -> dict:  # success station
+    return {  # final message for a complete request
+        "result": "Request accepted: " + state["cleaned"],  # echo cleaned text
+        "trace": ["write_complete"],  # record this station
+    }
 
 
-def print_trace():  # quality-review helper
-    print("=== GROUP CONVERSATION TRACE ===")  # banner
-    for i, msg in enumerate(groupchat.messages, start=1):  # numbered turns
-        name = msg.get("name") or msg.get("role") or "unknown"  # speaker
-        content = str(msg.get("content") or "")[:220]  # preview
-        print(f"{i}. [{name}] {content}")  # one line
-    print("=== END TRACE ===")  # footer
+def write_clarify(state: RequestState) -> dict:  # blocked station
+    return {  # guidance when the id token is missing
+        "result": "Please resend with an id token such as id-104.",  # clear ask
+        "trace": ["write_clarify"],  # record this station
+    }
 
 
-if __name__ == "__main__":  # direct execution only
-    if not API_KEY:  # fail clearly
-        raise ValueError("Set OPENAI_API_KEY in .env")  # setup
-    opening = (  # complex campus task
-        "Prepare one placement-drive briefing for faculty and a student notice "  # two audiences
-        "for the stipend-status tracker launch. Research, then risk, then messaging. "  # order
-        "Stay inside known campus facts."  # fence
-    )  # end opening
-    desk.initiate_chat(manager, message=opening)  # start through the chair
-    print_trace()  # inspect handoffs
+def route_after_check(state: RequestState) -> str:  # edge router, not a node
+    if state["is_complete"]:  # read the flag written by check_complete
+        return "write_complete"  # next node name on the success branch
+    return "write_clarify"  # next node name on the blocked branch
+
+
+builder = StateGraph(RequestState)  # graph shell with this state schema
+builder.add_node("clean_request", clean_request)  # register station 1
+builder.add_node("check_complete", check_complete)  # register station 2
+builder.add_node("write_complete", write_complete)  # register success station
+builder.add_node("write_clarify", write_clarify)  # register blocked station
+builder.add_edge(START, "clean_request")  # always begin at clean
+builder.add_edge("clean_request", "check_complete")  # always move to the gate
+builder.add_conditional_edges(  # branch using the router function
+    "check_complete",  # from this node
+    route_after_check,  # function that returns a node name
+    {  # map router labels to actual node names
+        "write_complete": "write_complete",  # success label
+        "write_clarify": "write_clarify",  # blocked label
+    },
+)
+builder.add_edge("write_complete", END)  # success path finishes
+builder.add_edge("write_clarify", END)  # blocked path finishes
+graph = builder.compile()  # freeze the map into a runnable app
+
+blocked = graph.invoke(  # run the missing-id path
+    {  # initial state
+        "request": "Please close my ticket.",  # no id token
+        "cleaned": "",  # empty before clean
+        "is_complete": False,  # default before the gate
+        "result": "",  # empty before a write node
+        "trace": [],  # reducer starts from this list
+    }
+)
+print("BLOCKED TRACE:", blocked["trace"])  # expect clean → check → clarify
+print("BLOCKED RESULT:", blocked["result"])  # expect the resend message
+
+ok = graph.invoke(  # run the complete path
+    {  # initial state
+        "request": "Please close ticket id-104.",  # contains id-104
+        "cleaned": "",  # empty before clean
+        "is_complete": False,  # default before the gate
+        "result": "",  # empty before a write node
+        "trace": [],  # fresh trace
+    }
+)
+print("OK TRACE:", ok["trace"])  # expect clean → check → complete
+print("OK RESULT:", ok["result"])  # expect the accepted message
 ```
 
-**How the code works:**
+### How the code works
 
-- Three **AssistantAgent** specialists have **non-overlapping** system messages. Each must produce a different sub-result.
-- **GroupChat** is the shared room. **GroupChatManager** is the chair `initiate_chat` talks to.
-- `select_briefing_speaker` encodes **handoffs**: research → risk → messaging. That is **speaker selection**, not round-robin luck.
-- `max_round=10` is the bell. `BRIEF_READY` is the success stamp. Together they stop **runaway dialogue**.
-- `human_input_mode="NEVER"` is the optional-human choice for the demo. Switch later if Meera must approve the notice live.
+- `RequestState` is the contract. Every node sees the same field names.
+- `trace: Annotated[list[str], add]` concatenates. Nodes return **only new** names.
+- `check_complete` writes `is_complete`. It does **not** call the next function itself.
+- `route_after_check` is an **edge**. It returns a **string node name**.
+- `add_conditional_edges` wires that router. The blocked run never visits `write_complete`.
 
-Run:
+### Activity — Predict before you run
 
-```bash
-python placement_drive_group.py
-```
+For `"reset password for id-77"`, write the expected `trace` and whether `result` starts with `Request accepted`.
 
----
-
-## Diagnose One Failure Mode and Fix Configuration
-
-Connecting sentence: A messy trace is a **configuration** document, not a reason to scrap the team.
-
-- **Official Definition:** A **group-chat failure mode** is a repeatable bad pattern such as **repetition deadlock** (same points, no progress) or **wrong speaker** (the specialist who should not own this turn speaks).
-- **In Simple Words:** The meeting got stuck, or the wrong person grabbed the mic.
-- **Real-Life Example:** Messaging answers “can we threaten legal action?” That is **wrong speaker**. Research repeating the same seven bullets four times is **repetition deadlock**.
-
-| Failure mode | What you see in the trace | Configuration fix to try |
-|---|---|---|
-| **Wrong speaker** | Messaging speaks immediately after the desk opening | Keep the custom ladder; do not use random auto select |
-| **Repetition deadlock** | Risk restates research with no new fence | Tighten risk’s message; lower `max_round` slightly **after** messaging still has room |
-| **Incomplete handoff** | `BRIEF_READY` never appears; messaging never speaks | Raise `max_round`; confirm the ladder returns messaging after risk |
-| **Endless politeness** | “Happy to help” loops | Stronger `BRIEF_READY` instruction + `is_done` |
-
-**Lab fix (wrong speaker):** If you temporarily set `speaker_selection_method="round_robin"`, the desk or the wrong specialist may talk out of turn. Restore `select_briefing_speaker` and re-run. That is a **configuration** fix, not a new framework.
-
-**Lab fix (deadlock):** If messaging never prints `BRIEF_READY`, add the sentence *End with BRIEF_READY on the first complete notice* to the messaging system message only. Re-run once.
-
-### Activity — Trace detective
-
-After the run, fill: Did research speak before risk? Did messaging include `BRIEF_READY`? Did any extra company appear?
-
-### Activity — Break then fix
-
-Set `max_round=3`, re-run, write what failed (likely incomplete handoff). Restore `max_round=10` and confirm messaging returns.
-
-### Activity — Human-input judgement
-
-Write one sentence: when you would set `human_input_mode` so Prof. Meera approves the notice, and why you would **not** use `ALWAYS` for every specialist turn.
+**Suggested answer:** `["clean_request", "check_complete", "write_complete"]` and yes — `id-` is present.
 
 ---
 
-## Speaker Selection Methods — Choose on Purpose
+## Cycles: LLM Nodes and Tools
 
-Connecting sentence: Custom ladders are not the only AutoGen option. Know the menu so you do not pick **random** for a policy-sensitive brief.
+A **directed acyclic graph** (DAG) never returns to a node. Many agents must **loop**: the model may call a tool, read the tool result, then call another tool or finish.
 
-| Method | Simple meaning | Fit for this briefing |
-|---|---|---|
-| **Custom function** (this lab) | You encode research → risk → messaging | Best: handoffs are the product |
-| **round_robin** | Next name in the roster list | Easy to demo; easy to get **wrong speaker** |
-| **auto** (LLM picks) | The model chooses who speaks | Flexible; harder to debug in class |
+- **Official Definition:** A **cycle** is an edge that can send control back to a node already visited in the same run (within a hop limit).
+- **In Simple Words:** The model may visit the tool station more than once.
+- **Real-Life Example:** A clerk checks the register, comes back to the counter, then checks a second register.
 
-**Need:** A placement-drive notice that can invent legal language is a **governance** problem, not a style problem. Speaker rules are the first control. Hosted builders and ops habits come later in this module; the chair in this script is already a control.
+LangGraph’s prebuilt helpers for this loop:
 
-**Common error:** Switching to `auto` because the custom function “feels rigid.” Rigidity is the point when risk must speak before messaging.
-
-### Activity — Predict round-robin
-
-Roster order is desk, research, risk, messaging. If round-robin starts after the opening, who might speak **before** research? Why is that a wrong-speaker risk?
-
----
-
-## A Healthy Group Trace
-
-Connecting sentence: Lock a picture of success so deadlock and wrong speaker are obvious.
-
-| Turn (typical) | Speaker | Distinct sub-result |
-|---|---|---|
-| 1 | CampusDeskRunner | Opens the drive + tracker ask |
-| 2 | ResearchSpecialist | 5–7 file-backed bullets |
-| 3 | RiskSpecialist | Fence list; flags |
-| 4 | MessagingSpecialist | Notice + **BRIEF_READY** |
-
-If turn 2 is already messaging, **wrong speaker**. If turns 3–8 are research repeating the same Nimbus paragraph, **repetition deadlock**. If the log ends at turn 3 with only research and risk, **incomplete handoff** (often `max_round` too low).
-
-```mermaid
-flowchart LR
-  W[Wrong speaker] --> F1[Restore custom ladder]
-  D[Repetition deadlock] --> F2[Tighten role + BRIEF_READY]
-  H[Incomplete handoff] --> F3[Raise max_round]
-```
-
-### Activity — Label a fake log
-
-Log: messaging, messaging, messaging, no `BRIEF_READY`. Is that wrong speaker, deadlock, or both? What **one** change do you try first?
-
----
-
-## Pair vs Group — Ananya’s Week
-
-Connecting sentence: The **previous** pair is still the right tool for a two-seat lookup. The group is for **one complex packet** with three slices.
-
-| Campus request | Design unit |
+| Helper | Role |
 |---|---|
-| Daily “Slack sent or not?” | AutoGen **pair** + dispatch tool |
-| Weekly four-section faculty brief | **CrewAI** production crew |
-| Drive briefing + tracker launch copy | AutoGen **group** with chair |
+| `bind_tools` | Model may emit structured tool calls |
+| `ToolNode` | Executes those calls and writes `ToolMessage`s |
+| `tools_condition` | If the last AI message has tool calls → `tools`; else → `END` |
 
-Do not put three novelists in a GroupChat for a yes/no dispatch question. Do not ask one pair to own research, risk, *and* messaging without a chair.
+**Need:** `AgentExecutor` hides the loop. On a graph you *see* `assistant → tools → assistant`.
 
-### Activity — Choose the unit
+![ChatGroq assistant node, tools_condition diamond, ToolNode lookup_record, and ToolMessage cycling back](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-260313/module4/session43/session43-04-tool-cycle.png)
 
-Prof. Meera asks: “Give me one page faculty can read before the drive, with risk fences visible.” Crew, pair, or group? Write one sentence.
+**Common doubt:** *“Should the tool node also decide the next station?”* — No. `ToolNode` runs functions. `tools_condition` routes. Policy flags still belong in Python nodes when the rule must not be left to the model.
+
+```python
+from typing import Annotated, TypedDict  # state typing
+from dotenv import load_dotenv  # load GROQ_API_KEY
+from langchain_core.messages import AnyMessage, HumanMessage, SystemMessage  # chat types
+from langchain_core.tools import tool  # decorator for a typed tool
+from langchain_groq import ChatGroq  # Groq chat model with tool calling
+from langgraph.graph import StateGraph, START, END  # graph builder
+from langgraph.graph.message import add_messages  # reducer for message lists
+from langgraph.prebuilt import ToolNode, tools_condition  # tool station and router
+
+
+load_dotenv()  # read .env from the working directory
+
+
+@tool  # register a typed tool the model can call
+def lookup_record(record_id: str) -> str:  # fake register lookup
+    """Return the status for a record id such as id-104."""  # shown to the model
+    directory = {  # in-memory register for the demo
+        "id-104": "OPEN: assigned to Desk A",  # known record
+        "id-200": "CLOSED: completed last week",  # known record
+    }
+    return directory.get(record_id, "NOT_FOUND")  # never invent a missing row
+
+
+tools = [lookup_record]  # list ToolNode will execute
+llm = ChatGroq(model="llama-3.3-70b-versatile", temperature=0)  # Groq tool-calling model
+llm_with_tools = llm.bind_tools(tools)  # model may request lookup_record
+
+
+class AgentState(TypedDict):  # notebook for the cyclic graph
+    messages: Annotated[list[AnyMessage], add_messages]  # append-only chat log
+
+
+def assistant(state: AgentState) -> dict:  # LLM station
+    system = SystemMessage(  # fixed instructions for this node
+        content=(  # tell the model when to use the tool
+            "You are a records assistant. "  # role
+            "If the user names a record id, call lookup_record. "  # tool policy
+            "If no id is present, ask for an id such as id-104. "  # clarify path
+            "Do not invent statuses."  # hard rule in language; tool is source of truth
+        )
+    )
+    reply = llm_with_tools.invoke([system] + list(state["messages"]))  # one model step
+    return {"messages": [reply]}  # reducer appends this AIMessage
+
+
+builder = StateGraph(AgentState)  # graph shell
+builder.add_node("assistant", assistant)  # LLM station
+builder.add_node("tools", ToolNode(tools))  # execution station
+builder.add_edge(START, "assistant")  # first hop is always the model
+builder.add_conditional_edges(  # cycle vs finish
+    "assistant",  # after the model
+    tools_condition,  # built-in: tool calls → tools, else END
+)
+builder.add_edge("tools", "assistant")  # tool results go back to the model
+app = builder.compile()  # runnable cyclic graph
+
+missing = app.invoke(  # path with no id — model should ask, not call the tool
+    {"messages": [HumanMessage(content="What is the status of my request?")]}  # no id
+)
+print("MISSING LAST:", missing["messages"][-1].content)  # expect a request for an id
+
+found = app.invoke(  # path with a known id — expect a tool call then an answer
+    {"messages": [HumanMessage(content="Status of id-104 please.")]}  # known id
+)
+print("FOUND LAST:", found["messages"][-1].content)  # expect OPEN / Desk A from the tool
+```
+
+### How the code works
+
+- `add_messages` appends. Return only **new** messages from the node.
+- `assistant` may return an `AIMessage` with `tool_calls`. `tools_condition` then sends control to `tools`.
+- `ToolNode` runs `lookup_record` and appends a `ToolMessage`. The edge `tools → assistant` creates the **cycle**.
+- When the model answers in plain text (no tool calls), `tools_condition` routes to `END`.
+- Unknown ids return `NOT_FOUND` from the tool. The model must not invent a status.
+
+**Common error:** Forgetting `tools → assistant`. The tool runs once and the graph dies before the model can speak the result.
+
+### Activity — Label the hop
+
+A user sends `"Status of id-999"`. `id-999` is not in the directory. List the node order you expect, and the tool return value.
+
+**Suggested answer:** `assistant` → `tools` → `assistant` → `END`. Tool return: `NOT_FOUND`. Final text should report not found, not a fake status.
 
 ---
 
-## Troubleshooting the Chaired Meeting
+## Tracing Execution
 
-| Symptom | Likely cause | Fix |
-|---|---|---|
-| Auth error | Missing key | `.env` + `load_dotenv()` |
-| Import error | Package name | `pip install ag2 python-dotenv` |
-| Messaging never speaks | `max_round` too low | Restore `10`; confirm ladder after risk |
-| Extra company in the notice | Weak messaging message | “Use only unflagged research”; re-run |
-| Chair writes the poster | Manager treated as novelist | Keep copy in MessagingSpecialist only |
-| Human waits every turn | `ALWAYS` left on | Demo with `NEVER`; use human input only at approval |
+Building the graph is half the skill. The other half is **reading** a run.
 
-**Optional human input, restated:** Keep the automatic path until the ladder works. Then imagine `TERMINATE` mode: the group prepares the notice, and Meera types once — send, or send back to risk. That is oversight without slowing every specialist sentence.
+- **Official Definition:** An **execution trace** is the ordered record of nodes visited and the state fields each node changed.
+- **In Simple Words:** Replay the journey from the notebook.
+- **Real-Life Example:** A parcel scan log: hub, warehouse, out for delivery — not only “failed.”
 
----
+Use `stream` to watch updates live:
 
-## What “Good” Looks Like on This Group
+```python
+for event in graph.stream(  # yield after each node
+    {  # same initial state as a blocked invoke
+        "request": "Please close my ticket.",  # no id
+        "cleaned": "",  # empty
+        "is_complete": False,  # default
+        "result": "",  # empty
+        "trace": [],  # empty
+    }
+):
+    print(event)  # dict keyed by node name, value is that node's update
+```
 
-A successful orchestrated run has all of the following:
+Walkthrough template (use after every run):
 
-- Trace shows **ResearchSpecialist**, then **RiskSpecialist**, then **MessagingSpecialist**
-- Three **distinct** sub-results (bullets, fences, notice)
-- No extra company names; no legal threats
-- `BRIEF_READY` appears, or you can name the failure mode and the **one** setting you changed
-- The meeting did not need 40 rounds of agreement
+| Step | Node | Fields changed | Next edge |
+|---|---|---|---|
+| 1 | | | |
+| 2 | | | |
+| 3 | | | |
 
-**Upcoming** work moves toward no-code scenarios (**make.com**), hosted builders, **ops**, and **governance**. This session’s job is a **chaired specialist meeting** you can debug.
-
-### Activity — Reliability checklist
-
-| # | Check | Done? |
-|---|---|---|
-| 1 | Three specialists have non-overlapping system messages | |
-| 2 | Custom speaker ladder is research → risk → messaging | |
-| 3 | `max_round` is high enough for messaging to speak | |
-| 4 | Trace shows three distinct sub-results | |
-| 5 | No extra company names in the notice | |
-| 6 | BRIEF_READY (or a named failure + one fix) | |
-| 7 | Human input is a choice, not an accident | |
-
-Connecting sentence: If row 4 fails, do not start with make.com. Fix the chair in this script first.
-
-### Activity — Distinct sub-results
-
-Copy one phrase from each specialist in your trace. If two phrases could have come from the same role, the boundaries are still overlapping — tighten **one** system message.
-
----
-
-## Optional Human Input Without Slowing the Room
-
-Connecting sentence: Oversight is a **mode**, not a personality.
-
-| Mode | What happens | Campus use |
-|---|---|---|
-| `NEVER` | Fully automatic | Class demo; ladder practice |
-| `TERMINATE` | Human may speak when the group would stop | Meera approves the notice |
-| `ALWAYS` | Human every turn | Slow; easy to stall a Zoom lab |
-
-**Need:** Governance later in the module will ask who is allowed to publish. Practise the knob now so “human in the loop” is a setting you can explain, not a slogan.
-
-**Common error:** Turning `ALWAYS` on to “be safe,” then wondering why research never finishes. Safety here is **speaker rules + max rounds + BRIEF_READY**, then a single human gate if the notice is public.
-
-### Activity — One gate
-
-Write the single question you would ask Prof. Meera at `TERMINATE` time. Example: *Send this student notice, or send it back to RiskSpecialist?*
-
----
-
-## If the Group Never Closes
-
-Connecting sentence: Endless politeness is still a **stop-rule** bug.
-
-If agents keep saying “happy to help,” they never emit `BRIEF_READY`. The chair cannot guess that you are satisfied. Put the stamp in the **messaging** system message, mirror it in `is_done`, and keep `max_round` as a backstop — not as the only plan.
-
-If `max_round` fires first, the last message may be incomplete. That is still useful evidence: raise the cap **or** shorten each specialist’s expected sub-result. Do not do both in the same panic edit.
-
-### Activity — Name the stop
-
-After your run, write whether the chat ended because of **BRIEF_READY** or because **max_round** was hit. Only one of those is a successful completion for this lab.
+If the blocked request visited `write_complete`, the **router** or the **flag** is wrong. Fix the Python gate. Do not add another prompt.
 
 ---
 
 ## Key Takeaways
 
-- **GroupChat** plus **GroupChatManager** turn many conversable agents into one orchestrated briefing thread.
-- **Speaker selection** and **handoffs** keep research, risk, and messaging in order; **max rounds** stop runaway chat.
-- Each specialist must contribute a **distinct sub-result**; the chair is not a fourth novelist.
-- Diagnose **wrong speaker** or **repetition deadlock** from the trace, then change **one** configuration.
+- **LangGraph** runs agent work as **state + nodes + edges**, not as one hidden loop.
+- **Reducers** (`add_messages`, `operator.add`) append list fields; nodes return **new** items only.
+- **Conditional edges** keep routing in Python. Nodes write flags; routers return node names.
+- **Cycles** (`assistant` ⇄ `tools`) are how tool-calling agents run on a graph you can audit.
+- **`invoke`** and **`stream`** plus a `trace` field are the proof of what ran.
 
-These orchestration habits — room, chair, turn rules, bell — are what you will reuse when campus workflows move into hosted builders and operational governance in **upcoming** sessions.
+Checkpoints, human approval pauses, timeouts, and retries belong with a full workflow, not with first compile. Those controls attach to the same `StateGraph` once the map is correct.
 
 ---
 
-## Important Commands, Libraries, and Terminologies Used
+## Important Commands, Libraries, Terminologies Used
 
-| Term / Command | Type | Meaning |
-|---|---|---|
-| **Orchestration** | Habit | Turn-taking, handoffs, and closure |
-| **GroupChat** | Class | Shared multi-agent message room |
-| **GroupChatManager** | Class | Chair that runs the group |
-| **Speaker selection** | Policy | Who speaks next |
-| **Multi-agent handoff** | Pattern | Work moves specialist to specialist |
-| **max_round** | Setting | Hard cap on group turns |
-| **Human input** | Optional | `human_input_mode` for live approval |
-| **Repetition deadlock** | Failure | Same points, no progress |
-| **Wrong speaker** | Failure | Unsuitable agent takes the turn |
-| **BRIEF_READY** | Keyword | Group completion stamp |
-| **initiate_chat** | Method | Desk starts the meeting via the manager |
-| **Conversation trace** | Evidence | Ordered group messages |
-| `pip install ag2 python-dotenv` | Command | Install AutoGen family and `.env` loader |
-| `python placement_drive_group.py` | Command | Run the placement-drive group |
+| Name | Meaning |
+|---|---|
+| **LangGraph** | Library for stateful graph workflows |
+| **StateGraph** | Builder for state, nodes, and edges |
+| **State** | Shared typed notebook for one run |
+| **Node** | Function that returns a partial state update |
+| **Edge** | Unconditional or conditional transition |
+| **START / END** | Built-in entry and exit terminals |
+| **Reducer** | Merge function for a state field |
+| **`add_messages`** | Reducer that appends chat messages |
+| **`operator.add`** | Reducer that concatenates lists |
+| **`add_conditional_edges`** | Branch using a router function |
+| **Cycle** | Path that can revisit a node |
+| **`bind_tools`** | Attach tools to a chat model |
+| **`ToolNode`** | Executes model-requested tool calls |
+| **`tools_condition`** | Route to tools or END from the last AI message |
+| **`compile`** | Freeze the builder into a runnable app |
+| **`invoke`** | Run the graph once to a final state |
+| **`stream`** | Yield state updates after each node |
+| **`ChatGroq`** | LangChain chat wrapper for Groq models |
+| **`GROQ_API_KEY`** | Environment key loaded from `.env` |
+| **`load_dotenv`** | Load API keys from `.env` |

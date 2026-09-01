@@ -4,27 +4,27 @@ flowchart TB
   subgraph Foundation["What Students Bring Into This Session"]
     M1["<b>Previous Module</b><br/>Agentic Foundation & Architecture<br/><i>[Python + LLM Basics]</i><br/>Prompts, APIs, agent concepts"]
     M2["<b>Previous Module</b><br/>Agent Components - Memory, Tools & RAG<br/><i>[Memory + Retrieval]</i><br/>Chunking, vectors, RAG pipeline"]
-    M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, memory, debug & iterate"]
+    M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, LCEL, AgentExecutor"]
   end
 
-  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[CrewAI + AutoGen]</i><br/>Specialist crews and group chat"]]
+  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[LangGraph basics]</i><br/>State, nodes, edges, tool cycle"]]
 
-  CS{{"<b>Current Session</b><br/>make.com No-Code AI Scenarios<br/><i>[Triggers + Routers + AI Modules]</i><br/>Mental shift: wire AI into business apps without writing an application"}}
+  CS{{"<b>Current Session</b><br/>LangGraph End-to-End Workflow<br/><i>[Desk + Save + Pause]</i><br/>Mental shift: one product that survives stop, stamp, and failure"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>No-code AI scenarios<br/>Same integration goal, visual build"]
-    RV["<b>Real-Life Value</b><br/>Enquiry form to classify<br/>Email, sheet, CRM-style log"]
+    CV["<b>Course Value</b><br/>A graph you can prove with three cases"]
+    RV["<b>Real-Life Value</b><br/>Ticket, clarify, or wait for a supervisor"]
   end
 
   subgraph Future["Where This Leads"]
-    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[hosted builders + LLM ops]</i><br/>Hosted agents, ops, governance"]
-    F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>End-to-end autonomous system"]
+    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[No-code + LLM ops]</i><br/>Hosted agents, then go-live"]
+    F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>LangGraph multi-agent prototype"]
   end
 
   M1 ==>|&nbsp;Foundation&nbsp;| M2
   M2 ==>|&nbsp;Components&nbsp;| M3
   M3 ==>|&nbsp;Scale up&nbsp;| CM
-  CM ==>|&nbsp;Wire the apps&nbsp;| CS
+  CM ==>|&nbsp;Ship the Desk&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
   CS ==>|&nbsp;Next Steps&nbsp;| F4
