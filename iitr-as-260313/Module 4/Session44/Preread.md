@@ -1,4 +1,4 @@
-# Pre-read: make.com — No-Code AI Automation Scenarios
+# Pre-read: LangGraph: Building an End-to-End AI Agentic Workflow
 
 ## Context of This Session in the Course
 
@@ -8,27 +8,27 @@ flowchart TB
   subgraph Foundation["What Students Bring Into This Session"]
     M1["<b>Previous Module</b><br/>Agentic Foundation & Architecture<br/><i>[Python + LLM Basics]</i><br/>Prompts, APIs, agent concepts"]
     M2["<b>Previous Module</b><br/>Agent Components - Memory, Tools & RAG<br/><i>[Memory + Retrieval]</i><br/>Chunking, vectors, RAG pipeline"]
-    M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, memory, debug & iterate"]
+    M3["<b>Previous Module</b><br/>Hands-On Single-Agent Development<br/><i>[LangChain + eval loop]</i><br/>Tools, LCEL, AgentExecutor"]
   end
 
-  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[CrewAI + AutoGen]</i><br/>Specialist crews and group chat"]]
+  CM[["<b>Current Module Until Previous Session</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[LangGraph basics]</i><br/>State, nodes, edges, tool cycle"]]
 
-  CS{{"<b>Current Session</b><br/>make.com No-Code AI Scenarios<br/><i>[Triggers + Routers + AI Modules]</i><br/>Mental shift: wire AI into business apps without writing an application"}}
+  CS{{"<b>Current Session</b><br/>LangGraph End-to-End Workflow<br/><i>[Desk + Save + Pause]</i><br/>Mental shift: one product that survives stop, stamp, and failure"}}
 
   subgraph Value["Why This Matters"]
-    CV["<b>Course Value</b><br/>No-code AI scenarios<br/>Same integration goal, visual build"]
-    RV["<b>Real-Life Value</b><br/>Enquiry form to classify<br/>Email, sheet, CRM-style log"]
+    CV["<b>Course Value</b><br/>A graph you can prove with three cases"]
+    RV["<b>Real-Life Value</b><br/>Ticket, clarify, or wait for a supervisor"]
   end
 
   subgraph Future["Where This Leads"]
-    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[hosted builders + LLM ops]</i><br/>Hosted agents, ops, governance"]
-    F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>End-to-end autonomous system"]
+    F4["<b>Current Module Ahead</b><br/>Multi-Agent Collaboration and Deployment<br/><i>[No-code + LLM ops]</i><br/>Hosted agents, then go-live"]
+    F5["<b>Upcoming Module</b><br/>Capstone Project - Autonomous System Build<br/><i>[Architecture + Prototype]</i><br/>LangGraph multi-agent prototype"]
   end
 
   M1 ==>|&nbsp;Foundation&nbsp;| M2
   M2 ==>|&nbsp;Components&nbsp;| M3
   M3 ==>|&nbsp;Scale up&nbsp;| CM
-  CM ==>|&nbsp;Wire the apps&nbsp;| CS
+  CM ==>|&nbsp;Ship the Desk&nbsp;| CS
   CS ==>|&nbsp;Course Path&nbsp;| CV
   CS ==>|&nbsp;Real-Life Use&nbsp;| RV
   CS ==>|&nbsp;Next Steps&nbsp;| F4
@@ -48,147 +48,88 @@ flowchart TB
 
 ---
 
-**Ananya** opens the Campus Ops Inbox at Greenfield Institute of Technology, Pune. Overnight, the student enquiry form has filled again: a placement FAQ, a hostel-leave question, a half-empty spam row, and one angry stipend complaint.
+A **service counter** that only works while one volunteer is staring at the laptop is not a desk. If the volunteer closes the lid, the case vanishes. If a large refund prints without a supervisor’s signature, accounts will not accept the story that “the model sounded confident.” If the register hangs, the citizen should not wait forever, and nobody should invent a ticket number to look busy.
 
-Someone still copy-pastes names into a spreadsheet. Someone else drafts a polite email. A third person updates a CRM-style sheet so Prof. Meera Kulkarni can see the queue. Hot leads wait while average ones get lucky replies first.
+You already know how to draw a **graph**: stations, a shared notebook, a fork, a model-and-tool loop. This session uses that grammar to ship **one product**.
 
-Nothing here is “AI magic.” It is **repetitive handwork** — the kind that burns hours, creates typos, and makes good enquiries wait.
+The end-to-end example is a **Service Request Desk**.
 
-Now ask a sharper question:
+## What if the desk has to be honest?
 
-**What if every new enquiry could be classified by AI, emailed to the right desk, and logged into a sheet — without anyone writing an application?**
+A user sends **one message**. The desk must finish with a clear outcome:
 
-That is the career-relevant skill this session unlocks. Campuses and companies do not only hire people who *build* agents in code. They also hire people who can **wire AI into the apps the team already uses** — forms, email, sheets — quickly and safely.
-
----
-
-## The challenge: one enquiry, many paths, zero patience
-
-What if Greenfield receives 200 enquiries in a week, and each type needs different treatment?
-
-| Enquiry type | What should happen |
+| Message | Honest outcome |
 |---|---|
-| Placement FAQ | AI drafts a short answer → email goes out → sheet row updates |
-| Hostel / leave question | AI extracts the student name → routes to Student Affairs → sheet logs the ticket |
-| Incomplete / spam | Holding list → no faculty ping → optional polite auto-reply |
-| Angry stipend complaint | Escalate to a human → skip auto-email → log severity |
+| Close ticket **id-104**, amount **800** | Stamp a ticket (`TKT-104`) |
+| “Please help, nothing works” | **Ask again** — no record id, so no ticket |
+| Refund **id-200**, amount **7500** | **Pause** — Rs 5000 or more needs a supervisor |
 
-Doing this by hand is exhausting. Doing this with a custom Python HTTP API is powerful — but slow when the only goal is “connect Form → AI → Gmail → Sheet.”
+**What if** the program dies after lookup? A real office keeps a **file number**. You reopen the **same** file. You do not start a new case and hope the details match.
 
-In the **previous** session you practised **group chat** with specialist AutoGen agents: who speaks, how rounds stop, how distinct sub-results combine. Earlier in this module you also staffed **CrewAI** crews. Those skills teach orchestration thinking: *who does what, in what order, with what handoff*.
+**What if** the amount is high? A clerk must not stamp “approved” because the prompt was polite. The graph **waits**. A person says yes or no. Then the **same** file continues.
 
-This session asks a different practical question:
+**What if** the register is slow or blips once? You stop waiting after a limit. You try a few times. If it still fails, you tell the user the truth. You **never invent** `TKT-`.
 
-> How do you design the same integration goal — trigger → decide → transform with AI → act on business tools — using **make.com**, a popular no-code scenario builder used widely in ops and growth teams?
+Those three “what ifs” are not extra topics glued on. They are what makes the walk **end to end**.
 
----
+## One desk, not four demos
 
-## Enter make.com: a visual business assembly line
+Think of a **case file** in a campus admin office or a bank desk.
 
-**make.com** (earlier known as Integromat) lets you build **scenarios** — visual workflows where apps talk to each other.
+- The **file number** is how you find the same case tomorrow. In the graph this is a **thread id**. The cupboard that stores snapshots is a **checkpointer**.
+- The **supervisor stamp** is a planned pause. The computer cannot sign for the supervisor.
+- The **kitchen timer** on the register call is a **timeout**. Knocking again a few times, not a hundred, is a **retry**. Stopping without a fake stamp is **fail closed**.
 
-A **scenario** is like a factory floor plan for work: something starts the line, stations do small jobs, and finished goods leave through different exits.
-
-Key building blocks you will meet:
-
-- **Modules** — each app step on the canvas (watch a form, call AI, send email, update a sheet). Think of them as workers at stations.
-- **Triggers** — the starting gun. “When a new form row appears…” or “When a webhook fires…” or “Every weekday at 9 AM…”
-- **Routers** — the decision junction. “If placement FAQ, go left; if complaint, go right.”
-- **AI / HTTP modules** — the smart station. An **OpenAI** (or similar) module classifies or drafts; an **HTTP** module talks to any REST endpoint when a ready-made connector is missing.
-- **Data stores** — a small memory cupboard inside make.com for lookup values, counters, or temporary records.
-- **Scheduling** — run on a clock, not only on an event.
-- **Error handling** — what happens when Gmail fails, AI times out, or a required field is empty.
-
-Code-first automation and make.com scenarios chase the **same goal**: reliable integration. The difference is *how* you build and who can maintain it. In make.com, you assemble the flow visually and test paths without compiling an app. In code-first stacks, you own deeper control, custom logic, and engineering process. Good practitioners know **when each style fits**.
-
----
-
-## A railway station junction
-
-Picture a busy railway junction in India.
-
-1. A train **arrives** (trigger).
-2. The station master checks the **route board** (router): Express? Passenger? Goods?
-3. A clerk **writes a clean summary** of the cargo or passenger list (AI transformation).
-4. Then the system **updates** platforms, announcements, and logs (email / CRM-style sheet).
-5. If a track is blocked, the station does not freeze forever — it follows a **recovery plan** (error handling).
-
-make.com works the same way. Your scenario is the junction. Modules are stations. The router is the route board. AI is the clerk who turns messy student language into structured next steps. Business apps are the platforms where work actually lands.
-
-Once you see automation as a **junction with clear routes**, the canvas stops feeling mysterious.
-
----
-
-## What a practical scenario looks like
-
-Here is a mental sketch of the kind of flow you will assemble in the live session — described in plain language, not as an export file:
-
-1. **Start** — A new student enquiry arrives (form submission, sheet row, or scheduled pull).
-2. **Decide** — A router checks AI labels: *placement / leave / incomplete / complaint*.
-3. **Transform** — An AI module cleans the message, extracts name and intent, and drafts a short reply or CRM note.
-4. **Act** — Success path updates a spreadsheet (the campus CRM-style register), and sends an email to the right desk.
-5. **Recover** — If the email module fails, the scenario logs the failure, retries where safe, or routes to a “needs human” list instead of silently dying.
-
-That last step is career gold. Anyone can demo a happy path. Professionals also document a **recoverable error path** — what breaks, how you notice, and how the system continues safely.
-
-You will also discuss **testing**: run one clean placement enquiry and one broken case (missing email, API timeout, bad AI output format). Then write short notes so a teammate can hand off the scenario tomorrow without guessing.
-
----
+LangGraph is still the engine. The desk is the product. **Groq** may read the message and fill fields. **Python** still decides the path. High-value money cannot be approved by extra wording in a prompt.
 
 In this pre-read, you'll discover:
 
-- **Discover** why no-code scenarios matter for real campus and business operations — not only for developers
-- **Understand** how a **trigger**, **router**, and **AI module** work together like a station junction
-- **Learn** what **data stores**, **scheduling**, and **error handling** contribute to a trustworthy automation
-- **See** how make.com compares with code-first automation while serving similar integration goals
+- **What** the Service Request Desk must do for three different messages
+- **Why** a case needs a file number if the program can stop
+- **Why** a large refund pauses for a person
+- **Why** a hanging register must time out, retry a blip, then speak honestly
 
----
+## How the stations fit together
 
-## Why this sits in your journey
+The walk is the same story you will code:
 
-So far in this module you have:
+**Read the message → look up the register → apply the money rule → ticket or wait for a person → send a reply.**
 
-- Connected services visually with **n8n**
-- Coordinated specialised agents with **CrewAI**
-- Orchestrated group collaboration with **AutoGen**
+- **Extract** may use the model. It must not invent a missing id.
+- **Lookup** talks to a register (in the lab, a small in-memory directory with one simulated blip).
+- **Policy** is Python. Missing id or unknown record → ask again. Amount under the limit → ticket. Amount at or above the limit → human pause.
+- **Human approve** waits. Resume with yes or no on the **same** file number.
+- **Create ticket** stamps `TKT-` only on the allowed path. The clarify path cannot reach it.
 
-make.com extends the same *systems thinking* into another widely used no-code platform. After this, you will be ready to evaluate **hosted agent builders** in the **upcoming** session — products where AI agents live inside vendor platforms with knowledge, actions, and guardrails.
+You will prove the desk with those **three messages**. That small exam is the **golden pack**: clean close, missing id, high-amount refund.
 
-The bigger course story is simple: **agents are not only chat windows**. They are pipelines that sense events, decide routes, transform information, and act on business tools — with reliability built in.
+## What you should arrive knowing
 
----
+You do not need to memorise library names tonight. You should be able to tell a friend, in ordinary language:
 
-## Questions to think about before class
+- The product is **one desk**, not a pile of snippets.
+- A **file number** means “continue this case,” not “start another.”
+- A **pause** is a feature when money is large, not a crash.
+- A **timeout** is a kitchen timer. A **retry** is a second knock after a temporary fail. A missing id is **not** a reason to knock again.
+- If lookup never answered, the user sees an error. The desk does not mint a fake ticket to look complete.
 
-1. **The hot-lead junction** — Greenfield’s form receives both “When is the TCS drive?” and “My stipend is two weeks late and I am furious.” How do you design one scenario with a router so each path gets a different AI prompt and a different business action?
+The lecture will attach the names: `MemorySaver`, `SqliteSaver`, `interrupt`, `Command`, `RetryPolicy`, and a Groq extract node. The desk comes first; the names sit on the furniture.
 
-2. **The silent failure** — Email sending fails at 11 PM. What should the scenario do so Ananya does not lose the enquiry, and how do you document that recoverable error path for Campus Ops?
+## Questions the live session will settle
 
-3. **No native app button** — The tool you need is not listed as a ready module. When do you reach for an **HTTP** module, and what must you verify before trusting that connection?
+Write a short guess before class.
 
-Bring these questions to class — and one messy process from your own life that currently depends on copy-paste. **Upcoming** work in this module moves from wiring apps to standing up a hosted helper, then to operations and governance. This session’s job is a **testable scenario**, not a full product.
+1. Two users send refunds. Must they share one file number, or must each case have its own? What goes wrong if they share?
+2. Amount is **7500**. The model’s last sentence is “looks fine, create the ticket.” Should `create_ticket` run **before** a human says yes? Why?
+3. Lookup hangs for a minute. Should the user wait until the laptop is hot, or should the desk stop and explain? If lookup returns “not found,” should the desk retry?
 
----
+If you can argue those without code, the lab will feel like filling in a map you already understand.
 
-## Words you will hear — explained right away
+## After this session you will be able to
 
-- **Scenario:** The visual workflow you run — the whole junction, not one station.
-- **Module:** One app step on the canvas — watch a form, call AI, send mail, write a sheet.
-- **Trigger:** The starting gun — a new enquiry, a webhook, or a clock.
-- **Router:** The route board — different labels take different exits.
-- **Data store:** A small cupboard of lookup values inside make.com.
-- **Error handling:** The recovery plan when Gmail, AI, or a field fails.
+- Run **one** Service Request Desk graph for three named messages
+- Show a **saved** case and continue it, including a supervisor yes or no
+- Explain **timeout**, **retry**, and **fail closed** as desk behaviour, not as slogans
+- Point at a **trace** and say whether the run ticketed, asked for an id, or waited for a human
 
----
-
-## What's next
-
-By the end of the session, you should be able to:
-
-- **Explain** how make.com scenarios relate to code-first automation without confusing the two
-- **Assemble** a scenario with a **trigger**, **router**, and at least one **AI-powered** transformation
-- **Connect** outputs to everyday business tools such as **email** and a **CRM-style spreadsheet**
-- **Test** and document **one success path** and **one recoverable error path**
-- **Talk** confidently about **modules**, **data stores**, **scheduling**, and **error handling**
-
-You already know how to staff an AI **team** in code. This session teaches you how to **wire AI into the apps Campus Ops already opens every morning**.
+A canvas of app connectors and a hosted chat agent are different surfaces. They come later in this module. This session is the code-first desk you can prove: message in, honest outcome out, file still there if you closed the lid.

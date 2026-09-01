@@ -9,17 +9,16 @@ session duration: 1hr  50mins
 
 Session Notes Length: 480 lines to 500 lines max
 
-title: AutoGen: Group Chat and Multi-Agent Orchestration
+title: Getting Started with LangGraph: Fundamentals & Setup
 
-objective: Orchestrate multi-agent group chats with defined speakers selection policy and collaborative task completion.
+objective: Model agent workflows as LangGraph graphs with shared state, reducers, conditional routing, and an LLM-plus-tool cycle.
 
-type of session: theory/implementation/mixture of theory + implementation / You take the call
+type of session: mixture of theory + implementation
 
-topics be covered: GroupChat; GroupChatManager; speaker selection; max rounds; human input optional; multi-agent handoffs
-
+topics be covered: LangGraph; StateGraph; nodes; edges; START; END; graph state; reducers; add_messages; conditional routing; cycles; ToolNode; tools_condition; compile; invoke; stream; execution traces
 
 detailed subtopics to be covered:
-* Design a group chat involving three or more specialized AutoGen agents for one complex task.
-* Configure speaker selection and round limits to prevent runaway dialogue.
-* Demonstrate successful task completion where multiple agents contribute distinct sub-results.
-* Diagnose one group-chat failure mode such as repetition deadlock or wrong speaker and apply a configuration fix.
+* Contrast LangGraph with linear chains and conversation-style multi-agent runtimes, and justify a graph when control, branches, and audit matter.
+* Define shared graph state with TypedDict and reducers so messages and traces accumulate instead of being overwritten.
+* Build and run a graph with nodes, unconditional edges, and at least one conditional branch.
+* Add an LLM node and a tool node in a cycle, then trace node order and state updates for a success path and a blocked path.
