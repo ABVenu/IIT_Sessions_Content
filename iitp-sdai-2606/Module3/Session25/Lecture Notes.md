@@ -30,6 +30,9 @@ It cannot be the full product. Real apps need a **shared brain** that many users
   - *Official Definition:* The server-side layer that receives HTTP requests, applies business rules, talks to storage and other services, and returns a response.  
   - *In Simple Words:* The kitchen and accounts office behind the dining hall.  
   - *Real-Life Example:* Swiggy’s servers check whether the restaurant is open, calculate bill and GST, and record the order. That work is not CSS.
+
+![Campus canteen split into dining hall and kitchen — students see the menu and Place order; the kitchen holds the order slip, stock register, and GST bill — frontend is the hall, backend is the kitchen](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session25/session25-01-dining-kitchen-layers.png?v=20260902)
+
 - Need: If every student’s marks lived only inside each browser tab, there would be **no single source of truth**. A teacher could not publish one result list. The backend holds the shared record.
 - Logic: Frontend can **display** a hall ticket. Backend **decides** whether you are eligible, **stores** the roll number, and **returns** JSON or HTML the browser can show.
 - Common doubt: “I already used `fetch` to get posts. Is that backend?” No. `fetch` is the **client** asking. Someone else wrote the server that answered. Today you start writing that server.
@@ -41,6 +44,30 @@ It cannot be the full product. Real apps need a **shared brain** that many users
 | Backend | Server process on a computer | Validate, decide, store, respond | Python (now used as a web server) |
 
 Connecting idea: HTTP is the same language you learned earlier — **GET**, **JSON**, status **200**. Previously you sent GET. Now you **answer** GET.
+
+### Client–server recap — why a backend is needed
+
+You already learned the **client–server** model in Module 2. A **client** starts the conversation; a **server** answers. That back-and-forth is the **request–response cycle** over **HTTP**.
+
+- **Client**  
+  - *Official Definition:* The program that sends the request (browser, later a mobile app or an API tester).  
+  - *In Simple Words:* The side that walks up to the counter and asks.  
+  - *Real-Life Example:* Chrome showing IRCTC, or your JavaScript **`fetch` GET** asking a public URL for JSON.
+- **Server**  
+  - *Official Definition:* The program that listens for requests, applies rules, and returns a response.  
+  - *In Simple Words:* The kitchen that receives the slip and sends the plate.  
+  - *Real-Life Example:* IRCTC’s computers — and, from this session, **your** FastAPI process on port **8000**.
+- Need: Many clients (phone browser, laptop browser, later `fetch` on a page) must share **one** honest record. If each tab stored its own marks, there would be no class result list. The **backend is that server**.
+- Logic: Frontend HTML/CSS/JS is almost always the **client**. Python FastAPI is the **server**. Same cycle you traced for booking sites — you now write the function that builds the JSON.
+- Common doubt: “I opened `index.html` from my laptop. Is that a server?” No. That is the browser reading a local file. A backend is a **listening program** other programs can call.
+- Common error: Calling `fetch` “the backend.” `fetch` is still the client asking. Backend is the program that **answers**.
+
+| Role from Module 2 | What you practise now |
+|--------------------|------------------------|
+| Client | Browser GET (and `fetch` you already wrote) |
+| Server | FastAPI + Uvicorn — this is the backend |
+| Request | GET `/` or GET `/health` hitting port 8000 |
+| Response | Status **200** plus JSON from your function |
 
 ### What the backend must do that HTML cannot
 
@@ -100,6 +127,8 @@ That program can be written in more than one language.
 
 Connecting idea: Language choice is settled. Next you need a **project box** so packages do not mix with other Python work on the same laptop.
 
+![Laptop split — browser page built with HTML, CSS, and JavaScript with a stamp that Python does not run there, versus Terminal FastAPI and Uvicorn listening on port 8000 sending JSON back for GET](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session25/session25-02-browser-vs-python-server.png?v=20260902)
+
 ## Typical backend project setup
 
 A backend project is not one random `script.py` on the Desktop.  
@@ -133,6 +162,8 @@ campus-api/
   main.py             # FastAPI app and GET routes
 ```
 
+![Hostel desk kit labelled campus-api — .venv cupboard, requirements.txt grocery list, main.py notebook, .env settings card, and .gitignore covering private items](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session25/session25-03-campus-api-project-kit.png?v=20260902)
+
 - Common error: Putting `main.py` on the Desktop **outside** the folder that contains `.venv`. Then Uvicorn and pip point at the wrong place.
 - Common error: Creating a second venv inside a venv. Always `cd campus-api` first, then `python3 -m venv .venv` **once**.
 
@@ -145,6 +176,9 @@ That global interpreter is shared. Backend projects add many packages; they must
   - *Official Definition:* A directory that contains a Python interpreter and its own `site-packages`, created with the standard library module `venv`.  
   - *In Simple Words:* A private Python cupboard for this project only.  
   - *Real-Life Example:* A hostel mess plate vs a tiffin from home. `venv` is your tiffin — FastAPI lives there, not in the shared mess (system Python).
+
+![Shared lab PC dumping packages into one system Python bowl versus a labelled campus-api tiffin cupboard named .venv holding FastAPI, Uvicorn, and python-dotenv with an active (.venv) prompt](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session25/session25-04-venv-isolated-python.png?v=20260902)
+
 - Need: FastAPI’s version for this project must not break an older package you used for a different assignment.
 - Logic: You **create** the folder once, **activate** it every time you work, then `pip install` while it is active.
 - Common error: Running `pip install fastapi` **without** activating venv. Packages go to the wrong Python; the server later says `ModuleNotFoundError`.
@@ -418,7 +452,7 @@ If the page says “Unable to connect,” Uvicorn is not running or the port in 
 
 ### From browser GET to your function (one round trip)
 
-Walk this sequence once so FastAPI does not feel like magic.
+![GET round trip on a desk — browser GET to http://127.0.0.1:8000/health, Uvicorn door on port 8000, FastAPI health() counter, JSON status ok with stamp 200](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session25/session25-05-get-round-trip.png?v=20260902)
 
 1. You type `http://127.0.0.1:8000/health` and press Enter.
 2. The browser sends **GET** `/health` to **127.0.0.1** port **8000**.
