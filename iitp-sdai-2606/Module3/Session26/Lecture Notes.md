@@ -34,10 +34,15 @@ You already know the four common methods from the **client–server** lesson.
 | **PUT** | Update (replace fields) | JSON with the new title and message | No |
 | **DELETE** | Remove | Usually none | No |
 
+![Campus office with four counters — GET /notices to read, POST /notices to create with a JSON slip, PUT /notices/1 to update, DELETE /notices/2 to remove — same door, different verbs](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session26/session26-03-four-method-counters.png?v=20260902)
+
 - **CRUD**  
   - *Official Definition:* Create, Read, Update, Delete — the four basic operations on a collection of records.  
   - *In Simple Words:* Add a row, look at rows, edit a row, throw a row away.  
   - *Real-Life Example:* A hostel **notice board**: pin a new notice, read the board, replace a wrong date, take a notice down.
+
+![Hostel notice board showing Create pin, Read the board, Update rewrite a date, and Delete take a paper down — CRUD as four jobs on one board](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session26/session26-01-notice-board-crud.png?v=20260902)
+
 - Need: `GET /health` proved the doorbell works. A product still needs **write** operations. Marks, orders, and notices change.
 - Logic: The **method** is the verb; the **path** is which counter; the **body** is the slip of paper for create/update.
 - Common doubt: “Can I test POST by pasting JSON in the address bar?” No. The address bar does not attach a JSON body or change the method.
@@ -68,6 +73,9 @@ Every call is still one **request–response cycle**. FastAPI’s job is to pars
 - Need: Returning a dict is fine for **200**. Create should often be **201**. Missing ids should be **404**. Wrong JSON should be **400**.
 - Logic: FastAPI matches **method + path** to a decorator (`@app.post`, `@app.put`, …), then injects parameters (request object, JSON body, path id).
 - Common doubt: “Is the Request the JSON?” No. The Request is the **envelope**. The JSON body is the **letter** inside, for POST and PUT.
+
+![Courier envelope labelled Request with POST and path /notices, opened to a JSON letter with title and message — envelope is the Request object, letter is the body](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session26/session26-02-request-envelope-letter.png?v=20260902)
+
 - Common error: Ignoring status codes and only reading the JSON. Postman shows both. A **404** body can still look like a sentence.
 
 You already used **200** on GET. Add these stamps for CRUD:
@@ -94,6 +102,8 @@ Walk this once. The other methods reuse the same envelope story.
 - Need: If step 4 misses, you used the wrong method or a typo in `/notices`.
 - Logic: GET `/notices` and POST `/notices` share a path but are **different endpoints**. FastAPI stores them separately.
 - Common error: Sending POST, then reading only the body and ignoring **201** vs **400**. Always read the stamp first.
+
+![POST round trip — Postman Send to http://127.0.0.1:8000/notices, Uvicorn door on port 8000, FastAPI @app.post /notices, JSON with id 1 and stamp 201 Created](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session26/session26-04-post-round-trip.png?v=20260902)
 
 ### Student activity: name the envelope
 
@@ -350,6 +360,8 @@ def delete_notice(notice_id: int):  # Only the path id is required
 | **Send** | Fires the request |
 | Status (right of the response) | `200 OK`, `201 Created`, `400`, `404` |
 | Response body | JSON from FastAPI |
+
+![Postman on a laptop — method POST, URL localhost port 8000 /notices, Body raw JSON with title and message, Send, response panel showing 201 Created and id 1](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module3/session26/session26-05-postman-crud-tester.png?v=20260902)
 
 **How the client works:**
 
