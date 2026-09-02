@@ -1,0 +1,342 @@
+Module,Session No,Week,Session ID,Title,Objective,Topics to be Covered (Core - 2hr),Core Learning Objectives,To be taken by,English IM Tentative Session Date,Day,,Hindi IM Tentative Session Date,Day,"Extra Hands-on session - may be taken on Monday
+(Optional)"
+"Module 1: Programming, DSA & AI-Powered Foundations",1,1,1.1,Introduction to Programming & Python Basics,"Write and execute first Python programs using an online compiler with variables, operators, and basic input/output.","• Online Compiler Setup – writing and executing Python programs using an online compiler (One Compiler)
+• Core Fundamentals – variables and data types
+• Operators – arithmetic, comparison, logical, and assignment operators, expressions
+• Input/Output – using input() and print() for user interaction","• Execute Python programs in an online compiler
+• Declare variables and work with core data types
+• Apply arithmetic, comparison, logical, and assignment operators
+• Handle basic user input and output using input() and print()",Industry Mentor,11/06/2026,Thursday,,15/07/2026,,
+"Module 1: Programming, DSA & AI-Powered Foundations",2,1,1.2,Operators & Conditional Statements,Control program flow using if/elif/else and boolean logic to solve conditional programming problems.,"• Conditionals – using if, elif, and else statements
+• Boolean Logic – applying boolean logic and comparison operators in conditions
+• Logical Thinking – thinking step-by-step and building structured problem-solving habits
+• Practice – solving beginner-level conditional programming problems","• Implement if, elif, and else branches
+• Evaluate conditions using boolean and comparison operators
+• Break problems into logical, testable steps
+• Solve introductory conditional programming exercises",Industry Mentor,13/06/2026,Saturday,,,,
+"Module 1: Programming, DSA & AI-Powered Foundations",3,2,2.1,Loops & Iterations in Python,"Automate repetitive tasks using for loops, while loops, and loop control with break and continue.","• Loops – using for loops and while loops
+• Loop Control – break and continue
+• Automation – automating repetitive sequences with loops
+• Problem Solving – iterative problem solving, breaking problems into testable parts","• Write for loops and while loops
+• Control loop execution using break and continue
+• Choose the appropriate loop type for a given problem
+• Apply iterative thinking to decompose and solve problems",Industry Mentor,18/06/2026,Thursday,,21/07/2026,,
+"Module 1: Programming, DSA & AI-Powered Foundations",4,2,2.2,DSA: Lists & Strings – Built-in Functions,"Work with Python lists and strings using indexing, slicing, and essential built-in functions.","• Lists – defining lists, essential list methods (append, pop, sort, len)
+• List Access – positive indexing, negative indexing, and slicing
+• Strings – indexing, slicing, concatenation, and f-string formatting
+• Built-in Functions – len(), sorted(), min(), max(), sum() for lists and strings","• Create and manipulate lists using essential methods
+• Access elements via indexing and slicing on lists and strings
+• Format and concatenate strings using f-strings
+• Apply built-in functions to process list and string data",Industry Mentor,20/06/2026,Saturday,,,,
+"Module 1: Programming, DSA & AI-Powered Foundations",5,3,3.1,DSA: Dictionaries & HashMaps – Built-in Functions,Store and retrieve data using dictionaries and hashmaps with essential built-in methods.,"• Dictionaries – defining dictionaries, accessing and modifying key-value pairs
+• Dictionary Methods – get(), keys(), values(), items()
+• HashMaps – understanding dictionary as hashmap, keys and hashable types
+• Built-in Functions – len(), sorted() on dictionary keys/values","• Create and use dictionaries with key-value pairs
+• Apply get(), keys(), values(), and items() methods
+• Explain dictionary/hashmap intuition for fast lookups
+• Use built-in functions to work with dictionary data",Industry Mentor,25/06/2026,Thursday,,28/07/2026,,
+"Module 1: Programming, DSA & AI-Powered Foundations",6,3,3.2,"Nested Logic, Loops & Intro to Complexity Analysis",Apply nested conditionals and loops while introducing Big-O complexity analysis basics.,"• Nested Conditionals – multi-level if/elif/else decision logic
+• Nested Loops – iterating with loops inside loops
+• Complexity Basics – understanding why efficiency matters, best/worst case intuition
+• Big-O Introduction – O(1), O(n), O(n²) with simple examples","• Write nested conditional logic for multi-step decisions
+• Implement nested loops to process 2D data and combinations
+• Explain best, average, and worst case intuitively
+• Identify O(1), O(n), and O(n²) patterns in simple code",Industry Mentor,27/06/2026,Saturday,,,,
+"Module 1: Programming, DSA & AI-Powered Foundations",7,4,4.1,Python Functions & Modular Programming,Write reusable Python functions using parameters and return values to organize programs into modular components.,Functions; Parameters and Return Values; Function Calls; Modular Programming,"• Define and call functions using def
+• Pass arguments through parameters and return results using return
+• Connect multiple functions by passing one function’s output as another function’s input
+• Organize repetitive code into reusable and modular functions",Industry Mentor,02/07/2026,Thursday,,04/08/2026,,
+"Module 1: Programming, DSA & AI-Powered Foundations",8,4,4.2,Sorting Algorithms – Bubble Sort & Selection Sort,Understand and implement bubble sort and selection sort with O(n²) complexity analysis.,"• Bubble Sort – intuition, step-by-step tracing, and Python implementation
+• Selection Sort – intuition, step-by-step tracing, and Python implementation
+• Tracing – manually tracing sort execution on sample inputs
+• Complexity Analysis – O(n²) time complexity and space complexity of both algorithms","• Explain how bubble sort and selection sort work
+• Implement bubble sort and selection sort in Python
+• Trace algorithm execution on sample arrays
+• Analyze O(n²) time complexity for elementary sorting algorithms",Industry Mentor,04/07/2026,Saturday,,,,
+"Module 1: Programming, DSA & AI-Powered Foundations",9,5,5.1,"Hands-on Logic Building, Development Setup & DSA Problem Solving – I","Set up the Python development environment and solve beginner DSA problems using lists, strings, dictionaries, loops, and conditionals.",Development Environment Setup; Local Python Execution; Logic Building with Core Data Structures; Beginner DSA Problem Solving,"• Set up Python, VS Code, and Terminal for local development
+• Write, save, and run Python programs locally
+• Break a problem into inputs, outputs, conditions, and logical steps
+• Solve basic list, string, and dictionary problems using loops and conditionals",Industry Mentor,09/07/2026,Thursday,,11/08/2026,,
+"Module 1: Programming, DSA & AI-Powered Foundations",10,5,5.2,Hands-on Logic Building & DSA Problem Solving – II,"Solve intermediate DSA problems using nested logic, core data structures, Bubble Sort, and Selection Sort.",Problem Analysis; Nested Logic and Data Structures; Bubble and Selection Sort; Intermediate DSA Problem Solving,"• Analyse problem constraints and convert the solution into an algorithm
+• Solve moderately complex problems involving lists, strings, dictionaries, and nested loops
+• Implement Bubble Sort and Selection Sort step by step
+• Apply sorting to solve problems such as duplicate handling, second largest element, and ordered comparisons",Industry Mentor,11/07/2026,Saturday,,,,
+"Module 1: Programming, DSA & AI-Powered Foundations",11,6,6.1,"Intro to VCS, Git & Repository Management",Track code changes using Git and manage local and remote repositories on GitHub.,"• Version Control Fundamentals – introduction to version control and its importance
+• Git Basics – init, add, commit, and understanding local repositories
+• GitHub Introduction – cloning repositories and working with remote repositories
+• Remote Workflow – staging, committing, and pushing code to GitHub","• Explain why version control matters
+• Initialize a repo and perform basic Git operations (init, add, commit)
+• Clone and work with remote GitHub repositories
+• Stage, commit, and push code to a remote repository",Industry Mentor,16/07/2026,Thursday,,18/08/2026,,
+"Module 1: Programming, DSA & AI-Powered Foundations",12,6,6.2,"Git Remotes, Branching & Advanced Operations","Work with Git branching, merging, conflict resolution, and team collaboration on GitHub.","• Branching – creating and switching branches for parallel development
+• Merging – merging branches and understanding merge workflows
+• Conflict Resolution – identifying and resolving merge conflicts
+• Collaboration – collaborating on team projects using GitHub","• Create and switch between Git branches
+• Merge branches using standard Git workflows
+• Resolve common merge conflicts
+• Collaborate on shared repositories using GitHub",Industry Mentor,18/07/2026,Saturday,,,,
+"Module 1: Programming, DSA & AI-Powered Foundations",13,7,7.1,GenAI Coding Lab I,"Use AI tools to explain DSA concepts, generate pseudocode, and build problem-solving intuition.","• AI-Assisted Problem Solving – using AI tools (GPT/Claude) to understand DSA concepts
+• Pseudocode Generation – generating pseudocode for algorithms before coding
+• Visual Execution – visualizing step-by-step algorithm execution with AI
+• Debugging & Intuition – debugging solutions and building problem-solving intuition","• Use AI tools to explain and clarify DSA concepts
+• Generate pseudocode for algorithms before implementation
+• Visualize step-by-step algorithm execution with AI assistance
+• Debug and analyze solutions while building problem-solving intuition",Industry Mentor,23/07/2026,Thursday,,,,
+,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,
+Module 2: Web Foundations & Dedicated Frontend,14,8,8.1,HTML Structure and Semantic Markup,"Build structured web pages using semantic HTML, forms, and input elements.","• Web Development Basics – introduction to web development and the frontend role
+• HTML Structure – document structure, semantic tags, headings, paragraphs, links, and images
+• Forms & Inputs – forms, input types, labels, and buttons
+• Semantic HTML – writing accessible, meaningful page structure","• Explain the frontend developer's role in web applications
+• Build well-structured HTML pages with semantic tags
+• Create forms with common input elements
+• Apply semantic HTML best practices for accessibility",Industry Mentor,25/07/2026,Saturday,,28/07/2026,Tuesday,
+Module 2: Web Foundations & Dedicated Frontend,15,8,8.2,"CSS Fundamentals – Selectors, Properties & Box Model","Apply CSS selectors, properties, and the box model to style HTML pages.","• CSS Introduction – linking CSS to HTML, inline, internal, and external stylesheets
+• Selectors & Properties – element, class, id selectors; color, typography, backgrounds, borders
+• Box Model – margin, padding, border, and content area
+• Hands-on Styling – styling pages built in Session 14","• Link and apply CSS to HTML documents
+• Use element, class, and id selectors with core properties
+• Explain and apply the CSS box model
+• Style a complete HTML page with CSS",Industry Mentor,30/07/2026,Thursday,,29/07/2026,Wednesday,
+Module 2: Web Foundations & Dedicated Frontend,16,9,9.1,CSS Layout – Flexbox and Grid,Design responsive page layouts using CSS Flexbox and Grid.,"• Flexbox – flex container, flex items, direction, alignment, justify-content, align-items
+• CSS Grid – grid template, rows, columns, gaps, and placement
+• Responsive Sections – building header, main, and footer layouts
+• Practice – layout exercises combining Flexbox and Grid","• Build layouts using Flexbox for one-dimensional alignment
+• Create grid-based layouts for two-dimensional page structure
+• Combine Flexbox and Grid in a responsive page
+• Complete guided layout exercises",Industry Mentor,01/08/2026,Saturday,,04/08/2026,Tuesday,
+Module 2: Web Foundations & Dedicated Frontend,17,9,9.2,JavaScript Fundamentals I,"Learn JavaScript fundamentals including variables, data types, control flow, and data structures.","• JavaScript Setup – attaching JS to HTML, console.log, debugging in browser
+• Variables & Data Types – let, const, var and primitive types
+• Control Flow – operators, conditional statements, and loops
+• Data Structures – strings, arrays, and objects with practical examples","• Attach JavaScript to HTML and debug using the browser console
+• Declare variables and use core data types
+• Write conditional logic and loops in JavaScript
+• Manipulate strings, arrays, and objects in basic programs",Industry Mentor,06/08/2026,Thursday,,05/08/2026,Wednesday,
+Module 2: Web Foundations & Dedicated Frontend,18,10,10.1,JavaScript Fundamentals II – Functions & Scope,"Write reusable JavaScript functions with parameters, return values, arrow functions, and scope.","• Functions – function declarations and function expressions
+• Parameters & Return Values – passing arguments and returning results
+• Arrow Functions – syntax, usage, and comparison with regular functions
+• Scope & Practice – global and block scope with function-based exercises","• Write functions using declarations and expressions
+• Pass parameters and return values from functions
+• Use arrow functions appropriately
+• Apply scope rules in function-based programs",Industry Mentor,08/08/2026,Saturday,,11/08/2026,Tuesday,
+Module 2: Web Foundations & Dedicated Frontend,19,10,10.2,DOM Basics & Event Handling,Access DOM elements and handle user interactions with event listeners and DOM manipulation.,"• DOM Fundamentals – document object, getElementById, querySelector, querySelectorAll
+• DOM Traversal – reading element content and traversing the DOM tree
+• Event Handling – addEventListener, click, input, and submit events
+• DOM Manipulation – creating, modifying, removing elements; basic form validation","• Select and traverse DOM elements using standard APIs
+• Read and update element content dynamically
+• Attach event listeners for user interactions
+• Build interactive features with basic DOM manipulation and form validation",Industry Mentor,13/08/2026,Thursday,,12/08/2026,Wednesday,
+Module 2: Web Foundations & Dedicated Frontend,20,11,11.1,Advanced DOM Manipulation,"Dynamically create, update, and style DOM elements for richer interactive UI components.","• Dynamic Elements – creating, removing, and replacing elements at runtime
+• Style Manipulation – modifying inline styles and CSS classes via JavaScript
+• DOM Updates – traversing and updating elements dynamically
+• Practice – building interactive UI components (tabs, modals, dynamic lists)","• Create and remove DOM elements dynamically
+• Modify styles and toggle CSS classes with JavaScript
+• Traverse and update the DOM for interactive UIs
+• Build guided interactive components using advanced DOM techniques",Industry Mentor,20/08/2026,Thursday,,18/08/2026,Tuesday,
+,,,,,,,,,,,,,,
+,,,,Module 1 Evaluation,,,,,22/08/2026,Saturday,,22/08/2026,Saturday,
+,,,,,,,,,,,,,,
+Module 2: Web Foundations & Dedicated Frontend,,,,Masterclass: Sorting Algorithms – Insertion Sort,Implement Insertion Sort and apply it to solve beginner sorting-based DSA problems.,Insertion Sort; Array Traversal; Element Shifting; Sorted Subarrays,"• Understand how Insertion Sort builds a sorted portion of a list one element at a time
+• Implement Insertion Sort using loops, comparisons, and element shifting
+• Trace each iteration to identify the current element and its correct position
+• Apply Insertion Sort to solve basic sorting and ordered-list problems",Prof,24/08/2026,Monday,,24/08/2026,Monday,
+Module 2: Web Foundations & Dedicated Frontend,21,11,11.2,Asynchronous JavaScript,"Understand asynchronous JavaScript with callbacks, setTimeout, and setInterval for delayed execution.","• Sync vs Async – understanding synchronous vs asynchronous execution
+• Callbacks – introduction to callback functions
+• Timers – setTimeout and setInterval for delayed and repeated execution
+• Practice – exercises combining async behavior with DOM manipulation","• Explain the difference between synchronous and asynchronous execution
+• Use callbacks for async workflows
+• Apply setTimeout and setInterval in interactive examples
+• Combine async JavaScript with DOM updates",Industry Mentor,27/08/2026,Thursday,,19/08/2026,Wednesday,
+Module 2: Web Foundations & Dedicated Frontend,22,12,12.1,"Client-Server Model, HTTP & JSON","Understand client-server architecture, HTTP fundamentals, and JSON data handling.","• Web Architecture – how the web works, client-server model, request-response cycle
+• HTTP Fundamentals – request/response structure, methods (GET, POST, PUT, DELETE), status codes
+• JSON – JSON syntax, parsing, and using JSON in JavaScript
+• Hands-on – tracing what happens when a user visits a URL","• Explain client-server architecture and the request-response cycle
+• Identify common HTTP methods and status codes
+• Parse and use JSON data in web applications
+• Trace the flow of a web request from browser to server",Industry Mentor,29/08/2026,Saturday,,25/08/2026,Tuesday,
+Module 2: Web Foundations & Dedicated Frontend,23,12,12.2,Promises Basics & Fetch API – GET Requests,Learn Promise basics and use the Fetch API to make GET requests and handle JSON responses.,"• Promises Basics – what Promises are, pending/fulfilled/rejected states, .then() and .catch() introduction
+• Fetch API – introduction to fetch() for browser-based HTTP GET requests
+• Response Handling – reading responses, parsing JSON, basic error handling
+• Hands-on – fetching data from a sample API endpoint and displaying results","• Explain what a Promise is and why it is used for async operations
+• Write basic Promise chains using .then() and .catch()
+• Make GET requests using the Fetch API
+• Parse JSON responses and handle basic fetch errors",Industry Mentor,03/09/2026,Thursday,,26/08/2026,Wednesday,
+Module 2: Web Foundations & Dedicated Frontend,24,13,13.1,GenAI Coding Lab II,"Leverage AI to generate HTML/CSS/JS layouts, debug client-side code, and refine frontend integrations.","• AI Layout Generation – using AI tools (GPT/Claude) to generate HTML and CSS layouts
+• AI JavaScript Assistance – creating basic JavaScript functionality with AI
+• API Integration Debugging – debugging client-side Fetch/API interaction with AI
+• Code Refinement – improving and refining AI-generated frontend code","• Generate HTML/CSS layouts using AI coding assistants
+• Create basic JavaScript functionality with AI support
+• Debug client-side API integration issues using AI
+• Review and refine AI-generated frontend code for quality",Industry Mentor,05/09/2026,Saturday,,01/09/2026,Tuesday,
+Module 2 End Module Evaluation,,,,,,,,,,,,,,
+"Module 3: Core Backend, Data & Architecture",25,14,14.1,Introduction to Backend Development & FastAPI Setup,Set up a backend project with venv and build a first FastAPI application with a basic GET endpoint.,"• Backend Fundamentals – role of backend development in the stack
+• Project Setup – venv, pip install, project structure, environment variables
+• FastAPI Introduction – creating a FastAPI app and running the dev server
+• First GET Endpoint – writing and testing a basic GET route","• Explain the backend developer's role in a web application
+• Create and activate a virtual environment for a backend project
+• Build a minimal FastAPI application
+• Implement and test a basic GET endpoint",Industry Mentor,10/09/2026,Thursday,,02/09/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",26,14,14.2,FastAPI Deep Dive – Request/Response & Full CRUD,Implement full CRUD endpoints in FastAPI and test request/response handling using Postman.,"• Request & Response – understanding request and response objects in FastAPI
+• CRUD Endpoints – implementing GET, POST, PUT, DELETE routes
+• Request Body – accepting and returning JSON data
+• Postman Testing – introduction to Postman and testing all CRUD routes","• Explain how FastAPI handles requests and responses
+• Implement all four CRUD HTTP methods in FastAPI
+• Send JSON request bodies and return structured responses
+• Test every CRUD route using Postman",Industry Mentor,12/09/2026,Saturday,,08/09/2026,Tuesday,
+"Module 3: Core Backend, Data & Architecture",27,15,15.1,"FastAPI Dynamic Routes, Parameters & Swagger Docs",Build dynamic FastAPI routes with path and query parameters and explore Swagger documentation.,"• Path Parameters – dynamic route segments and typed path params
+• Query Parameters – optional and required query params with defaults
+• Swagger UI – exploring auto-generated API docs at /docs
+• Hands-on – building parameterized routes and testing via Swagger","• Create dynamic routes using path parameters
+• Accept and validate query parameters
+• Navigate and test APIs using Swagger UI
+• Understand how FastAPI auto-generates OpenAPI documentation",Industry Mentor,17/09/2026,Thursday,,09/09/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",28,15,13.1,Data Validation with Pydantic – Basics,Define basic Pydantic schemas for request and response validation in FastAPI endpoints.,"• Pydantic Introduction – role of Pydantic in FastAPI validation
+• Schema Definition – creating BaseModel classes with type hints
+• Request Validation – validating incoming request bodies
+• Response Models – defining and returning validated response schemas","• Create Pydantic models with basic field types
+• Apply request body validation to FastAPI endpoints
+• Define response models for consistent API output
+• Read and handle basic validation error responses",Industry Mentor,19/09/2026,Saturday,,15/09/2026,Tuesday,
+"Module 3: Core Backend, Data & Architecture",,,,,,,,Prof,21/09/2026,Monday,,16/09/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",29,16,13.2,Advanced FastAPI – Dependency Injection & Middleware,Build modular FastAPI applications using dependency injection and middleware.,"• Dependency Injection – introduction and creating reusable dependencies
+• Using Dependencies – injecting dependencies into route functions
+• Middleware Basics – what middleware is and when to use it
+• Hands-on – building a simple middleware and shared dependency","• Explain dependency injection and its benefits in FastAPI
+• Create and inject reusable dependencies
+• Implement basic middleware for request/response processing
+• Apply dependencies across multiple API endpoints",Industry Mentor,24/09/2026,Thursday,,22/09/2026,Tuesday,
+"Module 3: Core Backend, Data & Architecture",30,16,14.1,"Advanced FastAPI – CORS, Background Tasks & File Handling","Configure CORS, run background tasks, and handle file upload/download in FastAPI.","• CORS – understanding cross-origin requests and enabling CORS in FastAPI
+• Background Tasks – running tasks after sending a response
+• File Upload – accepting file uploads via API endpoints
+• File Download – returning files as API responses","• Configure CORS middleware for frontend-backend communication
+• Add background tasks to FastAPI endpoints
+• Implement a basic file upload endpoint
+• Return file download responses from an API",Industry Mentor,26/09/2026,Saturday,,23/09/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",31,17,14.2,Database Fundamentals & SQL (Part I),"Understand relational databases, design tables, and write SELECT and INSERT SQL queries.","• Relational Databases – introduction and role in backend systems
+• Table Design – CREATE TABLE, primary keys, and constraints
+• SELECT Queries – retrieving data from tables
+• INSERT Operations – adding records to tables","• Explain why relational databases are used in backend apps
+• Design tables with appropriate keys and constraints
+• Write SELECT queries to retrieve data
+• Write INSERT statements to add new records",Industry Mentor,01/10/2026,Thursday,,29/09/2026,Tuesday,
+"Module 3: Core Backend, Data & Architecture",32,17,15.1,Database Fundamentals & SQL (Part II),"Write UPDATE and DELETE queries, filter data with WHERE, and define table relationships.","• UPDATE & DELETE – modifying and removing records
+• WHERE Clause – filtering data with conditions
+• Relationships – one-to-many and many-to-many table relationships
+• Practice – writing UPDATE, DELETE, and filtered SELECT queries","• Write UPDATE statements to modify existing records
+• Write DELETE statements with WHERE conditions
+• Explain one-to-many and many-to-many relationships
+• Combine WHERE clause with CRUD operations",Industry Mentor,03/10/2026,Saturday,,30/09/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",33,18,15.2,Advanced SQL – JOINs,Retrieve connected data from multiple tables using INNER JOIN and LEFT JOIN queries.,"• JOINs Introduction – why joins are needed with related tables
+• INNER JOIN – retrieving matching records across tables
+• LEFT JOIN – including unmatched records from the left table
+• Practice – writing join queries on related sample tables","• Explain the purpose of SQL joins
+• Write INNER JOIN queries across related tables
+• Write LEFT JOIN queries for partial matches
+• Combine data from multiple tables for analysis",Industry Mentor,08/10/2026,Thursday,,06/10/2026,Tuesday,
+"Module 3: Core Backend, Data & Architecture",34,18,16.1,Advanced SQL – Aggregate Functions & GROUP BY,"Summarize data using aggregate functions, GROUP BY, and HAVING clause in SQL.","• Aggregate Functions – COUNT, SUM, AVG, MIN, MAX with examples
+• GROUP BY – grouping records for summary analysis
+• HAVING – filtering results after grouping
+• Practice – writing aggregation queries on sample datasets","• Apply aggregate functions to summarize table data
+• Group data with GROUP BY for category-wise analysis
+• Filter grouped results using HAVING
+• Write practical aggregation queries for data analysis",Industry Mentor,10/10/2026,Saturday,,07/10/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",35,19,17.1,SQLAlchemy ORM Fundamentals,Define SQLAlchemy models and perform CRUD operations with basic ORM relationships.,"• ORM Introduction – what an ORM is and why it is used with FastAPI
+• Model Definition – defining SQLAlchemy models mapped to tables
+• ORM Queries – SELECT, INSERT, UPDATE, DELETE using SQLAlchemy
+• Relationships – basic one-to-many relationship handling in ORM","• Explain ORM benefits over raw SQL for API development
+• Define SQLAlchemy models for database tables
+• Perform CRUD operations using SQLAlchemy ORM
+• Set up basic relationships between ORM models",Industry Mentor,15/10/2026,Thursday,,13/10/2026,Tuesday,
+"Module 3: Core Backend, Data & Architecture",36,19,17.2,Hands-on Backend – Mini End-to-End Application,"Build a mini end-to-end backend application connecting FastAPI, ORM, and a database.","• Architecture Overview – connecting FastAPI routes, ORM models, and database
+• Full CRUD Build – creating endpoints with persistent database storage
+• Database Integration – wiring SQLAlchemy session and model operations
+• Instructor Demo – end-to-end walkthrough of a mini backend application","• Explain the full backend stack from API to database
+• Build CRUD endpoints connected to a real database via ORM
+• Integrate SQLAlchemy models with FastAPI route handlers
+• Follow an instructor-led demo of a complete mini application",Industry Mentor,17/10/2026,Saturday,,14/10/2026,Wednesday,
+"Module 3: Core Backend, Data & Architecture",37,20,18.1,GenAI Coding Lab III,"Use Claude AI to generate backend code, ORM queries, API examples, and documentation.","• AI-Assisted Workflows – using Claude AI for backend development tasks
+• Code Generation – generating FastAPI endpoint skeletons and ORM queries
+• API Examples – producing sample requests and responses with AI
+• Documentation – generating and improving API docs with AI assistance","• Use AI to draft FastAPI endpoint skeletons
+• Generate SQLAlchemy ORM queries with AI assistance
+• Produce example API request/response pairs
+• Improve API documentation using AI tools",Industry Mentor,22/10/2026,Thursday,,20/10/2026,Tuesday,
+Module 3 End Module Evaluation,,,,,,,,,,,,,,
+Module 4: Applied AI Features & Capstone,38,21,19.1,Introduction to Large Language Models,Understand how Large Language Models work including transformers and tokenization.,"• LLM Fundamentals – introduction to large language models
+• Transformers – architecture and key components overview
+• Tokenization – how text is tokenized and processed by LLMs
+• Hands-on – exploring how LLMs receive and generate text","• Explain what a Large Language Model is
+• Describe transformer architecture at a high level
+• Explain the role of tokenization in text processing
+• Understand how LLMs process and generate text",Industry Mentor,24/10/2026,Saturday,,21/10/2026,Wednesday,
+Module 4: Applied AI Features & Capstone,,,,,,,,Prof,26/10/2026,Monday,,29/09/2026,Tuesday,
+Module 4: Applied AI Features & Capstone,39,21,19.2,Prompt Engineering,"Design effective prompts using structure, techniques, role prompting, and structured output patterns.","• Prompt Structure – components of an effective prompt
+• Prompting Techniques – zero-shot, few-shot, and chain-of-thought
+• Role Prompting – using personas to shape model responses
+• Structured Prompting – structured output prompting and advanced patterns","• Write well-structured prompts with clear instructions
+• Apply zero-shot, few-shot, and chain-of-thought techniques
+• Use role-based prompting for targeted responses
+• Apply structured output prompting patterns for reliable responses",Industry Mentor,29/10/2026,Thursday,,30/09/2026,Wednesday,
+Module 4: Applied AI Features & Capstone,40,22,20.1,AI API Integration,"Integrate LLM APIs into FastAPI with authentication, chat APIs, streaming, and rate limit handling.","• LLM APIs – introduction to providers (OpenAI, Google, Anthropic)
+• Authentication – API key setup and secure usage
+• Chat APIs – system/user/assistant roles and message structure
+• Streaming & Rate Limits – streaming responses and rate limit handling","• Explain the LLM API provider ecosystem
+• Set up authenticated API requests securely
+• Use chat-based APIs with role-based messaging
+• Handle streaming responses and rate limits in API integration",Industry Mentor,31/10/2026,Saturday,,06/10/2026,Tuesday,
+Module 4: Applied AI Features & Capstone,41,22,20.2,Advanced AI Integration,"Implement structured outputs, vision APIs, embeddings, and multimodal AI in backend applications.","• Structured Outputs – generating schema-validated responses
+• Vision APIs – image understanding capabilities
+• Embeddings – vector generation for semantic search
+• Multimodal Integration – combining text, image, and vector features","• Generate structured outputs using response schemas
+• Use vision APIs for image understanding tasks
+• Create embeddings for semantic search use cases
+• Integrate multimodal AI features in backend apps",Industry Mentor,05/11/2026,Thursday,,07/10/2026,Wednesday,
+Module 4: Applied AI Features & Capstone,42,23,21.1,Claude Code for AI Development,"Install and use Claude Code for iterative development, debugging, and effective prompting.","• Installation & Setup – installing and configuring Claude Code
+• CLI Basics – command-line interface and project initialization
+• Development Workflow – iterative development with Claude Code
+• Debugging & Best Practices – error resolution and effective prompting","• Install and configure Claude Code
+• Initialize projects and use CLI workflows
+• Develop iteratively using Claude Code assistance
+• Debug issues and apply prompting best practices",Industry Mentor,07/11/2026,Saturday,,13/10/2026,Tuesday,
+Module 4: Applied AI Features & Capstone,43,23,21.2,Introduction to the Capstone Project,"Design capstone project architecture, select tech stack, and define the database schema.","• Architecture Design – low-level and high-level design for capstone
+• Tech Stack – selecting frontend, backend, database, and AI tools
+• Database Schema – designing tables and relationships for capstone entities
+• Planning – outlining core features and project scope","• Create LLD and HLD for the capstone project
+• Select and justify the technology stack
+• Design a database schema for core entities
+• Define project scope and core features",Industry Mentor,12/11/2026,Thursday,,14/10/2026,Wednesday,
+Module 4: Applied AI Features & Capstone,44,24,22.1,Capstone Project Planning – API Endpoints & Security,"Plan capstone API endpoints, request/response designs, authentication, and security.","• API Endpoint Planning – defining routes, methods, and payloads
+• Request/Response Design – documenting API contracts
+• Authentication – planning auth flows for the capstone
+• Security Basics – key security considerations for the backend","• Plan and document capstone API endpoints
+• Design request/response structures for each endpoint
+• Define authentication approach for the capstone
+• Identify security considerations before building",Industry Mentor,14/11/2026,Saturday,,20/10/2026,Tuesday,
+Module 4: Applied AI Features & Capstone,45,24,22.2,Capstone Project I – Frontend Development,Build capstone frontend features and deliver client-side user-facing functionality.,"• Frontend Implementation – building capstone UI pages and components
+• UI Integration – connecting frontend with planned user flows
+• Client-side Features – implementing interactive capstone functionality
+• Mentor Support – guided development with checkpoint reviews","• Build capstone frontend pages and components
+• Implement core user-facing features
+• Integrate client-side logic for planned user flows
+• Complete frontend milestone with mentor review",Industry Mentor,19/11/2026,Thursday,,21/10/2026,Wednesday,
+Module 4: Applied AI Features & Capstone,46,25,23.1,Capstone Project II – Backend Development,Implement capstone backend APIs and server-side logic with database-backed CRUD.,"• Backend Implementation – building FastAPI endpoints for capstone
+• Database Integration – ORM models and persistent storage
+• Server-side Logic – implementing core business logic
+• Mentor Support – guided backend development with reviews","• Build capstone backend API endpoints
+• Connect endpoints to database via ORM
+• Implement server-side business logic
+• Complete backend milestone with mentor review",Industry Mentor,21/11/2026,Saturday,,27/10/2026,Tuesday,
+Module 4: Applied AI Features & Capstone,47,25,23.2,Capstone Project III – Agents & Full-Stack Integration,"Integrate frontend, backend, and AI agent features into a complete full-stack capstone application.","• Full-Stack Integration – connecting frontend, backend, and database
+• AI Agent Integration – adding AI-powered features to capstone
+• End-to-End Workflows – completing user flows across all layers
+• Mentor Support – integration troubleshooting and reviews","• Integrate frontend with backend APIs
+• Add AI agent features to the capstone application
+• Complete end-to-end user workflows
+• Resolve integration issues across the full stack",Industry Mentor,26/11/2026,Thursday,,28/10/2026,Wednesday,
+Module 4: Applied AI Features & Capstone,48,26,24.1,Capstone Project IV – Documentation & Deployment,Complete capstone documentation and deploy the application for final submission.,"• Documentation – writing API docs, README, and setup guides
+• Deployment – deploying frontend and backend application
+• Final Review – demo preparation and submission checklist
+• Mentor Support – final review and feedback","• Write complete project documentation
+• Deploy the capstone application to a hosting environment
+• Prepare demo and final submission materials
+• Complete capstone delivery milestone",Industry Mentor,28/11/2026,Saturday,,03/11/2026,Tuesday,
