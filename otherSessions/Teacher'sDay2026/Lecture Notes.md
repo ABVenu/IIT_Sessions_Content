@@ -752,7 +752,7 @@ As you move through higher classes, you will see more tools with the word AI on 
 | **E-Eye** | Railway cameras that recognise an elephant and can warn the driver |
 | **NotebookLM** | Google study tool that turns *your* notes into slides or a study guide |
 | **Google Stitch** | Google tool that draws a first poster or layout from a short description |
-| **Published web app** | A small page the mentor creates and puts on the internet (**Vercel**) so anyone with the link can open it |
+| **Lovable / Bolt** | Websites that turn a written prompt into a small app — used here for **My School To-Do** |
 | **Scan helper** | Software that marks a spot on a hospital picture — for example in breast-cancer screening — for a doctor to check |
 | **Deepfake** | A video or audio that looks real but was built by software |
 | **Check rule** | Explain or practise with AI, then confirm with the textbook and the teacher |
