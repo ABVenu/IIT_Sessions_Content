@@ -1,5 +1,7 @@
 # Vibe Coding with Claude — Chat, Cowork, and Code
 
+#### [Instructor Slides](https://coding-platform.s3.amazonaws.com/dev/lms/tickets/d78eab75-d754-4159-8695-3994ad7190ba/bXLXBSmaFMGime2o.zip)
+
 In **previous** work you built **agentic graphs** (nodes, edges, shared state), **RAG** over your own files, **golden evals**, and **token-cost** checks. Those labs answered: *what ran, in which order, and what did it cost?*
 
 This session uses the same ideas inside a **product ecosystem**. You will treat **vibe coding** as a working style, then walk **Claude Chat**, **Claude Cowork**, and **Claude Code**. The last stretch is **cost engineering** — which model to call, when to cache, and how to read unit economics.
