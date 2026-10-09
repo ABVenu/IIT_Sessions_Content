@@ -1,0 +1,442 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A reading log starts like this:
+
+```jsx
+function ReadingNote() {
+  const [pages, setPages] = useState(0);
+
+  return (
+    <div>
+      <p>Pages read: {pages}</p>
+      <button onClick={() => setPages(3)}>Save</button>
+    </div>
+  );
+}
+```
+
+The screen first shows `Pages read: 0`. Meera clicks **Save** once. What does the paragraph show after that click?",,,,,,3,,`Pages read:`,`Pages read: 03`,`Pages read: 3`,`Pages read: 0`,,,6abe1a3782b6fa5c2340021c,0,markdown,"C is correct because `setPages(3)` replaces the stored number with `3`. React renders the component again, and `{pages}` prints that new number.
+
+A is incorrect because the state is the number `3`, so the paragraph is not left blank. B is incorrect because the setter replaces `0`; it does not glue `0` and `3` into `03`. D is incorrect because that is the text from the first render, before **Save**."
+mcsc,markdown,"A mess form keeps the dish name in state:
+
+```jsx
+const [dish, setDish] = useState("""");
+
+<input
+  value={dish}
+  onChange={(event) => setDish(event.target.value)}
+/>
+```
+
+The box starts empty. Riya types the letter `P`. What is true right after that keystroke?",,,,,,2,,The box stays empty until the browser tab is refreshed,"`dish` becomes `""P""`, the component renders again, and the box shows `P`","`dish` stays `""""` because a text box can only change a prop",`onChange` is skipped whenever `value` is already written on the input,,,6abe1a3782b6fa5c2340021c,0,markdown,"B is correct because this input is controlled. The keystroke runs `onChange`, `setDish` stores `""P""`, and the next render puts `value={dish}` back into the box.
+
+A is incorrect because the update is applied on the next render, without a refresh. C is incorrect because `setDish` changes this component’s state; the snippet does not read a prop. D is incorrect because `onChange` is what writes the new text into state. With both `value` and `onChange`, typing works."
+mcsc,markdown,"A library card uses this state and markup:
+
+```jsx
+const [isLate, setIsLate] = useState(false);
+
+return (
+  <div>
+    <p>Card status</p>
+    {isLate && <p>Return the book today</p>}
+  </div>
+);
+```
+
+What is on the screen the first time this component renders?",,,,,,4,,`Card status` and `Return the book today`,`Return the book today` only,"No text, because `useState(false)` stops the whole component",`Card status` only,,,6abe1a3782b6fa5c2340021c,0,markdown,"D is correct because `isLate` starts as `false`. `false && <p>Return the book today</p>` adds nothing. The first paragraph does not depend on `isLate`, so `Card status` still shows.
+
+A is incorrect because the warning paragraph is rendered only when `isLate` is true. B is incorrect because `Card status` is outside the `&&` check. C is incorrect because `false` only makes that one `&&` expression render nothing. The component still returns the rest of the JSX."
+mcsc,markdown,"A canteen screen starts like this:
+
+```jsx
+const [paid, setPaid] = useState(false);
+
+return <p>{paid ? ""Receipt ready"" : ""Waiting for payment""}</p>;
+```
+
+What text is visible at the start?",,,,,,1,,`Waiting for payment`,`paid`,`Receipt ready`,`Receipt ready` followed by `Waiting for payment`,,,6abe1a3782b6fa5c2340021c,0,markdown,"A is correct because `paid` starts as `false`, so the ternary chooses the branch after the colon.
+
+B is incorrect because the screen prints one of the two strings, not the variable name. C is incorrect because `Receipt ready` is the branch used when `paid` is `true`. D is incorrect because a ternary renders one branch, not both."
+mcsc,markdown,"Kabir writes a seat counter without `useState`:
+
+```jsx
+function SeatCounter() {
+  let seats = 2;
+
+  return (
+    <div>
+      <p>Seats left: {seats}</p>
+      <button
+        onClick={() => {
+          seats = seats - 1;
+        }}
+      >
+        Book one
+      </button>
+    </div>
+  );
+}
+```
+
+He clicks **Book one**. The paragraph still says `Seats left: 2`. Why?",,,,,,4,,"`seats - 1` is invalid JavaScript, so the click is cancelled before it runs",Every button click restores variables to the values written at the top of the function,React refreshes a number on screen only when that number was created with `useState(0)`,Assigning a new value to a plain `let` does not ask React to render the component again,,,6abe1a3782b6fa5c2340021c,0.5,markdown,"D is correct because `seats` is an ordinary variable. The click changes it inside that function, but React was not given a state update, so it does not render the component again. The paragraph keeps the `2` from the last render.
+
+A is incorrect because `seats - 1` is valid JavaScript. The line `seats = seats - 1` runs; it just does not refresh the screen. B is incorrect because a click does not automatically replay `let seats = 2`. The screen is unchanged because there is no re-render. C is incorrect because `useState` can start at any value, including `2`. The missing piece here is a state setter, not a starting value of `0`."
+mcsc,markdown,"A bus-pass screen looks like this:
+
+```jsx
+function BusPass() {
+  const [name, setName] = useState("""");
+  const [showPass, setShowPass] = useState(false);
+
+  return (
+    <div>
+      <input
+        value={name}
+        onChange={(event) => setName(event.target.value)}
+      />
+      <button onClick={() => setShowPass(true)}>Show pass</button>
+      {showPass ? <p>Pass for {name}</p> : <p>Pass is hidden</p>}
+    </div>
+  );
+}
+```
+
+Ananya types `Ananya` in the box, then clicks **Show pass**. What does the paragraph say?",,,,,,2,,`Pass is hidden`,`Pass for Ananya`,`Pass for`,`Pass for name`,,,6abe1a3782b6fa5c2340021c,0.5,markdown,"B is correct because each typed letter is stored with `setName`, so `name` is `""Ananya""`. The click sets `showPass` to `true`, the component renders again, and the ternary chooses `Pass for {name}`.
+
+A is incorrect because that sentence is the `false` branch, and `showPass` is now `true`. C is incorrect because `name` is not empty after the typing. D is incorrect because `{name}` prints the stored text, not the word `name`."
+mcmc,markdown,"A city box should display the text stored in state, and typing in the box should update that state. Which snippets do both?",,,,,,,,"```jsx
+const [city, setCity] = useState("""");
+<input value={city} onChange={(event) => setCity(event.target.value)} />
+```","```jsx
+function CityField() {
+  const [city, setCity] = useState("""");
+  return (
+    <div>
+      <p>City on file: {city}</p>
+      <input onChange={(event) => setCity(event.target.value)} />
+    </div>
+  );
+}
+```","```jsx
+const [city, setCity] = useState(""Pune"");
+<input value={city} onChange={(event) => setCity(event.target.value)} />
+```","```jsx
+function CityField() {
+  const [city, setCity] = useState(""Pune"");
+  return (
+    <div>
+      <p>{city}</p>
+      <input value=""Pune"" onChange={(event) => setCity(event.target.value)} />
+    </div>
+  );
+}
+```","```jsx
+const [city, setCity] = useState("""");
+<input value={city} />
+```","1, 3",6abe1a3782b6fa5c2340021c,0.5,markdown,"A is correct because `value={city}` shows the state and `onChange` writes each new string with `setCity`. The box starts empty. After a keystroke, the next render shows the stored text.
+
+C is correct for the same reason. The only difference is the starting text `""Pune""`. Typing still replaces `city`, and the next render shows the new text in the box.
+
+B is incorrect because the input has no `value`. The paragraph can show `city`, but the box itself is not displaying state. The browser keeps whatever was typed in the box.
+
+D is incorrect because the box is locked to the fixed string `""Pune""`. `setCity` updates state, and the paragraph can change, but the box does not show `city`.
+
+E is incorrect because the box shows `city`, but nothing updates `city` when the user types. The box stays `""""`."
+mcmc,markdown,"A pantry label uses this component:
+
+```jsx
+function Pantry() {
+  const [item, setItem] = useState(""Rice"");
+
+  function switchItem() {
+    setItem(""Dal"");
+    console.log(item);
+  }
+
+  return (
+    <div>
+      <p>{item}</p>
+      <button onClick={switchItem}>Switch</button>
+    </div>
+  );
+}
+```
+
+The screen first shows `Rice`. Which statements are true the first time **Switch** is clicked?",,,,,,,,"After React renders again, the paragraph shows `Dal`",`console.log(item)` prints `Rice`,`console.log(item)` prints `Dal` before the paragraph changes,"`useState(""Rice"")` runs again on the click and forces the paragraph to stay `Rice`",The paragraph can change because `setItem` causes the component to render again,"1, 2, 5",6abe1a3782b6fa5c2340021c,0.5,markdown,"A is correct because `setItem(""Dal"")` stores `Dal`. On the next render, `{item}` is `Dal`.
+
+B is correct because `item` inside `switchItem` is still the value from the current render, which is `""Rice""`. The log runs before the next render.
+
+E is correct because calling the setter is what asks React to render this component again with the stored value.
+
+C is incorrect because the log reads the current `item`. It does not read the value that will appear on the next render. D is incorrect because the argument `""Rice""` is used as the initial state on the first render only. A later click does not replay that initial value."
+mcmc,markdown,"A clinic desk uses two pieces of state:
+
+```jsx
+function TokenDesk() {
+  const [token, setToken] = useState(1);
+  const [patient, setPatient] = useState("""");
+
+  return (
+    <div>
+      <p>Now serving: {token}</p>
+      <input
+        value={patient}
+        onChange={(event) => setPatient(event.target.value)}
+      />
+      <button onClick={() => setToken(token + 1)}>Next</button>
+      {patient.length > 0 ? (
+        <p>Calling {patient}</p>
+      ) : (
+        <p>Waiting for a name</p>
+      )}
+      {token > 1 && <p>Queue has moved</p>}
+    </div>
+  );
+}
+```
+
+The page has just loaded. The clerk types `Isha`, then clicks **Next** once. Which statements are true after that click?",,,,,,,,`Now serving: 2` is on the screen,`Calling Isha` is on the screen,`Calling Isha` and `Waiting for a name` are both on the screen,`Queue has moved` is on the screen,The input is empty because **Next** clears `patient`,"1, 2, 4",6abe1a3782b6fa5c2340021c,1,markdown,"A is correct because `token` starts at `1` and one click runs `setToken(token + 1)`, so the next render shows `2`.
+
+B is correct because the controlled input stored `Isha` in `patient`. `patient.length > 0` is true, so the ternary renders `Calling Isha`.
+
+D is correct because `token` is `2`, and `2 > 1` makes the `&&` branch render `Queue has moved`.
+
+C is incorrect because the ternary renders one branch. `Waiting for a name` was the empty-name branch, and the name is no longer empty. E is incorrect because **Next** only calls `setToken`. `patient` stays `""Isha""`, so the input still shows that name."
+mcmc,markdown,"Each version below is a separate component. The paragraph starts as `Draft`. The user clicks **Keep** once.
+
+Which versions show the text `Saved` in the paragraph after that click, without throwing an error?",,,,,,,,"```jsx
+function NoteA() {
+  let note = ""Draft"";
+  return (
+    <div>
+      <p>{note}</p>
+      <button onClick={() => { note = ""Saved""; }}>Keep</button>
+    </div>
+  );
+}
+```","```jsx
+function NoteB() {
+  const [note, setNote] = useState(""Draft"");
+  return (
+    <div>
+      <p>{note}</p>
+      <button onClick={() => setNote(""Saved"")}>Keep</button>
+    </div>
+  );
+}
+```","```jsx
+function NoteC() {
+  const [note, setNote] = useState(""Draft"");
+  return (
+    <div>
+      <p>{note}</p>
+      <button onClick={() => { note = ""Saved""; }}>Keep</button>
+    </div>
+  );
+}
+```","```jsx
+function NoteD() {
+  const [note, setNote] = useState(""Draft"");
+  return (
+    <div>
+      <p>Draft</p>
+      <button onClick={() => setNote(""Saved"")}>Keep</button>
+    </div>
+  );
+}
+```","```jsx
+function NoteE() {
+  const [note, setNote] = useState(""Draft"");
+  return (
+    <div>
+      <p>{note === ""Saved"" ? ""Saved"" : ""Draft""}</p>
+      <button onClick={() => setNote(""Saved"")}>Keep</button>
+      {note === ""Saved"" && <p>Note is stored</p>}
+    </div>
+  );
+}
+```","2, 5",6abe1a3782b6fa5c2340021c,1,markdown,"B is correct because `setNote(""Saved"")` stores the new text and React renders again. The paragraph reads `{note}`, so it shows `Saved`.
+
+E is correct because the same setter runs. On the next render `note === ""Saved""` is true, so the ternary prints `Saved`. The extra `&&` line also appears, and the first paragraph still shows `Saved`.
+
+A is incorrect because `note` is a plain `let`. The click does not update state, so React does not render again, and the paragraph stays `Draft`.
+
+C is incorrect because `note` from `useState` is a `const`. `note = ""Saved""` throws a TypeError. The setter is never called, so the paragraph does not change to `Saved`.
+
+D is incorrect because the setter does run and the component renders again, but the paragraph is the fixed text `Draft`. It does not read `note`, so the screen still says `Draft`."
+subjective,markdown,"The campus lost-and-found desk keeps one slip on screen for the item currently at the counter.
+
+The slip has two text boxes and a claimed flag. Typing updates the boxes immediately. Marking the item claimed, or resetting the desk, changes only the state those buttons are responsible for. The lines under the buttons must follow that state.
+
+## Task
+
+Create a single file named `FoundItemDesk.jsx`.
+
+Build one component named `FoundItemDesk` that holds this state:
+
+| State | Starts as | What it stores |
+| --- | --- | --- |
+| `itemName` | `""""` | Text in the item name box |
+| `location` | `""""` | Text in the location box |
+| `isClaimed` | `false` | Whether the item has been marked claimed |
+
+The screen must include:
+
+1. A heading whose text is `Found item desk`.
+2. An item-name input whose displayed text is `itemName`. Typing in it updates `itemName`.
+3. A location input whose displayed text is `location`. Typing in it updates `location`.
+4. A button labelled `Mark claimed`. Clicking it sets `isClaimed` to `true`. It does not change `itemName` or `location`.
+5. A button labelled `Reset desk`. Clicking it sets `itemName` to `""""`, `location` to `""""`, and `isClaimed` to `false`.
+
+Under the buttons, render these lines from state:
+
+- If `isClaimed` is `true`, show `Status: Claimed`. Otherwise show `Status: Still at the desk`. Use a ternary.
+- If `itemName` is `""""`, show `No item name yet`. Otherwise show `Item: ` followed by the stored name. Use a ternary.
+- If `location` is not `""""`, show `Found at: ` followed by the stored location. If `location` is `""""`, that line must be absent. Use `&&`.
+
+Do not add a list of past items. This screen stores one slip at a time. Styling is optional. The visible text and the behaviour below are required.
+
+## Sample walkthrough
+
+Check the screen in this order. The inputs show the stored text after each step.
+
+### Check A — page just opened
+
+| On screen | Expected |
+| --- | --- |
+| Item name box | empty |
+| Location box | empty |
+| Status line | `Status: Still at the desk` |
+| Item line | `No item name yet` |
+| Location line | not shown |
+
+### Check B — type a name only
+
+Type `Blue bottle` into the item name box. Leave the location box empty. Do not click a button.
+
+| On screen | Expected |
+| --- | --- |
+| Item name box | `Blue bottle` |
+| Location box | empty |
+| Status line | `Status: Still at the desk` |
+| Item line | `Item: Blue bottle` |
+| Location line | not shown |
+
+### Check C — type a location
+
+The item name is still `Blue bottle`. Type `Library steps` into the location box.
+
+| On screen | Expected |
+| --- | --- |
+| Item name box | `Blue bottle` |
+| Location box | `Library steps` |
+| Status line | `Status: Still at the desk` |
+| Item line | `Item: Blue bottle` |
+| Location line | `Found at: Library steps` |
+
+### Check D — mark claimed
+
+Click **Mark claimed** once.
+
+| On screen | Expected |
+| --- | --- |
+| Item name box | `Blue bottle` |
+| Location box | `Library steps` |
+| Status line | `Status: Claimed` |
+| Item line | `Item: Blue bottle` |
+| Location line | `Found at: Library steps` |
+
+### Check E — reset
+
+Click **Reset desk** once.
+
+| On screen | Expected |
+| --- | --- |
+| Item name box | empty |
+| Location box | empty |
+| Status line | `Status: Still at the desk` |
+| Item line | `No item name yet` |
+| Location line | not shown |
+
+### Check F — claim an empty slip
+
+From the reset screen, click **Mark claimed** without typing.
+
+| On screen | Expected |
+| --- | --- |
+| Item name box | empty |
+| Location box | empty |
+| Status line | `Status: Claimed` |
+| Item line | `No item name yet` |
+| Location line | not shown |
+
+## Submission instructions
+
+- Code all the points above in VS Code in a single `FoundItemDesk.jsx` file.
+- Render `FoundItemDesk` in your Vite React app, run it, and verify Checks A to F.
+- Submit the code in the code editor / answer box on the LMS.",,,,,,,,,,,,,,6abe1a3782b6fa5c2340021c,0.5,markdown,"### Walkthrough
+
+Use three `useState` values so each part of the slip can change on its own.
+
+- `itemName` and `location` start as empty strings. Each input’s `value` is that state, and its `onChange` stores `event.target.value`. That is a controlled input: the box shows state, and typing updates state, which renders the component again.
+- `isClaimed` starts as `false`. **Mark claimed** calls `setIsClaimed(true)` only. The name and location stay whatever they already were, which is why Check D keeps both sentences and Check F can show `Status: Claimed` with `No item name yet`.
+- **Reset desk** calls all three setters. After the next render the boxes are empty, the status ternary is on the false branch, the item ternary is on the empty branch, and `location !== """"` is false, so the location line is not rendered.
+- The status line and the item line use a ternary because each of those lines must always show one of two sentences. The location line uses `&&` because it should appear only when there is a location.
+- A click that only calls a setter still updates the screen, because a state update re-renders the component. The lines read the state variables, so they show the new values.
+
+### Complete code
+
+```jsx
+import { useState } from ""react"";
+
+function FoundItemDesk() {
+  const [itemName, setItemName] = useState("""");
+  const [location, setLocation] = useState("""");
+  const [isClaimed, setIsClaimed] = useState(false);
+
+  return (
+    <div>
+      <h1>Found item desk</h1>
+
+      <input
+        value={itemName}
+        onChange={(event) => setItemName(event.target.value)}
+        placeholder=""Item name""
+      />
+
+      <input
+        value={location}
+        onChange={(event) => setLocation(event.target.value)}
+        placeholder=""Location found""
+      />
+
+      <button onClick={() => setIsClaimed(true)}>Mark claimed</button>
+      <button
+        onClick={() => {
+          setItemName("""");
+          setLocation("""");
+          setIsClaimed(false);
+        }}
+      >
+        Reset desk
+      </button>
+
+      <p>{isClaimed ? ""Status: Claimed"" : ""Status: Still at the desk""}</p>
+      <p>{itemName === """" ? ""No item name yet"" : `Item: ${itemName}`}</p>
+      {location !== """" && <p>Found at: {location}</p>}
+    </div>
+  );
+}
+
+export default FoundItemDesk;
+```
+
+To verify, render `<FoundItemDesk />` from the app entry you already use, then follow Checks A to F.
+
+### Alternative approaches
+
+- The click logic can live in named functions such as `markClaimed` and `resetDesk` instead of inline arrow functions. The setters and the rendered text stay the same.
+- The empty-name check can be `itemName === """"` or `itemName.length === 0`. Both match this state, because the value is always a string.
+- The three reset setters can be called in any order. The screen after that render is still empty name, empty location, and not claimed.
+- Labels linked to the inputs with `htmlFor` and `id` can be added around the same controlled inputs. They do not change the state behaviour."

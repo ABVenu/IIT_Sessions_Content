@@ -1,0 +1,503 @@
+questionType,contentType,contentBody,intAnswer,prepTime(in_seconds),floatAnswer.max,floatAnswer.min,fitbAnswer,mcscAnswer,subjectiveAnswer,option.1,option.2,option.3,option.4,option.5,mcmcAnswer,tagRelationships,difficultyLevel,answerExplanationType,answerExplanation
+mcsc,markdown,"A clinic keeps four rows in `visits`. The receptionist runs:
+
+```sql
+SELECT visit_id, patient_name
+FROM visits
+WHERE city = 'Pune';
+```
+
+The grid shows one row. What is true about the other three visits?",,,,,,3,,They are deleted because they failed the city test,"The `visits` table is dropped, and only the Pune row is saved in a new table",They stay stored in `visits`; this query only leaves them out of the answer,Their city values are rewritten to an empty box,,,6abe14a38180dda8b8e123c0,0,markdown,"C is correct because `WHERE` only filters this result. Rows that fail the test remain in the table.
+
+A is incorrect because a `SELECT` does not remove rows. B is incorrect because this statement does not drop the table. D is incorrect because a filter does not write new city values."
+mcsc,markdown,One stored city is the text `Chennai`. Which condition keeps that row in the result?,,,,,,2,,`WHERE city = 'chennai'`,`WHERE city = 'Chennai'`,`WHERE city = Chennai`,`WHERE city IS NULL`,,,6abe14a38180dda8b8e123c0,0,markdown,"B is correct because text must match the stored capitals, and text in a condition uses single quotes.
+
+A is incorrect because `chennai` and `Chennai` are different, so the result is empty. C is incorrect because missing quotes make PostgreSQL look for a column named Chennai. D is incorrect because this city is filled; `IS NULL` looks for an empty box."
+mcsc,markdown,"`students` holds these marks:
+
+| full_name | marks |
+| --- | --- |
+| Asha Rao | 88 |
+| Rahul Mehta | 76 |
+| Meera Iyer | 91 |
+| Imran Khan | 64 |
+
+This query is run:
+
+```sql
+SELECT full_name
+FROM students
+WHERE marks < 80;
+```
+
+Who appears?",,,,,,4,,Asha Rao and Meera Iyer,Meera Iyer only,All four students,Rahul Mehta and Imran Khan,,,6abe14a38180dda8b8e123c0,0,markdown,"D is correct because 76 and 64 are less than 80. Rahul and Imran pass the test.
+
+A is incorrect because 88 and 91 fail `marks < 80`. B is incorrect because Meera’s 91 does not pass, and Rahul also passes. C is incorrect because Asha and Meera fail the test and are left out of this answer. They remain stored."
+mcsc,markdown,"Asha Rao is `id` 1. Her email is `asha@example.com` and her city is `Pune`. This statement succeeds:
+
+```sql
+UPDATE students
+SET marks = 90
+WHERE id = 1;
+```
+
+What is true afterwards?",,,,,,1,,Only Asha’s marks become 90; her email and city stay as they were,Every student’s marks become 90,Asha’s `id` becomes 90,Asha’s row is removed and a new row is inserted for her,,,6abe14a38180dda8b8e123c0,0,markdown,"A is correct because `SET` names the new marks, `WHERE id = 1` limits the change to Asha, and the other columns on her row stay.
+
+B is incorrect because the condition stops the change from reaching every row. C is incorrect because `id` is not in `SET`. D is incorrect because `UPDATE` edits the existing row; it does not delete and insert."
+mcsc,markdown,"`marks` must stay from 0 to 100 (`CHECK (marks >= 0 AND marks <= 100)`). Asha’s marks are 90. This statement is run:
+
+```sql
+UPDATE students
+SET marks = 150
+WHERE id = 1;
+```
+
+What happens?",,,,,,3,,"Marks become 150, because the check applies only when a row is first inserted","Marks become 100, and the extra 50 is ignored","The statement is cancelled, and Asha’s marks stay 90",The `students` table is dropped because 150 is illegal,,,6abe14a38180dda8b8e123c0,0.5,markdown,"C is correct because the check still applies on `UPDATE`. The statement is cancelled, and a failed update does not half-save the row.
+
+A is incorrect because the same rule rejects 150 on update. B is incorrect because PostgreSQL does not clamp the value to 100. D is incorrect because a failed update leaves the table in place."
+mcsc,markdown,"`hostels` contains id 1 (`Pune House`) and id 4 (`Guest House`). Student 3 exists, and `students.hostel_id` references `hostels`. Two students still store `hostel_id` 1. No student stores `hostel_id` 4.
+
+Which statement is refused?",,,,,,4,,`SELECT hostel_name FROM hostels WHERE id = 4`,`DELETE FROM hostels WHERE id = 4`,`UPDATE students SET hostel_id = 1 WHERE id = 3`,`DELETE FROM hostels WHERE id = 1`,,,6abe14a38180dda8b8e123c0,0.5,markdown,"D is correct because a foreign key will not leave students pointing at a hostel that no longer exists. Pune House stays while those students still use id 1.
+
+A is incorrect because reading Guest House is allowed. B is incorrect because Guest House has no student pointing at it, so that delete removes only hostel 4. C is incorrect because hostel 1 exists, so storing `hostel_id` 1 is allowed."
+mcmc,markdown,"A city column has three kinds of rows: one stores `Pune`, one stores `Not given`, and one was never filled (empty).
+
+Which statements are correct?",,,,,,,,`WHERE city = NULL` returns the row whose city was never filled,`WHERE city IS NULL` returns the row whose city was never filled,A row that fails the city test is deleted by that `SELECT`,`WHERE city = 'Not given'` returns the row that stores those words,`WHERE city = 'Pune'` returns the Pune row and leaves the other rows stored,"2, 4, 5",6abe14a38180dda8b8e123c0,0.5,markdown,"B is correct because an empty box is tested with `IS NULL`. D is correct because `Not given` is real text, found with `=`. E is correct because `WHERE` filters the answer and does not remove the other rows.
+
+A is incorrect because `= NULL` does not find an empty box. C is incorrect because this `SELECT` does not delete rows."
+mcmc,markdown,Which statements are correct?,,,,,,,,`UPDATE students SET city = 'Pune'` with no `WHERE` rewrites every city,`INSERT` needs a `WHERE` clause so the new row can be tested before it is added,"Two `SET` assignments must be separated by a comma; without it, the statement fails and no column changes",`DELETE FROM students` with no `WHERE` removes every row and leaves the table in place,`RETURNING` can show the row an `UPDATE` or `DELETE` just touched,"1, 3, 4, 5",6abe14a38180dda8b8e123c0,0.5,markdown,"A is correct because a missing `WHERE` on `UPDATE` changes every row. C is correct because a missing comma between `SET` assignments is a syntax error, and no column changes. D is correct because `DELETE` without `WHERE` empties the rows and keeps the columns; that is different from `DROP TABLE`. E is correct because `RETURNING` shows the row that was changed or removed.
+
+B is incorrect because `INSERT` has no `WHERE`; the row is not there yet to test."
+mcmc,markdown,"Use this stored state:
+
+- Students 1 and 2 both store `hostel_id` 1. Each of those rows has only one hostel id.
+- `enrolments` holds pairs `(student_id, course_id)`: `(1, 1)`, `(1, 2)`, and `(3, 1)`.
+- The primary key of `enrolments` is `(student_id, course_id)`.
+- Course names live only in `courses`. Pair rows store ids.
+
+Which statements are correct?",,,,,,,,"Two students sharing hostel id 1 is a one-to-many link: one hostel, many students",Student 1’s two courses should both be saved in that student’s single `hostel_id` column,`DELETE FROM enrolments WHERE student_id = 1 AND course_id = 2` removes that pair only; student 1 and the course row remain,"Inserting `(3, 1)` again is rejected because that pair is already stored","`SELECT student_id, course_id FROM enrolments WHERE student_id = 1` returns course names such as `Databases`","1, 3, 4",6abe14a38180dda8b8e123c0,1,markdown,"A is correct because many child rows may store the same parent id, while each student still has one hostel value. C is correct because deleting one enrolment removes the link, not the student and not the course. D is correct because the pair primary key blocks a second copy of `(3, 1)`.
+
+B is incorrect because one column cannot hold two course ids; those pairs belong in a link table. E is incorrect because `enrolments` returns ids, not the course name from `courses`."
+mcmc,markdown,"`students.id` is generated by default as identity, and inserts omit `id`. Rows 1, 2, 3, and 4 are already stored. A practice row is inserted and receives id 5, then removed with `DELETE FROM students WHERE email = 'practice@example.com'`. `enrolments` stores pairs that reference `students`. `hostels` is the parent of `hostel_id`.
+
+Which statements are correct?",,,,,,,,`DROP TABLE students` is the safe first step while `enrolments` still references `students`,The next insert that omits `id` does not receive id 5,"If `DELETE FROM students WHERE marks < 90` would match two people, run that same `WHERE` in a `SELECT` before deleting","When a new email breaks the unique rule, the new email is saved and only the other columns roll back",A foreign key on `hostel_id` means two students cannot store the same hostel id,"2, 3",6abe14a38180dda8b8e123c0,1,markdown,"B is correct because identity keeps counting forward. Deleting the row that used id 5 does not give 5 to the next insert that omits `id`. C is correct because a condition can match more rows than you expect, so the same `WHERE` should be read with `SELECT` first.
+
+A is incorrect because link rows that point at students have to go first. Dropping `students` while `enrolments` still references it is not the safe first step. D is incorrect because a failed update is cancelled. The old email stays, and the row is not half-saved. E is incorrect because the foreign key only demands that the hostel id exist. Many students may store the same `hostel_id`."
+subjective,markdown,"A coding club keeps a lab register in PostgreSQL.
+
+- One lab room can hold many members. Each member points at one room.
+- One member can join many workshops, and one workshop can have many members. Those pairs sit in a third table.
+- You will filter rows, correct saved values, remove one temporary member, and remove one signup without removing the person or the workshop.
+
+Write one script that builds this register and checks it. Do not read two tables on the same result line. Each `SELECT` uses one table.
+
+## Task
+
+Create a single SQL file named `club_register.sql`.
+
+Run the whole script from a fresh start so identity values begin at 1. If a statement is highlighted alone, run the checks in the order below.
+
+### Part A — Build the tables and seed rows
+
+Drop existing objects in an order that does not leave a link hanging: `signups`, then `workshops`, then `members`, then `rooms`.
+
+Create:
+
+`rooms`
+
+- `id` integer, generated by default as identity, primary key
+- `room_name` text, required, unique
+
+`members`
+
+- `id` integer, generated by default as identity, primary key
+- `full_name` text, required
+- `email` text, required, unique
+- `city` text, default `'Not given'`
+- `score` integer, required, allowed only from 0 to 100
+
+`workshops`
+
+- `id` integer, generated by default as identity, primary key
+- `workshop_name` text, required, unique
+
+`signups`
+
+- `member_id` integer, required, must match `members (id)`
+- `workshop_id` integer, required, must match `workshops (id)`
+- primary key on the pair `(member_id, workshop_id)`
+
+Insert rooms, in this order: `Lab A`, `Lab B`, `Spare Lab`.  
+Their ids will be 1, 2, and 3.
+
+Insert workshops, in this order: `SQL Basics`, `Git Workshop`.  
+Their ids will be 1 and 2.
+
+Insert members, omitting `id`:
+
+| full_name | email | city | score |
+| --- | --- | --- | --- |
+| Neha Shah | neha@example.com | Pune | 84 |
+| Arjun Das | arjun@example.com | Not given | 71 |
+| Sara Ali | sara@example.com | Chennai | 93 |
+| Dev Patel | dev@example.com | Lucknow | 66 |
+
+Their ids will be 1, 2, 3, and 4.
+
+Add `room_id` to `members` as an integer that must match `rooms (id)`. Do not mark it required.
+
+Insert signups:
+
+| member_id | workshop_id | Meaning |
+| --- | --- | --- |
+| 1 | 1 | Neha in SQL Basics |
+| 1 | 2 | Neha in Git Workshop |
+| 3 | 1 | Sara in SQL Basics |
+| 4 | 2 | Dev in Git Workshop |
+
+### Part B — Keep only some rows
+
+Run these three reads on the seeded `members` table, before you change any score or city.
+
+```sql
+SELECT full_name, score
+FROM members
+WHERE score >= 80
+ORDER BY id;
+```
+
+Expected output:
+
+```text
+Neha Shah | 84
+Sara Ali  | 93
+```
+
+```sql
+SELECT full_name, city
+FROM members
+WHERE city = 'Chennai' OR city = 'Lucknow'
+ORDER BY id;
+```
+
+Expected output:
+
+```text
+Sara Ali  | Chennai
+Dev Patel | Lucknow
+```
+
+```sql
+SELECT full_name
+FROM members
+WHERE city = 'Pune' AND score >= 80;
+```
+
+Expected output:
+
+```text
+Neha Shah
+```
+
+### Part C — One room, many members
+
+Before you assign any room, run:
+
+```sql
+SELECT full_name
+FROM members
+WHERE room_id IS NULL
+ORDER BY id;
+```
+
+Expected output:
+
+```text
+Neha Shah
+Arjun Das
+Sara Ali
+Dev Patel
+```
+
+Then set rooms with `UPDATE` and `WHERE id = ...`:
+
+- Neha (id 1) and Arjun (id 2) → room 1
+- Sara (id 3) and Dev (id 4) → room 2
+
+Confirm the empty check and the shared room:
+
+```sql
+SELECT full_name
+FROM members
+WHERE room_id IS NULL;
+```
+
+Expected output: no rows.
+
+```sql
+SELECT full_name
+FROM members
+WHERE room_id = 1
+ORDER BY id;
+```
+
+Expected output:
+
+```text
+Neha Shah
+Arjun Das
+```
+
+### Part D — Correct values already stored
+
+1. Set Dev’s score to 72 using `WHERE id = 4`. Add `RETURNING id, full_name, score`.
+
+Expected `RETURNING` row:
+
+```text
+4 | Dev Patel | 72
+```
+
+2. Set Arjun’s city to `Jaipur` and his score to 75 in one `UPDATE`, using `WHERE email = 'arjun@example.com'`. Add `RETURNING id, full_name, city, score`.
+
+Expected `RETURNING` row:
+
+```text
+2 | Arjun Das | Jaipur | 75
+```
+
+### Part E — Remove one member, then one unused room
+
+Insert this temporary member (id will be 5):
+
+| full_name | email | city | score | room_id |
+| --- | --- | --- | --- | --- |
+| Practice Member | practice@example.com | Delhi | 50 | 3 |
+
+Delete only that email. Use `RETURNING id, full_name, email`.
+
+Expected `RETURNING` row:
+
+```text
+5 | Practice Member | practice@example.com
+```
+
+Confirm who remains:
+
+```sql
+SELECT id, full_name
+FROM members
+ORDER BY id;
+```
+
+Expected output:
+
+```text
+1 | Neha Shah
+2 | Arjun Das
+3 | Sara Ali
+4 | Dev Patel
+```
+
+Spare Lab (id 3) now has nobody pointing at it. Delete only that room.
+
+### Part F — Change one signup pair
+
+Insert the pair that puts Arjun (`member_id` 2) into SQL Basics (`workshop_id` 1).
+
+Delete only Neha’s Git Workshop pair (`member_id` 1 and `workshop_id` 2). Use `AND` in the `WHERE`. Add `RETURNING member_id, workshop_id`.
+
+Expected `RETURNING` row:
+
+```text
+1 | 2
+```
+
+Above that `DELETE`, add one short comment that this removes the pair only, not Neha and not Git Workshop.
+
+Then run:
+
+```sql
+SELECT member_id, workshop_id
+FROM signups
+WHERE workshop_id = 1
+ORDER BY member_id;
+```
+
+Expected output:
+
+```text
+1 | 1
+2 | 1
+3 | 1
+```
+
+```sql
+SELECT workshop_id
+FROM signups
+WHERE member_id = 1;
+```
+
+Expected output:
+
+```text
+1
+```
+
+---
+
+## Submission Instructions
+
+- Code all the parts in VS Code in a single `.sql` file named `club_register.sql`.
+- Run the script in a PostgreSQL SQL Editor and verify every result grid above. If a highlight runs only the highlighted lines, run each check on its own, in order.
+- Submit the full script in the code editor / answer box in the LMS.",,,,,,,,,,,,,,6abe14a38180dda8b8e123c0,0.5,markdown,"### Walkthrough
+
+1. Drop `signups` and `workshops` before `members`, and drop `members` before `rooms`, so no foreign key is left hanging.
+2. Create the four tables. `signups` stores ids, and its primary key is the pair, so the same member-workshop pair cannot be inserted twice.
+3. Seed three rooms, two workshops, and four members. Add `room_id` with `ALTER TABLE ... ADD COLUMN ... REFERENCES rooms (id)`, then insert the four signup pairs.
+4. Part B uses the original scores and cities: `>= 80` keeps Neha (84) and Sara (93); `OR` keeps Sara and Dev; `AND` keeps Neha only.
+5. Before any assignment, `room_id IS NULL` lists all four members. `= NULL` would not.
+6. Four `UPDATE`s set the rooms. Neha and Arjun share room 1. That is one room, many members. The later `IS NULL` read is empty. `room_id = 1` returns Neha and Arjun only.
+7. Dev’s score update touches id 4 only. Arjun’s update changes city and score together because both assignments sit in `SET`, separated by a comma, and the email finds his row.
+8. The practice insert receives id 5. Deleting that email removes only that row. The next identity value is not 5. The remaining ids are 1–4. Spare Lab can then be deleted because nobody still stores `room_id` 3.
+9. Arjun’s new signup is `(2, 1)`. Deleting `(1, 2)` leaves Neha in `members`, leaves Git Workshop in `workshops`, and leaves Neha’s SQL Basics pair. Workshop 1 then has member ids 1, 2, and 3. Neha’s remaining `workshop_id` is 1.
+
+### Complete Code
+
+```sql
+DROP TABLE IF EXISTS signups;
+DROP TABLE IF EXISTS workshops;
+DROP TABLE IF EXISTS members;
+DROP TABLE IF EXISTS rooms;
+
+CREATE TABLE rooms (
+    id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    room_name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE members (
+    id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    full_name TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
+    city TEXT DEFAULT 'Not given',
+    score INTEGER NOT NULL CHECK (score >= 0 AND score <= 100)
+);
+
+CREATE TABLE workshops (
+    id INTEGER GENERATED BY DEFAULT AS IDENTITY PRIMARY KEY,
+    workshop_name TEXT NOT NULL UNIQUE
+);
+
+CREATE TABLE signups (
+    member_id INTEGER NOT NULL REFERENCES members (id),
+    workshop_id INTEGER NOT NULL REFERENCES workshops (id),
+    PRIMARY KEY (member_id, workshop_id)
+);
+
+INSERT INTO rooms (room_name)
+VALUES
+    ('Lab A'),
+    ('Lab B'),
+    ('Spare Lab');
+
+INSERT INTO workshops (workshop_name)
+VALUES
+    ('SQL Basics'),
+    ('Git Workshop');
+
+INSERT INTO members (full_name, email, city, score)
+VALUES
+    ('Neha Shah', 'neha@example.com', 'Pune', 84),
+    ('Arjun Das', 'arjun@example.com', 'Not given', 71),
+    ('Sara Ali', 'sara@example.com', 'Chennai', 93),
+    ('Dev Patel', 'dev@example.com', 'Lucknow', 66);
+
+ALTER TABLE members
+ADD COLUMN room_id INTEGER REFERENCES rooms (id);
+
+INSERT INTO signups (member_id, workshop_id)
+VALUES
+    (1, 1),
+    (1, 2),
+    (3, 1),
+    (4, 2);
+
+SELECT full_name, score
+FROM members
+WHERE score >= 80
+ORDER BY id;
+
+SELECT full_name, city
+FROM members
+WHERE city = 'Chennai' OR city = 'Lucknow'
+ORDER BY id;
+
+SELECT full_name
+FROM members
+WHERE city = 'Pune' AND score >= 80;
+
+SELECT full_name
+FROM members
+WHERE room_id IS NULL
+ORDER BY id;
+
+UPDATE members SET room_id = 1 WHERE id = 1;
+UPDATE members SET room_id = 1 WHERE id = 2;
+UPDATE members SET room_id = 2 WHERE id = 3;
+UPDATE members SET room_id = 2 WHERE id = 4;
+
+SELECT full_name
+FROM members
+WHERE room_id IS NULL;
+
+SELECT full_name
+FROM members
+WHERE room_id = 1
+ORDER BY id;
+
+UPDATE members
+SET score = 72
+WHERE id = 4
+RETURNING id, full_name, score;
+
+UPDATE members
+SET city = 'Jaipur', score = 75
+WHERE email = 'arjun@example.com'
+RETURNING id, full_name, city, score;
+
+INSERT INTO members (full_name, email, city, score, room_id)
+VALUES ('Practice Member', 'practice@example.com', 'Delhi', 50, 3);
+
+DELETE FROM members
+WHERE email = 'practice@example.com'
+RETURNING id, full_name, email;
+
+SELECT id, full_name
+FROM members
+ORDER BY id;
+
+DELETE FROM rooms
+WHERE id = 3;
+
+INSERT INTO signups (member_id, workshop_id)
+VALUES (2, 1);
+
+-- Removes Neha's Git pair only; Neha and Git Workshop both stay.
+DELETE FROM signups
+WHERE member_id = 1 AND workshop_id = 2
+RETURNING member_id, workshop_id;
+
+SELECT member_id, workshop_id
+FROM signups
+WHERE workshop_id = 1
+ORDER BY member_id;
+
+SELECT workshop_id
+FROM signups
+WHERE member_id = 1;
+```
+
+### Alternative approaches
+
+- `room_id` can be created with the `members` table and filled in the first `INSERT`, instead of `ALTER TABLE` plus later `UPDATE`s. The checks stay the same if the null read is done before those values are filled.
+- Dev can be found by `email = 'dev@example.com'` instead of `id = 4`. Arjun can be found by `id = 2` instead of email. One column in `WHERE` is enough when it identifies the row you mean."
