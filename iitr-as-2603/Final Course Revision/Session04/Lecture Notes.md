@@ -16,6 +16,8 @@ An API is a promise about how to ask for a result. On the web that promise is us
 
 The service sends a status code and a body.
 
+![HTTP request and response — methods GET POST and peers, status codes 200 through 503 with agent actions, read status before body, timeouts](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session04/revision04-01-http-status.png)
+
 ### 2.1 Methods
 
 | Method | Intent |
@@ -71,6 +73,8 @@ A policy PDF comes from retrieval. They are complementary. Neither replaces the 
 
 ## 3. Tool calling
 
+![Tool calling loop — model emits structured tool request, program validates and runs it, result returns; step limit prevents infinite bounce](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session04/revision04-02-tool-calling-loop.png)
+
 The loop is:
 
 1. The user asks.
@@ -125,6 +129,8 @@ A model that answers a balance from the handbook, or a policy from a guess about
 ### 3.4 LangChain packages that same loop
 
 Doing the loop by hand means you repeat the same glue: build the prompt, call the model, read a tool request, run the function, and send the result back. LangChain is a library of those parts, so a chain can be rearranged without rewriting the glue.
+
+![LangChain pipe — prompt template, model, parser; bind_tools and tool_calls data with tool message call id back to the model](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session04/revision04-03-langchain-pipe.png)
 
 **LangChain.** A library that connects a prompt, a model, tools, memory, and retrieval into one runnable flow.
 
@@ -293,6 +299,8 @@ When the steps are known, a graph is a clear way to say them. Three ideas carry 
 | Node | One unit of work: classify, retrieve, call a tool, format |
 | Edge | The allowed move from one node to the next |
 | State | The shared data every node can read and update |
+
+![Workflow graph — nodes edges and shared state, orchestrator and specialists, human approval checkpoint, safety allow-list on tools](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session04/revision04-04-graph-orchestration.png)
 
 State is the folder that moves with the job: the question, the retrieved chunks, the tool results, the draft answer, the errors. If a fact is not in state, the next node does not have it. If every node stuffs raw transcripts into state, the run becomes impossible to debug.
 

@@ -17,6 +17,8 @@ Retrieval-augmented generation places the fetched text into the prompt so the mo
 
 A language model is a poor database. It has a knowledge cutoff, it was not trained on your private handbook, and it will complete a plausible sentence when the fact is missing. Retrieval is how you hand it the fact at answer time.
 
+![Two stores — relational table for exact order status lookup versus vector store for policy meaning search](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session03/revision03-01-two-stores.png)
+
 CSV and spreadsheet files are fine for a small, single-user extract. They become the wrong system when many people, or an agent, read and write the same records at once.
 
 They do not enforce “this id may appear only once”, and they do not give you a query language with predictable structure. A database does.
@@ -50,6 +52,8 @@ Without these, the application discovers bad data at the worst moment: two custo
 - **One-to-one:** one person, one government id record.
 - **One-to-many:** one customer, many orders. The “many” table holds the foreign key.
 - **Many-to-many:** students and courses. A junction table holds pairs of keys, because neither side can store a single foreign key without repeating or dropping data.
+
+![Keys and joins — primary and foreign keys, one-to-many and junction table, danger of UPDATE or DELETE without WHERE](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session03/revision03-02-keys-joins.png)
 
 Normalisation splits a wide, repetitive table into smaller tables so each fact is stored once. Repeating a teacher’s phone number on every class row means one correction must be edited in many places, and some copies will be missed. A teachers table plus a foreign key removes that repetition.
 
@@ -129,6 +133,8 @@ Nulls do not equal null. A filter `WHERE phone = NULL` does not find missing pho
 The engine does not run clauses in the order you type them.
 
 The usual order is `FROM` and `JOIN`, then `WHERE`, then `GROUP BY`, then `HAVING`, then `SELECT`, then `ORDER BY`, then `LIMIT` and `OFFSET`.
+
+![SQL clause execution order — FROM and JOIN through WHERE, GROUP BY, HAVING, SELECT, ORDER BY, LIMIT and OFFSET](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session03/revision03-04-sql-clause-order.png)
 
 `WHERE` drops rows before any total exists. `HAVING` drops groups after `COUNT`, `SUM`, or `AVG` has been computed. Using `WHERE` to drop “small groups” answers a different question.
 
@@ -272,6 +278,8 @@ RAG is three moves:
 1. **Retrieve** the chunks whose embeddings are nearest to the question, optionally after a metadata filter.
 2. **Augment** the prompt by placing those chunks in a clearly marked context block.
 3. **Generate** an answer conditioned on that block.
+
+![RAG pipeline — offline ingest chunk and embed; online retrieve, augment prompt, generate; name retrieval versus generation failure](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session03/revision03-03-rag-pipeline.png)
 
 Think of an open-book test. The model is the person answering. The retriever is the librarian.
 

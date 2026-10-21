@@ -16,6 +16,8 @@ Keep three questions in mind while you revise:
 
 Python is a language. A program is a text file the interpreter reads from top to bottom. The usual local stack is: Python installed on the machine, a terminal to type commands, and an editor such as VS Code to write and run files.
 
+![Local Python stack — PATH and terminal find the interpreter, editor and virtual environment isolate packages, script versus notebook kernel, secrets in env not in Git](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session01/revision01-01-python-dev-stack.png)
+
 ### 2.1 Install and PATH
 
 The terminal finds Python by searching the system PATH, the list of folders it is allowed to look in. If Python is installed but `python3` is “not found”, the install often succeeded and the PATH entry did not. Installing on the local disk, rather than inside a synced folder such as OneDrive, avoids path and permission errors that appear only on some machines.
@@ -83,6 +85,8 @@ A comment starts with `#` and is ignored by the interpreter. An expression produ
 Many lines are both: an assignment statement whose right-hand side is an expression.
 
 ### 3.3 Names that share one object
+
+![Two names one list — append mutates the shared object for both names; rebinding one name leaves the other on the old list](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session01/revision01-02-list-aliasing.png)
 
 If `a = [1, 2]` and `b = a`, then `a` and `b` are two names for the same list. `a.append(3)` changes what `b` sees. This is the aliasing edge case.
 
@@ -304,6 +308,8 @@ Methods do not edit the original string. `name.upper()` returns a new string; `n
 
 A function is a named block you can call. `def` defines it.
 
+![return versus print — print shows text on screen; return hands a value back to the caller; mutable default arguments are shared across calls](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session01/revision01-04-return-vs-print.png)
+
 The definition does not run the body. The call does.
 
 ```python
@@ -417,6 +423,8 @@ Silent failure, where the method prints a message and the caller thinks the with
 ## 12. Version control with Git and GitHub
 
 Version control records how files changed, who changed them, when, and why. Without it, two people editing the same file overwrite each other, and there is no way back to last Tuesday’s working copy.
+
+![Git workflow — working directory to staging to commit to remote, branches and pull request review, secrets blocked from history](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session01/revision01-03-git-workflow.png)
 
 ### 12.1 What kind of system Git is
 

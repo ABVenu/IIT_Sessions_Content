@@ -43,6 +43,8 @@ The compact loop is **Observe → Think → Act**, and then observe again until 
 
 The loop is finished only when a stop condition is true: the goal is met, the user says stop, a step limit is reached, or the agent must hand the case to a person. A loop with no stop condition spends tokens until a platform limit kills it.
 
+![Agent loop — Observe Think Act with planning reasoning memory and action; model chooses, tools execute, stop rule required](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session02/revision02-01-observe-think-act.png)
+
 ### 2.3 Characteristics worth naming precisely
 
 - **Autonomy:** it can take the next step without a person clicking through every branch.
@@ -101,6 +103,8 @@ Counting tokens matters when you compare cost, when you decide how much history 
 
 ### 3.4 The context window
 
+![Context window budget — system, examples, history, retrieved text, and completion share one token limit; cutoff unless a tool adds live facts](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session02/revision02-02-context-window-tokens.png)
+
 The context window is the maximum number of tokens the model will consider on one call. It includes the system instruction, the examples, the conversation, the retrieved passages, and the answer still being generated.
 
 When the window is full, the usual practical effect is that the oldest material is dropped, or the call fails, depending on the client. Silent truncation is the dangerous version: the model answers from the tail of the prompt and never sees the rule you placed at the top. Putting a critical rule at both the start and the end of a long prompt is a hedge against that loss of attention, not a substitute for keeping the prompt short.
@@ -144,6 +148,8 @@ Very small local models are inconsistent at tool choice. For a step that must ca
 A prompt is the input that sets up the model’s next completion. Prompt engineering is the discipline of changing that input until the behaviour is stable enough for the task. It is iterative.
 
 The first wording is a hypothesis.
+
+![Prompt structure — system user and assistant roles plus role, task, instructions, constraints, and output format](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session02/revision02-03-prompt-roles-structure.png)
 
 ### 4.1 Roles
 
@@ -241,6 +247,8 @@ Every extra reasoning cycle and every tool result is more tokens. An agent is mo
 It is waste when a single grounded answer would have done.
 
 ## 6. Memory
+
+![Memory layers — short-term buffer window and summary versus long-term store; pin facts like order id, never store secrets or guesses](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitr-as-2603/final-course-revision/session02/revision02-04-memory-layers.png)
 
 ### 6.1 State, context, and the window
 
