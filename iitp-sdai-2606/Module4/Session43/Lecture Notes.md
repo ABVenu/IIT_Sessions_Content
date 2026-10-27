@@ -2,15 +2,17 @@
 
 You have built **Python** fundamentals, a **frontend** that calls APIs, a persistent **`campus_api`** with **FastAPI** and **SQLAlchemy**, and you have practiced **LLM integration**, **structured AI features**, and **terminal-assisted** development. The capstone is where those skills become **one product** you can **demo**, **defend in interviews**, and **extend** after the course.
 
+The cohort builds **CampusBite**—a **restaurant order and delivery** app: customers place orders (with **dummy payment**), restaurant owners **CRUD dishes** and run the kitchen queue, delivery partners complete assigned runs, and customers **rate**, **request return**, and receive **dummy refunds** when the owner approves. Full session-by-session milestones, RBAC, status rules, and deployment targets are in **`Capstone Flow Session.md`** in this folder—treat that file as your master blueprint.
+
 This lesson is **design-first**: **high-level design (HLD)**, **low-level design (LLD)**, **tech stack** choices, **database schema**, and **scope**. You will **not** list every HTTP route or auth flow here—that contract work belongs in the **next** planning lesson so architecture and API security stay separate.
 
 ## What you will learn in this lesson
 
-- **Architecture design** — HLD boxes and LLD zoom-in for your idea
-- **Tech stack selection** — frontend, backend, database, and AI tools you can ship
-- **Database schema** — tables, keys, and relationships for core entities
-- **Planning** — in-scope features vs deferred nice-to-haves
-- **Hands-on** — one vertical slice blueprint for a **campus event booking** style app
+- **Architecture design** — HLD boxes and LLD zoom-in for **CampusBite**
+- **Tech stack selection** — **Vercel** (frontend), **Render** (API), **Supabase** (PostgreSQL), plus server-side AI
+- **Database schema** — users, restaurants, menu, orders, reviews, payment ledger
+- **Planning** — scope including **return/refund** (no real payment gateway)
+- **Hands-on** — one vertical slice: place order → deliver → review → return → owner refund
 
 Connecting idea: Code is bricklaying; capstone week needs **approved plans** so you do not pour concrete for a pool the plot cannot hold.
 
@@ -24,7 +26,7 @@ Connecting idea: Code is bricklaying; capstone week needs **approved plans** so 
 
 | Pain if you skip design | What design gives you |
 | --- | --- |
-| Frontend calls wrong URLs | Shared nouns: **Event**, **Booking** |
+| Frontend calls wrong URLs | Shared nouns: **Order**, **MenuItem**, **status** |
 | AI feature with no user table | Schema shows missing **users** early |
 | Eleven half buttons | One **vertical slice** finished |
 
@@ -34,7 +36,7 @@ Connecting idea: Code is bricklaying; capstone week needs **approved plans** so 
 
 ### Activity — one journey only
 
-Pick **one** user journey that must work on demo day (example: “student books a seat for an event”). Write six steps from login to confirmation.
+Pick **one** user journey that must work on demo day (example: “customer places order → partner delivers → customer requests return → owner approves dummy refund”). Write six steps from login to confirmation.
 
 ---
 
@@ -50,16 +52,16 @@ Pick **one** user journey that must work on demo day (example: “student books 
 | --- | --- |
 | **Web client** | HTML/CSS/JS pages, forms, `fetch` |
 | **API server** | FastAPI routes, validation, auth later |
-| **Database** | SQLite or PostgreSQL tables via SQLAlchemy |
+| **Database** | **Supabase** (PostgreSQL) via SQLAlchemy |
 | **AI service** | Optional routes calling LLM/embeddings on **server** |
 
-**ASCII HLD (event booking example)**
+**ASCII HLD (CampusBite deployment)**
 
 ```text
-[ Browser ] --HTTPS JSON--> [ FastAPI app ] --SQL--> [ Database ]
-                                |
-                                +----HTTPS----> [ LLM provider ]
-                                (keys in .env only)
+[ Browser on Vercel ] --HTTPS JSON--> [ FastAPI on Render ] --SQL--> [ Supabase PostgreSQL ]
+                                              |
+                                              +----HTTPS----> [ LLM provider ]
+                                              (keys in Render env only)
 ```
 
 **Data flow narrative (three sentences max per arrow)**
@@ -87,23 +89,23 @@ Connecting idea: HLD names the cast; **LLD** gives each actor a script for one j
 
 | Artefact | Contents |
 | --- | --- |
-| **Screen list** | Login, event list, event detail, booking confirm |
-| **API touchpoints** | Names only: `list_events`, `create_booking` (details later) |
-| **Entity list** | User, Event, Booking (+ optional HostelClub) |
-| **State notes** | What happens if event full? waitlist in or out of scope? |
+| **Screen list** | Login, menu/cart, checkout (dummy pay), my orders, restaurant queue, delivery list |
+| **API touchpoints** | Names only: `create_order`, `assign_partner`, `return_decision` (details later) |
+| **Entity list** | User, Restaurant, MenuItem, Order, OrderItem, Review, PaymentLedger |
+| **State notes** | Order status transitions; cancel only in PLACED; return only after DELIVERED |
 
-**Booking flow (LLD bullets)**
+**Order flow (LLD bullets)**
 
-1. User opens **event list** → API returns published events.
-2. User opens **detail** → sees seats remaining (computed field).
-3. User clicks **book** → API checks capacity → inserts booking row.
-4. UI shows **confirmation** with booking id.
+1. Customer opens **menu** → API returns available dishes for one restaurant.
+2. Customer **checks out** → order `PLACED`, **mock_paid** ledger row.
+3. Owner advances **ACCEPTED → PREPARING → READY**, **assigns** delivery partner.
+4. Partner marks **DELIVERED** → customer **reviews** or **requests return** → owner **approves refund** (dummy).
 
 **Common doubt:** “Is LLD the same as database schema?” — Related but not identical; schema is **storage**; LLD includes **screens and steps**.
 
 ### Activity — mark out-of-scope
 
-List two features you will **not** build in v1 (payment gateway, waitlist, chat bot). One sentence each on why deferring helps.
+List two features you will **not** build in v1 (real UPI gateway, live map tracking). One sentence each on why deferring helps.
 
 ---
 
@@ -113,22 +115,22 @@ List two features you will **not** build in v1 (payment gateway, waitlist, chat 
 - **In Simple Words:** Your **toolbox** for this build.
 - **Real-Life Example:** Choosing **scooter vs metro**—both reach, but time and skill differ.
 
-**Recommended course-aligned stack**
+**Cohort capstone stack (locked)**
 
 | Layer | Choice | Justification sentence |
 | --- | --- | --- |
-| Frontend | HTML, CSS, vanilla JS | Matches labs; no build step required |
-| Backend | **FastAPI** | You already know `/docs`, Pydantic, routers |
+| Frontend | HTML, CSS, vanilla JS on **Vercel** | Matches labs; static hosting with env for API URL |
+| Backend | **FastAPI** on **Render** | You already know `/docs`, Pydantic, routers |
 | ORM | **SQLAlchemy 2** | Same patterns as **`campus_api`** |
-| DB | **SQLite** locally | File-based, easy mentor review |
-| AI | One provider API | Reuse **`campus_ai_api`** patterns |
+| DB | **Supabase** (PostgreSQL) | Production-shaped DB; connection string on Render |
+| AI | One provider API on Render | Reuse **`campus_ai_api`** patterns; keys never on Vercel |
 
 **Trade-off table**
 
 | Option | Pros | Cons |
 | --- | --- | --- |
-| SQLite | Zero setup | Weaker concurrency story |
-| PostgreSQL | Production-like | Extra install burden |
+| Supabase | Hosted Postgres + dashboard | Requires connection string discipline |
+| SQLite local only | Fast offline dev | Differs from prod—mirror Supabase early |
 | React SPA | Rich UI | More tooling for short timeline |
 | Vanilla JS | Fast to learn curve | Manual DOM work |
 
@@ -146,41 +148,48 @@ Connecting idea: Stack choices must match the **schema** you can actually query.
 - **In Simple Words:** **Nouns** your API will persist.
 - **Real-Life Example:** Attendance register columns—roll, name, hostel—not free paragraphs.
 
-**Core tables (event booking example)**
+**Core tables (CampusBite)**
 
 | Table | Purpose |
 | --- | --- |
-| **users** | Who can log in and book |
-| **events** | What can be booked |
-| **bookings** | Who booked which event |
+| **users** | customer, restaurant_owner, delivery_partner; `role` + optional `restaurant_id` |
+| **restaurants** | Outlet metadata |
+| **menu_items** | Dish CRUD scope for owner |
+| **orders** | Status, dummy **payment_status**, **return_status**, partner assignment |
+| **order_items** | Line snapshots (`unit_price_snapshot`, `item_name_snapshot`) |
+| **reviews** | One per delivered order |
+| **payment_ledger** | `mock_charge` and `refund_credit` rows (no gateway) |
 
 **SQLAlchemy-style column sketch**
 
 ```python
-# Teaching sketch — align names with your ERD before coding
-# users: id PK, email unique, password_hash, full_name, created_at
-# events: id PK, title, description, starts_at, capacity, created_by_user_id FK
-# bookings: id PK, user_id FK, event_id FK, status, created_at
-# UNIQUE (user_id, event_id) optional — one seat per user per event
+# Teaching sketch — see Capstone Flow Session.md for full columns
+# orders.status: PLACED .. DELIVERED, CANCELLED
+# orders.payment_status: mock_paid, refunded, refund_rejected, ...
+# orders.return_status: none, requested, approved, rejected
 ```
 
 **Relationship rules**
 
 | Rule | Meaning |
 | --- | --- |
-| **1 user → many bookings** | FK `bookings.user_id` |
-| **1 event → many bookings** | FK `bookings.event_id` |
-| **capacity** | Integer on **events**; count bookings before insert |
+| **1 restaurant → many menu_items** | FK `menu_items.restaurant_id` |
+| **1 customer → many orders** | FK `orders.customer_id` |
+| **1 order → many order_items** | Snapshots protect history when menu price changes |
 
 **ERD (text)**
 
 ```text
-users (1) ----< bookings >---- (1) events
+restaurants (1) ----< menu_items
+users (customer) (1) ----< orders >---- (1) restaurants
+orders (1) ----< order_items
+orders (1) ---- 0..1 reviews
+orders (1) ---- * payment_ledger
 ```
 
 **Normalization instinct**
 
-- Store **`event_id`** on booking, not duplicate entire event row.
+- Store **price and dish name on `order_items`** at place time.
 - Store **`password_hash`**, never plain password (implementation in security lesson).
 
 **Optional AI tables (only if in scope)**
@@ -194,7 +203,7 @@ If AI is **out of v1**, leave tables out—do not schema-plan fiction.
 
 ### Activity — column challenge
 
-Add **waitlist** without new features: which table gains a column or new table? Write one paragraph; mentors discuss in class.
+Add **partial refund** without a payment gateway: which fields on `orders` and `payment_ledger` change? Write one paragraph; mentors discuss in class.
 
 ---
 
@@ -208,14 +217,14 @@ Add **waitlist** without new features: which table gains a column or new table? 
 
 | Label | Example feature |
 | --- | --- |
-| **Must** | Login, list events, create booking |
-| **Should** | Admin create event |
-| **Could** | FAQ semantic search |
-| **Won’t (now)** | Payment gateway |
+| **Must** | Login, menu, place order (mock pay), kitchen flow, deliver, review |
+| **Should** | Return request + owner refund decision, dashboard filters |
+| **Could** | Menu image upload, AI menu FAQ |
+| **Won’t (now)** | Real payment gateway, maps, websockets |
 
 **Vertical slice definition**
 
-> A path from UI → API → DB that proves persistence and error handling for **one** happy journey plus **one** failure (event full).
+> A path from UI → API → DB that proves persistence and error handling for **deliver + review + return/refund**, plus **409** when customer tries to cancel a **DELIVERED** order.
 
 **Time honesty**
 
@@ -244,7 +253,7 @@ Tables (list):
 Risks (keys, PII, fest traffic):
 ```
 
-**Example one-liner:** “Students book seats for campus club events without WhatsApp chaos.”
+**Example one-liner:** “Students order from campus restaurants with tracked delivery and fair return handling—without WhatsApp chaos.”
 
 ---
 
@@ -252,7 +261,7 @@ Risks (keys, PII, fest traffic):
 
 | Earlier work | Capstone reuse |
 | --- | --- |
-| **`campus_api` CRUD** | Admin event management |
+| **`campus_api` CRUD** | Restaurant menu + order patterns |
 | **Frontend fetch labs** | List/detail pages |
 | **Prompt + `/ai/chat`** | Optional helpdesk line |
 | **Structured FAQ ingest** | Optional knowledge base |
@@ -269,7 +278,7 @@ You are **not** graded on using every feature—coherence beats checkbox tourism
 | HLD diagram readable in 30 seconds | |
 | LLD covers demo journey only | |
 | Stack justified in plain English | |
-| Schema has PKs, FKs, capacity story | |
+| Schema has PKs, FKs, order status + payment ledger | |
 | Scope lists **won’t** items | |
 | AI keys stay server-side on diagram | |
 
@@ -280,7 +289,7 @@ You are **not** graded on using every feature—coherence beats checkbox tourism
 | NFR | Student-friendly meaning | Capstone example |
 | --- | --- | --- |
 | **Availability** | App works during demo | Run on laptop + backup video |
-| **Performance** | List pages feel snappy | Paginate events if >50 rows |
+| **Performance** | List pages feel snappy | Paginate orders if >50 rows |
 | **Security** | Secrets and passwords protected | Keys only in `.env` on API |
 | **Maintainability** | Teammate can read your code | Match `campus_api` folder layout |
 
@@ -301,33 +310,36 @@ You are not building Netflix—still name **one** NFR you will test before demo.
 
 ---
 
-## Example LLD screen notes (event booking)
+## Example LLD screen notes (CampusBite)
 
 | Screen | Elements | API touchpoint name |
 | --- | --- | --- |
 | Login | email, password, submit | `login` (auth detail later) |
-| Event list | cards with title, date | `list_events` |
-| Event detail | description, seats left | `get_event` |
-| Booking confirm | success message, id | `create_booking` |
+| Menu | dishes, add to cart | `get_menu` |
+| Checkout | address, dummy pay confirm | `create_order` |
+| My orders | status filters | `list_my_orders` |
+| Restaurant queue | status buttons, assign partner | `update_order_status`, `assign` |
+| Delivery | my list, mark delivered | `delivery_orders` |
 
 Wireframes can be pencil sketches—clarity beats colour.
 
 ---
 
-## Capacity and booking rules (logic without code)
+## Order, cancel, return, and refund rules (logic without code)
 
-| Rule | Storage |
+| Rule | Storage / behaviour |
 | --- | --- |
-| Event has max seats | `events.capacity` integer |
-| Each booking consumes one seat | row in **bookings** |
-| Prevent overbooking | Count bookings before insert |
-| Cancel policy | `status` column: `confirmed` / `cancelled` |
+| Customer cancel | Only while `status=PLACED` |
+| Delivered order | No delete; no cancel |
+| Dummy payment | `mock_paid` + ledger `mock_charge` on place |
+| Return request | After `DELIVERED`; `return_status=requested` |
+| Refund | Owner approves → ledger `refund_credit`, `payment_status=refunded` |
 
-**Edge case discussion:** Two users book last seat at once—database transaction or unique constraint story; full fix in implementation week, but **name** the race in LLD.
+**Edge case discussion:** Customer tries to delete a **DELIVERED** order—API returns **409**; only **return-request** path applies.
 
 ### Activity — write acceptance criteria
 
-For “create booking”, write three **Given / When / Then** lines (example: Given event has 1 seat left, When two users submit, Then only one succeeds).
+For “cancel order”, write three **Given / When / Then** lines (example: Given order is PREPARING, When customer calls cancel, Then API returns 409).
 
 ---
 
@@ -338,7 +350,7 @@ Does v1 need AI to solve the core problem?
   |-- No --> Ship without AI; add in v2 if time
   |-- Yes --> Pick ONE:
         (a) FAQ search via embeddings
-        (b) Short summarise of event description
+        (b) Menu / allergy FAQ from `faq_entries`
         (c) Upload notice Q&A with human confirm
 ```
 
@@ -357,17 +369,18 @@ If you choose (a), your HLD must show **FAQ storage**—not a lone chat bubble.
 
 ---
 
-## Alternative capstone domains (same design method)
+## Capstone flow across build sessions
 
-| Domain | Core entities (starter) |
+Use **`Capstone Flow Session.md`** for the full checklist. In short:
+
+| Build phase | You deliver |
 | --- | --- |
-| Study group matcher | users, groups, memberships |
-| Hostel complaint tracker | users, complaints, status_history |
-| Club announcement board | users, posts, tags |
-
-Swap nouns in ERD—the **method** stays: HLD → LLD → schema → scope.
-
-**Pick problems you can interview about:** real users, real constraints, not blockchain for its own sake.
+| Architecture (this lesson) | HLD, ERD, MoSCoW, vertical slice story |
+| API & security plan | Route contracts, JWT, RBAC matrix |
+| Frontend | Vercel dashboards + `localStorage` token |
+| Backend | Render + Supabase + transition guards |
+| Integration | E2E demo + `/ai/ask` |
+| Ship | README, env docs, live URLs |
 
 ---
 
@@ -401,9 +414,9 @@ Dates belong on your team calendar—not in these notes—but **order** matters 
 
 1. What problem does your app solve without AI?
 2. Show me where the database lives on your HLD.
-3. Which table enforces “no double booking”?
+3. Which table stores **dummy refund** history?
 4. What did you consciously leave out of v1?
-5. If Gemini is down, does core booking still work?
+5. If Gemini is down, does placing and delivering orders still work?
 
 Prepare one-sentence answers before stand-up.
 
@@ -438,7 +451,7 @@ Pick the highest likelihood risk above and write **one** engineering task that r
 
 ### Activity — elevator pitch
 
-In 30 seconds, describe your capstone to a non-tech friend: user, problem, and one screen they would recognise. If you mention “AI” before “booking” (or your core verb), reorder the pitch.
+In 30 seconds, describe your capstone to a non-tech friend: user, problem, and one screen they would recognise. If you mention “AI” before “ordering” (or your core verb), reorder the pitch.
 
 ---
 
@@ -452,7 +465,7 @@ Detailed **API endpoint tables**, **request/response JSON contracts**, **JWT flo
 
 - **HLD** shows components and trust boundaries—especially where **AI keys** live.
 - **LLD** turns one **demo journey** into screens and API touchpoint names.
-- **Schema** is a promise to your future self—design **users**, **events**, and **bookings** before hacks.
+- **Schema** is a promise to your future self—design **orders**, **ledger**, and **roles** before hacks.
 - **Scope** protects demo day—**must** features beat **could** features.
 - Upcoming work turns this blueprint into **route contracts** and then into code.
 
@@ -473,8 +486,12 @@ Detailed **API endpoint tables**, **request/response JSON contracts**, **JWT flo
 | **Scope** | Agreed in/out boundaries for v1 |
 | **FastAPI** | Backend framework from course labs |
 | **SQLAlchemy** | ORM for database access |
-| **SQLite** | File database for local capstone |
-| **users / events / bookings** | Example core entities |
-| **capacity** | Event limit enforced before booking |
+| **Supabase** | Hosted PostgreSQL for capstone |
+| **Vercel / Render** | Preferred FE / BE hosting |
+| **payment_ledger** | Dummy charge and refund audit rows |
+| **mock_paid** | Payment status without gateway |
+| **return_status** | Customer return + owner decision |
+| **CampusBite** | Cohort restaurant delivery capstone |
+| **Capstone Flow Session.md** | Master blueprint for sessions 43–48 |
 | **password_hash** | Stored credential, not plain text |
 | **AI service** | Server-side LLM routes optional in v1 |
