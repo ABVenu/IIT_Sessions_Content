@@ -4,6 +4,9 @@ You already know how to **brief a model** (roles, constraints, JSON) and how to 
 
 **Claude Code** is a **command-line** coding assistant that treats your repository as the workspace. This lesson covers **installation**, **CLI basics**, an **iterative workflow**, and **debugging prompts**. It does **not** design capstone architecture—that blueprint work comes **next**.
 
+![Claude Code pairs with you in the terminal—describe tasks, review diffs, and iterate like a focused code review loop](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session42/session42-01-terminal-pair-programming.png?v=20261028)
+
+
 ## What you will learn in this lesson
 
 - **Installation and setup** — getting Claude Code running safely on your machine
@@ -106,6 +109,9 @@ Without opening Claude, list three files you would attach to a task “add query
 
 ---
 
+![Repeat prompt, proposed edits, diff review, and test runs until the fix matches your intent](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session42/session42-02-iterative-cli-loop.png?v=20261028)
+
+
 ## Iterative development workflow
 
 - **Official Definition:** **Iterative development** repeats small plan → edit → test → refine cycles until acceptance criteria pass.
@@ -140,6 +146,9 @@ Without opening Claude, list three files you would attach to a task “add query
 Connecting idea: When something breaks, you switch from LOOP to **debug mode** prompts.
 
 ---
+
+![Use the CLI to trace a broken fetch or API URL, patch, and confirm in the browser network tab](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session42/session42-04-debug-fetch-fix.png?v=20261028)
+
 
 ## Debugging with Claude Code
 
@@ -284,6 +293,9 @@ form.addEventListener("submit", async (event) => {  // Listen for submit
 **Claude Code + LLM APIs:** Keys for production models stay in **backend `.env`**, not in terminal transcripts you share.
 
 ---
+
+![Point the tool at your FastAPI tree so changes stay scoped to routes, models, and services](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session42/session42-03-fastapi-repo-context.png?v=20261028)
+
 
 ## Working with FastAPI repos (course pattern)
 

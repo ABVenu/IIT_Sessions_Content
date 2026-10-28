@@ -15,6 +15,9 @@ Connecting idea: Building is half the job; **shipping provably** is what intervi
 
 ---
 
+![Graders expect live URLs, demo accounts, setup steps, env vars, features, and known limits](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session48/session48-01-readme-structure.png?v=20261028)
+
+
 ## README template (copy and fill)
 
 ```markdown
@@ -82,6 +85,9 @@ Set API_BASE_URL to http://127.0.0.1:8000
 **Never** commit service role key to Git; use `DATABASE_URL` on Render only.
 
 ---
+
+![Production triangle: Vercel frontend, Render API, Supabase database—with CORS on the edge](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session48/session48-02-deploy-triangle.png?v=20261028)
+
 
 ## Render backend deploy
 
@@ -151,6 +157,9 @@ Reviewers compare contract vs `/docs` for drift.
 
 ---
 
+![After deploy, verify health, auth, a sample order, CORS from Vercel, and OpenAPI docs](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session48/session48-04-smoke-tests.png?v=20261028)
+
+
 ## Smoke tests after deploy
 
 | # | Test |
@@ -165,6 +174,9 @@ Reviewers compare contract vs `/docs` for drift.
 | 8 | 401 after logout |
 
 ---
+
+![Time-box the mentor demo: hook, core flows, AI highlight, honest limitations, close](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session48/session48-03-demo-script-timeline.png?v=20261028)
+
 
 ## Demo script (3–5 minutes)
 

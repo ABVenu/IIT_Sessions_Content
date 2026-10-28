@@ -4,6 +4,9 @@ In the **previous** lessons you learned how an **LLM** turns tokens into text, a
 
 This lesson wires an **LLM API** into FastAPI the same way you already call **SQLAlchemy** and return **`StudentOut`**: authenticate on the server, validate input, call the external service, return a safe response. You will **not** repeat prompt technique drills here; you will **use** the prompts you already know inside **chat-shaped** HTTP requests.
 
+![Browser talks to your FastAPI service with JSON and no provider key; the server alone calls the LLM with HTTPS and a secret key](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session40/session40-01-backend-three-box.png?v=20261028)
+
+
 ## What you will learn in this lesson
 
 - **LLM API providers** — OpenAI, Google (Gemini), Anthropic (Claude), and the shared HTTPS pattern
@@ -67,6 +70,9 @@ Connecting idea: Once you pick a provider, every call needs **authentication** b
 
 ---
 
+![Keep provider API keys in server environment variables—never expose them in frontend fetch calls](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session40/session40-04-api-key-server-only.png?v=20261028)
+
+
 ## Authentication and secure API key usage
 
 - **Official Definition:** **API authentication** here means proving your server is allowed to call the provider, usually with a bearer token or key in headers or query (provider-specific).
@@ -105,6 +111,9 @@ GEMINI_API_KEY=your_key_from_google_ai_studio
 Read this claim: “We will store the key in `localStorage` so refresh keeps working.” Write three concrete harms (billing, abuse, compliance) in bullet form.
 
 ---
+
+![Chat payloads stack system, user, and assistant messages; the model reply follows that conversation shape](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session40/session40-02-chat-roles.png?v=20261028)
+
 
 ## Chat APIs and role-based messages
 
@@ -308,6 +317,9 @@ uvicorn main:app --reload --port 8010
 Call the same question with your older **`fetch`** Gemini script and with **`/ai/chat`**. Note one advantage of the FastAPI layer (key location, validation, or logging).
 
 ---
+
+![Buffered routes return one JSON body; streaming sends partial tokens so the UI can update incrementally](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session40/session40-03-streaming-vs-buffered.png?v=20261028)
+
 
 ## Streaming responses
 

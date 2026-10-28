@@ -42,6 +42,9 @@ Write one sentence each: what happens if (a) token is missing, (b) token is vali
 
 ---
 
+![Login returns a signed JWT; protected routes validate Bearer tokens before handlers run](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session44/session44-01-jwt-flow.png?v=20261028)
+
+
 ## JWT (JSON Web Token) for CampusBite
 
 - **Official Definition:** A **JWT** is a compact, signed string encoding **claims** (JSON fields) so the server can verify integrity without storing session state in memory.
@@ -161,6 +164,9 @@ Returns current user from JWT—used to paint navbar avatar from **`profile_imag
 
 ---
 
+![Map each role—customer, owner, partner, admin—to allowed actions before coding guards](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session44/session44-02-rbac-matrix.png?v=20261028)
+
+
 ## RBAC matrix (planning artefact)
 
 Fill this table in your team doc—Session 46 implements it in code.
@@ -193,6 +199,9 @@ Fill this table in your team doc—Session 46 implements it in code.
 Add RBAC row for `POST /orders/{id}/return-request` and write the row-level rule in one sentence.
 
 ---
+
+![Group REST endpoints by resource so the team shares one index during implementation](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session44/session44-04-endpoint-index.png?v=20261028)
+
 
 ## API endpoint planning (CampusBite index)
 
@@ -277,6 +286,9 @@ Uses **GROUP BY** you practiced in SQL lessons.
 - Review twice on same order
 
 ---
+
+![Requests pass through CORS, logging, rate limits, and auth middleware before route logic](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session44/session44-03-middleware-pipeline.png?v=20261028)
+
 
 ## Middleware (HLD / LLD + implementation plan)
 

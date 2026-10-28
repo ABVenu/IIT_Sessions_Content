@@ -21,6 +21,9 @@ Connecting idea: The frontend is the face; the backend is the **source of truth*
 
 ---
 
+![Split routers, models, services, and middleware so order logic stays testable on Render](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session46/session46-01-backend-layout.png?v=20261028)
+
+
 ## Backend layout
 
 ```text
@@ -116,6 +119,9 @@ Use **`create_access_token`** from Session 44 pattern.
 
 ---
 
+![Only allow valid order status transitions—placed through delivered, plus cancel rules](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session46/session46-02-order-state-machine.png?v=20261028)
+
+
 ## Order service: transitions
 
 ```python
@@ -139,6 +145,9 @@ def assert_order_transition(order, new_status: str, role: str) -> None:  # Raise
 Extend table for restaurant cancel policy if documented.
 
 ---
+
+![Create order rows, mark mock payment, persist line items, return the new order id](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session46/session46-03-place-order-payment.png?v=20261028)
+
 
 ## Place order + dummy payment
 
@@ -242,6 +251,9 @@ On approve: `return_status=approved`, `payment_status=refunded`, ledger `refund_
 On reject: `return_status=rejected`, keep `mock_paid`.
 
 ---
+
+![Logging middleware on the request path; background tasks can send admin reminders separately](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session46/session46-04-reminders-logging.png?v=20261028)
+
 
 ## Middleware (logging)
 

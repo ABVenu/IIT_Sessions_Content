@@ -18,6 +18,9 @@ Connecting idea: Session 44 wrote the contract; today you build the screens that
 
 ---
 
+![Organise public assets, shared JS helpers, and role-specific HTML pages in one Vercel project](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session45/session45-01-vercel-layout.png?v=20261028)
+
+
 ## Project layout on Vercel
 
 ```text
@@ -100,6 +103,9 @@ Add a logout button that calls `clearAuth()` and redirects to `login.html`. Conf
 
 ---
 
+![Pages call api.js; auth.js supplies the JWT; every request targets your Render backend base URL](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session45/session45-02-auth-api-pages-flow.png?v=20261028)
+
+
 ## API wrapper (`api.js`)
 
 ```javascript
@@ -151,6 +157,9 @@ async function handleRegister(event) {
 **UX hint:** Show preview `<img>` when URL field blurs and starts with `https://`.
 
 ---
+
+![Wireframe the browse → cart → checkout path before styling dashboards](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session45/session45-03-customer-screens.png?v=20261028)
+
 
 ## Customer menu and cart
 
@@ -224,6 +233,9 @@ await apiFetch(`/orders/${orderId}/return-request`, {
 ```
 
 ---
+
+![Owner, delivery partner, and customer views share auth helpers but different dashboards](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session45/session45-04-role-dashboards.png?v=20261028)
+
 
 ## Restaurant dashboard
 

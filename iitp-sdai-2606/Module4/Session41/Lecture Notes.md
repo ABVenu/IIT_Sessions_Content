@@ -38,6 +38,9 @@ Given UI fields `title`, `tags` only, decide whether model output `{"title":"X",
 
 ---
 
+![Define a JSON schema or Pydantic model so the LLM output is validated before your API returns it](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session41/session41-01-structured-json-schema.png?v=20261028)
+
+
 ## Structured outputs and response schemas
 
 - **Official Definition:** A **response schema** (JSON Schema or provider-native schema object) declares allowed properties and types for model output.
@@ -104,6 +107,9 @@ def parse_faq_extract(raw_text: str) -> FaqExtract:  # One entry point for trust
 Connecting idea: Once JSON is reliable, you can store **`title` + `tags`** in tables planned for capstone work later.
 
 ---
+
+![Send an image to a vision-capable model and map the reply into structured fields your route can trust](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session41/session41-02-vision-to-structure.png?v=20261028)
+
 
 ## Vision APIs for image understanding
 
@@ -231,6 +237,9 @@ async def receipt_check(file: UploadFile = File(...)):  # Single uploaded image
 
 ---
 
+![Embed menu or document text into vectors, then retrieve nearest matches for semantic search](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session41/session41-03-embeddings-search.png?v=20261028)
+
+
 ## Embeddings and semantic search
 
 - **Official Definition:** An **embedding** is a dense vector representation of text such that semantically similar texts lie close together in vector space.
@@ -333,6 +342,9 @@ async def faq_search(q: str):  # Query string from browser
 Given three questions A/B/C, rank which pair “feels” most similar before you compute vectors: (A) exam timetable, (B) when is midterm, (C) canteen menu.
 
 ---
+
+![Chain vision understanding, text reasoning, and structured JSON—each step with a clear responsibility](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session41/session41-04-multimodal-chain.png?v=20261028)
+
 
 ## Multimodal integration: chaining responsibilities
 

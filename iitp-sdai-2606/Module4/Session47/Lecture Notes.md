@@ -47,6 +47,9 @@ Draw: Browser → Render API → Supabase → Gemini. Mark where JWT is checked 
 
 ---
 
+![Rehearse the full demo path: login, order, kitchen updates, delivery, and optional AI insights](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session47/session47-01-e2e-gold-path.png?v=20261028)
+
+
 ## E2E gold path (demo rehearsal)
 
 Follow **`Capstone Flow Session.md` §11**:
@@ -62,6 +65,9 @@ Follow **`Capstone Flow Session.md` §11**:
 Record screen recording backup for fest-day network issues.
 
 ---
+
+![Aggregate order history on the server, prompt Gemini, return insight bullets—no vector DB required](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session47/session47-02-ai-insights-route.png?v=20261028)
+
 
 ## AI feature: order insights (no embeddings)
 
@@ -253,6 +259,9 @@ Sync on **OpenAPI contract** from Session 44—do not rename fields silently.
 
 ---
 
+![When something breaks, test frontend, API, database, and AI layers independently](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session47/session47-03-layer-isolation-debug.png?v=20261028)
+
+
 ## Layer isolation debugging workflow
 
 1. Reproduce bug in browser Network tab.
@@ -376,6 +385,9 @@ Keep buttons disabled until customer has at least one order—show friendly empt
 - Demo focus stays customer-facing AI; kitchen flow is purely REST.
 
 ---
+
+![Keep API_URL, secrets, and database URLs aligned between Vercel and Render environments](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session47/session47-04-env-sync-vercel-render.png?v=20261028)
+
 
 ## Render + Vercel env sync checklist
 

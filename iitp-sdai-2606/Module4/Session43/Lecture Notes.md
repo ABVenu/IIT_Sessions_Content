@@ -40,6 +40,9 @@ Pick **one** user journey that must work on demo day (example: “customer place
 
 ---
 
+![CampusBite HLD: Vercel frontend, Render FastAPI backend, Supabase Postgres, and optional Gemini AI](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session43/session43-01-hld-architecture.png?v=20261028)
+
+
 ## High-level design (HLD)
 
 - **Official Definition:** **High-level design** describes major subsystems and data flow without every class or line of code.
@@ -109,6 +112,9 @@ List two features you will **not** build in v1 (real UPI gateway, live map track
 
 ---
 
+![Match each layer to course tools: React on Vercel, FastAPI on Render, Postgres on Supabase](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session43/session43-03-tech-stack-layers.png?v=20261028)
+
+
 ## Tech stack selection
 
 - **Official Definition:** A **tech stack** is the set of languages, frameworks, libraries, and services used to implement the product.
@@ -141,6 +147,9 @@ List two features you will **not** build in v1 (real UPI gateway, live map track
 Connecting idea: Stack choices must match the **schema** you can actually query.
 
 ---
+
+![Core entities—users, restaurants, menu items, orders, and delivery—before you write migrations](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session43/session43-02-entity-relationship.png?v=20261028)
+
 
 ## Database schema design
 
@@ -368,6 +377,9 @@ If you choose (a), your HLD must show **FAQ storage**—not a lone chat bubble.
 | **Mystery AI** | Box labelled “AI” with no arrow | Name route purpose |
 
 ---
+
+![Plan → security → frontend → backend → integration → documentation and deployment](https://s13n-curr-images-bucket.s3.ap-south-1.amazonaws.com/iitp-sdai-2606/module4/session43/session43-04-capstone-session-flow.png?v=20261028)
+
 
 ## Capstone flow across build sessions
 
